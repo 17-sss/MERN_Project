@@ -13,7 +13,6 @@ export default function createRequestSaga(type, request) {
 
     return function*(action) {
         yield put(startLoading(type));  // 로딩 시작
-        console.log(type, '1')
 
         try {
             const response = yield call(request, action.payload);
@@ -29,7 +28,5 @@ export default function createRequestSaga(type, request) {
             });
         }
         yield put(finishLoading(type)); // 로딩 끝
-        console.log(type, '2')
-
     };
 };
