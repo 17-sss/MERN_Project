@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
+
 // 리덕스 스토어 관련 START
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
@@ -14,8 +15,8 @@ const store = createStore(rootReducer, composeWithDevTools());
 // 리덕스 스토어 관련 END
 
 ReactDOM.render(
-  <Provider store = {store}>
-    <BrowserRouter>
+  <Provider store = {store}>    
+    <BrowserRouter>    
       <App />
     </BrowserRouter>
   </Provider>,

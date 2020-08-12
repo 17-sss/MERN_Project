@@ -1,16 +1,15 @@
+// 연습용 Block. 참고용
 import React from 'react';
 import styled from 'styled-components';
 
 const StyledBox = styled.div`
-  background-color: ${(props) => props.backgroundColor || "rgb(69, 66, 105)"};
-  color: ${(props) => props.color || "black"};
+  background-color: ${(props) => props.backgroundColor || "rgb(69, 66, 105)"};  
   width: ${(props) => props.width === undefined ? "100%" : props.width};  
   padding: ${props => props.padding === undefined ? "20px 0" : props.padding};
-  margin-top: ${props => props.marginTop === undefined ? "0" : props.marginTop};
+  margin: ${props => props.margin === undefined ? "0" : props.margin};
 `;
 
 const BoxModel = (props) => {
-    console.log(props); 
     return (
         <StyledBox {...props} />        
     );    
