@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import Header from './components/base/Header';
+import Footer from './components/base/Footer';
 
 import MainPage from './pages/MainPage';
 import ShoppingPage from './pages/ShoppingPage';
@@ -29,6 +30,9 @@ const App = () => {
       <Route component = {LoginPage} path = "/login" />
       {/* // Member (회원정보) */}
       <Route component = {MemberPage} path = "/member/@:username" />
+
+
+      <Footer/>
     </>
   )
 }

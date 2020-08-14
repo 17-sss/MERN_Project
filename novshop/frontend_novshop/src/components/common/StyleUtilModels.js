@@ -22,7 +22,8 @@ export const CustomLink = styled(Link)`
     }
 
     &:hover {
-        color: rgb(83, 83, 83);
+        ${props => props.hoveroff || 
+            "color: rgb(83, 83, 83)"};
     }
 `;
 // **********************************************************************************

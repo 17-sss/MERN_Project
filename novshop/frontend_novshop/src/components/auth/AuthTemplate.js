@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import {CustomLink} from '../common/StyleUtilModels'
 
 const AuthTemplateBlock = styled.div`
-    height: 70vh;
-    
+    height: 80vh;
+
     /* flex로 내부 내용 중앙 정렬 */
     display: flex;
     flex-direction: column;
