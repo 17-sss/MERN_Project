@@ -3,17 +3,22 @@ import styled from 'styled-components';
 import {CustomLink} from '../common/StyleUtilModels'
 
 const AuthTemplateBlock = styled.div`
-    height: 80vh;
+    height: 60rem;
+    padding-top: 5%;    
 
-    /* flex로 내부 내용 중앙 정렬 */
+    /* flex로 내부 내용 중앙 정렬 샘플*/
+    /*
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    */
 `;
 
 // 흰색 박스
 const WhiteBox = styled.div`
+    margin: 0 auto;
+
     .logo-area {
         display: block;
         padding-bottom: 2rem;
@@ -22,7 +27,7 @@ const WhiteBox = styled.div`
         letter-spacing: 2px;
     }
 
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     padding: 3rem;
     width: 360px;
     background: white;
