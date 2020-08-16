@@ -28,6 +28,7 @@ const HeaderBlock = styled.div`
 */
 const HeaderUl = styled.ul` 
     padding: ${props => props.padding === undefined ? "0.5rem 0 0 0" : props.padding};
+    margin: ${props => props.margin && props.margin};
     float: ${props => props.float || 'right'};
     position: ${props => props.posRelative && 'relative'};
 `;
@@ -90,8 +91,7 @@ const EmptyBlock = styled.div`
 
 const Header = (props) => {
     const categorySample = ['음식', '의류', '가구'];
-    const authSample = ['로그인', '회원가입'];
-    const authSample2 = ['알림', '주문/배송', '고객센터', '장바구니'];
+    const authSample = ['로그인', '회원가입', '알림', '주문/배송', '고객센터', '장바구니'];
 
     return (
         <>
@@ -111,40 +111,36 @@ const Header = (props) => {
 
                         <HeaderUl posRelative>        
                             {authSample.map((item, i) => {
+                                if (i === 2) { 
+                                    return (<HeaderLi vertical/>);
+                                }
+
                                 return (
                                     <HeaderLi key = {i}>
-                                        <CustomLink to = {() => {return item === '로그인' ? '/login' : '/member/join' }}>
+                                        <CustomLink to = {() => {
+                                                return (
+                                                    (i <= 1) ? 
+                                                        (item === '로그인' ? '/login' : '/member/join') 
+                                                        :
+                                                        ('/#' + i)
+                                                )                                         
+                                            }}>
                                             {item}
                                         </CustomLink>   
                                     </HeaderLi>
                                 );
-                            })}  
-                            <HeaderLi vertical/>
-                            {authSample2.map((item, i) => {
-                                return (
-                                    <HeaderLi key = {i}>
-                                        <CustomLink to = {'/@' + i}>
-                                            {item}
-                                        </CustomLink>   
-                                    </HeaderLi>
-                                );
-                            })}                             
+                            })}                                                        
                         </HeaderUl>  
                         <div style = {{clear: "right"}} />
 
-                        <HeaderUl padding = '0' posRelative>
+                        <HeaderUl 
+                            padding = '0' 
+                            margin = '0.7rem 0 0 0' 
+                            posRelative
+                        >
                             <HeaderLi key = ''>
                                 <CustomLink to = '/'>
-                                    1
-                                </CustomLink>   
-                            </HeaderLi>
-                        </HeaderUl>
-                        <div style = {{clear: "right"}} />
-
-                        <HeaderUl padding = '0' posRelative>
-                            <HeaderLi key = ''>
-                                <CustomLink to = '/'>
-                                    3
+                                    검색바 위치
                                 </CustomLink>   
                             </HeaderLi>
                         </HeaderUl>
