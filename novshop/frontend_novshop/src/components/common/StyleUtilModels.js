@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 // *** 좌우 Margin 10 ***
 // **********************************************************************************
 export const MarginBlock = styled.div`
-    /* 스크롤바의 사이즈 체크해서 스크롤바가 없을때도 스크롤바 사이즈 만큼 margin++ */
     margin: ${props => props.margin === undefined ? "0 15%" : props.margin}; 
+    /* (window.innerWidth - document.documentElement.clientWidth) ==> 스크롤바 값.. 나중에 쓸수 있음 써 */
 `;
 
 // **********************************************************************************

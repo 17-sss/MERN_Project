@@ -21,6 +21,8 @@ const App = () => {
       */}
       <Header/>
 
+
+
       <Route component = {MainPage} path = "/" exact />      
       {/* // Shopping */}
       <Route component = {ShoppingPage} path = "/shopping/@:category" />       

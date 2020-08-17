@@ -1,6 +1,10 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import {MarginBlock, CustomLink} from '../common/StyleUtilModels';
+// https://fontawesome.com/how-to-use/on-the-web/using-with/react
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+
 
 // ***************************************************************************************************************
 // ***************************************************************************************************************
@@ -71,6 +75,43 @@ const HeaderHr = styled.hr`
     border-top: 0.7px solid rgb(255, 253, 255);
 `;
 
+// *** SearchInput, 검색 창 ****
+const SearchInput = styled.input`
+    font-size: 0.7rem;
+    border: 1.4px solid rgb(152, 234, 240);
+    padding: 3.5% 3.5%;
+    outline: none;
+    width: 78%;    
+
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+
+    &:focus {        
+        border: 1.4px solid rgb(142, 211, 216);
+    }
+`;
+
+// *** SearchBtn, 검색 버튼 ****
+const SearchBtn = styled.button`
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+    outline: inherit;
+`;
+
+// *** SearchIcon, 검색 아이콘 ****
+const SearchIcon = styled(FontAwesomeIcon)`
+    color: rgb(152, 234, 240);
+
+    &:hover {
+        color: rgb(142, 211, 216); 
+    }
+`;
+
 
 
 // *** EmptyBlock ***
@@ -87,8 +128,6 @@ const EmptyBlock = styled.div`
 
 // ***************************************************************************************************************
 // ***************************************************************************************************************
-
-
 const Header = (props) => {
     const categorySample = ['음식', '의류', '가구'];
     const authSample = ['로그인', '회원가입', '알림', '주문/배송', '고객센터', '장바구니'];
@@ -112,7 +151,7 @@ const Header = (props) => {
                         <HeaderUl posRelative>        
                             {authSample.map((item, i) => {
                                 if (i === 2) { 
-                                    return (<HeaderLi vertical/>);
+                                    return (<HeaderLi vertical key=''/>);
                                 }
 
                                 return (
@@ -138,14 +177,23 @@ const Header = (props) => {
                             margin = '0.7rem 0 0 0' 
                             posRelative
                         >
-                            <HeaderLi key = ''>
-                                <CustomLink to = '/'>
-                                    검색바 위치
-                                </CustomLink>   
+                            <HeaderLi key = ''>     
+                                <form onSubmit = '' method='get'>
+                                    <SearchInput 
+                                        placeholder='검색어를 입력해주세요.'
+                                        name='search'
+                                        type='text'
+                                    />        
+                                    
+                                    <SearchBtn type='submit' style={{verticalAlign: 'middle', width: '10%', marginLeft: '3%'}}>                                                                         
+                                        <SearchIcon icon = {faSearch} /> 
+                                    </SearchBtn>
+                                    
+                                </form>
                             </HeaderLi>
+                            
                         </HeaderUl>
                         <div style = {{clear: "right"}} />
-                    
                     
                     </HeaderBlock>        
                 </MarginBlock>
