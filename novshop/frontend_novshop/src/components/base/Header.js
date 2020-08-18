@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {MarginBlock, CustomLink} from '../common/StyleUtilModels';
+import {MarginBlock, CustomLink, TransparentBtn} from '../common/StyleUtilModels';
 // https://fontawesome.com/how-to-use/on-the-web/using-with/react
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -93,14 +93,10 @@ const SearchInput = styled.input`
 `;
 
 // *** SearchBtn, 검색 버튼 ****
-const SearchBtn = styled.button`
-    background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-    outline: inherit;
+const SearchBtn = styled(TransparentBtn)`
+    vertical-align: middle;
+    width: 10%;
+    margin-left: 3%;
 `;
 
 // *** SearchIcon, 검색 아이콘 ****
@@ -183,9 +179,8 @@ const Header = (props) => {
                                         placeholder='검색어를 입력해주세요.'
                                         name='search'
                                         type='text'
-                                    />        
-                                    
-                                    <SearchBtn type='submit' style={{verticalAlign: 'middle', width: '10%', marginLeft: '3%'}}>                                                                         
+                                    />                                            
+                                    <SearchBtn type='submit'>                                                                         
                                         <SearchIcon icon = {faSearch} /> 
                                     </SearchBtn>
                                     

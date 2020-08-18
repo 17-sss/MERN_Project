@@ -41,6 +41,12 @@ const StyledLink = styled(CustomLink)`
 `;
 
 const AuthTemplate = ({children}) => {
+    /* 
+        매개변수 {children} 은
+            /pages/LoginPage.js 
+            or 
+            RegisterPage.js 참고하면 알 수 있음
+    */
     return (
         <AuthTemplateBlock>
             <WhiteBox>

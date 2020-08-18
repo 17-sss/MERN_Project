@@ -1,14 +1,30 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import { Link } from 'react-router-dom';
+import {useScrollBarWidthMinusMargin} from '../../lib/hook/Util';
 
 // **********************************************************************************
-// *** 좌우 Margin 10 ***
+// *** 좌우 Margin  ***
 // **********************************************************************************
-export const MarginBlock = styled.div`
-    margin: ${props => props.margin === undefined ? "0 15%" : props.margin}; 
-    /* (window.innerWidth - document.documentElement.clientWidth) ==> 스크롤바 값.. 나중에 쓸수 있음 써 */
-`;
+// const StyledMargin = styled.div`
+//     ${props.margin }
+//     margin: ${props => props.margin === undefined ? "0 15%" : props.margin}; 
+// `;
+
+export const MarginBlock = ({children}) => {
+    const calcMargin = useScrollBarWidthMinusMargin(15);
+    
+    return (        
+        <div style={{
+            marginLeft: (calcMargin + 'px'),
+            marginRight: (calcMargin + 'px'),
+        }}>
+            {children}
+            {calcMargin} s
+        </div>
+    );
+    // return <div style = {{margin: "0 15%"}}>{children} </div>
+};
 
 // **********************************************************************************
 // *** 커스텀 Link 컴포넌트 1 ***
@@ -28,9 +44,9 @@ export const CustomLink = styled(Link)`
     }
 `;
 // **********************************************************************************
-// *** 커스텀 버튼 1 ***
+// *** 커스텀 버튼 : <Link> or <button> ***
 // **********************************************************************************
-// 커스텀 버튼 디자인 START
+// 커스텀 버튼 : <Link> or <button> 디자인 START
 const ButtonStyle = css`
     border: none;
     border-radius: 4px;
@@ -84,4 +100,18 @@ export const Button = props => {
         <StyledBtn  {...props} />
     );
 };
-// 커스텀 버튼 디자인 END
+// 커스텀 버튼 : <Link> or <button> 디자인 END
+
+// **********************************************************************************
+// *** 커스텀 버튼 : 투명 ***
+// **********************************************************************************
+export const TransparentBtn = styled.button`
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+    outline: inherit;
+`;
+

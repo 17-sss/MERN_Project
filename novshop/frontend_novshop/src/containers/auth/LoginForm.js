@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { changeField, initializeForm, login   } from '../../modules/auth';
 
-import AuthForm from '../../components/auth/AuthForm';
+import LoginRegisterTemplate from '../../components/auth/LoginRegisterTemplate';
 import { check } from '../../modules/user';
 
 const LoginForm = ( { history } ) => {
@@ -61,7 +61,7 @@ const LoginForm = ( { history } ) => {
     }, [history, user]);
 
     return (
-        <AuthForm
+        <LoginRegisterTemplate
             type="login"
             form={form}
             onChange = {onChange}

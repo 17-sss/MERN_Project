@@ -1,10 +1,10 @@
-// 로그인 폼
+// LoginRegisterTemplate는 ReactBook의 "components/auth/AuthForm" 임
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Button } from '../common/StyleUtilModels';
 
-const AuthFormBlock = styled.div`
+const LoginRegisterTemplateBlock = styled.div`  
     h3 {
         margin: 0;
         color: gray;
@@ -66,10 +66,10 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-const AuthForm = ({type, form, onChange, onSubmit, error}) => {
+const LoginRegisterTemplate = ({type, form, onChange, onSubmit, error}) => {
     const text = textMap[type];     
     return (        
-        <AuthFormBlock>                 
+        <LoginRegisterTemplateBlock>                 
             <h3>{text}</h3>
             <form onSubmit = {onSubmit}>
                 <StyledInput 
@@ -110,9 +110,9 @@ const AuthForm = ({type, form, onChange, onSubmit, error}) => {
                     <Link to = "/login">로그인</Link> 
                 )}                            
             </Footer>
-        </AuthFormBlock>
+        </LoginRegisterTemplateBlock>
     );
 }
 
 
-export default AuthForm;
+export default LoginRegisterTemplate;
