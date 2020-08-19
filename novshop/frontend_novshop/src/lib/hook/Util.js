@@ -46,88 +46,60 @@ export const useWindowSize = () => {
     return windowSize;
 };
 
-// **********************************************************************************
-// *** getScrollBarWidth *** 스크롤바 width 계산
-// **********************************************************************************
-export const useScrollBarWidth = () => {
-    const [scrollBarWidth, setScrollBarWidth] = useState(0);
-    const winInnerWidth = window.innerWidth;
+// ==================================================================================
+// ==================================================================================
+/* 
+    꼭 아래 2개의 Custom Hook이 화면 Resize 될때마다 자동으로 업뎃되는 줄 알았더니..
+    App.js에서 사용하는 useWindowSize Hook 때문임. 
+    useWindowSize에서 이벤트 리스너 ('resize') 다루기 때문.
+    App.js는 알다시피 최상위 느낌
 
-    useEffect(() => {
-        setScrollBarWidth(
-            window.innerWidth - document.documentElement.clientWidth,
-        );
-    }, [winInnerWidth]);
-
-    return scrollBarWidth;
-
-    /*  
-  docClientWidth: document.documentElement.clientWidth,
-  docClientHeight: document.documentElement.clientHeight,
+    ---> Hook에 대한 개념정리 다시하길.
 */
-};
+// ==================================================================================
+// ==================================================================================
+
 
 // **********************************************************************************
-// *** useScrollBarWidthMinusMargin *** Margin에 적용할 값 계산 (window.innerWidth 에서 스크롤바 width를 뺀 값 계산)
-// 리듀서로 변경해야할듯
+// *** useCalcMargin *** Margin 값 계산 (Percent형식을 px로 설정하기 위함)
 // **********************************************************************************
-/* // 리듀서로 변경하다맘
-function calcMarginReducer(state, action) {  
-    let calcMargin = state.value;
-    let marginPer = 0;
-
-    if (action.percent <= 0) {
-        marginPer = 0;
-    } else if (action.percent < 100) {
-        marginPer = action.percent * 0.01; 
-    } else {
-        marginPer = 0;
-    }
-    
-    // 스크롤바 넓이 계산
-    let scrollBarWidth = (window.innerWidth - document.documentElement.clientWidth);
-
-    // 적용될 마진 계산 
-    if (!scrollBarWidth) {
-      calcMargin = (window.innerWidth * marginPer);
-    } else {
-      calcMargin = (window.innerWidth * marginPer + scrollBarWidth / 2);
-    }
-
-    return calcMargin;
-};
-
-export const useCalcMargin = () => {
-  // const [state, dispatch] = useReducer(calcMarginReducer, {value: 0}0)
-  // 더 연구 요망
-}
-*/ 
-
-export const useScrollBarWidthMinusMargin = (AmarginPercent) => {
-    const [scrollBarWidth, setScrollBarWidth] = useState(0);
+/* 
+    1. React - exhaustive-deps warning 해결법:
+        https://dawan0111.github.io/blog/react/react--exhaustive-deps/
+    2. useEffect(), useMemo(), useCallback() 정리
+        https://likejirak.tistory.com/48
+*/
+export const useCalcMargin = (AmarginPercent) => {
     const [calcMargin, setCalcMargin] = useState(0);
-
     const winInnerWidth = window.innerWidth;
-
+    
     useEffect(() => {
         let marginPer = 0;
+
         if (AmarginPercent <= 0) marginPer = 0;
         else if (AmarginPercent < 100) marginPer = AmarginPercent * 0.01;
         else marginPer = 0;
 
-        // 스크롤바 넓이 계산
-        setScrollBarWidth(
-            window.innerWidth - document.documentElement.clientWidth,
-        );
+        // Margin 계산
+        setCalcMargin(winInnerWidth * marginPer);   
 
-        // 적용될 마진 계산
-        if (!scrollBarWidth) {
-            setCalcMargin(winInnerWidth * marginPer);
-        } else {
-            setCalcMargin(winInnerWidth * marginPer + scrollBarWidth / 2);
-        }
-    }, [winInnerWidth]);
+    }, [AmarginPercent, winInnerWidth]);
 
     return calcMargin;
 };
 
+// **********************************************************************************
+// *** useCalcVertScrollWidth *** 수직 ScrollBar Width 값 계산
+// **********************************************************************************
+export const useCalcVertScrollWidth = () => {
+    const [verticalScrollWidth, setVerticalScrollWidth] = useState(0);
+    const winInnerWidth = window.innerWidth;
+
+    useEffect( () => {
+        setVerticalScrollWidth(
+            window.innerWidth - document.documentElement.clientWidth,
+        );
+    }, [winInnerWidth]);
+
+    return verticalScrollWidth;
+};
