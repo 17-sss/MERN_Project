@@ -1,23 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 // **********************************************************************************
-// *** useWindowSize : Window개체 innerWidth & innerHeight 가져오기 ***
+// *** useGetWindowInnerEvent : Window개체 innerWidth & innerHeight 가져오기 (Event 포함)
 // **********************************************************************************
-/* 
-// 사용 예제
-function App() {
-  const size = useWindowSize();
-
-  return (
-    <div>
-      {size.width}px / {size.height}px
-    </div>
-  );
-}
-*/
-
-// 훅
-export const useWindowSize = () => {
+export const useGetWindowInnerEvent = () => {
+    
     const [windowSize, setWindowSize] = useState({
         width: undefined,
         height: undefined,
@@ -46,6 +34,22 @@ export const useWindowSize = () => {
     return windowSize;
 };
 
+
+// **********************************************************************************
+// *** useDetectHistory *** 페이지 이동 감지 
+// ((사용안함, 스크롤바 여부에 따라 페이지 이동시에도 사이즈 갱신되게하려했었음) (MarginBlock에 사용하려함))
+// **********************************************************************************
+export const useDetectHistory = () => {
+    const history = useHistory();
+
+    useEffect(() => {        
+        return history.listen((location) => {                                                
+            // console.log(location);
+            window.locationKey = location.key;        
+        })
+    },[history]); 
+};
+
 // ==================================================================================
 // ==================================================================================
 /* 
@@ -72,8 +76,8 @@ export const useWindowSize = () => {
 export const useCalcMargin = (AmarginPercent) => {
     const [calcMargin, setCalcMargin] = useState(0);
     const winInnerWidth = window.innerWidth;
-    
-    useEffect(() => {
+
+    useEffect(() => {            
         let marginPer = 0;
 
         if (AmarginPercent <= 0) marginPer = 0;
@@ -81,8 +85,7 @@ export const useCalcMargin = (AmarginPercent) => {
         else marginPer = 0;
 
         // Margin 계산
-        setCalcMargin(winInnerWidth * marginPer);   
-
+        setCalcMargin(winInnerWidth * marginPer);           
     }, [AmarginPercent, winInnerWidth]);
 
     return calcMargin;

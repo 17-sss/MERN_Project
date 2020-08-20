@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-
-import { useWindowSize } from './lib/hook/Util';
+import { useGetWindowInnerEvent } from './lib/utility/customHooks';
 
 import Header from './components/base/Header';
 import Footer from './components/base/Footer';
@@ -13,8 +12,9 @@ import RegisterPage from './pages/RegisterPage';
 import MemberPage from './pages/MemberPage';
 
 const App = () => {
-    const windowSize = useWindowSize();
-
+    const windowSize = useGetWindowInnerEvent();
+    
+        
     if (windowSize.width >= 750) {
         return (
             <>

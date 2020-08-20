@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useCalcMargin, useCalcVertScrollWidth } from '../../lib/hook/Util';
+import { useCalcMargin, useCalcVertScrollWidth } from '../../lib/utility/customHooks';
 
 // **********************************************************************************
 // *** 좌우 Margin  ***

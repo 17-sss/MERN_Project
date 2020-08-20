@@ -174,7 +174,7 @@ const Header = (props) => {
                             posRelative
                         >
                             <HeaderLi key = ''>     
-                                <form onSubmit = '' method='get'>
+                                <form onSubmit = {() => ''} method='get'>
                                     <SearchInput 
                                         placeholder='검색어를 입력해주세요.'
                                         name='search'
