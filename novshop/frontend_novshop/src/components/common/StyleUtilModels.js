@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useCalcMargin, useCalcVertScrollWidth } from '../../lib/utility/customHooks';
+import { useCalcMargin } from '../../lib/utility/customHooks';
 
 // **********************************************************************************
 // *** 좌우 Margin  ***
@@ -36,13 +36,12 @@ const StyledMargin = styled.div`
 export const MarginBlock = ({ children }) => {
     const MarginAndScroll = {
         margin: useCalcMargin(15),
-        vertScrollWidth: useCalcVertScrollWidth(),
+        vertScrollWidth: undefined, /* useCalcVertScrollWidth(), 사용안하기로..*/
     };
 
     return (
         <StyledMargin MarginOption={MarginAndScroll}>
             {children}
-            {MarginAndScroll.margin} || {MarginAndScroll.vertScrollWidth}  
         </StyledMargin>
     );
 };
