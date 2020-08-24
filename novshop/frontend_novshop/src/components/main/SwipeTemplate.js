@@ -1,41 +1,25 @@
 import React from 'react';
-// import styled from 'styled-components';
 import SwipeForm from '../../containers/main/SwipeForm';
-
-// const SwipeTemplateBlock = styled.div``;
-
-const styles = {
-    tabs: {
-      background: '#fff',
-    },
-    slide: {
-      padding: 15,
-      minHeight: 100,
-      color: '#fff',
-    },
-    slide1: {
-      backgroundColor: '#FEA900',
-    },
-    slide2: {
-      backgroundColor: '#B3DC4A',
-    },
-    slide3: {
-      backgroundColor: '#6AC0FF',
-    },
-  };
+import SwipeItem from '../../containers/main/SwipeItem';
 
 const SwipeTemplate = () => {
     return (
         <SwipeForm>
-            <div style={Object.assign({}, styles.slide, styles.slide1)}>
-                slide n°1
-            </div>
-            <div style={Object.assign({}, styles.slide, styles.slide2)}>
+            <SwipeItem onClick={() => alert('no')}>
+              slide n°1
+            </SwipeItem>
+            <SwipeItem
+                to="/123"
+                backgroundImage={'https://unsplash.it/476/205'}
+            >
                 slide n°2
-            </div>
-            <div style={Object.assign({}, styles.slide, styles.slide3)}>
+            </SwipeItem>
+            <SwipeItem
+                to="/Shopping/@Test"
+                backgroundImage={'https://unsplash.it/477/205'}
+            >
                 slide n°3
-            </div>
+            </SwipeItem>
         </SwipeForm>
     );
 };
