@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
+import styled, {css} from 'styled-components';
+import { TransparentBtn } from '../../common/StyleUtilModels';
 
 function reducer(state, action) {
     switch (action.type) {
@@ -49,7 +51,50 @@ function reducer(state, action) {
             return state;
     }
 }
+
 const AutoSwipeViews = autoPlay(SwipeableViews);
+
+const StyledSwipeForm = styled.div`
+    position: relative;
+    background-color: #f6f6f6;
+`;
+
+const StyledSwipeButton = styled(TransparentBtn)`
+    position: absolute;
+    margin-top: -40px;
+    top: 50%;
+    /* font-size: 6.4rem; */
+
+    width: 40px;
+    height: 77px;
+    background-size: 40px 77px;
+    opacity: 1 !important;
+
+    ${ 
+        (props) => {
+            if (props.styleOption === 'PREV') {
+                return css`
+                    left: 8%;  
+                    
+                    background-image: url('/images/nav_arrow_left.png');
+                `
+            } else if (props.styleOption === 'NEXT') {
+                return css`
+                    right: 8%; 
+                    background-image: url('/images/nav_arrow_right.png');
+                `
+            } else {
+                return console.log('SwipeBtn Design error');
+            }        
+        }
+    }
+
+    color: rgb(235, 235, 235);
+
+    &:hover {
+        color: rgb(230, 230, 230);
+    }
+`;
 
 const SwipeForm = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, {
@@ -58,19 +103,27 @@ const SwipeForm = ({ children }) => {
     });
 
     return (
-        <>
+        <StyledSwipeForm>
             <AutoSwipeViews
-                // enableMouseEvents
+                enableMouseEvents                
                 index={state.value}
                 onChangeIndex={() => dispatch({ type: 'AUTO' })}
                 interval={3000}
-            >
-                {children}
+            >                
+                {children}                
             </AutoSwipeViews>
 
-            <button onClick={() => dispatch({ type: 'PREV' })}>PREV</button>
-            <button onClick={() => dispatch({ type: 'NEXT' })}>NEXT</button>
-        </>
+            <StyledSwipeButton 
+                onClick={() => dispatch({ type: 'PREV' })}
+                styleOption='PREV'
+            />
+
+            <StyledSwipeButton 
+                onClick={() => dispatch({ type: 'NEXT' })}
+                styleOption='NEXT'
+            />
+            
+        </StyledSwipeForm>
     );
 };
 

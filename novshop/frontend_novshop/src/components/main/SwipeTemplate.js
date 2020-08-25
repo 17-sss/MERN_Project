@@ -1,24 +1,28 @@
 import React from 'react';
-import SwipeForm from '../../containers/main/SwipeForm';
-import SwipeItem from '../../containers/main/SwipeItem';
+import SwipeForm from './Swipe/SwipeForm';
+import SwipeItem from './Swipe/SwipeItem';
 
 const SwipeTemplate = () => {
     return (
         <SwipeForm>
-            <SwipeItem onClick={() => alert('no')}>
-              slide n°1
+            <SwipeItem
+                to="/Shopping/@SWIPE1"
+                imageLink="/images/200810.jpg"                
+            >
+                slide n°1
             </SwipeItem>
             <SwipeItem
-                to="/123"
-                backgroundImage={'https://unsplash.it/476/205'}
+                to="/Shopping/@SWIPE2"
+                imageLink="/images/200730.jpg" 
             >
                 slide n°2
             </SwipeItem>
             <SwipeItem
-                to="/Shopping/@Test"
-                backgroundImage={'https://unsplash.it/477/205'}
+                to="/Shopping/@SWIPE3"
+                imageLink="/images/200720.jpg"
+                // imageLink="https://unsplash.it/477/205"
             >
-                slide n°3
+                <div style={{ backgroundColor: 'red' }}>slide n°3</div>
             </SwipeItem>
         </SwipeForm>
     );
