@@ -17,11 +17,6 @@ const App = () => {
     if (windowSize.width >= 750) {
         return (
             <>
-                {/* 
-                  // Main 
-                  1. exact 이게 붙어있으면 주어진 경로와 정확히 맞아 떨어져야만 설정한 컴포넌트를 보여줌 
-                  2. path설정은 path={['/@:username', '/']} 이런 식으로도 가능
-                */}
                 <Header />
                 
                 <Switch>

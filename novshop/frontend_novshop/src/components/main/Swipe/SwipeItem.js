@@ -4,34 +4,36 @@ import styled, { css } from 'styled-components';
 const StyledSwipeItem = styled.div`
     ${(props) =>
         props.imageLink === undefined
-            ? css`
-                  background-image: url('/logo512.png');
-              `
-            : css`
-                  background-image: url(${props.imageLink});
-              `};
+        ? css`
+            background-image: url('/logo512.png');
+        `
+        : css`
+            background-image: url(${props.imageLink});
+        `
+    };
 
     ${(props) =>
         props.imageSize === undefined
-            ? /* 옵션 메모: contain | cover | 100% 100% */
-              css`
-                  background-size: contain;
-              `
-            : css`
-                  background-size: ${props.imageSize};
-              `};
+         /* 옵션 메모: contain | cover | 100% 100% */
+        ? css`
+            background-size: cover; /* contain하면 화면 크기 바뀔때 같이 커졌다 작아졌다하심.. */
+        `
+        : css`
+            background-size: ${props.imageSize};
+        `
+    };
+
     background-repeat: no-repeat;
     /* 옵션 메모: center center | center top */
     background-position: center top;
     display: block;
-    color: ${(props) => props.color || '#FFF'};
-    height: 610px;
 
+    color: ${(props) => props.color || '#FFF'};
+    height: ${(props) => props.height || "680px"};
+    width: ${(props) => props.width || "100%"};
+    min-height: ${(props) => props.minHeight || "100%"};
+    
     cursor: pointer;
-    /* 
-    min-height: 100;
-    padding: 15
-    */
 `;
 
 const SwipeItem = (props, /*{ children }*/ ) => {
