@@ -7,7 +7,7 @@ const SwipeTemplate = () => {
         <SwipeForm>
             <SwipeItem
                 to="/Shopping/@SWIPE1"
-                imageLink="/images/200810.jpg"                
+                imageLink="/images/200810.jpg"                                               
             >
                 slide n°1
             </SwipeItem>

@@ -108,7 +108,7 @@ const SwipeForm = ({ children }) => {
                 enableMouseEvents                
                 index={state.value}
                 onChangeIndex={() => dispatch({ type: 'AUTO' })}
-                interval={3000}
+                interval={4000}
             >                
                 {children}                
             </AutoSwipeViews>

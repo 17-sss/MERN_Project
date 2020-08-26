@@ -1,0 +1,14 @@
+@@ 200826
+@ 메모 (파일 참고: /src/components/main/Swipe/SwipeItem.js)
+    * useRef 관련
+        1. ref 지정한 개체의 InnerHTML (태그안의 내용을 가져오려면) 
+            > aRef.current.innerHTML          
+        2. styledComponent 태그의 속성의 값 가져오기
+            > aRef.current.attributes['속성명'].value
+            
+            - 추가사항
+                원래 정의된 속성(프로퍼티)명은 가져올 수 있으나, 임의로 지정한건 못가져오는듯.
+                (   [작업 당시 메모]
+                        to나 id 같은 원래있는 프로퍼티는 value 속성이 있는듯. 
+                        커스텀속성은 value값 못찾음
+                )
