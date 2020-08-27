@@ -20,7 +20,7 @@ const HeaderWrapper = styled.div`
 // *** HeaderBlock, 헤더 Block ***
 const HeaderBlock = styled.div`
     position: ${(props) => props.position && 'relative'};
-    height: 90px;
+    height: 120px;
 `;
 
 // *** HearderUl / Li ▶ 헤더 카테고리용 ui, li ***  [START]
@@ -61,12 +61,34 @@ const HeaderLi = styled.li`
 `;
 // *** HearderUl / Li ▶ 헤더 카테고리용 ui, li ***  [END]
 
-// *** HeaderLogo, 헤더 로고 ***
-const HeaderLogo = styled.h1` 
+// *** HeaderLogoFont, 헤더 로고 : 폰트 ***    (사용안함)
+/*
+const HeaderLogoFont = styled.h1` 
     position: ${props => props.posAbsolute && 'absolute'};
     float: left;
     font-family: "Bauhaus 93";
     font-size: ${props => props.fontSize === undefined ? "23.5pt" : props.fontSize}; 
+`;
+*/
+
+// *** HeaderLogoImage, 헤더 로고 : 이미지 ***
+const HeaderLogoImage = styled.div`
+    /* 
+        ** 이미지 수정 시: 
+            원본 - onlinelogomaker.com/logomaker/?project=66437368  
+            투명배경 - Pixir 사용
+    */
+    background-image: url("/images/logo_Trans.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    width: 200px;
+    height: 47px;
+
+    position: absolute;
+    top: 25px;
+
+    cursor: pointer;
 `;
 
 // *** HeaderHr, 헤더 구분선 ***
@@ -77,15 +99,16 @@ const HeaderHr = styled.hr`
 
 // *** SearchInput, 검색 창 ****
 const SearchInput = styled.input`
-    font-size: 0.7rem;
+    font-size: 10pt;
     border: 1.4px solid rgb(152, 234, 240);
-    padding: 3.5% 3.5%;
+    padding: 5% 0%;
     outline: none;
     width: 78%;    
-
+/*
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     border-radius: 20px;
+*/
 
     &:focus {        
         border: 1.4px solid rgb(142, 211, 216);
@@ -102,7 +125,7 @@ const SearchBtn = styled(TransparentBtn)`
 // *** SearchIcon, 검색 아이콘 ****
 const SearchIcon = styled(FontAwesomeIcon)`
     color: rgb(152, 234, 240);
-
+    font-size: 13pt;
     &:hover {
         color: rgb(142, 211, 216); 
     }
@@ -134,7 +157,9 @@ const Header = (props) => {
 
                 <MarginBlock>  
                     <HeaderBlock>
-                        <HeaderLogo posAbsolute>
+                        {/*                         
+                            // 헤더 로고 : 폰트형 (사용안함)
+                        <HeaderLogoFont posAbsolute>
                             <CustomLink 
                                 to = '/'
                                 margin = '0'   
@@ -142,7 +167,9 @@ const Header = (props) => {
                             >
                                 nov Shop
                             </CustomLink>
-                        </HeaderLogo>    
+                        </HeaderLogoFont>     
+                        */}
+                        <HeaderLogoImage onClick = {() => global.location.href = '/'}/>
 
                         <HeaderUl posRelative>        
                             {authSample.map((item, i) => {
@@ -152,14 +179,17 @@ const Header = (props) => {
 
                                 return (
                                     <HeaderLi key = {i}>
-                                        <CustomLink to = {() => {
+                                        <CustomLink 
+                                            to = {() => {
                                                 return (
                                                     (i <= 1) ? 
                                                         (item === '로그인' ? '/login' : '/member/join') 
                                                         :
                                                         ('/#' + i)
                                                 )                                         
-                                            }}>
+                                            }}
+                                            fontSize = "11pt"
+                                        >
                                             {item}
                                         </CustomLink>   
                                     </HeaderLi>
@@ -196,11 +226,16 @@ const Header = (props) => {
                 <HeaderHr />
 
                 <MarginBlock>
-                    <HeaderUl>        
+                    <HeaderUl
+                        padding= "0.8% 0"
+                    >        
                         {categorySample.map((item, i) => {
                             return (
                                 <HeaderLi key = {i}>
-                                    <CustomLink to = {'/shopping/@' + i}>
+                                    <CustomLink 
+                                        to = {'/shopping/@' + i}
+                                        fontSize = "11pt"    
+                                    >
                                         {item}
                                     </CustomLink>   
                                 </HeaderLi>

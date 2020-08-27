@@ -76,6 +76,7 @@ export const CustomLink = styled(Link)`
     text-decoration: none;
     margin: ${(props) => props.margin || '0 5px'};
     color: rgb(0, 0, 0);
+    font-size: ${(props) => props.fontSize && props.fontSize};
 
     &:focus,
     &:hover,
