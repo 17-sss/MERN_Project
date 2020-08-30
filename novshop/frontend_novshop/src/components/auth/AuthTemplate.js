@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {CustomLink} from '../common/StyleUtilModels'
+import {StyledCustomLink} from '../common/StyleUtilModels'
 
 const AuthTemplateBlock = styled.div`
     height: 50rem;
@@ -35,7 +35,7 @@ const WhiteBox = styled.div`
 `;
 
 // Link 컴포넌트 디자인 변경
-const StyledLink = styled(CustomLink)`
+const StyledLink = styled(StyledCustomLink)`
     color: black;
     font-family: "Bauhaus 93";
 `;

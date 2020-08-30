@@ -57,7 +57,7 @@ const SwipeItem = (props, /*{ children }*/ ) => {
                 if (pressRef.current.value === 'false') {                    
                     global.location.href = link;
                 }
-            }, 120);
+            }, 130);
         }       
     }, 
         [

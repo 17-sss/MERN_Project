@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {MarginBlock, CustomLink, TransparentBtn} from '../common/StyleUtilModels';
+import {MarginBlock, StyledCustomLink, StyledTransparentBtn} from '../common/StyleUtilModels';
 // https://fontawesome.com/how-to-use/on-the-web/using-with/react
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -41,7 +41,7 @@ const HeaderLi = styled.li`
     margin-bottom: 0.5rem;
     float: ${props => props.float || 'left'};   
 
-    ${props => props.vertical && 
+    ${props => props.vertical && // vertical 속성은 | 와 같은 수직선 의미
         css`
             padding: 0 10px;
             &::after {
@@ -116,7 +116,7 @@ const SearchInput = styled.input`
 `;
 
 // *** SearchBtn, 검색 버튼 ****
-const SearchBtn = styled(TransparentBtn)`
+const SearchBtn = styled(StyledTransparentBtn)`
     vertical-align: middle;
     width: 10%;
     margin-left: 3%;
@@ -179,7 +179,7 @@ const Header = (props) => {
 
                                 return (
                                     <HeaderLi key = {i}>
-                                        <CustomLink 
+                                        <StyledCustomLink 
                                             to = {() => {
                                                 return (
                                                     (i <= 1) ? 
@@ -191,7 +191,7 @@ const Header = (props) => {
                                             fontSize = "11pt"
                                         >
                                             {item}
-                                        </CustomLink>   
+                                        </StyledCustomLink>   
                                     </HeaderLi>
                                 );
                             })}                                                        
@@ -232,12 +232,12 @@ const Header = (props) => {
                         {categorySample.map((item, i) => {
                             return (
                                 <HeaderLi key = {i}>
-                                    <CustomLink 
+                                    <StyledCustomLink 
                                         to = {'/shopping/@' + i}
                                         fontSize = "11pt"    
                                     >
                                         {item}
-                                    </CustomLink>   
+                                    </StyledCustomLink>   
                                 </HeaderLi>
                             );
                         })}                               

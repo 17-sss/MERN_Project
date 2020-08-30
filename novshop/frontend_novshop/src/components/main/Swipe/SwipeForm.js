@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import styled, {css} from 'styled-components';
-import { TransparentBtn } from '../../common/StyleUtilModels';
+import { StyledTransparentBtn } from '../../common/StyleUtilModels';
 
 function reducer(state, action) {
     switch (action.type) {
@@ -59,7 +59,7 @@ const StyledSwipeForm = styled.div`
     background-color: #f6f6f6;
 `;
 
-const StyledSwipeButton = styled(TransparentBtn)`
+const StyledSwipeButton = styled(StyledTransparentBtn)`
     position: absolute;
     margin-top: -40px;
     top: 50%;

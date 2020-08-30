@@ -72,7 +72,7 @@ export const MarginBlock = ({ children }) => {
 // **********************************************************************************
 // *** 커스텀 Link 컴포넌트 1 ***
 // **********************************************************************************
-export const CustomLink = styled(Link)`
+export const StyledCustomLink = styled(Link)`
     text-decoration: none;
     margin: ${(props) => props.margin || '0 5px'};
     color: rgb(0, 0, 0);
@@ -148,7 +148,7 @@ export const Button = (props) => {
 // **********************************************************************************
 // *** 커스텀 버튼 : 투명 ***
 // **********************************************************************************
-export const TransparentBtn = styled.button`
+export const StyledTransparentBtn = styled.button`
     background: none;
     color: inherit;
     border: none;

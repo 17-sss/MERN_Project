@@ -1,14 +1,21 @@
 import React from 'react';
-import styled from 'styled-components';
 import SwipeTemplate from './SwipeTemplate';
-import {BoxModel} from '../common/StyleUtilModels';
+import ProductItem from '../common/Product/ProductItem';
+import ProductForm from '../common/Product/ProductList';
 
-const MainTemplateBlock = styled.div``;
+
 
 const MainTemplate = () => {
     return (
-        <MainTemplateBlock>
+        <>
             <SwipeTemplate/>
+            <ProductForm>
+                <ProductItem style = {{backgroundColor: 'red'}} >s{">"}</ProductItem>
+                <ProductItem style = {{backgroundColor: 'blue'}} >d</ProductItem>
+                <ProductItem style = {{backgroundColor: 'yellow'}} >s</ProductItem>
+                <ProductItem style = {{backgroundColor: 'green'}} >aa</ProductItem>
+            </ProductForm>
+            {/*
             <BoxModel 
                 padding="15% 0"                
             />
@@ -16,7 +23,8 @@ const MainTemplate = () => {
                 padding="15% 0"
                 backgroundColor='skyblue'
             />
-        </MainTemplateBlock>
+            */}
+        </>
     );
 };
 
