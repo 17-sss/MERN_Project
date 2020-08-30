@@ -41,22 +41,29 @@
 
 @@ 200826
     * 메모 (파일 참고: /src/components/main/Swipe/SwipeItem.js)
-    1. useRef 관련
-        1) ref 지정한 개체의 InnerHTML (태그안의 내용을 가져오려면) 
-            > aRef.current.innerHTML          
-        2) styledComponent 태그의 속성의 값 가져오기
-            > aRef.current.attributes['속성명'].value
-            
-            - 추가사항
-                원래 정의된 속성(프로퍼티)명은 가져올 수 있으나, 임의로 지정한건 못가져오는듯.
-                (   [작업 당시 메모]
-                        to나 id 같은 원래있는 프로퍼티는 value 속성이 있는듯. 
-                        커스텀속성은 value값 못찾음
-                )
-    2. react Route 컴포넌트 관련            
-        1) exact 이게 붙어있으면 주어진 경로와 정확히 맞아 떨어져야만 설정한 컴포넌트를 보여줌 
-        2) path설정은 path={['/@:username', '/']} 이런 식으로도 가능
+        1. useRef 관련
+            1) ref 지정한 개체의 InnerHTML (태그안의 내용을 가져오려면) 
+                > aRef.current.innerHTML          
+            2) styledComponent 태그의 속성의 값 가져오기
+                > aRef.current.attributes['속성명'].value
+                
+                - 추가사항
+                    원래 정의된 속성(프로퍼티)명은 가져올 수 있으나, 임의로 지정한건 못가져오는듯.
+                    (   [작업 당시 메모]
+                            to나 id 같은 원래있는 프로퍼티는 value 속성이 있는듯. 
+                            커스텀속성은 value값 못찾음
+                    )
+        2. react Route 컴포넌트 관련            
+            1) exact 이게 붙어있으면 주어진 경로와 정확히 맞아 떨어져야만 설정한 컴포넌트를 보여줌 
+            2) path설정은 path={['/@:username', '/']} 이런 식으로도 가능
 
 
 @@ 200830 
-    * react 부트스트랩 관련 랑크: https://react-bootstrap.github.io/
+    * react 부트스트랩 관련 
+        1. 링크
+            https://react-bootstrap.github.io/
+        2. 설치
+            npm i --save react-bootstrap bootstrap
+        3. 참고
+            1) react-bootstrap 모듈 사용시, index.js나 App.js에 bootstrap import 해줘야 함
+                (   import 'bootstrap/dist/css/bootstrap.min.css';  )

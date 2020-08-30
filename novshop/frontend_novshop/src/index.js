@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';  // react-bootstrap 모듈 사용시 필수!! 
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
