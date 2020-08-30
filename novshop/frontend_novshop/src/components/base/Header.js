@@ -94,7 +94,7 @@ const HeaderLogoImage = styled.div`
 // *** HeaderHr, 헤더 구분선 ***
 const HeaderHr = styled.hr`
     margin: 0;
-    border-top: 0.7px solid rgb(255, 253, 255);
+    border-top: 1px solid rgb(255, 240, 240);
 `;
 
 // *** SearchInput, 검색 창 ****
@@ -103,7 +103,7 @@ const SearchInput = styled.input`
     border: 1.4px solid rgb(152, 234, 240);
     padding: 5% 0%;
     outline: none;
-    width: 78%;    
+    width: 85%;    
 /*
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
@@ -227,7 +227,7 @@ const Header = (props) => {
 
                 <MarginBlock>
                     <HeaderUl
-                        padding= "0.8% 0"
+                        padding= "0.5% 0"
                     >        
                         {categorySample.map((item, i) => {
                             return (

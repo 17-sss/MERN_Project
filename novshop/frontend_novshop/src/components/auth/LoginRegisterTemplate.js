@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../common/StyleUtilModels';
 
 const LoginRegisterTemplateBlock = styled.div`  
-    h3 {
+    h4 {
         margin: 0;
         color: gray;
         margin-bottom: 1rem;
@@ -70,7 +70,7 @@ const LoginRegisterTemplate = ({type, form, onChange, onSubmit, error}) => {
     const text = textMap[type];     
     return (        
         <LoginRegisterTemplateBlock>                 
-            <h3>{text}</h3>
+            <h4>{text}</h4>
             <form onSubmit = {onSubmit}>
                 <StyledInput 
                     autoComplete="username" 

@@ -1,9 +1,18 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
+import styled, {css} from 'styled-components';
+
+const StyledCol = styled(Col)`
+    ${props => props.TestSize && css`
+        height: 100px;
+        width: 25%;
+        margin: 0 10px;
+    `}
+`;
 
 const ProductItem = (props) => {
     return (
-        <Col {...props}/>
+        <StyledCol {...props} />
     );
 };
 

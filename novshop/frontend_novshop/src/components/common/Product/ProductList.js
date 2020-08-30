@@ -1,17 +1,14 @@
 import React from 'react';
 import { Container, Row } from "react-bootstrap";
-import styled from 'styled-components';
 
-const StyledRow = styled(Row)``;
-
-const ProductForm = ({children}) => {
+const ProductList = ({children}) => {
     return (
-        <Container>
-            <StyledRow>
+        <Container fluid>
+            <Row>
                 {children}
-            </StyledRow>
+            </Row>
         </Container>
     );
 };
 
-export default ProductForm;
+export default ProductList;
