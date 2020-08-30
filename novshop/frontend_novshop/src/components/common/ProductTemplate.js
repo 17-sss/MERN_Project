@@ -11,14 +11,14 @@ const StyledCol = styled(Col)`
 const ProductTemplate = (props) => {
     return (
         <Container fluid>
-            <Row className = 'row-cols-4'>
+            <Row className = 'row-cols-4' style = {{margin: '0 10%'}}>
                 <StyledCol backColor = 'red'></StyledCol>
                 <StyledCol backColor = 'skyblue'></StyledCol>
                 <StyledCol backColor = 'blue'></StyledCol>
-                <StyledCol backColor = 'white'></StyledCol>
+                <StyledCol backColor = 'yellow'></StyledCol>
                 <StyledCol backColor = 'green'></StyledCol>
                 <StyledCol backColor = 'purple'></StyledCol>
-                <StyledCol backColor = 'yellow'></StyledCol>
+                <StyledCol backColor = 'orange'>{'https://getbootstrap.com/docs/4.5/layout/grid/'}</StyledCol>
                 <StyledCol backColor = 'black'></StyledCol>
             </Row>
         </Container>
