@@ -6,13 +6,13 @@ const StyledCol = styled(Col)`
     ${props => props.TestSize && css`
         height: 100px;
         width: 25%;
-        margin: 0 10px;
+        margin: 10px;
     `}
 `;
 
 const ProductItem = (props) => {
     return (
-        <StyledCol {...props} />
+        <StyledCol {...props}  />
     );
 };
 

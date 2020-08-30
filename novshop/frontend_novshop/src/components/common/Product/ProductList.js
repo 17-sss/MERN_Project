@@ -1,12 +1,17 @@
 import React from 'react';
 import { Container, Row } from "react-bootstrap";
+import styled, {css} from 'styled-components';
 
-const ProductList = ({children}) => {
+const StyledRow = styled(Row)` 
+    ${(props) => props.MgLR5 && css`margin: 0 5%;`};
+`;
+
+const ProductList = (props) => {
     return (
         <Container fluid>
-            <Row>
-                {children}
-            </Row>
+            <StyledRow {...props}>
+                {props.children}
+            </StyledRow>
         </Container>
     );
 };
