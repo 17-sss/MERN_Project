@@ -16,9 +16,8 @@ const App = () => {
     
     if (windowSize.width >= 750) {
         return (
-            <>
-                <Header />
-                
+            <>          
+                <Header/>      
                 <Switch>
                     <Route component={MainPage} path="/" exact />
                     {/* // Shopping */}

@@ -56,7 +56,7 @@ const StyledMargin = styled.div`
     }}
 `;
 
-export const MarginBlock = ({ children }) => {
+export const MarginBlock = (props) => {
     const MarginAndScroll = {
         margin: useCalcMargin(15),
         vertScrollWidth: undefined, /* useCalcVertScrollWidth(), 사용안하기로..*/
@@ -64,7 +64,7 @@ export const MarginBlock = ({ children }) => {
 
     return (
         <StyledMargin MarginOption={MarginAndScroll}>
-            {children}
+            {props.children}
         </StyledMargin>
     );
 };

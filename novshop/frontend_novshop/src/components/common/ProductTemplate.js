@@ -1,27 +1,71 @@
 import React from 'react';
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from 'react-bootstrap';
 import styled from 'styled-components';
 
-const StyledCol = styled(Col)`
-    background-color: ${(props) => props.backColor || "black"};
-    height: 100px;
-    
+const StyledContainer = styled(Container)`
+    width: 1600px;
+    max-width: none !important;
 `;
 
+const StyledCol = styled(Col)`
+    background-color: ${(props) => props.backcolor || 'black'};
+    height: 400px;
+    width: 400px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+`;
+
+
 const ProductTemplate = (props) => {
+    const Items = () => {
+        let arr = [];
+
+        for (let index = 0; index <= 7; index++) {
+            arr.push(
+                <StyledCol 
+                    backcolor="#ccc" 
+                    key = {index}
+                    
+                    /*className = "col-xs-4"*/
+                >
+                    <div
+                        style={{
+                            height: '290px',
+                            marginTop: '10px',
+                            backgroundColor: '#fff',
+                        }}
+                    />
+                    <div style = {{margin: '5px 0'}} />
+                    <div
+                        style={{
+                            height: '90px',                            
+                            backgroundColor: "rgb(240 , 240, 240)",
+                        }}
+                    >
+                        몇번쨰일까? :: {index + 1}
+                    </div>
+                    
+                </StyledCol>
+            );                            
+        }
+
+        return arr;
+    }
+
+    
+
     return (
-        <Container fluid>
-            <Row className = 'row-cols-4' style = {{margin: '0 10%'}}>
-                <StyledCol backColor = 'red'></StyledCol>
-                <StyledCol backColor = 'skyblue'></StyledCol>
-                <StyledCol backColor = 'blue'></StyledCol>
-                <StyledCol backColor = 'yellow'></StyledCol>
-                <StyledCol backColor = 'green'></StyledCol>
-                <StyledCol backColor = 'purple'></StyledCol>
-                <StyledCol backColor = 'orange'>{'https://getbootstrap.com/docs/4.5/layout/grid/'}</StyledCol>
-                <StyledCol backColor = 'black'></StyledCol>
+        <StyledContainer /*fluid*/>
+            <Row className="row-cols-4" style={{ margin: '0 10%' }}>
+                {
+                    Items().map( (value, i) => {
+                        return value
+                    })
+                }
+            
             </Row>
-        </Container>
+        </StyledContainer>
     );
 };
 
