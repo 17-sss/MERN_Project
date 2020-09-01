@@ -1,9 +1,16 @@
 import React from 'react';
-import styled, {css} from 'styled-components';
-import {MarginBlock, StyledCustomLink, StyledTransparentBtn} from '../common/StyleUtilModels';
-// https://fontawesome.com/how-to-use/on-the-web/using-with/react
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components';
+import {StyledCustomLink, /* StyledTransparentBtn, MarginBlock */} from '../common/StyleUtilModels';
+
+// ****************************************************************************************
+// Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
+// ****************************************************************************************
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faShoppingBasket } from '@fortawesome/free-solid-svg-icons';       // fas
+import { faUser } from '@fortawesome/free-regular-svg-icons';       // far
+// import { faUser } from '@fortawesome/free-brands-svg-icons';     // fab
+// ----------------------------------------------------------------------------------------/
+
 
 // ========================================================================================
 // ************* 헤더 Wrapper *************
@@ -13,9 +20,9 @@ const StyledWrapper = styled.div`
     height: 140px;
     position: relative;
     margin: 0 auto;
-    background-color: #ccc;
+    /* background-color: #ccc; */
 `;
-// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------/
 
 
 // ========================================================================================
@@ -26,22 +33,13 @@ const StyledTopLogo = styled.div`
     margin: 0 auto;    
     display: table;
     line-height: 140px;
-    height: 140px;
-    width: 200px;
-    /*
-    background-image: url("/images/logo_Trans.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    */
 `;
 
-const StyledLogoLink = styled(StyledCustomLink)`
-    display: table-cell;
+const StyledLogoLink = styled(StyledCustomLink)`        
     vertical-align: middle;
-    background-color: white;
+    /* display: table-cell; */
 `;  
-// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------/
 
 
 // ========================================================================================
@@ -54,11 +52,10 @@ const StyledUserSection = styled.div`
 `;
 
 const StyledUserSectionLi = styled.li`      /* ul 태그는 styled 작업 안해도 될듯. */
-
+    cursor: pointer;
 `;
 
-
-// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------/
 
 
 
@@ -73,7 +70,10 @@ const Header = (props) => {
                     hoveroff = {"true"}
                     margin="0"
                 >
-                    <img src="/images/logo_Trans.png"></img>
+                    <img 
+                        src="/images/logo_Trans.png"
+                        alt="logo"
+                    />
                 </StyledLogoLink>
             </StyledTopLogo>
             {/* 헤더 로고 END */}
@@ -84,20 +84,20 @@ const Header = (props) => {
                     <StyledUserSectionLi 
                         style = {{
                             float: 'left',
-                            marginRight: '10px',
+                            marginRight: '12px',
                         }}
                     >                         
-                        <FontAwesomeIcon icon = {faSearch} style = {{color: 'black',}} />    
+                        <FontAwesomeIcon icon = {faUser} size = 'lg'/>    
                     </StyledUserSectionLi>
 
                     <StyledUserSectionLi
                         style = {{
                             float: 'left',
-                            marginRight: '10px',
+                            marginRight: '12px',
                             position: 'relative',  //                           
                         }}
                     >
-                        <FontAwesomeIcon icon = {faSearch} style = {{color: 'red',}} />    
+                        <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
                     </StyledUserSectionLi>
 
                     <StyledUserSectionLi
@@ -107,7 +107,7 @@ const Header = (props) => {
                             marginRight: '0px', // li:lastchild                            
                         }}
                     >
-                        <FontAwesomeIcon icon = {faSearch} style = {{color: 'blue',}} />                
+                        <FontAwesomeIcon icon = {faSearch} size = 'lg' />                
                     </StyledUserSectionLi>
                 </ul>
             </StyledUserSection>
