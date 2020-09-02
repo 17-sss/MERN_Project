@@ -1,0 +1,10 @@
+@@ 200902
+    * 메모 
+        1. CSS position에 대해..
+            링크: https://www.zerocho.com/category/CSS/post/5864f3b59f1dc000182d3ea1
+        2. CSS로 Dropdown
+            1) 링크
+                http://tcpschool.com/css/css_advanced_dropdown
+            +) StyledComponents 사용법 링크 (공식)
+                https://styled-components.com/
+                
