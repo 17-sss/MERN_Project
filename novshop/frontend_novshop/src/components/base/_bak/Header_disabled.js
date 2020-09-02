@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {MarginBlock, StyledCustomLink, StyledTransparentBtn} from '../common/StyleUtilModels';
+import {MarginBlock, StyledCustomLink, StyledTransparentBtn} from '../../common/StyleUtilModels';
 // https://fontawesome.com/how-to-use/on-the-web/using-with/react
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'

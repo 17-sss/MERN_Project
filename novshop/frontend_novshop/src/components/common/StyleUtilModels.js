@@ -157,3 +157,17 @@ export const StyledTransparentBtn = styled.button`
     cursor: pointer;
     outline: inherit;
 `;
+
+
+// **********************************************************************************
+// *** StyledClear ***
+// **********************************************************************************
+export const StyledClear = styled.div`
+    ${(props) => {
+        if ((props.opt === "left") || (props.opt === "right") || (props.opt === "both")) {
+            return css`clear: ${props.opt};`;
+        } else {
+            return css`clear: both;`;
+        }
+    }}
+`;
