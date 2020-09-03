@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {StyledCustomLink, StyledClear} from '../common/StyleUtilModels';
+import {StyledCustomLink, StyledClear, CSSDropdown, StyledDropdownContent} from '../common/StyleUtilModels';
 
 // ****************************************************************************************
 // Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
@@ -51,6 +51,8 @@ const StyledHeadUL = styled.ul`
                 /* list-style-type: none; */
                 float: left;
                 padding: 0 15px;
+
+                ${props.isdropdown && CSSDropdown}  /* isdropdown 있을시 dropdown 설정 */
             }
         `
         :
@@ -64,7 +66,7 @@ const StyledHeadUL = styled.ul`
                 }
             }
         `
-    }
+    }    
 `;
 
 // ----------------------------------------------------------------------------------------/ 
@@ -109,68 +111,6 @@ const StyledIconSection = styled.div`
 `;
 // ----------------------------------------------------------------------------------------/    
 // 헤더 :: [아이콘, 로고] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-
-
-
-// 헤더 :: [카테고리용 Dropdown] START ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-// ========================================================================================
-// ************* Dropdown : 버튼 *************
-// ========================================================================================
-const StyledDropdownBtn = styled.button`
-    background-color: #FFDAB9; 
-    padding: 8px; 
-    font-size: 15px; 
-    border: none;
-`;
-// ----------------------------------------------------------------------------------------/ 
-
-
-// ========================================================================================
-// ************* Dropdown : Content *************
-// ========================================================================================
-const StyledDropdownContent = styled.div`
-    display: none;
-    position: absolute;
-    background-color: #FFDAB9;
-    min-width: 70px;
-    padding: 8px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-
-    a {
-        color: black; 
-        padding: 8px; 
-        text-decoration: none; 
-        display: block;
-
-        &:hover {
-            background-color: #CD853F;
-        }
-    }
-`;
-// ----------------------------------------------------------------------------------------/ 
-
-
-// ========================================================================================
-// ************* Dropdown : 최상위 (dropdown 관련 맨 마지막에 선언해놔야 정상 작동) *************
-// ========================================================================================
-const StyledDropdown = styled.div`
-    position: relative;
-    display: inline-block;
-
-    &:hover {
-         /* .dropdown:hover .dropdown-button { background-color: #CD853F; } */
-        ${StyledDropdownBtn} {
-            background-color: #CD853F;
-        } 
-        /* .dropdown:hover .dropdown-content { display: block; } */
-        ${StyledDropdownContent} {
-            display: block;
-        } 
-    }
-`;
-// ----------------------------------------------------------------------------------------/  
-// 헤더 :: [카테고리용 Dropdown] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-
 
 
 const Header = (props) => {
@@ -256,30 +196,37 @@ const Header = (props) => {
 
             {/* *** 헤더 [카테고리] START *** */}
             <StyledHeadWrapper type = "Category">
-                <StyledHeadUL  type = "Category">                    
+                <StyledHeadUL  type = "Category" 
+                    isdropdown // << 잘못된거지만 잠시..
+                >                                    
                     {categoryList.map( (item, i) => {
                         return (
-                            <li
-                                key = {item.key}  
-                            >
+                            <li 
+                                key = {item.key}
+                                // isdropdown = {(i > 3)}  여기서 작동해야함. 부모인 StyledHeadUL에서 작동하면안대..
+                            >                            
                                 <StyledCustomLink
                                     to = {"/shopping/@" + item.key}
                                     margin = "0"                                                                     
                                 >
                                     {item.value}
-                                </StyledCustomLink>
+                                </StyledCustomLink>                                
+                                {
+                                    (i > 3) &&
+                                        <StyledDropdownContent>
+                                            <StyledCustomLink to="/#123">ONE</StyledCustomLink>    
+                                            <StyledCustomLink to="/#234">TWO</StyledCustomLink>
+                                        </StyledDropdownContent>    
+                                }
+
                             </li>
-                        );
-                    })}        
+                        );                        
+                        
+                    })}                                                     
                 </StyledHeadUL>
                 <StyledClear />
             </StyledHeadWrapper>    
             {/* *** 헤더 [카테고리] END *** */}
-            
-
-            
-
-
 
         </>
     );

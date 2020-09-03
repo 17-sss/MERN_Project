@@ -17,7 +17,9 @@ const MainTemplate = () => {
     return (
         <>
             <SwipeTemplate />
-            <ProductTemplate /*Items = {TestItem()} */ />
+            <ProductTemplate 
+                // Items = {TestItem()}
+            />
         </>
     );
 };

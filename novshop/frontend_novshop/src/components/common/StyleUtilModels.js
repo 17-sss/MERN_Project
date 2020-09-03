@@ -160,7 +160,7 @@ export const StyledTransparentBtn = styled.button`
 
 
 // **********************************************************************************
-// *** StyledClear ***
+// *** StyledClear : clear 태그 Control ***
 // **********************************************************************************
 export const StyledClear = styled.div`
     ${(props) => {
@@ -171,3 +171,50 @@ export const StyledClear = styled.div`
         }
     }}
 `;
+
+
+// Dropdown 관련 START ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+// **********************************************************************************
+// *** Dropdown : Content ***
+// **********************************************************************************
+export const StyledDropdownContent = styled.div`
+    display: none;
+    position: absolute;
+    background-color: #FFDAB9;
+    min-width: 70px;
+    padding: 8px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+    a {
+        color: black; 
+        padding: 8px; 
+        text-decoration: none; 
+        display: block;
+
+        &:hover {
+            background-color: #CD853F;
+        }
+    }
+`;
+
+
+// **********************************************************************************
+// *** Dropdown : '최상위'에 쓸 용도.           
+//          태그가 아닌 CSS로 만들어 놓고 사용하려는 스타일컴포넌트 변수에 등록하기.  ***
+// **********************************************************************************
+export const CSSDropdown = css`
+    position: relative;
+    display: inline-block;
+    z-index: 10;   
+
+    &:hover {
+        /* .dropdown:hover .dropdown-button { background-color: #CD853F; }  < 참고용 */
+
+
+        /* .dropdown:hover .dropdown-content { display: block; } */
+        ${StyledDropdownContent} {
+            display: block;            
+        } 
+    }
+`;
+// Dropdown 관련 END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒

@@ -7,4 +7,11 @@
                 http://tcpschool.com/css/css_advanced_dropdown
             +) StyledComponents 사용법 링크 (공식)
                 https://styled-components.com/
+
+@@ 200903 
+    * 메모
+        1. CSS z-index에 대해
+            링크: https://aboooks.tistory.com/83
+        2. React 조건부 렌더링 
+            링크: https://ko.reactjs.org/docs/conditional-rendering.html
                 
