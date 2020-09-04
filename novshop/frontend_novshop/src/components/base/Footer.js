@@ -1,17 +1,30 @@
 import React from 'react';
-/*
-import styled, {css} from 'styled-components';
-import {MarginBlock, CustomLink} from '../common/StyleUtilModels';
-*/
+import styled from 'styled-components';
+import {getWidth} from '../../lib/utility/customFunc'
+
+const FooterWrapper = styled.div`
+    width: ${getWidth(1)};
+    position: relative;
+    margin: 0 auto;
+
+    /* 임시 START */
+    height: 5rem;
+    background-color: #ccc;
+    
+    h1 {
+        color: white;        
+        padding: 0 120px;
+    }
+    /* 임시 END */
+`
 
 const Footer = () => {
     return (
-        <div style = {{
-            height: "3rem",
-            backgroundColor: "black",            
-        }}>
-            <h1 style={{color: "white", margin: '0',}}>FOOTER</h1>
-        </div>
+        <>
+            <FooterWrapper>
+                <h1> THIS IS FOOTER</h1>
+            </FooterWrapper>
+        </>
     )
 };
 

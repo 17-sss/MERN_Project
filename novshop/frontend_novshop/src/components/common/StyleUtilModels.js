@@ -72,7 +72,7 @@ export const MarginBlock = (props) => {
 // **********************************************************************************
 // *** 커스텀 Link 컴포넌트 1 ***
 // **********************************************************************************
-export const StyledCustomLink = styled(Link)`
+export const CustomLink = styled(Link)`
     text-decoration: none;
     margin: ${(props) => props.margin || '0 5px'};
     color: rgb(0, 0, 0);
@@ -83,11 +83,7 @@ export const StyledCustomLink = styled(Link)`
     &:visited,
     &:link,
     &:active {
-        text-decoration: none;
-    }
-
-    &:hover {
-        ${(props) => props.hoveroff || 'color: rgb(83, 83, 83)'};
+        text-decoration: none;      
     }
 `;
 // **********************************************************************************
@@ -148,7 +144,7 @@ export const Button = (props) => {
 // **********************************************************************************
 // *** 커스텀 버튼 : 투명 ***
 // **********************************************************************************
-export const StyledTransparentBtn = styled.button`
+export const TransparentBtn = styled.button`
     background: none;
     color: inherit;
     border: none;
@@ -160,9 +156,9 @@ export const StyledTransparentBtn = styled.button`
 
 
 // **********************************************************************************
-// *** StyledClear : clear 태그 Control ***
+// *** ClearEx : clear 태그 Control ***
 // **********************************************************************************
-export const StyledClear = styled.div`
+export const ClearEx = styled.div`
     ${(props) => {
         if ((props.opt === "left") || (props.opt === "right") || (props.opt === "both")) {
             return css`clear: ${props.opt};`;
@@ -177,32 +173,37 @@ export const StyledClear = styled.div`
 // **********************************************************************************
 // *** Dropdown : Content ***
 // **********************************************************************************
-export const StyledDropdownContent = styled.div`
+export const DropdownContent = styled.div`
+    background-color: white;
+
     display: none;
-    position: absolute;
-    background-color: #FFDAB9;
+    position: absolute;    
     min-width: 70px;
     padding: 8px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    margin: ${props => props.margin || "0 0 0 -5px"};
+    /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
 
     a {
         color: black; 
-        padding: 8px; 
+        padding: 0 3px;
         text-decoration: none; 
         display: block;
 
         &:hover {
-            background-color: #CD853F;
+            background-color: rgb(249, 249, 249);
         }
     }
 `;
 
 
 // **********************************************************************************
-// *** Dropdown : '최상위'에 쓸 용도.           
-//          태그가 아닌 CSS로 만들어 놓고 사용하려는 스타일컴포넌트 변수에 등록하기.  ***
+// *** Dropdown : '최상위'에 쓸 용도 (css) ***
 // **********************************************************************************
-export const CSSDropdown = css`
+/* 
+    - Dropdown을 하는 부모 태그가 어느 것이 될지 모르니 스타일컴포넌트 자체가 아닌 css로 만들어놓음.
+    - 태그가 아닌 CSS로 만들어 놓고 사용하려는 스타일컴포넌트 변수에 등록하기.
+*/
+export const cssDropdown = css`
     position: relative;
     display: inline-block;
     z-index: 10;   
@@ -212,7 +213,7 @@ export const CSSDropdown = css`
 
 
         /* .dropdown:hover .dropdown-content { display: block; } */
-        ${StyledDropdownContent} {
+        ${DropdownContent} {
             display: block;            
         } 
     }

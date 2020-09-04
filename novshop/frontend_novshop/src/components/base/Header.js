@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {StyledCustomLink, StyledClear, CSSDropdown, StyledDropdownContent} from '../common/StyleUtilModels';
+import {CustomLink, ClearEx, cssDropdown, DropdownContent} from '../common/StyleUtilModels';
+import {getWidth} from '../../lib/utility/customFunc'
 
 // ****************************************************************************************
 // Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
@@ -15,8 +16,8 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';       // far
 // ========================================================================================
 // ************* 헤더용 Wrapper *************
 // ========================================================================================
-const StyledHeadWrapper = styled.div`
-    width: 1324px;    
+const HeadWrapper = styled.div`
+    width: ${getWidth(1.45)};    
     position: relative;
     margin: 0 auto;
     /* background-color: #ccc; */
@@ -37,9 +38,30 @@ const StyledHeadWrapper = styled.div`
 
 
 // ========================================================================================
-// ************* 헤더 ul & li - [1] :: (헤더 Icons & 카테고리) *************
+// ************* 헤더용 구분선 : hr *************
 // ========================================================================================
-const StyledHeadUL = styled.ul`
+const HeadHr = styled.hr`
+    width: ${getWidth(1)};    
+    position: relative; /* 굳이 없어도 되는거같지만.. 그래도? */
+    margin: 0 auto;
+`;
+// ----------------------------------------------------------------------------------------/ 
+
+
+// ========================================================================================
+// ************* 헤더 Icons & 카테고리 : li *************
+// ========================================================================================
+const HeadLi = styled.li`
+    ${props => props.isdropdown && cssDropdown};
+    ${props => props.posrelative && css` position: relative; `};    
+`;
+// ----------------------------------------------------------------------------------------/ 
+
+
+// ========================================================================================
+// ************* 헤더 Icons & 카테고리 : ul *************
+// ========================================================================================
+const HeadUL = styled.ul`
     /* type에 따른 Style (Header & Category) */
     ${(props) => props.type === "Category" ?
         css`    /* Category */
@@ -47,17 +69,15 @@ const StyledHeadUL = styled.ul`
             line-height: 40px;
             padding-left: 33px;
 
-            li {
+            ${HeadLi} {
                 /* list-style-type: none; */
                 float: left;
-                padding: 0 15px;
-
-                ${props.isdropdown && CSSDropdown}  /* isdropdown 있을시 dropdown 설정 */
+                padding: 0 15px;                
             }
         `
         :
         css`    /* Header */
-            li {
+            ${HeadLi} {
                 float: left;
                 margin-right: 12px;
                 
@@ -68,7 +88,6 @@ const StyledHeadUL = styled.ul`
         `
     }    
 `;
-
 // ----------------------------------------------------------------------------------------/ 
 // 헤더 :: [공통] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 
@@ -76,16 +95,16 @@ const StyledHeadUL = styled.ul`
 
 // 헤더 :: [아이콘, 로고] START ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 // ========================================================================================
-// ************* 헤더 로고 *************
+// ************* 헤더 로고 : div *************
 // ========================================================================================
-const StyledTopLogo = styled.div`
+const TopLogo = styled.div`
     text-align: center;
     margin: 0 auto;    
     display: table;
     line-height: 140px;
 `;
 
-const StyledLogoLink = styled(StyledCustomLink)`        
+const TopLogoLink = styled(CustomLink)`        
     vertical-align: middle;
     /* display: table-cell; */
 `;  
@@ -93,9 +112,9 @@ const StyledLogoLink = styled(StyledCustomLink)`
 
 
 // ========================================================================================
-// ************* 헤더 유저 / 전체 카테고리 (Icon)  *************
+// ************* 헤더 유저 / 전체 카테고리 (Icon) : div  *************
 // ========================================================================================
-const StyledIconSection = styled.div`
+const HeadIconSection = styled.div`
     position: absolute;
 
     ${(props) => {
@@ -114,7 +133,7 @@ const StyledIconSection = styled.div`
 
 
 const Header = (props) => {
-
+console.log(window.outerWidth, window.innerWidth);
 // 카테고리 리스트 Item 생성 (임시) START
     const keys = [
         'quick', 'best', 'new', 'selfproduced', 'basic',
@@ -130,31 +149,33 @@ const Header = (props) => {
     const categoryList = [];
     keys.map( (item, i) => categoryList.push({key: item, value: values[i],}));
 // 카테고리 리스트 Item 생성 (임시) END
-    
+
+// 임시용 변수들 START
+    const userid = "testid";
+// 임시용 변수들 END
 
     return (
         <>
             {/* *** 헤더 [아이콘, 로고] START *** */}
 
-            <StyledHeadWrapper>
+            <HeadWrapper>
                 {/* 헤더 로고 START */}
-                <StyledTopLogo>
-                    <StyledLogoLink 
-                        to = '/' 
-                        hoveroff = {"true"}
+                <TopLogo>
+                    <TopLogoLink 
+                        to = '/'                         
                         margin="0"
                     >
                         <img 
                             src="/images/logo_Trans.png"
                             alt="logo"
                         />
-                    </StyledLogoLink>
-                </StyledTopLogo>
+                    </TopLogoLink>
+                </TopLogo>
                 {/* 헤더 로고 END */}
 
 
                 {/* 헤더 전체 카테고리 (Icon) 관련 START */}
-                <StyledIconSection
+                <HeadIconSection
                     loc = "left"
                 >
                     <ul>
@@ -162,70 +183,68 @@ const Header = (props) => {
                             <FontAwesomeIcon icon = {faBars} size = 'lg'/>    
                         </li>
                     </ul>
-                </StyledIconSection>
+                </HeadIconSection>
                 {/* 헤더 전체 카테고리 (Icon) 관련 END */}
                 
 
                 {/* 헤더 유저 (Icon) 관련 START */}
-                <StyledIconSection>
-                    <StyledHeadUL>
-                        <li >                         
-                            <FontAwesomeIcon icon = {faUser} size = 'lg'/>    
-                        </li>
+                <HeadIconSection>
+                    <HeadUL>
+                        <HeadLi >                                                     
+                            <CustomLink to = "/login">                            
+                                <FontAwesomeIcon icon = {faUser} size = 'lg'/>        
+                            </CustomLink> 
+                        </HeadLi>
 
-                        <li
-                            style = {{
-                                position: 'relative',  //                           
-                            }}
-                        >
-                            <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
-                        </li>
+                        <HeadLi posrelative>
+                            <CustomLink to = {"/shoppingbasket/@" + userid}>
+                                <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
+                            </CustomLink>
+                        </HeadLi>
 
-                        <li>
+                        <HeadLi>
                             <FontAwesomeIcon icon = {faSearch} size = 'lg' />                
-                        </li>
-                    </StyledHeadUL>
-                </StyledIconSection>
-                <StyledClear />     {/* float 써서 clear: both 함 */}                
+                        </HeadLi>
+                    </HeadUL>
+                </HeadIconSection>
+                <ClearEx />     {/* float 써서 clear: both 함 */}                
                 {/* 헤더 유저 (Icon) 관련 END */}
-            </StyledHeadWrapper>
+            </HeadWrapper>
 
             {/* *** 헤더 [아이콘, 로고] END *** */}
 
-            <hr/>
+            <HeadHr/>
 
             {/* *** 헤더 [카테고리] START *** */}
-            <StyledHeadWrapper type = "Category">
-                <StyledHeadUL  type = "Category" 
-                    isdropdown // << 잘못된거지만 잠시..
-                >                                    
+            <HeadWrapper type = "Category">
+                <HeadUL  type = "Category">                                    
                     {categoryList.map( (item, i) => {
                         return (
-                            <li 
+                            <HeadLi 
                                 key = {item.key}
-                                // isdropdown = {(i > 3)}  여기서 작동해야함. 부모인 StyledHeadUL에서 작동하면안대..
+                                isdropdown = {(i > 3)}  // 여기서 작동해야함. 부모인 StyledHeadUL에서 작동하면안대..
                             >                            
-                                <StyledCustomLink
+                                <CustomLink
                                     to = {"/shopping/@" + item.key}
                                     margin = "0"                                                                     
                                 >
                                     {item.value}
-                                </StyledCustomLink>                                
+                                </CustomLink>                                
                                 {
                                     (i > 3) &&
-                                        <StyledDropdownContent>
-                                            <StyledCustomLink to="/#123">ONE</StyledCustomLink>    
-                                            <StyledCustomLink to="/#234">TWO</StyledCustomLink>
-                                        </StyledDropdownContent>    
+                                        <DropdownContent>
+                                            <CustomLink to="/#123">ONE</CustomLink>    
+                                            <CustomLink to="/#234">TWO</CustomLink>
+                                        </DropdownContent>    
                                 }
 
-                            </li>
+                            </HeadLi>
                         );                        
                         
                     })}                                                     
-                </StyledHeadUL>
-                <StyledClear />
-            </StyledHeadWrapper>    
+                </HeadUL>
+                <ClearEx />
+            </HeadWrapper>    
             {/* *** 헤더 [카테고리] END *** */}
 
         </>

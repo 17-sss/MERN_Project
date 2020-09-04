@@ -1,10 +1,15 @@
+/* 
+    해당 파일은 /src/pages/LoginPage.js & RegisterPage.js에서 쓰임. 
+*/
 import React from 'react';
 import styled from 'styled-components';
-import {StyledCustomLink} from '../common/StyleUtilModels'
+import {CustomLink} from '../common/StyleUtilModels'
+
 
 const AuthTemplateBlock = styled.div`
     height: 50rem;
     padding-top: 5%;    
+    
 
     /* flex로 내부 내용 중앙 정렬 샘플*/
     /*
@@ -35,7 +40,7 @@ const WhiteBox = styled.div`
 `;
 
 // Link 컴포넌트 디자인 변경
-const StyledLink = styled(StyledCustomLink)`
+const StyledLink = styled(CustomLink)`
     color: black;
     font-family: "Bauhaus 93";
 `;

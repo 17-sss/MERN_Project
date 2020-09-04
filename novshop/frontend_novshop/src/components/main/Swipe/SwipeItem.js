@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
+import {getWidth} from '../../../lib/utility/customFunc';
 
 const StyledSwipeItem = styled.div`
     ${(props) =>
@@ -16,7 +17,8 @@ const StyledSwipeItem = styled.div`
         props.imageSize === undefined
          /* 옵션 메모: contain | cover | 100% 100% */
         ? css`
-            background-size: cover; /* contain하면 화면 크기 바뀔때 같이 커졌다 작아졌다하심.. */
+            /* contain하면 화면 크기 바뀔때 같이 커졌다 작아졌다하심.. */
+            background-size: cover; 
         `
         : css`
             background-size: ${props.imageSize};
@@ -28,9 +30,11 @@ const StyledSwipeItem = styled.div`
     background-position: center top;
     display: block;
 
+    margin: 0 auto;
+    position: relative;
     color: ${(props) => props.color || '#FFF'};
-    height: ${(props) => props.height || "680px"};
-    width: ${(props) => props.width || "100%"};
+    width: ${(props) => props.width || getWidth(1) };
+    height: ${(props) => props.height || "680px"};    
     min-height: ${(props) => props.minHeight || "100%"};
     
     cursor: pointer;

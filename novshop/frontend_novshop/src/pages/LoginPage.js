@@ -7,7 +7,8 @@ const LoginPage = () => {
         <AuthTemplate>  
         {/* 
             AuthTemplate의 children으로 LoginForm 들가는 듯함. 
-            children 변수는 정해진 약속인듯. 진짜 children을 가리키는듯함.                
+            children 변수는 정해진 약속인듯. 진짜 children을 가리키는듯함.    
+            200904 ADD, children은 props.children 이었음.            
         */}
             <LoginForm/>
         </AuthTemplate>        

@@ -2,12 +2,12 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import styled from 'styled-components';
 
-const StyledContainer = styled(Container)`
+const BootstrapContainer = styled(Container)`
     width: 1600px;
     max-width: none !important;
 `;
 
-const StyledCol = styled(Col)`
+const BootstrapCol = styled(Col)`
     background-color: ${(props) => props.backcolor || 'black'};
     height: 400px;
     width: 400px;
@@ -23,7 +23,7 @@ const ProductTemplate = (props) => {
 
         for (let index = 0; index <= 7; index++) {
             arr.push(
-                <StyledCol 
+                <BootstrapCol 
                     backcolor="#ccc" 
                     key = {index}
                     
@@ -46,7 +46,7 @@ const ProductTemplate = (props) => {
                         몇번쨰일까? :: {index + 1}
                     </div>
                     
-                </StyledCol>
+                </BootstrapCol>
             );                            
         }
 
@@ -56,7 +56,7 @@ const ProductTemplate = (props) => {
     
 
     return (
-        <StyledContainer /*fluid*/>
+        <BootstrapContainer /*fluid*/>
             <Row className="row-cols-4" style={{ margin: '0 10%' }}>
                 {
                     Items().map( (value, i) => {
@@ -65,7 +65,7 @@ const ProductTemplate = (props) => {
                 }
             
             </Row>
-        </StyledContainer>
+        </BootstrapContainer>
     );
 };
 
