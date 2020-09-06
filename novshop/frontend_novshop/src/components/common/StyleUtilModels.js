@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useCalcMargin } from '../../lib/utility/customHooks';
 
+
 // **********************************************************************************
 // *** BoxModel (임시 레이아웃 채우기용..)  ***
 // **********************************************************************************
@@ -181,7 +182,7 @@ export const DropdownContent = styled.div`
     min-width: 70px;
     padding: 8px;
     margin: ${props => props.margin || "0 0 0 -5px"};
-    /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 
     a {
         color: black; 

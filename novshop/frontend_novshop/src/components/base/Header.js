@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import {CustomLink, ClearEx, cssDropdown, DropdownContent} from '../common/StyleUtilModels';
-import {getWidth} from '../../lib/utility/customFunc'
+import {getSize} from '../../lib/utility/customFunc'
 
 // ****************************************************************************************
 // Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
@@ -17,7 +17,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';       // far
 // ************* 헤더용 Wrapper *************
 // ========================================================================================
 const HeadWrapper = styled.div`
-    width: ${getWidth(1.45)};    
+    width: ${getSize(1.45)};    
     position: relative;
     margin: 0 auto;
     /* background-color: #ccc; */
@@ -41,7 +41,7 @@ const HeadWrapper = styled.div`
 // ************* 헤더용 구분선 : hr *************
 // ========================================================================================
 const HeadHr = styled.hr`
-    width: ${getWidth(1)};    
+    width: ${getSize(1)};    
     position: relative; /* 굳이 없어도 되는거같지만.. 그래도? */
     margin: 0 auto;
 `;
@@ -133,7 +133,7 @@ const HeadIconSection = styled.div`
 
 
 const Header = (props) => {
-console.log(window.outerWidth, window.innerWidth);
+
 // 카테고리 리스트 Item 생성 (임시) START
     const keys = [
         'quick', 'best', 'new', 'selfproduced', 'basic',
@@ -206,13 +206,12 @@ console.log(window.outerWidth, window.innerWidth);
                             <FontAwesomeIcon icon = {faSearch} size = 'lg' />                
                         </HeadLi>
                     </HeadUL>
-                </HeadIconSection>
-                <ClearEx />     {/* float 써서 clear: both 함 */}                
+                </HeadIconSection>                            
                 {/* 헤더 유저 (Icon) 관련 END */}
-            </HeadWrapper>
-
+            </HeadWrapper>                        
             {/* *** 헤더 [아이콘, 로고] END *** */}
 
+            <ClearEx />     {/* float 써서 clear: both 함 */}    
             <HeadHr/>
 
             {/* *** 헤더 [카테고리] START *** */}
@@ -239,14 +238,13 @@ console.log(window.outerWidth, window.innerWidth);
                                 }
 
                             </HeadLi>
-                        );                        
-                        
+                        );                                                
                     })}                                                     
-                </HeadUL>
-                <ClearEx />
+                </HeadUL>            
             </HeadWrapper>    
             {/* *** 헤더 [카테고리] END *** */}
-
+            
+            <ClearEx />
         </>
     );
 };

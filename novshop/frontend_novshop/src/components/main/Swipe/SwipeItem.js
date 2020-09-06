@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import {getWidth} from '../../../lib/utility/customFunc';
+import {getSize} from '../../../lib/utility/customFunc';
 
 const StyledSwipeItem = styled.div`
     ${(props) =>
@@ -33,7 +33,7 @@ const StyledSwipeItem = styled.div`
     margin: 0 auto;
     position: relative;
     color: ${(props) => props.color || '#FFF'};
-    width: ${(props) => props.width || getWidth(1) };
+    width: ${(props) => props.width || getSize(1) };
     height: ${(props) => props.height || "680px"};    
     min-height: ${(props) => props.minHeight || "100%"};
     

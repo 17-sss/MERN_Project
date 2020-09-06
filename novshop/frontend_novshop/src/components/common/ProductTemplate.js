@@ -1,9 +1,10 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import styled from 'styled-components';
+import { getSize } from '../../lib/utility/customFunc';
 
 const BootstrapContainer = styled(Container)`
-    width: 1600px;
+    width: ${getSize(1.2)};
     max-width: none !important;
 `;
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import {getWidth} from '../../lib/utility/customFunc'
+import {getSize} from '../../lib/utility/customFunc'
 
 const FooterWrapper = styled.div`
-    width: ${getWidth(1)};
+    width: ${getSize(1)};
     position: relative;
     margin: 0 auto;
 

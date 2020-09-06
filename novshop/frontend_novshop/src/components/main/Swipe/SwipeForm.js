@@ -4,7 +4,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import styled, {css} from 'styled-components';
 
 import { TransparentBtn } from '../../common/StyleUtilModels';
-import {getWidth} from '../../../lib/utility/customFunc';
+import {getSize} from '../../../lib/utility/customFunc';
 
 function reducer(state, action) {
     switch (action.type) {
@@ -57,7 +57,7 @@ function reducer(state, action) {
 const AutoSwipeViews = autoPlay(SwipeableViews);
 
 const StyledSwipeForm = styled.div`
-    width: ${getWidth(1)};          
+    width: ${getSize(1)};          
     margin: 0 auto;
     position: relative;
     background-color: #f6f6f6;
