@@ -15,10 +15,11 @@
 export const getSize = (AnRatioStatic = 0, AstrType = "width", AbManual = false, AbNopx = false) => {
     let result = 0;
     let screenSize = 0;
-    
-    if (AstrType === "width") {
+    let strType = AstrType.toLowerCase();
+        
+    if (strType === "width") {
         screenSize = global.screen.availWidth;
-    } else if (AstrType === "height") {
+    } else if (strType === "height") {
         screenSize = global.screen.availHeight;
     } else {
         screenSize = global.screen.availWidth;  

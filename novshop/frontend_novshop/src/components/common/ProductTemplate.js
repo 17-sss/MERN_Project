@@ -1,53 +1,20 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import styled from 'styled-components';
-import { getSize } from '../../lib/utility/customFunc';
+import ProductForm from "./Product/ProductForm";
+import ProductItem from "./Product/ProductItem";
 
-const BootstrapContainer = styled(Container)`
-    width: ${getSize(1.2)};
-    max-width: none !important;
-`;
-
-const BootstrapCol = styled(Col)`
-    background-color: ${(props) => props.backcolor || 'black'};
-    height: 400px;
-    width: 400px;
-    margin: 0;
-    padding: 0;
-    border: 1px solid black;
-`;
-
-
-const ProductTemplate = (props) => {
+const ProductTemplate = () => {
     const Items = () => {
         let arr = [];
 
         for (let index = 0; index <= 7; index++) {
             arr.push(
-                <BootstrapCol 
-                    backcolor="#ccc" 
+                <ProductItem 
                     key = {index}
-                    
-                    /*className = "col-xs-4"*/
-                >
-                    <div
-                        style={{
-                            height: '290px',
-                            marginTop: '10px',
-                            backgroundColor: '#fff',
-                        }}
-                    />
-                    <div style = {{margin: '5px 0'}} />
-                    <div
-                        style={{
-                            height: '90px',                            
-                            backgroundColor: "rgb(240 , 240, 240)",
-                        }}
-                    >
-                        몇번쨰일까? :: {index + 1}
-                    </div>
-                    
-                </BootstrapCol>
+                    itemImage = "/images/bymono_test1.webp"
+                    // itemImage = "/images/200810.jpg"
+                    itemName = "메르첼 오버셔츠"
+                    itemSize = "[XL-2XL,3XL-4XL]"
+                />                                                    
             );                            
         }
 
@@ -56,18 +23,14 @@ const ProductTemplate = (props) => {
 
     
 
-    return (
-        <BootstrapContainer /*fluid*/>
-            <Row className="row-cols-4" style={{ margin: '0 10%' }}>
-                {
-                    Items().map( (value, i) => {
-                        return value
-                    })
-                }
-            
-            </Row>
-        </BootstrapContainer>
+    return (    
+        <ProductForm>
+            {Items().map( (value, i) => {
+                return value
+            })}
+        </ProductForm>        
     );
 };
 
 export default ProductTemplate;
+
