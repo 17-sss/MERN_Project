@@ -1,8 +1,9 @@
 import React, {useRef, useEffect, useState} from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import { Col } from 'react-bootstrap';
 import { getSize } from '../../../lib/utility/customFunc';
-import { ClearEx, CustomLink } from '../../common/StyleUtilModels';
+import { ClearEx, CustomLink } from '../StyleUtilModels';
+import { cssDisplayNone, cssStrike } from '../StyleUtilCSS';
 
 // [최상위] 상품정보 전부를 표시할 틀
 const StyledItem = styled(Col)`
@@ -70,13 +71,52 @@ const ProductNameLink = styled(CustomLink)`
     }    
 `;
 
-// 상품 일반 정보와 부가설명 사이의 경계선
-// const ProductHr = styled.hr`
-//     margin: 10px auto;
-//     position: relative;
-//     width: ${(props) => props.width || "100%"};
-//     /* padding: 0 10px; */
-// `;
+// 상품 가격 & 할인가격 Wrappe mode = {1}r
+const ProductPriceUl = styled.ul`
+    ${props => {
+        switch (props.mode) {
+            case 1: {
+                return css`                    
+                    padding-bottom: 24px;                    
+                    display: block;
+                    height: 18px;
+                    line-height: 18px;
+                    font-size: 12px; 
+                    border-bottom: 1px solid #e6e6e6;
+
+                    li.custom_price {
+                        ${props => props.customPrice || 
+                            css`
+                                ${cssDisplayNone};
+                                ${cssStrike};    
+                            `
+                        }
+                        /* 따로 styled로 만들어서 sale, price, custom 구분해야? */
+                    }
+
+                    li.price {
+                        display: inline-block;                        
+                        color: black;
+                    }
+                `
+            }
+            case 2: {
+                return css`
+                    line-height: 1.5em;
+
+                    li.subname {
+                        font-size: 11px;
+                        color: #666666;
+                    }
+                `
+            }                
+        
+            default: 
+                break;
+        }
+    }}
+`;
+
 // =============================================[2]
 
 
@@ -134,8 +174,10 @@ const ProductItem = (props) => {
                     <ProductColor color = "blue" />
                     <ProductColor />    {/* 색상 정보는 배열로 받아올것 */}                    
                 </ProductColorWrapper>
+                
                 <ClearEx style = {{padding: "2px 0"}}/>    
-                {/* 상품정보 */}
+                
+                {/* 상품명 & 사이즈 정보 */}
                 <ProductNameLink 
                     to = {props.itemLink || '/1'}
                 >
@@ -143,7 +185,19 @@ const ProductItem = (props) => {
                     <span className="sizeInfo">
                         {props.itemSize}
                     </span>
-                </ProductNameLink>                            
+                </ProductNameLink> 
+                
+                {/* 상품가격 */}
+                <ProductPriceUl mode = {1}>
+                    <li className = "custom_price">custom</li>
+                    <li className = "price">{"32,000"}원</li>
+                </ProductPriceUl>
+                <ProductPriceUl mode = {2}>
+                    <li className = "subname">
+                        {"구김없고 가벼워 매일찾아질거에요!"}
+                    </li> 
+                </ProductPriceUl>
+                
 
             </ProductWrapper>
             {/* 상품 END */}
