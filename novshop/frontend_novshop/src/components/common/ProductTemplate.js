@@ -13,7 +13,7 @@ const ProductTemplate = () => {
                     itemImage = "/images/bymono_test1.webp"
                     // itemImage = "/images/200810.jpg"
                     itemName = "메르첼 오버셔츠"
-                    itemSize = "[XL-2XL,3XL-4XL]"
+                    itemSize = {["XL", "2XL", "3XL", "4XL"]}
                 />                                                    
             );                            
         }
