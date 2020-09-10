@@ -33,67 +33,67 @@
         "id": 5,
         "key": "outer",
         "values": "",       
-        "items": []
+        "items": ["자켓&블레이져", "점퍼", "코트", "가디건&집업", "베스트"]
     },       
     {
         "id": 6,
         "key": "knit",
         "values": "", 
-        "items": []     
+        "items": ["니트", "가디건&베스트"]     
     },       
     {
         "id": 7,
         "key": "tshirt",
         "values": "T-SHIRT",
-        "items": []           
+        "items": ["긴팔티", "맨투맨&후드티", "헨리넥&카라티", "반팔티&7부티", "프린팅티셔츠", "민소매"]           
     },       
     {
         "id": 8,
         "key": "shirt",
         "values": "",
-        "items": []       
+        "items": ["베이직 카라셔츠", "차이나&헨리넥셔츠", "패턴&체크셔츠", "린넨셔츠", "반팔&7부셔츠"]       
     },       
     {
         "id": 9,
         "key": "pants",
         "values": "",
-        "items": []      
+        "items": ["슬랙스", "면바지", "청바지", "트레이닝바지", "밴딩바지", "린넨바지", "반바지"]      
     },       
     {
         "id": 10,
         "key": "shoes",
         "values": "",
-        "items": []        
+        "items": ["빅사이즈신발", "로퍼&구두", "스니커즈", "슬리퍼&샌들"]        
     },  
     {
         "id": 11,
         "key": "accessory",
         "values": "",
-        "items": []        
+        "items": ["가방", "모자", "벨트", "양말&속옷", "쥬얼리&뷰티", "선글라스&안경", "타이&장갑&머플러"]        
     },  
     {
         "id": 12,
         "key": "sale",
-        "values": "",
+        "values": "SALE 80%",
         "items": []        
     },  
     {
         "id": 13,
         "key": "oneplus",
-        "values": "",
+        "values": "1+1",
         "items": []        
     },
     {
         "id": 14,
         "key": "big",
-        "values": "",
+        "values": "BIG X BIG",
         "items": []        
     },    
     {
         "id": 15,
         "key": "community",
         "values": "",
-        "items": []        
+        "items": ["공지사항", "고객센터"]        
     }          
 ]        
 

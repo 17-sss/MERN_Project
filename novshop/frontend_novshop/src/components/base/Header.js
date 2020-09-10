@@ -152,7 +152,7 @@ function createCategory(key, value = '', items) {
 
 
 const Header = () => {
-    //console.log(data[0].id);
+    console.log(data[9]);
 // 카테고리 리스트 Item 생성 (임시) START
     const categoryList = [];
     categoryList.push(
