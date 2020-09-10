@@ -1,0 +1,99 @@
+[
+    {
+        "id": 0,
+        "key": "quick",
+        "values": "퀵&당일발송",
+        "items": []    
+    },       
+    {
+        "id": 1,
+        "key": "best",
+        "values": "",
+        "items": []                                           
+    },  
+    {
+        "id": 2,
+        "key": "new",
+        "values": "NEW 5%",
+        "items": []         
+    },       
+    {
+        "id": 3,
+        "key": "selfproduced",
+        "values": "자체제작",
+        "items": []
+    },       
+    {
+        "id": 4,
+        "key": "basic",
+        "values": "",
+        "items": []
+    },       
+    {
+        "id": 5,
+        "key": "outer",
+        "values": "",       
+        "items": []
+    },       
+    {
+        "id": 6,
+        "key": "knit",
+        "values": "", 
+        "items": []     
+    },       
+    {
+        "id": 7,
+        "key": "tshirt",
+        "values": "T-SHIRT",
+        "items": []           
+    },       
+    {
+        "id": 8,
+        "key": "shirt",
+        "values": "",
+        "items": []       
+    },       
+    {
+        "id": 9,
+        "key": "pants",
+        "values": "",
+        "items": []      
+    },       
+    {
+        "id": 10,
+        "key": "shoes",
+        "values": "",
+        "items": []        
+    },  
+    {
+        "id": 11,
+        "key": "accessory",
+        "values": "",
+        "items": []        
+    },  
+    {
+        "id": 12,
+        "key": "sale",
+        "values": "",
+        "items": []        
+    },  
+    {
+        "id": 13,
+        "key": "oneplus",
+        "values": "",
+        "items": []        
+    },
+    {
+        "id": 14,
+        "key": "big",
+        "values": "",
+        "items": []        
+    },    
+    {
+        "id": 15,
+        "key": "community",
+        "values": "",
+        "items": []        
+    }          
+]        
+
