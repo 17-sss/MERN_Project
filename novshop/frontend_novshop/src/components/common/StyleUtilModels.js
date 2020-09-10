@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useCalcMargin } from '../../lib/utility/customHooks';
-
+import { Modal, InputGroup, FormControl, Button } from 'react-bootstrap';    // https://react-bootstrap.github.io/components/modal/
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';       // fas
 
 // **********************************************************************************
 // *** BoxModel (임시 레이아웃 채우기용..)  ***
@@ -130,7 +132,7 @@ const StyledBtnLink = styled(Link)`
     ${ButtonStyle}
 `;
 
-export const Button = (props) => {
+export const CustomButton = (props) => {
     return props.to ? (
         <StyledBtnLink
             {...props}
@@ -153,6 +155,10 @@ export const TransparentBtn = styled.button`
     font: inherit;
     cursor: pointer;
     outline: inherit;
+
+    &:hover{
+        color: ${props => props.hovercolor && props.hovercolor};
+    }
 `;
 
 
@@ -220,3 +226,103 @@ export const cssDropdown = css`
     }
 `;
 // Dropdown 관련 END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+
+
+// Modal (Bootstrap) 관련 START ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+
+// **********************************************************************************
+// *** Modal : VerticalModal - 화면 중앙에 팝업되는 Modal (샘플용) ***
+// **********************************************************************************
+const VerticalModal = (props) => {
+    return (
+        <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >            
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Modal heading
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <h4>Centered Modal</h4>
+                <p>
+                    Cras mattis consectetur purus sit amet fermentum. Cras justo
+                    odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
+                    risus, porta ac consectetur ac, vestibulum at eros.
+                </p>
+            </Modal.Body>
+            <Modal.Footer>
+                <button onClick={props.onHide}>Close</button>
+            </Modal.Footer> 
+            
+        </Modal>
+    );
+};
+
+
+// **********************************************************************************
+// *** Modal : SearchModal - 검색용 모달 ***
+// **********************************************************************************
+const SearchModal = (props) => {
+    return (
+        <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <InputGroup>
+                <FormControl
+                    placeholder="검색어를 입력해주세요"                    
+                    name="search" 
+                />
+                <InputGroup.Append>
+                {/* 추후 submit 연구 */}
+                    <form onSubmit = {() => console.log(11)}>                        
+                        <Button type = "submit" variant="outline-secondary">
+                            <FontAwesomeIcon icon={faSearch} size="lg" />
+                        </Button>
+                    </form>
+                </InputGroup.Append>
+            </InputGroup>
+
+        </Modal> 
+    );
+}
+
+// **********************************************************************************
+// *** Modal: ModalBtn - Modal 실행 버튼 ***
+// **********************************************************************************
+export const ModalBtn = (props) => {
+    const {children, mode} = props;
+    const [modalShow, setModalShow] = useState(false);
+
+    return (
+        <>
+            <TransparentBtn 
+                hovercolor= "#007bff"
+                variant="primary" 
+                onClick={() => setModalShow(true)}
+            >
+                {children}
+            </TransparentBtn>
+
+            {mode === 'search' ? (
+                <SearchModal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                />
+            ) : (
+                <VerticalModal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                />
+            )}
+          
+        </>
+    );
+};
+// Modal (Bootstrap) 관련 END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒

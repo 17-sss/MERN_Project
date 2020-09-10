@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {CustomLink, ClearEx, cssDropdown, DropdownContent, ModalBtn} from '../common/StyleUtilModels';
+import {CustomLink, ClearEx, cssDropdown, DropdownContent} from '../common/StyleUtilModels';
 import {getSize} from '../../lib/utility/customFunc'
 
 // ****************************************************************************************
@@ -135,7 +135,7 @@ const HeadIconSection = styled.div`
 // ○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○
 
 // createCategory, 카테고리 생성용 함수
-function createCategory(key, value = '', items) {
+function createCategory(key, value = '', items = []) {
     let valueTmp = value;
     if ( !value && key ) {
         valueTmp = key.toUpperCase();
@@ -151,56 +151,41 @@ function createCategory(key, value = '', items) {
 
 
 const Header = () => {
-// 카테고리 리스트 Item 생성 (임시) START
-    const categoryList = [];
-    categoryList.push(
+    const categoryList1 = [];
+    categoryList1.push(
         createCategory('quick', '퀵&당일발송'),
         createCategory('best'),
         createCategory('new', 'NEW 5%'),
         createCategory('selfproduced', '자체제작'),
         createCategory('basic'),
-        createCategory('outer', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('knit', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('tshirt', 'T-SHIRT', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('shirt', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('pants', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('shoes', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('accessory', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('sale', 'SALE 80%', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('oneplus', '1+1', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('big', 'BIG X BIG', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('community', ''),
-    );        
+        createCategory('outer', '', []),
+        createCategory('knit', '', []),
+        createCategory('tshirt', 'T-SHIRT', []),
+        createCategory('shirt', '', []),
+        createCategory('pants', '', []),
+        createCategory('shoes', '', []),
+        createCategory('accessory', '', []),
+        createCategory('sale', 'SALE 80%', []),
+        createCategory('oneplus', '1+1', []),
+        createCategory('big', 'BIG X BIG', []),
+        createCategory('community', '', []),
+    );
+    console.log(categoryList1);
+
+// 카테고리 리스트 Item 생성 (임시) START
+    const keys = [
+        'quick', 'best', 'new', 'selfproduced', 'basic',
+        'outer', 'knit', 'tshirt', 'shirt', 'pants', 'shoes',
+        'accessory', 'sale', 'oneplus', 'big', 'community'
+    ];
+    const values =  [
+        '퀵&당일발송', 'BEST', 'NEW 5%', '자체제작' ,'BASIC', 
+        'OUTER', 'KNIT', 'T-SHIRT', 'SHIRT', 'PANTS', 'SHOES', 
+        'ACCESSORY', 'SALE 80%', '1+1', 'BIG X BIG', 'COMMUNITY'
+    ];
+
+    const categoryList = [];
+    keys.map( (item, i) => categoryList.push({key: item, value: values[i],}));
 // 카테고리 리스트 Item 생성 (임시) END
 
 // 임시용 변수들 START
@@ -255,10 +240,8 @@ const Header = () => {
                             </CustomLink>
                         </HeadLi>
 
-                        <HeadLi>             
-                            <ModalBtn mode="search">
-                                <FontAwesomeIcon icon = {faSearch} size = 'lg' />                                            
-                            </ModalBtn>               
+                        <HeadLi>
+                            <FontAwesomeIcon icon = {faSearch} size = 'lg' />                
                         </HeadLi>
                     </HeadUL>
                 </HeadIconSection>                            
@@ -272,37 +255,23 @@ const Header = () => {
             {/* *** 헤더 [카테고리] START *** */}
             <HeadWrapper type = "Category">
                 <HeadUL  type = "Category">                                    
-                    {categoryList.map( (v, i) => {
-                        const parentLink = "/shopping/@" + v.key; 
+                    {categoryList.map( (item, i) => {
                         return (
                             <HeadLi 
-                                key = {v.key}
-                                isdropdown = {v.items && true}  // 여기서 작동해야함. 부모인 StyledHeadUL에서 작동하면안대..
+                                key = {item.key}
+                                isdropdown = {(i > 4)}  // 여기서 작동해야함. 부모인 StyledHeadUL에서 작동하면안대..
                             >                            
                                 <CustomLink
-                                    to = {parentLink}
+                                    to = {"/shopping/@" + item.key}
                                     margin = "0"                                                                     
                                 >
-                                    {v.value}
+                                    {item.value}
                                 </CustomLink>                                
                                 {
-                                    (v.items) &&
+                                    (i > 4) &&
                                         <DropdownContent>
-                                            {v.items.map( (vTmp, i) => {                                                
-                                                const {link, name} = vTmp.item; 
-                                                const contentKey = v.key + '_' + name;
-                                                const childLink = parentLink + "?bid=" + link
-
-                                                return (
-                                                    <CustomLink 
-                                                        to = {childLink}                                                      
-                                                        key = {contentKey}
-                                                        margin = "0"
-                                                    >                                                           
-                                                        {name}
-                                                    </CustomLink>
-                                                )
-                                            })}
+                                            <CustomLink to="/#123">ONE</CustomLink>    
+                                            <CustomLink to="/#234">TWO</CustomLink>
                                         </DropdownContent>    
                                 }
 

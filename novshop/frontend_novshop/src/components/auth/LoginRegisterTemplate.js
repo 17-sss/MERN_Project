@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Button } from '../common/StyleUtilModels';
+import { CustomButton } from '../common/StyleUtilModels';
 
 const LoginRegisterTemplateBlock = styled.div`  
     h4 {
@@ -47,7 +47,7 @@ const Footer = styled.div`
     }
 `;
 
-const BtnMarginTop = styled(Button)`
+const BtnMarginTop = styled(CustomButton)`
     margin-top: 1rem;
 `;
 

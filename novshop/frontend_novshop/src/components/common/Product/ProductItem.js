@@ -98,10 +98,10 @@ const ProductPriceUl = styled.ul`
             // mode 1 : 가격 관련
             case 1: {
                 return css`
-                    padding-bottom: 24px;
+                    padding-bottom: 22px;
                     display: block;
-                    height: 18px;
-                    line-height: 18px;
+                    height: 16px;
+                    line-height: 16px;
                     font-size: 12px;
                     border-bottom: 1px solid #e6e6e6;
                 `;
@@ -131,6 +131,7 @@ const cssNormalPrice = css`
 `;
 
 const ProductPriceLi = styled.li`
+    /* 일반 가격 */
     &.price {
         ${(props) => {
             const {sale, price} = props;
@@ -145,12 +146,14 @@ const ProductPriceLi = styled.li`
                         color: #666666;
                         ${cssStrike};
                     `;
-                } 
-                // else 절 생략, price 값 없으면 어차피 적용할게 있나?
+                } else {
+                    return [cssDisplayNone, cssStrike]; 
+                }                
             }
         }}
     }
 
+    /* 세일 */
     &.sale {
         ${(props) => {
             const {sale} = props;
@@ -158,6 +161,28 @@ const ProductPriceLi = styled.li`
             if (!sale)  return [cssDisplayNone, cssStrike];
             else        return cssNormalPrice;            
         }}
+    }
+
+    /* 부가설명 */
+    &.description {        
+        ${(props) => {
+            const {description} = props;
+
+            if (!description) {
+                return [cssDisplayNone, cssStrike]
+            } else {
+                return css`
+                    text-align: left;
+                    position: relative;
+                    /* margin: 4px auto 0px; 상 - 좌우 - 하 */
+                    margin: 0 auto;
+                    color: #666666;                    
+                    font-size: 11.5px;
+                    line-height: 22px;  /* 이거쓰면 라인(글)이 밑으로 내려감, 굳이 마진 패딩안써도됨. */
+                `;
+            }
+        }}
+
     }
 `;
 // ---------------------------------------------------/
@@ -199,6 +224,7 @@ const ProductItem = (props) => {
         itemColors,     // 상품컬러 정보
         price,          // 상품가격 - 일반가
         sale,           // 상품가격 - 세일가 
+        description,        // 상품 부가설명
     } = props;
 
 
@@ -207,14 +233,16 @@ const ProductItem = (props) => {
         <StyledItem ref={colRef}>
             {/* 이미지 START */}
             <ImageWrapper>
-                <img
-                    ref={imgRef}
-                    onLoad={imgOnload}
-                    src={itemImage}
-                    alt={itemName}
-                    width="100%"
-                    height={imageTagHeight()}
-                />
+                <CustomLink to = {itemLink}>
+                    <img
+                        ref={imgRef}
+                        onLoad={imgOnload}
+                        src={itemImage}
+                        alt={itemName}
+                        width="100%"
+                        height={imageTagHeight()}
+                    />
+                </CustomLink>
             </ImageWrapper>
             {/* 이미지 END */}
 
@@ -237,8 +265,9 @@ const ProductItem = (props) => {
                 <ClearEx style={{ padding: '2px 0' }} />
 
                 {/* 상품명 & 사이즈 정보 */}
-                <ProductNameLink to={itemLink || '/1'}>
+                <ProductNameLink to = {itemLink}>
                     {itemName}
+
                     <span className="sizeInfo">
                         {itemSize.map((value, i) => {                            
                             const thisLen = itemSize.length;
@@ -267,10 +296,12 @@ const ProductItem = (props) => {
                 </ProductPriceUl>
 
                 <ProductPriceUl mode={2}>
-                    <ProductPriceLi className="subname">
-                        {'구김없고 가벼워 매일찾아질거에요!'}
+                    {/* [3] 부가설명 */}
+                    <ProductPriceLi className="description" description={description}>
+                        {description}
                     </ProductPriceLi>
                 </ProductPriceUl>
+
             </ProductWrapper>
             {/* 상품 END */}
         </StyledItem>
@@ -283,23 +314,23 @@ ProductItem.defaultProps = {
     itemName: '',    
     itemLink: '',     
     itemSize: [],     
-    // itemColors: [],
-    itemColors: ["red", "blue", "yellow"],
-    // price: 0,
-    price: 32000,       
-    sale: 0,         
+    itemColors: [],
+    price: 0,       
+    sale: 0,       
+    description: '',
 };
 
 
 // ** props 기본 타입 지정 **
 ProductItem.propTypes = {
-    itemImage: PropTypes.string,    // 이미지: 이미지가 있는 위치
-    itemName: PropTypes.string,     // 상품명
-    itemLink: PropTypes.string,     // 상품링크
-    itemSize: PropTypes.array,      // 상품사이즈 정보
-    itemColors: PropTypes.array,    // 상품컬러 정보
-    price: PropTypes.number,        // 상품가격 - 일반가
-    sale: PropTypes.number,         // 상품가격 - 세일가
+    itemImage: PropTypes.string,    
+    itemName: PropTypes.string,     
+    itemLink: PropTypes.string,     
+    itemSize: PropTypes.array,      
+    itemColors: PropTypes.array,    
+    price: PropTypes.number,        
+    sale: PropTypes.number,         
+    description: PropTypes.string,
 }
 
 

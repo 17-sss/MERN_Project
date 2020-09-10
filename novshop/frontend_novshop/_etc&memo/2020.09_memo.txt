@@ -14,4 +14,23 @@
             링크: https://aboooks.tistory.com/83
         2. React 조건부 렌더링 
             링크: https://ko.reactjs.org/docs/conditional-rendering.html
+
+@@ 200910
+    * 메모
+        1. JavaScript 생성자, SET, GET, 객체 관련
+            링크:
+                * 생성자 & 프로토타입 
+                    https://www.zerocho.com/category/JavaScript/post/573c2acf91575c17008ad2fc       
+                    https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes/constructor
+                    
+                    - 객체지향 프로그래밍 (class)
+                        https://heecheolman.tistory.com/29
+                    - 객체(object)에 대해
+                        https://www.zerocho.com/category/JavaScript/post/573dbc9370ba9c603052cc9a
+                    - 객체, 생성자
+                        https://velog.io/@imacoolgirlyo/JS-Object-Constructors
+                
+                
+                
+                
                 
