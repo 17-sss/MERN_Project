@@ -19,7 +19,7 @@
     * 메모
         1. JavaScript 생성자, SET, GET, 객체 관련
             링크:
-                * 생성자 & 프로토타입 
+                1) 생성자 & 프로토타입 
                     https://www.zerocho.com/category/JavaScript/post/573c2acf91575c17008ad2fc       
                     https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes/constructor
                     
@@ -29,6 +29,16 @@
                         https://www.zerocho.com/category/JavaScript/post/573dbc9370ba9c603052cc9a
                     - 객체, 생성자
                         https://velog.io/@imacoolgirlyo/JS-Object-Constructors
+
+@@ 200911
+    * 메모 
+        1. React Route
+            링크:
+                https://gongbu-ing.tistory.com/45
+                https://ing-yeo.net/2019/09/react-beginner-5/
+                https://m.blog.naver.com/bkcaller/221494156108            
+            참고:
+                - React 자체에서 loction, match를 보내주는거였음. query-string 미들웨어가 아니라..
                 
                 
                 

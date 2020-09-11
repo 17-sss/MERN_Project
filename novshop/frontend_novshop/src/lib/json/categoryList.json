@@ -2,98 +2,143 @@
     {
         "id": 0,
         "key": "quick",
-        "values": "퀵&당일발송",
-        "items": []    
-    },       
+        "value": "퀵&당일발송",
+        "items": []
+    },
     {
         "id": 1,
         "key": "best",
-        "values": "",
-        "items": []                                           
-    },  
+        "value": "",
+        "items": []
+    },
     {
         "id": 2,
         "key": "new",
-        "values": "NEW 5%",
-        "items": []         
-    },       
+        "value": "NEW 5%",
+        "items": []
+    },
     {
         "id": 3,
         "key": "selfproduced",
-        "values": "자체제작",
+        "value": "자체제작",
         "items": []
-    },       
+    },
     {
         "id": 4,
         "key": "basic",
-        "values": "",
+        "value": "",
         "items": []
-    },       
+    },
     {
         "id": 5,
         "key": "outer",
-        "values": "",       
-        "items": ["자켓&블레이져", "점퍼", "코트", "가디건&집업", "베스트"]
-    },       
+        "value": "",
+        "items": [
+            { "id": 0, "value": "자켓&블레이져" },
+            { "id": 1, "value": "점퍼" },
+            { "id": 2, "value": "코트" },
+            { "id": 3, "value": "가디건&집업" },
+            { "id": 4, "value": "베스트" }
+        ]
+    },
     {
         "id": 6,
         "key": "knit",
-        "values": "", 
-        "items": ["니트", "가디건&베스트"]     
-    },       
+        "value": "",
+        "items": [
+            { "id": 0, "value": "니트" },
+            { "id": 1, "value": "가디건&베스트" }
+        ]
+    },
     {
         "id": 7,
         "key": "tshirt",
-        "values": "T-SHIRT",
-        "items": ["긴팔티", "맨투맨&후드티", "헨리넥&카라티", "반팔티&7부티", "프린팅티셔츠", "민소매"]           
-    },       
+        "value": "T-SHIRT",
+        "items": [
+            { "id": 0, "value": "긴팔티" },
+            { "id": 1, "value": "맨투맨&후드티" },
+            { "id": 2, "value": "헨리넥&카라티" },
+            { "id": 3, "value": "반팔티&7부티" },
+            { "id": 4, "value": "프린팅티셔츠" },
+            { "id": 5, "value": "민소매" }
+        ]
+    },
     {
         "id": 8,
         "key": "shirt",
-        "values": "",
-        "items": ["베이직 카라셔츠", "차이나&헨리넥셔츠", "패턴&체크셔츠", "린넨셔츠", "반팔&7부셔츠"]       
-    },       
+        "value": "",
+        "items": [
+            { "id": 0, "value": "베이직 카라셔츠" },
+            { "id": 1, "value": "차이나&헨리넥셔츠" },
+            { "id": 2, "value": "패턴&체크셔츠" },
+            { "id": 3, "value": "린넨셔츠" },
+            { "id": 4, "value": "반팔&7부셔츠" }         
+        ]
+    },
     {
         "id": 9,
         "key": "pants",
-        "values": "",
-        "items": ["슬랙스", "면바지", "청바지", "트레이닝바지", "밴딩바지", "린넨바지", "반바지"]      
-    },       
+        "value": "",
+        "items": [
+            { "id": 0, "value": "슬랙스" },
+            { "id": 1, "value": "면바지" },
+            { "id": 2, "value": "청바지" },
+            { "id": 3, "value": "트레이닝바지" },
+            { "id": 4, "value": "밴딩바지" },
+            { "id": 5, "value": "린넨바지" },
+            { "id": 6, "value": "반바지" }
+        ]
+    },
     {
         "id": 10,
         "key": "shoes",
-        "values": "",
-        "items": ["빅사이즈신발", "로퍼&구두", "스니커즈", "슬리퍼&샌들"]        
-    },  
+        "value": "",
+        "items": [
+            { "id": 0, "value": "빅사이즈신발" },
+            { "id": 1, "value": "로퍼&구두" },
+            { "id": 2, "value": "스니커즈" },
+            { "id": 3, "value": "슬리퍼&샌들" }
+        ]        
+    },
     {
         "id": 11,
         "key": "accessory",
-        "values": "",
-        "items": ["가방", "모자", "벨트", "양말&속옷", "쥬얼리&뷰티", "선글라스&안경", "타이&장갑&머플러"]        
-    },  
+        "value": "",
+        "items": [
+            { "id": 0, "value": "가방" },
+            { "id": 1, "value": "모자" },
+            { "id": 2, "value": "벨트" },
+            { "id": 3, "value": "양말&속옷" },
+            { "id": 4, "value": "쥬얼리&뷰티" },
+            { "id": 5, "value": "선글라스&안경" },
+            { "id": 6, "value": "타이&장갑&머플러" }
+        ]
+    },
     {
         "id": 12,
         "key": "sale",
-        "values": "SALE 80%",
-        "items": []        
-    },  
+        "value": "SALE 80%",
+        "items": []
+    },
     {
         "id": 13,
         "key": "oneplus",
-        "values": "1+1",
-        "items": []        
+        "value": "1+1",
+        "items": []
     },
     {
         "id": 14,
         "key": "big",
-        "values": "BIG X BIG",
-        "items": []        
-    },    
+        "value": "BIG X BIG",
+        "items": []
+    },
     {
         "id": 15,
         "key": "community",
-        "values": "",
-        "items": ["공지사항", "고객센터"]        
-    }          
-]        
-
+        "value": "",
+        "items": [
+            { "id": 0, "value": "공지사항" },
+            { "id": 1, "value": "고객센터" }
+        ]
+    }
+]

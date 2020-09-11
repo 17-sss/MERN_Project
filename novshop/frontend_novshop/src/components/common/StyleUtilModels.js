@@ -185,8 +185,8 @@ export const DropdownContent = styled.div`
 
     display: none;
     position: absolute;    
-    min-width: 70px;
-    padding: 8px;
+    min-width: 180px;
+    padding: 7px;
     margin: ${props => props.margin || "0 0 0 -5px"};
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 
@@ -195,6 +195,7 @@ export const DropdownContent = styled.div`
         padding: 0 3px;
         text-decoration: none; 
         display: block;
+        font-size: 9pt;
 
         &:hover {
             background-color: rgb(249, 249, 249);

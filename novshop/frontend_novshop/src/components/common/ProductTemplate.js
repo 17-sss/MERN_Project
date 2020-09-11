@@ -2,6 +2,7 @@ import React from 'react';
 import ProductForm from "./Product/ProductForm";
 import ProductItem from "./Product/ProductItem";
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ itemLink값은 임시임
 
 const ProductTemplate = () => {
     // [1] 여기에 데이터 조회하여 배열로 가져옴.
@@ -11,7 +12,8 @@ const ProductTemplate = () => {
             <ProductItem
                 itemImage = "/images/bymono_test1.webp"
                 itemName = "메르첼 오버셔츠"
-                itemLink = "/@TESTITEM1"
+                // eslint-disable-next-line                
+                itemLink = {"/shopping/shirt/0" + "?itemId=0"}
                 itemSize = {["XL", "2XL", "3XL", "4XL"]}
                 itemColors = {["navy", "skyblue", "gray"]}
                 price = {30000}
@@ -22,7 +24,8 @@ const ProductTemplate = () => {
             <ProductItem
                 itemImage = "/images/bymono_test2.webp"
                 itemName = "포켓 배색 긴팔티"
-                itemLink = "/@TESTITEM2"
+                // eslint-disable-next-line                
+                itemLink = {"/shopping/tshirt/0" + "?itemId=1"}
                 itemSize = {["XL", "2XL", "3XL", "4XL"]}
                 itemColors = {["green", "black", "blue", "white"]}
                 price = {22000}
@@ -33,7 +36,8 @@ const ProductTemplate = () => {
             <ProductItem
                 itemImage = "/images/bymono_test3.webp"
                 itemName = "모노 탄탄한 7부티"
-                itemLink = "/@TESTITEM3"
+                // eslint-disable-next-line                
+                itemLink = {"/shopping/tshirt/3" + "?itemId=2"}
                 itemSize = {["M-L", "XL", "2XL", "3XL"]}
                 itemColors = {["navy", "black", "beige", "white"]}
                 price = {29900}
@@ -44,7 +48,8 @@ const ProductTemplate = () => {
             <ProductItem
                 itemImage = "/images/bymono_test4.gif"
                 itemName = "펠로트 트렌치코트"
-                itemLink = "/@TESTITEM4"
+                // eslint-disable-next-line                
+                itemLink = {"/shopping/outer/2" + "?itemId=3"}
                 itemSize = {["XL", "2XL", "3XL", "4XL"]}
                 itemColors = {["beige", "black"]}
                 price = {135000}

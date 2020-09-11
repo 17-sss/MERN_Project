@@ -2,7 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 import {CustomLink, ClearEx, cssDropdown, DropdownContent, ModalBtn} from '../common/StyleUtilModels';
 import {getSize} from '../../lib/utility/customFunc';
-import data from '../../lib/json/categoryList.json';
+import categoryData from '../../lib/json/categoryList.json';
 
 // ****************************************************************************************
 // Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
@@ -135,77 +135,37 @@ const HeadIconSection = styled.div`
 
 // ○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○
 
-// createCategory, 카테고리 생성용 함수
-function createCategory(key, value = '', items) {
+// createCategory, 카테고리 객체 생성용 함수
+const createCategory = ({...data}) => {
+    const { id, key, value, items } = data;
     let valueTmp = value;
-    if ( !value && key ) {
+    if (!value && key) {
         valueTmp = key.toUpperCase();
     }
     return {
-        // es6에서 KEY와 value가 같으면 하나로 적어줘도 됨.
-        key, 
-        value: valueTmp, 
-        items,
+        id,
+        key,
+        value: valueTmp,
+        items: [{...items}],
     };
-}
+};
 // ----------------------------------------------------------------------------------------/  
 
 
 const Header = () => {
-    console.log(data[9]);
-// 카테고리 리스트 Item 생성 (임시) START
-    const categoryList = [];
-    categoryList.push(
-        createCategory('quick', '퀵&당일발송'),
-        createCategory('best'),
-        createCategory('new', 'NEW 5%'),
-        createCategory('selfproduced', '자체제작'),
-        createCategory('basic'),
-        createCategory('outer', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('knit', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('tshirt', 'T-SHIRT', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('shirt', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('pants', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('shoes', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('accessory', '', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('sale', 'SALE 80%', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('oneplus', '1+1', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('big', 'BIG X BIG', [ 
-            {item: {link: '1', name: 'ONE'}}, 
-            {item: {link: '2', name: 'TWO'}}  
-        ]),
-        createCategory('community', ''),
-    );        
-// 카테고리 리스트 Item 생성 (임시) END
+    
 
 // 임시용 변수들 START
+    // [1] 카테고리 리스트 Item 생성 (임시) START
+    // 200911 MEMO, 카테고리 목록(categoryData)은 json으로 만들어 놓음. 나중에 DB만들때 변경하기
+    const categoryList = [];
+    categoryData.map((v, i) => {
+        return categoryList.push(createCategory({...v}));
+    });
+    // console.log(categoryList[15].items[0].value);
+    // [1] 카테고리 리스트 Item 생성 (임시) END
+
+    // [2] 임시 userid
     const userid = "testid";
 // 임시용 변수들 END
 
@@ -229,9 +189,10 @@ const Header = () => {
                 {/* 헤더 로고 END */}
 
 
-                {/* 헤더 전체 카테고리 (Icon) 관련 START */}
+                {/* (사용안함) 헤더 전체 카테고리 (Icon) 관련 START */}
                 <HeadIconSection
                     loc = "left"
+                    style={{ display: "none" }}
                 >
                     <ul>
                         <li>                         
@@ -239,7 +200,7 @@ const Header = () => {
                         </li>
                     </ul>
                 </HeadIconSection>
-                {/* 헤더 전체 카테고리 (Icon) 관련 END */}
+                {/* (사용안함) 헤더 전체 카테고리 (Icon) 관련 END */}
                 
 
                 {/* 헤더 유저 (Icon) 관련 START */}
@@ -252,7 +213,7 @@ const Header = () => {
                         </HeadLi>
 
                         <HeadLi posrelative>
-                            <CustomLink to = {"/shoppingbasket/@" + userid}>
+                            <CustomLink to = {"/shoppingbasket/" + userid}>
                                 <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
                             </CustomLink>
                         </HeadLi>
@@ -275,33 +236,34 @@ const Header = () => {
             <HeadWrapper type = "Category">
                 <HeadUL  type = "Category">                                    
                     {categoryList.map( (v, i) => {
-                        const parentLink = "/shopping/@" + v.key; 
+                        const parentLink = "/shopping/" + v.key; 
+                        const dropdownItems = Object.values(v.items[0]);
+                        const isDropdown = (dropdownItems.length <= 0 ? false : true);
                         return (
                             <HeadLi 
-                                key = {v.key}
-                                isdropdown = {v.items && true}  // 여기서 작동해야함. 부모인 StyledHeadUL에서 작동하면안대..
+                                key = {v.id}
+                                isdropdown = {isDropdown}  // 여기서 작동해야함. 부모인 StyledHeadUL에서 작동하면안대..
                             >                            
                                 <CustomLink
                                     to = {parentLink}
                                     margin = "0"                                                                     
                                 >
-                                    {v.value}
+                                    {v.value}                                    
                                 </CustomLink>                                
-                                {
-                                    (v.items) &&
+                                {                                    
+                                    isDropdown &&
                                         <DropdownContent>
-                                            {v.items.map( (vTmp, i) => {                                                
-                                                const {link, name} = vTmp.item; 
-                                                const contentKey = v.key + '_' + name;
-                                                const childLink = parentLink + "?bid=" + link
+                                            {dropdownItems.map( (vItem, i) => {                                                
+                                                const {id, value} = vItem;                                                 
+                                                const childLink = parentLink + "/" + id;
 
                                                 return (
                                                     <CustomLink 
                                                         to = {childLink}                                                      
-                                                        key = {contentKey}
+                                                        key = {id}
                                                         margin = "0"
                                                     >                                                           
-                                                        {name}
+                                                        {value}
                                                     </CustomLink>
                                                 )
                                             })}
