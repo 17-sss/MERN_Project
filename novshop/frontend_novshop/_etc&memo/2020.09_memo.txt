@@ -40,7 +40,9 @@
             참고:
                 - React 자체에서 loction, match를 보내주는거였음. query-string 미들웨어가 아니라..
                 
-                
+@@ 200912
+    * 메모 
+        1. 자바스크립트 명명 규칙: https://velog.io/@recordboy/자바스크립트-변수-명명-규칙                
                 
                 
                 

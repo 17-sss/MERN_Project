@@ -1,6 +1,6 @@
 import React from 'react';
-import SwipeForm from './Swipe/SwipeForm';
-import SwipeItem from './Swipe/SwipeItem';
+import SwipeForm from './frSwipe/SwipeForm';
+import SwipeItem from './frSwipe/SwipeItem';
 
 const SwipeTemplate = () => {
     return (

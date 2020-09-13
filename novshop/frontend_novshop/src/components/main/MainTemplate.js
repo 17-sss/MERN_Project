@@ -1,6 +1,6 @@
 import React from 'react';
-import SwipeTemplate from './SwipeTemplate';
-import ProductTemplate from '../common/ProductTemplate';
+import SwipeTemplate from '../swipe/SwipeTemplate';
+import ProductTemplate from '../product/ProductTemplate';
 
 
 const MainTemplate = () => {

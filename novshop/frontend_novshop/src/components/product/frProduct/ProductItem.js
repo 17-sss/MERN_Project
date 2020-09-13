@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import styled, { css } from 'styled-components';
 import { Col } from 'react-bootstrap';
+
 import { getSize } from '../../../lib/utility/customFunc';
-import { ClearEx, CustomLink } from '../StyleUtilModels';
-import { cssDisplayNone, cssStrike } from '../StyleUtilCSS';
+import { ClearEx, CustomLink } from '../../common/StyleUtilModels';
+import { cssDisplayNone, cssStrike } from '../../common/StyleUtilCSS';
 
 // ========================================================================================
 // ************* Col(최상위) 틀 *************

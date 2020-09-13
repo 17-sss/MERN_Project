@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useCalcMargin } from '../../lib/utility/customHooks';
+import { getSize } from '../../lib/utility/customFunc';
+
 import { Modal, InputGroup, FormControl, Button } from 'react-bootstrap';    // https://react-bootstrap.github.io/components/modal/
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';       // fas
@@ -173,6 +175,16 @@ export const ClearEx = styled.div`
             return css`clear: both;`;
         }
     }}
+`;
+
+
+// **********************************************************************************
+// *** StyledHr : 구분선 ***
+// **********************************************************************************
+export const StyledHr = styled.hr`
+    width: ${getSize(1)};    
+    position: relative; /* 굳이 없어도 되는거같지만.. 그래도? */
+    margin: 0 auto;
 `;
 
 

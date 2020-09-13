@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {CustomLink, ClearEx, cssDropdown, DropdownContent, ModalBtn} from '../common/StyleUtilModels';
+import {CustomLink, ClearEx, cssDropdown, DropdownContent, ModalBtn, StyledHr } from '../common/StyleUtilModels';
 import {getSize} from '../../lib/utility/customFunc';
 import categoryData from '../../lib/json/categoryList.json';
 
@@ -12,6 +12,27 @@ import { faSearch, faShoppingBasket, faBars } from '@fortawesome/free-solid-svg-
 import { faUser } from '@fortawesome/free-regular-svg-icons';       // far
 // import { faUser } from '@fortawesome/free-brands-svg-icons';     // fab
 // ----------------------------------------------------------------------------------------/
+
+
+// 각종 함수 or 변수 START ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+// [F] createCategory, 카테고리 객체 생성용 함수
+const createCategory = ({...data}) => {
+    const { id, key, value, items } = data;
+    let valueTmp = value;
+    if (!value && key) {
+        valueTmp = key.toUpperCase();
+    }
+    return {
+        id,
+        key,
+        value: valueTmp,
+        items: items,
+    };
+};
+// ----------------------------------------------------------------------------------------/  
+// 각종 함수 or 변수 END ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+
 
 // 헤더 :: [공통] START ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 // ========================================================================================
@@ -26,25 +47,13 @@ const HeadWrapper = styled.div`
     /* type에 따라 height 조정 (Header & Category) */
     ${props => props.type === "Category" ? 
         css`    /* Category */ 
-            height: 40px;
-            border-bottom: 1px solid #f6f6f6;        
+            height: 40px;                    
         `     
         : 
         css`    /* Header */ 
             height: 140px;
         ` 
     }
-`;
-// ----------------------------------------------------------------------------------------/ 
-
-
-// ========================================================================================
-// ************* 헤더용 구분선 : hr *************
-// ========================================================================================
-const HeadHr = styled.hr`
-    width: ${getSize(1)};    
-    position: relative; /* 굳이 없어도 되는거같지만.. 그래도? */
-    margin: 0 auto;
 `;
 // ----------------------------------------------------------------------------------------/ 
 
@@ -90,6 +99,17 @@ const HeadUL = styled.ul`
     }    
 `;
 // ----------------------------------------------------------------------------------------/ 
+
+
+// ========================================================================================
+// ************* border-bottom을 사용한 구분선 *************
+// ========================================================================================
+const BorderBotLine = styled.div`
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid #f6f6f6;
+`;
+// ----------------------------------------------------------------------------------------/ 
 // 헤더 :: [공통] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 
 
@@ -132,26 +152,6 @@ const HeadIconSection = styled.div`
 // ----------------------------------------------------------------------------------------/    
 // 헤더 :: [아이콘, 로고] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 
-
-// ○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○
-
-// createCategory, 카테고리 객체 생성용 함수
-const createCategory = ({...data}) => {
-    const { id, key, value, items } = data;
-    let valueTmp = value;
-    if (!value && key) {
-        valueTmp = key.toUpperCase();
-    }
-    return {
-        id,
-        key,
-        value: valueTmp,
-        items: [{...items}],
-    };
-};
-// ----------------------------------------------------------------------------------------/  
-
-
 const Header = () => {
     
 
@@ -159,9 +159,10 @@ const Header = () => {
     // [1] 카테고리 리스트 Item 생성 (임시) START
     // 200911 MEMO, 카테고리 목록(categoryData)은 json으로 만들어 놓음. 나중에 DB만들때 변경하기
     const categoryList = [];
-    categoryData.map((v, i) => {
+    categoryData.map((v, i) => {        
         return categoryList.push(createCategory({...v}));
     });
+    
     // console.log(categoryList[15].items[0].value);
     // [1] 카테고리 리스트 Item 생성 (임시) END
 
@@ -230,15 +231,17 @@ const Header = () => {
             {/* *** 헤더 [아이콘, 로고] END *** */}
 
             <ClearEx />     {/* float 써서 clear: both 함 */}    
-            <HeadHr/>
+            <StyledHr/>
 
             {/* *** 헤더 [카테고리] START *** */}
             <HeadWrapper type = "Category">
                 <HeadUL  type = "Category">                                    
-                    {categoryList.map( (v, i) => {
+                    {categoryList.map( (v, i) => {  
+                        const childItems = v.items;
+                        // const childItems = Object.values(v.items);
+                        const isDropdown = (childItems.length <= 0 ? false : true);                                              
                         const parentLink = "/shopping/" + v.key; 
-                        const dropdownItems = Object.values(v.items[0]);
-                        const isDropdown = (dropdownItems.length <= 0 ? false : true);
+                                                                    
                         return (
                             <HeadLi 
                                 key = {v.id}
@@ -253,7 +256,7 @@ const Header = () => {
                                 {                                    
                                     isDropdown &&
                                         <DropdownContent>
-                                            {dropdownItems.map( (vItem, i) => {                                                
+                                            {childItems.map( (vItem, i) => {                                                
                                                 const {id, value} = vItem;                                                 
                                                 const childLink = parentLink + "/" + id;
 
@@ -274,10 +277,10 @@ const Header = () => {
                         );                                                
                     })}                                                     
                 </HeadUL>            
-            </HeadWrapper>    
+            </HeadWrapper>                
             {/* *** 헤더 [카테고리] END *** */}
-            
             <ClearEx />
+            <BorderBotLine/>
         </>
     );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
-import ProductForm from "./Product/ProductForm";
-import ProductItem from "./Product/ProductItem";
+import ProductForm from "./frProduct/ProductForm";
+import ProductItem from "./frProduct/ProductItem";
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ itemLink값은 임시임
 
