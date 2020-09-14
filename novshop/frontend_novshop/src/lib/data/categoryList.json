@@ -1,0 +1,144 @@
+[
+    {
+        "id": 0,
+        "key": "quick",
+        "value": "퀵&당일발송",
+        "items": []
+    },
+    {
+        "id": 1,
+        "key": "best",
+        "value": "",
+        "items": []
+    },
+    {
+        "id": 2,
+        "key": "new",
+        "value": "NEW 5%",
+        "items": []
+    },
+    {
+        "id": 3,
+        "key": "selfproduced",
+        "value": "자체제작",
+        "items": []
+    },
+    {
+        "id": 4,
+        "key": "basic",
+        "value": "",
+        "items": []
+    },
+    {
+        "id": 5,
+        "key": "outer",
+        "value": "",
+        "items": [
+            { "id": 0, "key": "jacketblazer", "value": "자켓&블레이져" },
+            { "id": 1, "key": "jumper", "value": "점퍼" },
+            { "id": 2, "key": "coat", "value": "코트" },
+            { "id": 3, "key": "cardigan", "value": "가디건&집업" },
+            { "id": 4, "key": "vest", "value": " 베스트" }
+        ]
+    },
+    {
+        "id": 6,
+        "key": "knit",
+        "value": "",
+        "items": [
+            { "id": 0, "key": "knit", "value": "니트" },
+            { "id": 1, "key": "cardiganvest", "value": "가디건&베스트" }
+        ]
+    },
+    {
+        "id": 7,
+        "key": "tshirt",
+        "value": "T-SHIRT",
+        "items": [
+            { "id": 0, "key": "longsleeve", "value": "긴팔티" },
+            { "id": 1, "key": "mtmhood", "value": "맨투맨&후드티" },
+            { "id": 2, "key": "henrykarati", "value": "헨리넥&카라티" },
+            { "id": 3, "key": "shortsleeve", "value": "반팔티&7부티" },
+            { "id": 4, "key": "print", "value": "프린팅티셔츠" },
+            { "id": 5, "key": "sleeveless", "value": "민소매" }
+        ]
+    },
+    {
+        "id": 8,
+        "key": "shirt",
+        "value": "",
+        "items": [
+            { "id": 0, "key": "basickara", "value": "베이직 카라셔츠" },
+            { "id": 1, "key": "chinahenry", "value": "차이나&헨리넥셔츠" },
+            { "id": 2, "key": "patterncheck", "value": "패턴&체크셔츠" },
+            { "id": 3, "key": "linen", "value": "린넨셔츠" },
+            { "id": 4, "key": "short", "value": "반팔&7부셔츠" }
+        ]
+    },
+    {
+        "id": 9,
+        "key": "pants",
+        "value": "",
+        "items": [
+            { "id": 0, "key": "slacks", "value": "슬랙스" },
+            { "id": 1, "key": "cotton", "value": "면바지" },
+            { "id": 2, "key": "bluejeans", "value": "청바지" },
+            { "id": 3, "key": "training", "value": "트레이닝바지" },
+            { "id": 4, "key": "banding", "value": "밴딩바지" },
+            { "id": 5, "key": "linen", "value": "린넨바지" },
+            { "id": 6, "key": "shorts", "value": "반바지" }
+        ]
+    },
+    {
+        "id": 10,
+        "key": "shoes",
+        "value": "",
+        "items": [
+            { "id": 0, "key": "bigsize", "value": "빅사이즈신발" },
+            { "id": 1, "key": "roppers", "value": "로퍼&구두" },
+            { "id": 2, "key": "snickers", "value": "스니커즈" },
+            { "id": 3, "key": "slippers", "value": "슬리퍼&샌들" }
+        ]
+    },
+    {
+        "id": 11,
+        "key": "accessory",
+        "value": "",
+        "items": [
+            { "id": 0, "key": "bag", "value": "가방" },
+            { "id": 1, "key": "hat", "value": "모자" },
+            { "id": 2, "key": "belt", "value": "벨트" },
+            { "id": 3, "key": "underwear", "value": "양말&속옷" },
+            { "id": 4, "key": "jewelry", "value": "쥬얼리&뷰티" },
+            { "id": 5, "key": "glasses", "value": "선글라스&안경" },
+            { "id": 6, "key": "tiegloves", "value": "타이&장갑&머플러" }
+        ]
+    },
+    {
+        "id": 12,
+        "key": "sale",
+        "value": "SALE 80%",
+        "items": []
+    },
+    {
+        "id": 13,
+        "key": "oneplus",
+        "value": "1+1",
+        "items": []
+    },
+    {
+        "id": 14,
+        "key": "big",
+        "value": "BIG X BIG",
+        "items": []
+    },
+    {
+        "id": 15,
+        "key": "community",
+        "value": "",
+        "items": [
+            { "id": 0, "key": "notice", "value": "공지사항" },
+            { "id": 1, "key": "cs", "value": "고객센터" }
+        ]
+    }
+]

@@ -2,7 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 import {CustomLink, ClearEx, cssDropdown, DropdownContent, ModalBtn, StyledHr } from '../common/StyleUtilModels';
 import {getSize} from '../../lib/utility/customFunc';
-import categoryData from '../../lib/json/categoryList.json';
+import categoryData from '../../lib/data/categoryList.json';
 
 // ****************************************************************************************
 // Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
@@ -105,8 +105,9 @@ const HeadUL = styled.ul`
 // ************* border-bottom을 사용한 구분선 *************
 // ========================================================================================
 const BorderBotLine = styled.div`
-    width: 100%;
+    width: ${getSize(1)};
     height: 1px;
+    margin: 0 auto;
     border-bottom: 1px solid #f6f6f6;
 `;
 // ----------------------------------------------------------------------------------------/ 
