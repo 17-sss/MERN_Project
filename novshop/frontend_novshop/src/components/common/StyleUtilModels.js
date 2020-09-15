@@ -188,6 +188,17 @@ export const StyledHr = styled.hr`
 `;
 
 
+// **********************************************************************************
+// *** BorderBotLine : border-bottom을 사용한 구분선 ***
+// **********************************************************************************
+export const BorderBotLine = styled.div`
+    height: 1px;
+    width: ${props => props.width ? props.width : getSize(1)};    
+    margin: ${props => props.margin ? props.margin : "0 auto"};
+    border-bottom: ${props => props.color ? ("1px solid " + props.color) : "1px solid #f6f6f6"};
+`;
+
+
 // Dropdown 관련 START ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 // **********************************************************************************
 // *** Dropdown : Content ***
