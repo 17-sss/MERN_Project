@@ -209,7 +209,7 @@ const ProductInfoSelectP = styled.p`
 
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
 
-const ProductDetailView = (props) => {
+const ProductDetailTemplate = (props) => {
     // 추후 container 단 START ----------
     const { itemId } = props.query;
 
@@ -337,4 +337,4 @@ const ProductDetailView = (props) => {
     );
 };
 
-export default ProductDetailView;
+export default ProductDetailTemplate;
