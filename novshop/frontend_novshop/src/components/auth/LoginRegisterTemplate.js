@@ -81,7 +81,7 @@ const objType = {
 
 
 const LoginRegisterTemplate = (props) => {
-    const {type, onSubmit, /* onChange, form */} = props;
+    const {type, onSubmit, onChange, form } = props;
     const typeValue = objType[type];
     return (
         <>
@@ -93,15 +93,15 @@ const LoginRegisterTemplate = (props) => {
                         name="userid" 
                         placeholder="아이디" 
                         type="text"
-                        // onChange={onChange}
-                        // value={form.userid}
+                        onChange={onChange}
+                        value={form.userid}
                     />
                     <LoginRegisterInput                         
                         name="userpwd"
                         placeholder="비밀번호"
                         type="password"
-                        // onChange={onChange}
-                        // value={form.userpwd}
+                        onChange={onChange}
+                        value={form.userpwd}
                     />  
 
                     {(type === "register") && 
@@ -109,8 +109,8 @@ const LoginRegisterTemplate = (props) => {
                             name="userpwdConfirm"
                             placeholder="비밀번호 확인"
                             type="password"
-                            // onChange={onChange}
-                            // value={form.userpwdConfirm}
+                            onChange={onChange}
+                            value={form.userpwdConfirm}
                         />
                     }
                     

@@ -1,37 +1,135 @@
-//---------------------------------- 리덕스 어렵누...
-import { createAction } from 'redux-actions';
-import { createRequestActionTypes  } from "../lib/reduxUtil";
+// Ducks 구조 사용
+/* 
+    1) export default 를 이용하여 리듀서를 내보내야 한다.
+    2) export를 이용하여 액션 생성 함수를 내보내야 한다.
+    3) 액션 타입 이름은 npm-module-or-app/reducer/ACTION_TYPE 형식으로 만들어야 한다.
+    4) 외부 리듀서에서 모듈의 액션 타입이 필요할 때는 액션 타입을 내보내도 된다.
 
-// 액션 생성
-const INITALIZE_FORM = 'auth/INITALIZE_FORM';   
-export const initializeForm = createAction(INITALIZE_FORM, form => form);   // login & register
+*/
+import { createRequestActionTypes } from "../lib/reduxUtil";
+import { createAction, handleActions } from 'redux-actions';
 
+// 액션 이름 설정
+const CHANGE_FIELD = 'auth/CHANGE_FIELD';
+const INITALIZE_FORM = 'auth/INITALIZE_FORM';
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('auth/LOGIN');
+const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] = createRequestActionTypes('auth/REGISTER');
+
+
+// 액션 생성 함수 생성
+/*  
+// 일반 액션 생성 함수 샘플.
+export const changeField = ({form, key, value}) => ({
+    type: CHANGE_FIELD,
+    payload: {
+        form,
+        key,
+        value,
+    }
+});
+
+export const initializeForm = form => ({
+    type: INITALIZE_FORM,
+    payload: form,
+});
+
+*/
+export const changeField = createAction(
+    CHANGE_FIELD,
+    ({form, key, value}) => ({
+        form,   // register, login
+        key,    // username, password, passwordConfirm
+        value,  // 실제 바꾸려는 값
+    }),
+);
+
+export const initializeForm = createAction(INITALIZE_FORM, form => form);   // "register" / "login"
+
 export const login = createAction(LOGIN, ({userid, userpwd}) => {
     return {
         userid,
         userpwd,
-    };
+    }
 });
-
-const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] = createRequestActionTypes('auth/R EGISTER');
 export const register = createAction(REGISTER, ({userid, userpwd}) => {
     return {
         userid,
         userpwd,
-    };
+    }
 });
 
-const CHANGE_FIELD = 'auth/CHANGE_FIELD';
-export const changeField = createAction(CHANGE_FIELD, ({form, key, value}) => {
-    return {
-        form,   // register, login
-        key,    // userid, userpwd, userpwdConfirm
-        value,  // 실제 바꾸려는 값
-    };
-});
+// 리듀서 초기값
+const initialState = {
+    register: {
+        userid: '',
+        userpwd: '',
+        userpwdConfirm: '',
+    },
+    login: {
+        userid: '',
+        userpwd: '',
+    },
+    auth: null,
+    authError: null,
+};
 
+// 리듀서 생성
+const auth = handleActions(
+    {
+        [CHANGE_FIELD]: (state, { payload: {form, key, value} }) => {            
+            const objTmp = () => {
+                // 아이씨바. 어케하라고! immer안쓰고..하
+            }
 
-// 사가 생성은 나중에..
+            return {
+                ...state,
+                [form]: objTmp[form][key],        
+            }
+            // immer 썼을시..
+            // return produce(state, draft => {
+            //         draft[form][key] = value;   // 예: state.register.username을 바꾼다.
+            // });                       
+        },
 
+        [INITALIZE_FORM]: (state, {payload: form}) => ({
+            ...state,
+            [form]: initialState[form],
+            authError: null,    // 폼 전환 시 회원 인증 에러 초기화     //  (24.2.3.5 : 01 - 4) ADD
+        }),
 
+        // 회원가입 성공
+        [REGISTER_SUCCESS]: (state, {payload: auth}) => ({
+            ...state,
+            authError: null,
+            auth,
+        }),
+
+        // 회원가입 실패
+        [REGISTER_FAILURE]: (state, {payload: error}) => ({
+            ...state,
+            authError: error,
+        }),
+
+        // 로그인 성공
+        [LOGIN_SUCCESS]: (state, {payload: auth}) => {            
+            return {
+                ...state,
+                authError: null,
+                auth,
+            }            
+        },
+
+        // 로그인 실패
+        [LOGIN_FAILURE]: (state, {payload: error}) => {            
+            return {
+                ...state,
+                authError: error,
+            }
+            
+        },
+        //  (24.2.3.5 : 01 - 4) END
+    },
+    initialState,
+);
+
+export default auth;
