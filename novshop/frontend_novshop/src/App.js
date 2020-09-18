@@ -24,9 +24,9 @@ const App = () => {
                 */}
                 <Route component={ShoppingPage} path="/shopping/:category/:subcategory?" />                 
                 {/* // Register (회원가입) */}
-                <Route component={RegisterPage} path="/member/join" />
+                <Route component={RegisterPage} path="/auth/register" />
                 {/* // Login (로그인) */}
-                <Route component={LoginPage} path="/login" />
+                <Route component={LoginPage} path="/auth/login" />
                 {/* // Member (회원정보) */}
                 <Route component={MemberPage} path="/member/@:username" />
             </Switch>

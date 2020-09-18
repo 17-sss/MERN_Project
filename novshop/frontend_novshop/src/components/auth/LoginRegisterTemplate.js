@@ -122,7 +122,7 @@ const LoginRegisterTemplate = (props) => {
                     <LinkFooter>                    
                         <Link 
                             style = {{color: "rgb(50, 50 ,50)"}}                    
-                            to= {type === "login" ? "/member/join" : "/login" } 
+                            to= {type === "login" ? "/auth/register" : "/auth/login" } 
                         >
                             {type === "login" ? "회원가입" : "로그인"}    
                         </Link>

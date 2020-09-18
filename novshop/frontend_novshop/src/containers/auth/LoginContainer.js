@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { changeField, initializeForm } from "../../modules/auth";
 
 const LoginContainer = () => {
-        const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const { form } = useSelector( ({auth}) => {        
         return {
             form: auth.login,
@@ -15,12 +15,10 @@ const LoginContainer = () => {
         const {name, value} = e.target;  
 
         dispatch(            
-            changeField({
-                
+            changeField({                
                 form: 'login',
                 key: name,
-                value,
-                
+                value,                
             })
         );
     };

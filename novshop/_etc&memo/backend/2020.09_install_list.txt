@@ -1,0 +1,13 @@
+### module install list ###
+
+@@ 200918 
+    1. 콘솔
+        > npm i -g sequelize-cli
+        > npm i mysql2 sequelize
+        > sequelize init
+        > npm i express cookie-parser express-session morgan connect-flash
+        > npm i -g nodemon
+        > npm i -D nodemon      (개발모드에서만 사용할 수 있게 함.)
+        > npm i dotenv          
+            (비밀키를 .env라는  파일에 모아두고, 해당 모듈이 .env 파일을 읽어 process.env 객체에 넣어줌)
+        

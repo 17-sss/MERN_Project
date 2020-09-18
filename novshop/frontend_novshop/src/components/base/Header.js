@@ -200,7 +200,7 @@ const Header = () => {
                 <HeadIconSection>
                     <HeadUL>
                         <HeadLi >                                                     
-                            <CustomLink to = "/login">                            
+                            <CustomLink to = "/auth/login">                            
                                 <FontAwesomeIcon icon = {faUser} size = 'lg'/>        
                             </CustomLink> 
                         </HeadLi>
