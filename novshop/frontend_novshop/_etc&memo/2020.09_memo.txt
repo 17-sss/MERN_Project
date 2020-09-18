@@ -58,7 +58,7 @@
 
 @@ 200917
     * 메모
-        1. React-Redux 관련 링크 (로그인, 로그아웃) (만드는 과정 참고하길)
+        1. React-Redux 관련 링크 (로그인, 로그아웃) (망할 Immer는 어케 돌아가는걸까..) (1)
             https://loy124.tistory.com/249?category=784080
             https://loy124.tistory.com/250?category=784080                                                     
             https://loy124.tistory.com/251?category=784080                                
@@ -69,6 +69,12 @@
 
         2. react-redux :: useSelector, useDispatch 관련
             https://medium.com/@pks2974/redux-hook-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0-3b92b4d75466
+
+
+@@ 200918
+    * 메모
+        1. React-Redux 관련 링크 (로그인, 로그아웃) (망할 Immer는 어케 돌아가는걸까..) (2)
+            https://backend-intro.vlpt.us/5/07.html
                 
                 
                  

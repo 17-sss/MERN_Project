@@ -16,6 +16,9 @@ export const getSize = (AnRatioStatic = 0, AstrType = "width", AbManual = false,
     let result = 0;
     let screenSize = 0;
     let strType = AstrType.toLowerCase();
+    let isMaxAvailWidth = false;
+    
+    if (AnRatioStatic === 1) isMaxAvailWidth = true;
         
     if (strType === "width") {
         screenSize = global.screen.availWidth;
@@ -38,5 +41,6 @@ export const getSize = (AnRatioStatic = 0, AstrType = "width", AbManual = false,
     
     let px = "px";
     if (AbNopx) px = '';
-    return (result + px);
+    
+    return ((result - (isMaxAvailWidth ? 18 : 0) ) + px);
 };

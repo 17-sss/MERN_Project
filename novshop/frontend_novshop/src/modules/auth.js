@@ -76,25 +76,47 @@ const initialState = {
 // 리듀서 생성
 const auth = handleActions(
     {
-        [CHANGE_FIELD]: (state, { payload: {form, key, value} }) => {            
-            const objTmp = () => {
-                // 아이씨바. 어케하라고! immer안쓰고..하
-            }
+        [CHANGE_FIELD]: (state, action) => {    
+            const {payload} = action;
+            const {form, key, value} = payload;
 
+            // [1-1] immer 안쓸시.. 정답!
             return {
                 ...state,
-                [form]: objTmp[form][key],        
+                [form]: {
+                    ...state[form], // 예: state.login 객체를 불변성유지 해줌.
+                    [key]: value,   // 현재 작업하고 있는 값만 바꿈. (key는 userid가 될수도, userpwd가 될수도)
+                }
             }
-            // immer 썼을시..
-            // return produce(state, draft => {
-            //         draft[form][key] = value;   // 예: state.register.username을 바꾼다.
-            // });                       
+            
+            // [1-2] immer 안쓸시.. (정확한 답이 아님) (immer 쓰는 방향으로 타협..)
+            
+            // const obj = {...state[form]};
+            // delete obj[key];
+            /*
+            return {
+                ...state,
+                
+                [form]: {
+                    userid: (key === "userid"   ? value : state[form]["userid"]),                
+                    userpwd: (key === "userpwd" ? value : state[form]["userpwd"]),
+                },               
+            } 
+            */
+            
+
+            // [3] immer 썼을시..
+            /*
+            return produce(state, draft => {                
+                draft[form][key] = value;   // 예: state.register.username을 바꾼다.
+            });                                  
+            */
         },
 
         [INITALIZE_FORM]: (state, {payload: form}) => ({
             ...state,
             [form]: initialState[form],
-            authError: null,    // 폼 전환 시 회원 인증 에러 초기화     //  (24.2.3.5 : 01 - 4) ADD
+            authError: null,    // 폼 전환 시 회원 인증 에러 초기화    
         }),
 
         // 회원가입 성공

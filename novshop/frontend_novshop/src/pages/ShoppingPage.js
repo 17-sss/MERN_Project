@@ -25,6 +25,7 @@ const ShoppingPage = (props) => {
         return (
             <> 
                 <ProductTemplate {...props} />                
+                
             </>
         );        
     }

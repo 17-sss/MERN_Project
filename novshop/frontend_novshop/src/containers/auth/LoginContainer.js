@@ -1,23 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
 import { useSelector, useDispatch } from "react-redux";
 import { changeField, initializeForm } from "../../modules/auth";
 
 const LoginContainer = () => {
-    const dispatch = useDispatch();
-    const { form } = useSelector( ({auth}) => {
+        const dispatch = useDispatch();
+    const { form } = useSelector( ({auth}) => {        
         return {
             form: auth.login,
         };
     } );
-
+    
     const onChange = (e) => {
         const {name, value} = e.target;  
-        dispatch(
+
+        dispatch(            
             changeField({
+                
                 form: 'login',
                 key: name,
                 value,
+                
             })
         );
     };
@@ -27,7 +30,7 @@ const LoginContainer = () => {
     };
 
 
-    React.useEffect(() => {
+    useEffect(() => {
         dispatch(
             initializeForm('login')
         );
