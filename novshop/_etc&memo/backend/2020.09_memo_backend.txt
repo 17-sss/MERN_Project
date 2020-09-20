@@ -1,4 +1,10 @@
 @@ 200918
-    * React - Express 연결 관련
+    * React - Express 연결 관련 링크 모음 :: 1
         https://hello-bryan.tistory.com/121
         https://im-developer.tistory.com/164
+
+@@ 200920
+    * React - Express 연결 관련 링크 모음 :: 2
+        https://singa-korean.tistory.com/46
+        https://www.npmjs.com/package/http-proxy-middleware
+        https://ljh86029926.gitbook.io/coding-apple-react/undefined-1/cra
