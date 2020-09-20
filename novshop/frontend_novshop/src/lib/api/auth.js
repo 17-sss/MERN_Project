@@ -6,5 +6,5 @@ import client from './client';
 // }
 
 export const test = () => {
-    return client.get('/api/');
+    return client.get('/api/auth');
 }

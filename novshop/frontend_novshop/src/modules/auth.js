@@ -62,6 +62,7 @@ export const register = createAction(REGISTER, ({userid, userpwd}) => {
 const initialState = {
     register: {
         userid: '',
+        usernick: '',
         userpwd: '',
         userpwdConfirm: '',
     },

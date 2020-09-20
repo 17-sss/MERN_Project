@@ -96,6 +96,16 @@ const LoginRegisterTemplate = (props) => {
                         onChange={onChange}
                         value={form.userid}
                     />
+                    {(type === "register") && 
+                        <LoginRegisterInput                         
+                            autoComplete="on"      
+                            name="usernick"
+                            placeholder="닉네임"
+                            type="text"
+                            onChange={onChange}
+                            value={form.usernick}                            
+                        />                        
+                    }
                     <LoginRegisterInput                         
                         name="userpwd"
                         placeholder="비밀번호"
@@ -103,7 +113,6 @@ const LoginRegisterTemplate = (props) => {
                         onChange={onChange}
                         value={form.userpwd}
                     />  
-
                     {(type === "register") && 
                         <LoginRegisterInput                         
                             name="userpwdConfirm"
@@ -112,6 +121,7 @@ const LoginRegisterTemplate = (props) => {
                             onChange={onChange}
                             value={form.userpwdConfirm}
                         />
+
                     }
                     
 

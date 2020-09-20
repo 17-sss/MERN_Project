@@ -10,3 +10,10 @@
         > npm i -D nodemon      (개발모드에서만 사용할 수 있게 함.)
         > npm i dotenv          
             (비밀키를 .env라는  파일에 모아두고, 해당 모듈이 .env 파일을 읽어 process.env 객체에 넣어줌)
+
+@@ 200920
+    1. 시퀄라이즈 관련
+        1) 데이터베이스 생성. 
+        > sequelize db:create
+    2. 콘솔 
+        > npm i passport passport-local passport-kakao bcrypt   (passport 모듈로 로그인 구현)

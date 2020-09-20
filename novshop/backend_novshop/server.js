@@ -3,6 +3,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan'); // 로그 모듈
 const path = require('path');
+const passport = require('passport');      // passport 모듈 
 require('dotenv').config(); // 비밀키를 불러오는 모듈 (.env 파일에서 불러옴)
 
 // [필요없는] 모듈
@@ -11,10 +12,13 @@ require('dotenv').config(); // 비밀키를 불러오는 모듈 (.env 파일에�
 const flash = require('connect-flash');     
 */
 
-const apiRouter = require('./routes');
+const authRouter = require('./routes/auth');
+const { sequelize } = require('./models');      // 시퀄라이즈 모델 서버에 연결..1
+const passportConfig = require('./passport');   // passport 설정..1
 
 const app = express();
-
+sequelize.sync();           // 시퀄라이즈 모델 서버에 연결..2
+passportConfig(passport);   // passport 설정..2
 app.set('port', process.env.PORT || 4000); // 환경변수 포트에 아무것도 없으면 4000으로 지정
 
 // [필요없는] 설정 : set
@@ -43,7 +47,12 @@ app.use(
     }),
 );
 
-app.use('/api', apiRouter);
+// passport 관련 설정은 req.session 객체가 express-session에서 생성하므로 express-session 미들웨어보다 뒤에 선언해야함.
+app.use(passport.initialize());     // passport.initialize(): 요청 (req 객체)에 passport 설정을 심음.
+app.use(passport.session());        // passport.session(): req.session 객체에 passport 정보를 저장
+
+
+app.use('/api/auth', authRouter);
 
 app.use((req, res, next) => {
     const err = new Error('Not Found');
