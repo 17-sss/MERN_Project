@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => (
     sequelize.define('user', {
         userid: {
             type: DataTypes.STRING(40),
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         // 2. snsid
         snsid: {
             type: DataTypes.STRING(50),
-            allowNull: true,
+            allowNull: true,            
         },
     // SNS 로그인 관련 END
     },{
@@ -39,4 +39,4 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true,
         paranoid: true,
     })
-};
+);

@@ -5,6 +5,6 @@ import client from './client';
 //     return client.post('/api/auth/login', {userid, userpwd});
 // }
 
-export const test = () => {
-    return client.get('/api/auth');
-}
+export const register = ({userid, userpwd, usernick}) => {
+    return client.post('/api/auth/register', {userid, userpwd, usernick});
+};

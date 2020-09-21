@@ -27,3 +27,7 @@
     
     * babel 적용
         https://shlee0882.tistory.com/231
+
+@@ 200921
+    * VScode Sequelize Autocomplete 설정
+        https://devhyun.com/blog/post/24

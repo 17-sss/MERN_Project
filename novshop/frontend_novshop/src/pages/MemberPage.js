@@ -3,7 +3,8 @@ import * as authAPI  from '../lib/api/auth';
 
 const MemberPage = () => {
     React.useEffect( () => {
-        console.log(authAPI.test());
+        // 추후 DELETE
+        console.log(authAPI.register({userid: 'paw', userpwd: '123', usernick: 'nick'}));
     })
 
     return (
