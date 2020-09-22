@@ -1,15 +1,16 @@
+const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 
 const { User } = require('../models');
 
-module.exports = (passport) => {
+module.exports = () => {
     passport.use(new LocalStrategy({
         usernameField: 'userid',
         passwordField: 'userpwd',        
     }, async (userid, userpwd, done) => {
         try {
-            const exUser = User.find({where: {userid}});
+            const exUser = User.findOne({where: {userid}});
 
             if (exUser) {                
                 // 첫번째 인자와 두번째 인자 (hash(해싱된 코드))를 비교하여 같으면 true 아니면 false를 반환

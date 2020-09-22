@@ -1,3 +1,5 @@
+// auth :: Redux Module
+
 // Ducks 구조 사용
 /* 
     1) export default 를 이용하여 리듀서를 내보내야 한다.
@@ -6,8 +8,10 @@
     4) 외부 리듀서에서 모듈의 액션 타입이 필요할 때는 액션 타입을 내보내도 된다.
 
 */
-import { createRequestActionTypes } from "../lib/reduxUtil";
+import { createRequestActionTypes, createRequestSaga } from "../lib/reduxUtil";
 import { createAction, handleActions } from 'redux-actions';
+import { takeLatest } from 'redux-saga/effects';
+import * as authAPI from '../lib/api/auth';
 
 // 액션 이름 설정
 const CHANGE_FIELD = 'auth/CHANGE_FIELD';
@@ -51,12 +55,25 @@ export const login = createAction(LOGIN, ({userid, userpwd}) => {
         userpwd,
     }
 });
-export const register = createAction(REGISTER, ({userid, userpwd}) => {
+export const register = createAction(REGISTER, ({userid, usernick, userpwd}) => {
     return {
         userid,
+        usernick,
         userpwd,
     }
 });
+
+
+// 사가 생성
+const registerSaga = createRequestSaga(REGISTER, authAPI.register);
+const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+
+export function* authSaga() {    
+    yield takeLatest(REGISTER, registerSaga);
+    yield takeLatest(LOGIN, loginSaga);
+}
+
+
 
 // 리듀서 초기값
 const initialState = {

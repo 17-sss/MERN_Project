@@ -71,18 +71,28 @@ const LinkFooter = styled.div`
 // ---------------------------------------------------/
 
 
+// ========================================================================================
+// [3] ErrorMessage
+// ========================================================================================
+// 1) ErrorMessage
+const ErrorMessage = styled.div`
+    color: red;
+    font-size: 14px;
+    margin: 10px 0 0 0;
+    text-align: center;
+`;
+
 
 const objType = {
     login: '로그인',
     register: '회원가입',
-};
-
-
+}
 
 
 const LoginRegisterTemplate = (props) => {
-    const {type, onSubmit, onChange, form } = props;
+    const {type, onSubmit, onChange, form, error } = props;
     const typeValue = objType[type];
+    
     return (
         <>
             <LoginRegisterTemplateWrapper>
@@ -123,6 +133,8 @@ const LoginRegisterTemplate = (props) => {
                         />
 
                     }
+
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
                     
 
                     <LoginRegisterBtn>

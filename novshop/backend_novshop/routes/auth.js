@@ -1,5 +1,5 @@
 const express = require('express');
-import passport from "passport";
+const passport = require('passport');
 const bcrypt = require('bcrypt');
 const {User} = require('../models');
 
@@ -9,20 +9,29 @@ const router = express.Router();
 router.post('/login', (req, res, next) => {
     // 흠... 로그인.. 애매한데
     // 연구해봐야할듯 패스포트로 어케가는건지..
-    const {userid, userpwd} = req.body;
-    const user = {
-        userid: userid,
-        userpwd: userpwd,
-    }
+    const {userid, userpwd} = req.body;    
+    console.log(userid, userpwd);
+
+    // https://darrengwon.tistory.com/22?category=858368 참고 (axios, fetch)
+    
     passport.authenticate('local', (authError, user, info) => {
+        console.log('test');
+        console.log(userid, userpwd);
         if (authError) {
+            /*
             console.error(authError);
             return next(authError);
+            */
+           return res.status(200).send('u');
+           // 드릅게 안넘어가네
         }
         if (!user) {
+            /*
             res.status(401);    // Unauthorized :: 없는 계정
             res.send(info.message, '없는 계정입니다.');
             return;
+            */
+           return res.status(401).send('n');
         }
     })
 })
@@ -33,13 +42,11 @@ router.post('/register', async (req, res, next) => {
     const { userid, userpwd, usernick } = req.body;    
 
     try {
-        const exUser = await User.find( {where: {userid}} );
+        const exUser = await User.findOne( {where: {userid}} );
         
         if (exUser) {
-            // 이미 있는 계정
-            res.status(409);    // Conflict 
-            res.send('이미 가입된 아이디 입니다.');  
-            return;                      
+            // 이미 있는 계정   // 409 : Conflict  
+            return res.status(409).send('이미 가입된 아이디 입니다.');            
         }
 
         const hash = await bcrypt.hash(userpwd, 12);
@@ -54,13 +61,10 @@ router.post('/register', async (req, res, next) => {
             userpwd: hash,
             usernick,
         });
-/*
-        const test = await User.find( {where: {userid}} );  // 추후 DELETE
-        console.log(test);  // 추후 DELETE
-        return test;        // 추후 DELETE
-*/
-
+        return res.status(200).send(userid + ' 가입 완료');                
+        
     } catch (error) {
+        console.log('err');
         console.error(error);
         next(error);
         return;
@@ -72,10 +76,8 @@ router.get('/logincheck', (req, res, next) => {
     const {user} = req.session;
 
     if (!user) {
-        // 로그인 중 아님
-        res.status(401);   // Unauthorized
-        res.send('로그인이 되어있지 않습니다.');
-        return;
+        // 로그인 중 아님   // 401 : Unauthorized
+        return res.status(401).send('로그인이 되어있지 않습니다.');           
     }
     return user;
 

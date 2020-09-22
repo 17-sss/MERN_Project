@@ -7,6 +7,7 @@ export const login = ({userid, userpwd}) => {
 
 // 회원가입
 export const register = ({userid, userpwd, usernick}) => {
+    console.log('chk')
     return client.post('/api/auth/register', {userid, userpwd, usernick});
 };
 
