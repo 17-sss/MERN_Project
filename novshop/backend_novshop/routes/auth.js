@@ -6,35 +6,39 @@ const {User} = require('../models');
 const router = express.Router();
 
 // 로그인 (POST /api/auth/login)  
-router.post('/login', (req, res, next) => {
-    // 흠... 로그인.. 애매한데
-    // 연구해봐야할듯 패스포트로 어케가는건지..
+    // [2] 이 방법으로 잘됨 (실질적문제는 localStrategy에서 잘못한거지만..?)
+    // 참고:: https://solve-programming.tistory.com/m/27
+
+router.post('/login', 
+    passport.authenticate('local'), 
+    (req, res) => {
+        res.json("성공");
+        console.log(req.isAuthenticated(), req.session.passport.user);
+        return res.status(200).send();
+    }
+);
+
+
+/*  // 이거 변환해서 만들어보기.
+router.post('/login', (req, res, next) => {    
     const {userid, userpwd} = req.body;    
     console.log(userid, userpwd);
 
-    // https://darrengwon.tistory.com/22?category=858368 참고 (axios, fetch)
-    
     passport.authenticate('local', (authError, user, info) => {
         console.log('test');
         console.log(userid, userpwd);
         if (authError) {
-            /*
             console.error(authError);
             return next(authError);
-            */
-           return res.status(200).send('u');
-           // 드릅게 안넘어가네
         }
         if (!user) {
-            /*
             res.status(401);    // Unauthorized :: 없는 계정
             res.send(info.message, '없는 계정입니다.');
             return;
-            */
-           return res.status(401).send('n');
         }
     })
-})
+});
+*/
 
 
 // 회원가입 (POST /api/auth/register)  

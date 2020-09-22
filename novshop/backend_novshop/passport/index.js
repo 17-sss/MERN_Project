@@ -11,7 +11,7 @@ module.exports = () => {
         // done의 두번째 인자는 성공시 넘길 개체. (사용자 정보를 모두 저장하면 세션 용량 커지기에 id만 저장)
         done(null, user.id);                                
     });
-
+    
     // [2] deserializeUser는 매 요청 시 실행, passport.session() 미들웨어가 이 메서드 호출
     passport.deserializeUser((id, done) => {
         console.log('deserializeUser');

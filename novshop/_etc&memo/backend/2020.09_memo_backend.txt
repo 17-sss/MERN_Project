@@ -31,3 +31,7 @@
 @@ 200921
     * VScode Sequelize Autocomplete 설정
         https://devhyun.com/blog/post/24
+
+@@ 200922 
+    * fetch, axios
+        https://darrengwon.tistory.com/22?category=858368
