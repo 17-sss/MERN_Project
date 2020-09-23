@@ -1,7 +1,7 @@
-import express from "express";
-import passport from "passport";
-import bcrypt from "bcrypt";
-import {User} from "../models";
+const express = require('express');
+const passport = require('passport');
+const bcrypt = require('bcrypt');
+const {User} = require('../models');
 
 const router = express.Router();
 
@@ -51,7 +51,7 @@ router.post('/login', (req, res, next) => {
 
 
 // 회원가입 (POST /api/auth/register)  
-router.post('/register', async (req, res, /* next */) => {
+router.post('/register', async (req, res, next) => {
     const { userid, userpwd, usernick } = req.body;    
 
     try {
@@ -59,12 +59,7 @@ router.post('/register', async (req, res, /* next */) => {
         
         if (exUser) {
             // 이미 있는 계정   // 409 : Conflict  
-            // return res.status(409).send('이미 가입된 아이디 입니다.');            
-            return res.status(409).json({
-                error: "USERID EXISTS",
-                code: 2,
-                message: '이미 가입된 아이디 입니다.',
-            });            
+            return res.status(409).send('이미 가입된 아이디 입니다.');            
         }
 
         const hash = await bcrypt.hash(userpwd, 12);
@@ -79,22 +74,13 @@ router.post('/register', async (req, res, /* next */) => {
             userpwd: hash,
             usernick,
         });
-
-        // return res.status(200).send(userid + ' 가입 완료');                
-        return res.json({
-            error: null,
-            success: true,
-        });
+        return res.status(200).send(userid + ' 가입 완료');                
         
     } catch (error) {
         console.log('err');
         console.error(error);
-        // next(error);
-        return res.status(500).json({
-            error: "UNKNOWN ERROR",
-            code: 1,
-            message: '서버 에러 (UNKNOWN ERROR)',
-        });  
+        next(error);
+        return;
     }
 }); 
 
@@ -120,4 +106,6 @@ router.get('/logincheck', (req, res, next) => {
     */
 });
 
-export default router;
+
+
+module.exports = router;
