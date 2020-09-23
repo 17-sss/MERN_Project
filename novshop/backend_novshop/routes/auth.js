@@ -8,7 +8,7 @@ const router = express.Router();
 // 로그인 (POST /api/auth/login)  
     // [2] 이 방법으로 잘됨 (실질적문제는 localStrategy에서 잘못한거지만..?)
     // 참고:: https://solve-programming.tistory.com/m/27
-
+/*
 router.post('/login', 
     passport.authenticate('local'), 
     (req, res) => {
@@ -17,6 +17,15 @@ router.post('/login',
         return res.status(200).send();
     }
 );
+*/
+
+router.post('/login', (req, res, next) => {    
+    const {userid, userpwd} = req.body;    
+    console.log(userid, userpwd);
+
+    passport.authenticate('local')    
+    res.status(400).send();
+});
 
 
 /*  // 이거 변환해서 만들어보기.
