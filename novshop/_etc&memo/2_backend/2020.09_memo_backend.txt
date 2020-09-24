@@ -40,8 +40,8 @@
         - axios보다 fetch를 먼저 알고 있어야 함. 더 조사해보기
         - 참고 링크
             https://darrengwon.tistory.com/22?category=858368
-    ★ express, react 연동 관련 
-         https://solve-programming.tistory.com/m/27
+    ★ express, react 연동 관련
+         https://solve-programming.tistory.com/m/27      (passport 관련도 있음)
 
 
 @@ 200923
@@ -49,3 +49,11 @@
         https://jeonghwan-kim.github.io/2018/08/19/express-travis-beanstalk.html
     ★ express react 연동 관련
         https://velopert.com/1921   (이 포스팅 이후 글도 참고하기.)
+
+
+@@ 200924
+    * passport
+        1. passport.authenticate            
+            1) 공식문서 링크
+                http://www.passportjs.org/docs/authenticate/
+            ?) passport.authenticate가 무한루프 돌아서 찾아봄, 이럴때 차라리 공식문서좀 보자..

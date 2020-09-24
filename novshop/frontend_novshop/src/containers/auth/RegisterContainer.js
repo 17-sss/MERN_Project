@@ -63,8 +63,9 @@ const RegisterContainer = () => {
         }
 
         if (auth) {
-            console.log('회원가입 성공');
+            const {success} = auth;
             console.log(auth);
+            success && console.log('회원가입 성공');            
         }
     }, [auth, authError])
     

@@ -69,10 +69,10 @@ const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 
 export function* authSaga() {    
-    // 마지막에 발생된 액션타입이 LOGIN or REGISTER인 경우 실행 
     yield takeLatest(REGISTER, registerSaga);
     yield takeLatest(LOGIN, loginSaga);
 }
+
 
 
 // 리듀서 초기값
@@ -98,7 +98,7 @@ const auth = handleActions(
             const {payload} = action;
             const {form, key, value} = payload;
 
-            // [1] immer 안쓸시
+            // [1-1] immer 안쓸시.. 정답!
             return {
                 ...state,
                 [form]: {
@@ -106,7 +106,24 @@ const auth = handleActions(
                     [key]: value,   // 현재 작업하고 있는 값만 바꿈. (key는 userid가 될수도, userpwd가 될수도)
                 }
             }
-            // [2] immer 썼을시
+            
+            // [1-2] immer 안쓸시.. (정확한 답이 아님) (immer 쓰는 방향으로 타협..)
+            
+            // const obj = {...state[form]};
+            // delete obj[key];
+            /*
+            return {
+                ...state,
+                
+                [form]: {
+                    userid: (key === "userid"   ? value : state[form]["userid"]),                
+                    userpwd: (key === "userpwd" ? value : state[form]["userpwd"]),
+                },               
+            } 
+            */
+            
+
+            // [3] immer 썼을시..
             /*
             return produce(state, draft => {                
                 draft[form][key] = value;   // 예: state.register.username을 바꾼다.
@@ -114,47 +131,27 @@ const auth = handleActions(
             */
         },
 
-        [INITALIZE_FORM]: (state, action) => {
-            const {payload: form} = action;     // action의 payload를 가져오지만, 여기선 form이라는 이름으로 씀       
-            return {
-                ...state,
-                [form]: initialState[form],
-                authError: null,    // 폼 전환 시 회원 인증 에러 초기화 
-            }
-        },
-        /*      // 위와 같은 동작임.
         [INITALIZE_FORM]: (state, {payload: form}) => ({
             ...state,
             [form]: initialState[form],
             authError: null,    // 폼 전환 시 회원 인증 에러 초기화    
         }),
-        */
 
         // 회원가입 성공
-        [REGISTER_SUCCESS]: (state, action) => {
-            const {payload: auth} = action;
-
-            return {
-                ...state,
-                authError: null,
-                auth,
-            }            
-        },
+        [REGISTER_SUCCESS]: (state, {payload: auth}) => ({
+            ...state,
+            authError: null,
+            auth,
+        }),
 
         // 회원가입 실패
-        [REGISTER_FAILURE]: (state, action) => {
-            const {payload: error} = action;
-
-            return {
-                ...state,
-                authError: error,
-            }
-        },
+        [REGISTER_FAILURE]: (state, {payload: error}) => ({
+            ...state,
+            authError: error,
+        }),
 
         // 로그인 성공
-        [LOGIN_SUCCESS]: (state, action) => {                        
-            const {payload: auth} = action;
-
+        [LOGIN_SUCCESS]: (state, {payload: auth}) => {            
             return {
                 ...state,
                 authError: null,
@@ -163,13 +160,12 @@ const auth = handleActions(
         },
 
         // 로그인 실패
-        [LOGIN_FAILURE]: (state, action) => {            
-            const {payload: error} = action;
-
+        [LOGIN_FAILURE]: (state, {payload: error}) => {            
             return {
                 ...state,
                 authError: error,
             }
+            
         },
         //  (24.2.3.5 : 01 - 4) END
     },

@@ -33,6 +33,7 @@ const LoginContainer = ({history}) => {
     
     const onSubmit = (e) => {
         e.preventDefault();        
+        
         const {userid, userpwd} = form;
         dispatch(login({userid, userpwd}));
     };
@@ -46,15 +47,18 @@ const LoginContainer = ({history}) => {
 
     // 로그인 여부 체크
     useEffect(() => {
-        if (authError) {
+        if (authError) {            
             console.log('로그인 오류 발생');
             console.log(authError);
+
             setError('로그인 오류 발생');
             return;
         }
 
-        if (auth) {
-            console.log('로그인 성공');
+        if (auth) {            
+            const {success} = auth;
+            success && console.log('로그인 성공');
+            
             // dispatch(check());
         }
     }, [authError, auth, /* dispatch */]);
