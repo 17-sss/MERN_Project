@@ -6,21 +6,27 @@ import { User } from '../models';
 const router = express.Router();
 
 // 로그인 (POST /api/auth/login)
-router.post('/login',        
+router.post('/login',     
     passport.authenticate('local'), 
     (req, res) => {     
-        //req.logout();   // !! 추후제거
-
-        /*
-            굳이 아이디 정보를 확인할 필요 없음.
-            Passport에서 성공하면, req객체에 user를 저장함. (req.user)
-            반대로 실패하면 Passport에서 res.status(401) 반환
-        */
-        return res.status(200).json({
-            error: null,
-            success: true,            
-        })        
-
+        const {user} = req;
+        
+        if (!user) {            
+            // 여기는 거의 작동안함.
+            // passport에서 인증 안되면 못넘어와서.. 
+                // 음.. 여기로 넘어오게하는 방법은 추후 연구.
+            return res.status(401).json({
+                    error: 'Unauthorized',
+                    code: -1,
+                    message: '인증되지 않은 사용자',
+            })
+        } else {            
+            req.logout();   // !! 추후제거
+            return res.status(200).json({
+                error: null,
+                success: true,            
+            })
+        };
         // req.session.passport.user에는 id 값 있음. (passport.serializeUser에서 설정한 값)
     }
 );
@@ -68,38 +74,6 @@ router.post('/register', async (req, res /* next */) => {
             code: -1,
             message: '서버 에러 (UNKNOWN ERROR)',
         });
-    }
-});
-
-
-// 유저(로그인) 체크 (GET /api/auth/usercheck)
-router.get('/usercheck', async (req, res /* next */) => {
-    if (req.isAuthenticated()) {
-        const {user} = req;
-        console.log(user);
-        if (!user) {
-            console.log(user, 1);
-            return res.status(401).json({ // Unauthorized
-                error: 'SESSION OK, BUT USER UNDIFINED',
-                code: -2,
-                message: '세션엔 등록되어있지만, 유저 정보가 유효하지 않습니다.',
-            })        
-        } else {
-            return res.status(200).json({
-                error: null,
-                success: true,
-                user, 
-            });
-        }
-
-    } else {
-        const {user} = req;
-        console.log(user, 2);
-        res.status(401).json({
-            error: 'SESSION UNDIFINED',
-            code: -1,
-            message: '세션에 등록되어 있지 않습니다.',
-        })    
     }
 });
 

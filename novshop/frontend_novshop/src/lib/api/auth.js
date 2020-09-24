@@ -11,6 +11,6 @@ export const register = ({userid, userpwd, usernick}) => {
 };
 
 // 로그인 체크 
-export const loginCheck = () => {
-    client.get('/api/auth/logincheck');
+export const usercheck = () => {
+    return client.get('/api/auth/usercheck');
 }

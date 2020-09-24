@@ -3,19 +3,20 @@ import { withRouter } from 'react-router-dom';
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
 import { useSelector, useDispatch } from "react-redux";
 import { changeField, initializeForm, login } from "../../modules/auth";
-// import { check } from '../../modules/user';
+import { check } from '../../modules/user';
 
 
 const LoginContainer = ({history}) => {
     const [error, setError] = useState(null);
 
     const dispatch = useDispatch();
-    const { form, auth, authError, /* user */ } = useSelector( ({auth, /* user */}) => {        
+    const { form, auth, authError, user } = useSelector( ({auth, user}) => {   
+
         return {
             form: auth.login,
             auth: auth.auth,
             authError: auth.authError,
-            // user: user.user,
+            user: user.user,
         };
     } );
     
@@ -60,17 +61,19 @@ const LoginContainer = ({history}) => {
             success && console.log('로그인 성공');
             
             // dispatch(check());
+            
         }
-    }, [authError, auth, /* dispatch */]);
+    }, [authError, auth, dispatch]);
 
-    /*
+    
     // (추후 구현) 로그인 성공 후, 메인으로 이동.
     useEffect(() => {
+        console.log(user);
         if (user) {
             history.push('/');
         }
     }, [history, user])
-    */
+    
 
 
     return (
