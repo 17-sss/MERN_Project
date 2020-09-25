@@ -16,7 +16,7 @@ module.exports = () => {
     passport.deserializeUser((id, done) => {
         console.log('deserializeUser');
         // serializeUser에서 세션에 저장했던 아이디를 받아 데이터베이스에서 사용자 정보를 조회        
-        User.find({where: {id}})    
+        User.findOne({ where: { id } })   
             // ▼ 조회한 정보를 req.user(user)에 저장하므로 req.user를 통해 로그인한 사용자 정보를 가져올수 있음.
             .then(user=>done(null, user))   
             .catch(err => done(err));

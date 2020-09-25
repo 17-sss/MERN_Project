@@ -73,12 +73,11 @@ router.post('/register', async (req, res /* next */) => {
 
 
 // 유저(로그인) 체크 (GET /api/auth/usercheck)
-router.get('/usercheck', async (req, res /* next */) => {
+router.get('/usercheck', (req, res /* next */) => {   
     if (req.isAuthenticated()) {
         const {user} = req;
-        console.log(user);
+
         if (!user) {
-            console.log(user, 1);
             return res.status(401).json({ // Unauthorized
                 error: 'SESSION OK, BUT USER UNDIFINED',
                 code: -2,
@@ -93,8 +92,6 @@ router.get('/usercheck', async (req, res /* next */) => {
         }
 
     } else {
-        const {user} = req;
-        console.log(user, 2);
         res.status(401).json({
             error: 'SESSION UNDIFINED',
             code: -1,

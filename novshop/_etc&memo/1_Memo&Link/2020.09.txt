@@ -1,0 +1,146 @@
+@@ 200902    
+    1. CSS position에 대해..
+        링크: https://www.zerocho.com/category/CSS/post/5864f3b59f1dc000182d3ea1
+    2. CSS로 Dropdown
+        1) 링크
+            http://tcpschool.com/css/css_advanced_dropdown
+        +) StyledComponents 사용법 링크 (공식)
+            https://styled-components.com/
+
+
+
+@@ 200903 
+    1. CSS z-index에 대해
+        링크: https://aboooks.tistory.com/83
+    2. React 조건부 렌더링 
+        링크: https://ko.reactjs.org/docs/conditional-rendering.html
+        
+
+
+@@ 200910    
+    1. JavaScript 생성자, SET, GET, 객체 관련
+        링크:
+            1) 생성자 & 프로토타입 
+                https://www.zerocho.com/category/JavaScript/post/573c2acf91575c17008ad2fc       
+                https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes/constructor
+                
+                - 객체지향 프로그래밍 (class)
+                    https://heecheolman.tistory.com/29
+                - 객체(object)에 대해
+                    https://www.zerocho.com/category/JavaScript/post/573dbc9370ba9c603052cc9a
+                - 객체, 생성자
+                    https://velog.io/@imacoolgirlyo/JS-Object-Constructors
+
+
+
+@@ 200911
+    1. React Route
+        링크:
+            https://gongbu-ing.tistory.com/45
+            https://ing-yeo.net/2019/09/react-beginner-5/
+            https://m.blog.naver.com/bkcaller/221494156108            
+        참고:
+            - React 자체에서 loction, match를 보내주는거였음. query-string 미들웨어가 아니라..
+        
+
+
+@@ 200912
+    1. 자바스크립트 명명 규칙: https://velog.io/@recordboy/자바스크립트-변수-명명-규칙    
+                    
+
+
+@@ 200916     
+    1. React 프레젠테이셔널 컴포넌트 & 컨테이너 컴포넌트 (리액트 개정판 책 참고)
+        1) 프레젠테이셔널 컴포넌트: 주로 상태 관리가 이루어지지 않고, 그저 props를 받아와서 화면에 UI를 보여주기만 하는 컴포넌트.
+        2) 컨터이너 컴포넌트: 리덕스와 연동되어 있는 컴포넌트, 리덕스로 부터 상태를 받아 오기도하고 리덕스 스토어에 액션을 디스패치.
+
+
+
+@@ 200917
+    1. React-Redux 관련 링크 (로그인, 로그아웃) (망할 Immer는 어케 돌아가는걸까..) (1)
+        https://loy124.tistory.com/249?category=784080
+        https://loy124.tistory.com/250?category=784080                                                     
+        https://loy124.tistory.com/251?category=784080                                
+    
+    ETC) express mongodb 활용 (로그인, 로그아웃) (위 링크 전에 작업해야할 백앤드 부분인데.. 참고)
+        https://loy124.tistory.com/243?category=791817
+                            ~
+        https://loy124.tistory.com/248?category=791817
+
+    2. react-redux :: useSelector, useDispatch 관련
+        https://medium.com/@pks2974/redux-hook-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0-3b92b4d75466
+
+
+
+@@ 200918
+    1. React-Redux 관련 링크 (로그인, 로그아웃) (망할 Immer는 어케 돌아가는걸까..) (2)
+        https://backend-intro.vlpt.us/5/07.html
+
+    2. React - Express 연결 관련 링크 모음 :: 1
+        https://hello-bryan.tistory.com/121
+        https://im-developer.tistory.com/164
+        https://darrengwon.tistory.com/239
+        https://gongbu-ing.tistory.com/40
+        https://hello-bryan.tistory.com/121
+        https://electricburglar.tistory.com/114
+
+
+
+@@ 200920
+    1. React - Express 연결 관련 링크 모음 :: 2
+        https://singa-korean.tistory.com/46
+        (+ https://www.npmjs.com/package/http-proxy-middleware)
+        https://ljh86029926.gitbook.io/coding-apple-react/undefined-1/cra
+    
+    2. package.json > scripts 커멘드 관련
+        1. 전부 실행하고 싶을떄.. 예시.
+            "start": "npm-run-all --parallel start:**",
+            "start:server": "nodemon server.js",
+            "start:client": "react-scripts start"
+# backend
+    3. sequelize
+        1. 시퀄라이즈 공식 문서
+            https://sequelize.org/master/index.html
+        2. 모델 정의
+            https://victorydntmd.tistory.com/27     (각종 속성 등 설명 기재되어 있음 ★)
+    
+    4. babel 적용
+        https://shlee0882.tistory.com/231
+
+
+
+@@ 200921   (backend)
+    1. VScode Sequelize Autocomplete 설정
+        https://devhyun.com/blog/post/24
+
+    
+
+@@ 200922       
+    1. express, react 연동 관련
+         https://solve-programming.tistory.com/m/27      (passport 관련도 있음)
+
+
+
+@@ 200923
+    ? 추후정적파일은 어디서 처리해야..? (참고용)
+        https://jeonghwan-kim.github.io/2018/08/19/express-travis-beanstalk.html
+    2. express react 연동 관련
+        https://velopert.com/1921   (이 포스팅 이후 글도 참고하기.)
+
+
+
+@@ 200924   (backend)
+    * passport
+        1. passport.authenticate            
+            1) 공식문서 링크
+                http://www.passportjs.org/docs/authenticate/
+            ?) passport.authenticate가 무한루프 돌아서 찾아봄, 이럴때 차라리 공식문서좀 보자..
+
+
+
+@@ 200925   (frontend)
+    1. Axios & Fetch
+        - axios보다 fetch를 먼저 알고 있어야 함. 더 조사해보기
+        - 참고 링크
+            https://darrengwon.tistory.com/22?category=858368
+            https://velog.io/@leeeeunz/TIL-35.-axios%EC%99%80-fetch%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90

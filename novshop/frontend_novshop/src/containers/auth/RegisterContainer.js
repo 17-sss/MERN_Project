@@ -1,9 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
 import { useSelector, useDispatch } from "react-redux";
 import { changeField, initializeForm, register } from "../../modules/auth";
 
 const RegisterContainer = () => {
+    const [error, setError] = useState(null);
+
     const dispatch = useDispatch();
     const { form, auth, authError } = useSelector( ({auth}) => {        
         /* 
@@ -39,19 +41,19 @@ const RegisterContainer = () => {
         e.preventDefault();        
         const {userid, userpwd, usernick, userpwdConfirm } = form;  
         
-        if (userpwd !== userpwdConfirm) {
-            // 오류처리
-            console.log('비번 틀렸다 앙마야');
+        if (userpwd !== userpwdConfirm) {            
+            setError('비밀번호를 확인해주세요.');
             return;
         }
+
         dispatch(register({userid, userpwd, usernick}));
     };
 
     // 컴포넌트가 처음 렌더링될 때 초기화.
-    useEffect(() => {
+    useEffect(() => {        
         dispatch(
-            initializeForm('register')
-        );
+            initializeForm('register'),
+        );        
     }, [dispatch]);
 
     // 회원가입 성공 or 실패 처리
@@ -76,6 +78,7 @@ const RegisterContainer = () => {
             onSubmit = {onSubmit}
             onChange = {onChange}
             form = {form}
+            error = {error}
         />
     );
 };

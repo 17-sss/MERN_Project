@@ -24,4 +24,20 @@ const client = axios.create();
     })  
 */
 
+export function createAxiosOptions(method, url, data) {    
+    let options = {
+        method: method,
+        url: url,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8'
+        },
+        data: data,
+    };
+
+    return options;
+};
+
+
+
 export default client;

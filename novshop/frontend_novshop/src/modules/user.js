@@ -14,7 +14,7 @@ export const check = () => {
     };
 };
 // !! usercheck에 괄호 넣으면 내가 원하는 곳에서 실행되지않고 계속실행댐!!
-const checkSaga = createRequestSaga(CHECK, authAPI.usercheck());
+const checkSaga = createRequestSaga(CHECK, authAPI.usercheck);
 
 export function* userSaga() {        
     yield takeLatest(CHECK, checkSaga);    

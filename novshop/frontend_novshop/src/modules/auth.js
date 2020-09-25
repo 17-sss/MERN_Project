@@ -16,6 +16,7 @@ import * as authAPI from '../lib/api/auth';
 // 액션 이름 설정
 const CHANGE_FIELD = 'auth/CHANGE_FIELD';
 const INITALIZE_FORM = 'auth/INITALIZE_FORM';
+
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('auth/LOGIN');
 const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] = createRequestActionTypes('auth/REGISTER');
 
@@ -47,8 +48,7 @@ export const changeField = createAction(
     }),
 );
 
-export const initializeForm = createAction(INITALIZE_FORM, form => form);   // "register" / "login"
-
+export const initializeForm = createAction(INITALIZE_FORM, form => form);           // "register" / "login"
 export const login = createAction(LOGIN, ({userid, userpwd}) => {
     return {
         userid,
@@ -114,13 +114,14 @@ const auth = handleActions(
             */
         },
 
+        // "register" / "login" 객체 초기화.
         [INITALIZE_FORM]: (state, action) => {
-            const {payload: form} = action;     // action의 payload를 가져오지만, 여기선 form이라는 이름으로 씀       
+            const {payload: form} = action;     // action의 payload를 가져오지만, 여기선 form이라는 이름으로 씀                               
             return {
                 ...state,
                 [form]: initialState[form],
                 authError: null,    // 폼 전환 시 회원 인증 에러 초기화 
-            }
+            };
         },
         /*      // 위와 같은 동작임.
         [INITALIZE_FORM]: (state, {payload: form}) => ({
@@ -170,8 +171,7 @@ const auth = handleActions(
                 ...state,
                 authError: error,
             }
-        },
-        //  (24.2.3.5 : 01 - 4) END
+        },        
     },
     initialState,
 );

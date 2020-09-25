@@ -43,7 +43,7 @@ const LoginContainer = ({history}) => {
     useEffect(() => {
         dispatch(
             initializeForm('login')
-        );
+        ); 
     }, [dispatch]);
 
     // 로그인 여부 체크
@@ -60,15 +60,13 @@ const LoginContainer = ({history}) => {
             const {success} = auth;
             success && console.log('로그인 성공');
             
-            // dispatch(check());
-            
+            dispatch(check());
         }
     }, [authError, auth, dispatch]);
 
     
     // (추후 구현) 로그인 성공 후, 메인으로 이동.
     useEffect(() => {
-        console.log(user);
         if (user) {
             history.push('/');
         }
