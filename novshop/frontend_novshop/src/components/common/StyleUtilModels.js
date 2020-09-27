@@ -83,7 +83,6 @@ export const CustomLink = styled(Link)`
     font-size: ${(props) => props.fontSize && props.fontSize};
 
     text-decoration: ${(props) => props.textdeco ? "underline" : "none"};
-
     &:focus,
     &:hover,
     &:visited,

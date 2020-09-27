@@ -1,13 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
+import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { changeField, initializeForm, register } from "../../modules/auth";
+import { check } from "../../modules/user";
 
-const RegisterContainer = () => {
+import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
+
+
+
+const RegisterContainer = ({history}) => {
     const [error, setError] = useState(null);
 
     const dispatch = useDispatch();
-    const { form, auth, authError } = useSelector( ({auth}) => {        
+    const { form, auth, authError, user } = useSelector( ({auth, user}) => {        
         /* 
             useSelector에서 불러오는 auth는 /modules/auth.js의 auth 리듀서
             여기서 console.log(auth) 해보면, auth의 initialState 값나옴.   
@@ -17,8 +22,9 @@ const RegisterContainer = () => {
             form: auth.register,    // auth['register'] 도 가능
             auth: auth.auth,
             authError: auth.authError,
+            user: user.user
         };
-    } );
+    });
     
     const onChange = (e) => {
         const {name, value} = e.target;  
@@ -59,17 +65,35 @@ const RegisterContainer = () => {
     // 회원가입 성공 or 실패 처리
     useEffect(()=> {
         if (authError) {
-            console.log('회원가입 오류 발생');
-            console.log(authError);
+            const {data, status} = authError;           
+
+            if (status === 409 || status === 500) {
+                setError(data.message);                
+            }
             return;
         }
 
         if (auth) {
-            const {success} = auth;
-            console.log(auth);
-            success && console.log('회원가입 성공');            
+            const {success} = auth;            
+            success && console.log('회원가입 성공');   
+            
+            dispatch(check());
         }
-    }, [auth, authError])
+    }, [auth, authError, dispatch])
+
+    // 회원가입 성공 후, 유저 체크
+    useEffect(() => {
+        if (user) {
+            history.push('/');
+            
+            // 로그인 상태 유지하기위해 브라우저에 내장되어있는 localStorage 사용
+            try {                
+                localStorage.setItem('user', JSON.stringify(user));                
+            } catch (error) {
+                console.log('localStorage is not working');
+            }
+        }
+    }, [history, user])
     
 
     return (
@@ -83,4 +107,4 @@ const RegisterContainer = () => {
     );
 };
 
-export default RegisterContainer;
+export default withRouter(RegisterContainer);

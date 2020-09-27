@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 // import { useGetWindowInnerEvent } from './lib/utility/customHooks';  사이즈에 따라 모바일앱처럼 변경하려했으나, 안함.
 
-import Header from './components/base/Header';
+import HeaderContainer from './containers/base/HeaderContainer';
 import Footer from './components/base/Footer';
 
 import MainPage from './pages/MainPage';
@@ -11,10 +11,11 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MemberPage from './pages/MemberPage';
 
+
 const App = () => {    
     return (
         <>                  
-            <Header/>      
+            <HeaderContainer/>      
             <Switch>
                 <Route exact component={MainPage} path="/"  />
                 {/* // Shopping (

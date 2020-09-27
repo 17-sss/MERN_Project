@@ -23,3 +23,9 @@ export const register = ({userid, userpwd, usernick}) => {
 export const usercheck = () => {    
     return client.get('/api/auth/usercheck');
 }
+
+// 로그아웃
+export const logout = () => {    
+    return client.post('/api/auth/logout');
+}
+

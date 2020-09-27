@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {CustomLink, ClearEx, cssDropdown, DropdownContent, ModalBtn, StyledHr, BorderBotLine } from '../common/StyleUtilModels';
+import {CustomLink, ClearEx, cssDropdown, DropdownContent, ModalBtn, StyledHr, BorderBotLine, TransparentBtn } from '../common/StyleUtilModels';
 import {getSize} from '../../lib/utility/customFunc';
 import categoryData from '../../lib/data/categoryList.json';
 
@@ -8,8 +8,9 @@ import categoryData from '../../lib/data/categoryList.json';
 // Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
 // ****************************************************************************************
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faShoppingBasket, faBars } from '@fortawesome/free-solid-svg-icons';       // fas
+import { faSearch, faShoppingBasket, faBars, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';       // fas
 import { faUser } from '@fortawesome/free-regular-svg-icons';       // far
+
 // import { faUser } from '@fortawesome/free-brands-svg-icons';     // fab
 // ----------------------------------------------------------------------------------------/
 
@@ -144,7 +145,8 @@ const HeadIconSection = styled.div`
 // ----------------------------------------------------------------------------------------/    
 // 헤더 :: [아이콘, 로고] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 
-const Header = () => {
+const Header = (props) => {    
+    const {onLogout, user} = props;      
     
 
 // 임시용 변수들 START
@@ -157,9 +159,6 @@ const Header = () => {
     
     // console.log(categoryList[15].items[0].value);
     // [1] 카테고리 리스트 Item 생성 (임시) END
-
-    // [2] 임시 userid
-    const userid = "testid";
 // 임시용 변수들 END
 
     return (
@@ -200,16 +199,27 @@ const Header = () => {
                 <HeadIconSection>
                     <HeadUL>
                         <HeadLi >                                                     
-                            <CustomLink to = "/auth/login">                            
+                            <CustomLink to = {user ? ("/member/@"+user.userid) : "/auth/login"}>                            
                                 <FontAwesomeIcon icon = {faUser} size = 'lg'/>        
                             </CustomLink> 
                         </HeadLi>
-
-                        <HeadLi posrelative>
-                            <CustomLink to = {"/shoppingbasket/" + userid}>
-                                <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
-                            </CustomLink>
-                        </HeadLi>
+                        
+                        {user && 
+                        <>
+                            <HeadLi posrelative>
+                                <CustomLink to = {user ? ("/shoppingbasket/@" + user.userid) : "/" }>
+                                    <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
+                                </CustomLink>
+                            </HeadLi>
+                            <HeadLi posrelative>
+                                <TransparentBtn 
+                                    onClick = {onLogout} 
+                                    hovercolor= "#007bff">
+                                    <FontAwesomeIcon icon = {faSignOutAlt} size = 'lg' />
+                                </TransparentBtn>
+                            </HeadLi>
+                        </>
+                        }
 
                         <HeadLi>             
                             <ModalBtn mode="search">

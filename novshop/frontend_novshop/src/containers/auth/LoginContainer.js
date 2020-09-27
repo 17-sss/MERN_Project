@@ -1,9 +1,11 @@
-import React, {useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';  
-import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
+import React, {useEffect, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { changeField, initializeForm, login } from "../../modules/auth";
 import { check } from '../../modules/user';
+
+import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
+
 
 
 const LoginContainer = ({history}) => {
@@ -48,11 +50,15 @@ const LoginContainer = ({history}) => {
 
     // 로그인 여부 체크
     useEffect(() => {
-        if (authError) {            
-            console.log('로그인 오류 발생');
-            console.log(authError);
 
-            setError('로그인 오류 발생');
+        if (authError) {
+            const {status} = authError;
+                    
+            if (status === 401) {
+                setError('아이디나 비밀번호를 확인해주세요.');
+            } else if (status === 500) {
+                setError('서버에 오류가 있습니다.');
+            }
             return;
         }
 
@@ -69,6 +75,13 @@ const LoginContainer = ({history}) => {
     useEffect(() => {
         if (user) {
             history.push('/');
+
+            // 로그인 상태 유지하기위해 브라우저에 내장되어있는 localStorage 사용
+            try {                
+                localStorage.setItem('user', JSON.stringify(user));
+            } catch (error) {
+                console.log('localStorage is not working');
+            }
         }
     }, [history, user])
     

@@ -15,12 +15,31 @@ import { Provider } from 'react-redux'; // 컴포넌트에서 스토어를 사�
 import { composeWithDevTools } from 'redux-devtools-extension';
 // ** Redux 관련 END
 
+import {tempSetUser, check} from './modules/user';
+
+
 const sageMiddleware = createSagaMiddleware();
 const store = createStore(
     rootReducer,
     composeWithDevTools(applyMiddleware(sageMiddleware)),
 );
+
+// loadUser(localStorage 관련 설명, 메모: 200927 참고)
+const loadUser = () => {
+    try {
+        const user = localStorage.getItem('user');
+
+        if (!user) return;
+
+        store.dispatch(tempSetUser(user));
+        store.dispatch(check());
+    } catch (error) {
+        console.log('localStorage is not working');
+    }
+};
+
 sageMiddleware.run(rootSaga);
+loadUser();
 
 ReactDOM.render(
     <Provider store={store}>

@@ -8,9 +8,7 @@ const router = express.Router();
 // 로그인 (POST /api/auth/login)
 router.post('/login',        
     passport.authenticate('local'), 
-    (req, res) => {     
-        //req.logout();   // !! 추후제거
-
+    (req, res) => {             
         /*
             굳이 아이디 정보를 확인할 필요 없음.
             Passport에서 성공하면, req객체에 user를 저장함. (req.user)
@@ -66,7 +64,7 @@ router.post('/register', async (req, res /* next */) => {
         return res.status(500).json({
             error: 'UNKNOWN ERROR',
             code: -1,
-            message: '서버 에러 (UNKNOWN ERROR)',
+            message: '서버에 오류가 있습니다.',
         });
     }
 });
@@ -99,5 +97,26 @@ router.get('/usercheck', (req, res /* next */) => {
         })    
     }
 });
+
+
+// 로그아웃 (POST /api/auth/logout)
+router.post('/logout', (req, res) => { 
+    if (req.isAuthenticated()) {
+        req.logout();
+        req.session.destroy();
+        
+        return res.status(200).json({
+            error: null,
+            success: true,
+        });
+    } else {
+        res.status(401).json({
+            error: 'SESSION UNDIFINED',
+            code: -1,
+            message: '세션에 등록되어 있지 않습니다. 로그인이 되어있지 않습니다.',
+        })    
+    }
+});
+
 
 export default router;
