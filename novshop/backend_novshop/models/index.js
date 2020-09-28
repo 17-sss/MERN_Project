@@ -14,6 +14,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 db.User = require('./user')(sequelize, Sequelize);
+db.Category = require('./category')(sequelize, Sequelize);
 // 추후 model 더 생성하면 여기에 적기. (맨 앞글자는 대문자로)
 
 
