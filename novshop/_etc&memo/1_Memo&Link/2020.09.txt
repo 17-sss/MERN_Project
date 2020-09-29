@@ -97,7 +97,7 @@
             "start": "npm-run-all --parallel start:**",
             "start:server": "nodemon server.js",
             "start:client": "react-scripts start"
-# backend
+    ## backend
     3. sequelize
         1. 시퀄라이즈 공식 문서
             https://sequelize.org/master/index.html
@@ -162,3 +162,26 @@
                     이 경우에는 사용자가 아주 짧은 깜박임 현상(로그인이 나타났다가 로그아웃이 나타나는 현상)을 겪을수도.
 
             + 무조건 sageMiddleware.run(rootSaga) 뒤에 호출
+
+
+
+@@ 200929   (backend)  
+    1. sequelize를 사용하여 '객체를 포함하고 있는 배열' 컬럼 생성
+        1) 메모
+            - mysql을 사용한 sequelize는 ARRAY 속성 사용 불가.
+            - getters setters를 사용함으로 해결.
+            - 추가적으로, JSON.stringify를 이용하여 저장하여야함.
+            - 파일 참고
+                /backend_novshop/models/category.js 의 items 컬럼
+        2) 링크
+            + 기준 링크 (해결하는데 도움이 된 링크)
+                https://medium.com/codespace69/how-to-define-array-of-objects-in-sequelize-js-fb1529c5502e
+            + 추가 참고용 링크
+                https://sequelize.org/master/manual/getters-setters-virtuals.html
+                https://sequelize.org/v3/docs/models-usage/     (ver 3)
+
+    2. JSON.stringify 설명
+        1) 메모
+            - JSON.stringify: JavaScript 값을 JSON(JavaScript Object Motion) 문자열로 변환
+        2) 링크
+            https://www.w3schools.com/js/js_json_stringify.asp

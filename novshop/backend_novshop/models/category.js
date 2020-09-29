@@ -15,9 +15,18 @@ module.exports = (sequelize, DataTypes) => (
                 defaultValue: "",                         
             },             
             items: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(1000),
                 allowNull: false,
                 defaultValue: "",
+                
+                // items 컬럼에 객체를 포함하고 있는 배열을 넣기 위해 Getter, Setter 사용
+                // 메모     @@ 200929 참고
+                get() { 
+                    return JSON.parse (this.getDataValue ('items')) ; 
+                }, 
+                set(val) {                     
+                    return this.setDataValue ('items', JSON.stringify (val)); 
+                },
             }
         }, {
             timestamps: true,   // createdAt, updatedAt 컬럼 추가. 
