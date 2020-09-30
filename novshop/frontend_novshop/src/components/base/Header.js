@@ -146,7 +146,8 @@ const HeadIconSection = styled.div`
 // 헤더 :: [아이콘, 로고] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 
 const Header = (props) => {    
-    const {onLogout, user} = props;      
+    const {onLogout, userData} = props;      
+    const {user} = userData ? userData : '';
     
 
 // 임시용 변수들 START
@@ -206,7 +207,7 @@ const Header = (props) => {
                         
                         {user && 
                         <>
-                            <HeadLi posrelative>
+                            <HeadLi posrelative>                                
                                 <CustomLink to = {user ? ("/shoppingbasket/@" + user.userid) : "/" }>
                                     <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
                                 </CustomLink>

@@ -10,6 +10,7 @@ import ShoppingPage from './pages/ShoppingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MemberPage from './pages/MemberPage';
+import AdminPage from './pages/AdminPage';
 
 
 const App = () => {    
@@ -17,7 +18,7 @@ const App = () => {
         <>                  
             <HeaderContainer/>      
             <Switch>
-                <Route exact component={MainPage} path="/"  />
+                <Route component={MainPage} path="/" exact />
                 {/* // Shopping (
                         1. path ▷ (대분류)카테고리 & (소분류)카테고리.종류
                         2. querystring ▷ 
@@ -30,6 +31,8 @@ const App = () => {
                 <Route component={LoginPage} path="/auth/login" />
                 {/* // Member (회원정보) */}
                 <Route component={MemberPage} path="/member/@:username" />
+                {/* // Admin (관리자 페이지) */}
+                <Route component={AdminPage} path="/admin" exact />
             </Switch>
 
             <Footer />

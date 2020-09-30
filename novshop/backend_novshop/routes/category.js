@@ -1,4 +1,3 @@
-import { create } from "domain";
 import express from "express";
 import {Category} from "../models";
 
@@ -12,14 +11,16 @@ router.post('/create', async (req, res) => {
         const exCategory = await Category.findOne({ where: { key } });
 
         if (exCategory) {
-            return res.status(401).json({
+            res.statusMessage = 'CATEGORY EXISTS';
+            
+            return res.status(450).json({
                 error: 'CATEGORY EXISTS',
                 code: 1,
                 message: '이미 존재하는 카테고리입니다.',
             });
         }
 
-        await Category.create({
+        const createData = await Category.create({
             key,
             displayValue,
             items: JSON.stringify(items),            
@@ -28,6 +29,11 @@ router.post('/create', async (req, res) => {
         return res.status(200).json({
             error: null,
             success: true,
+            data: {
+                key: createData.key,
+                displayValue: createData.displayValue,
+                items: createData.items,
+            },
         });
 
     } catch (error) {        
