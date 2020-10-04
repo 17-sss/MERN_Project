@@ -1,3 +1,4 @@
+// CATEGORY ******************************************************
 import express from "express";
 import {Category} from "../models";
 
@@ -25,7 +26,7 @@ router.post('/create', async (req, res) => {
             displayValue,
             items: JSON.stringify(items),            
         });
-        
+
         return res.status(200).json({
             error: null,
             success: true,
@@ -47,13 +48,15 @@ router.post('/create', async (req, res) => {
 });
 
 
-// 카테고리 가져오기 (POST /api/category/getall)
+// 카테고리 전부 가져오기 (POST /api/category/getall)
 router.post('/getall', async(req, res) => {
-    try {
+    try {   
         const allCategory = await Category.findAll();
 
         if (!allCategory) {
-            return res.status(404).json({
+            res.statusMessage = "CATEGORY IS NULL";
+
+            return res.status(451).json({
                 error: 'CATEGORY IS NULL',
                 code: 1,
                 message: '카테고리 목록을 불러올 수 없습니다.',

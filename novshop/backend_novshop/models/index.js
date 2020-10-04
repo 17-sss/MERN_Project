@@ -15,10 +15,14 @@ db.Sequelize = Sequelize;
 
 db.User = require('./user')(sequelize, Sequelize);
 db.Category = require('./category')(sequelize, Sequelize);
+db.Product = require('./product')(sequelize, Sequelize);
 // 추후 model 더 생성하면 여기에 적기. (맨 앞글자는 대문자로)
 
 
 // [1] 1대다 관계 정의 ---------------------------------
+db.Category.hasMany(db.Product);
+db.Product.belongsTo(db.Category);
+
 /*
 db.User.hasMany(db.Post);
 db.Post.belongsTo(db.User);

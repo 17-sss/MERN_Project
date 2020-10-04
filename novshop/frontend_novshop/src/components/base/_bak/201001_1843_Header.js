@@ -2,6 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 import {CustomLink, ClearEx, cssDropdown, DropdownContent, ModalBtn, StyledHr, BorderBotLine, TransparentBtn } from '../common/StyleUtilModels';
 import {getSize} from '../../lib/utility/customFunc';
+import categoryData from '../../lib/data/categoryList.json';
 
 // ****************************************************************************************
 // Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
@@ -12,6 +13,25 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';       // far
 
 // import { faUser } from '@fortawesome/free-brands-svg-icons';     // fab
 // ----------------------------------------------------------------------------------------/
+
+
+// 각종 함수 or 변수 START ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+// [F] createCategory, 카테고리 객체 생성용 함수
+const createCategory = ({...data}) => {
+    const { id, key, value, items } = data;
+    let valueTmp = value;
+    if (!value && key) {
+        valueTmp = key.toUpperCase();
+    }
+    return {
+        id,
+        key,
+        value: valueTmp,
+        items: items,
+    };
+};
+// ----------------------------------------------------------------------------------------/  
+// 각종 함수 or 변수 END ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 
 
@@ -126,9 +146,21 @@ const HeadIconSection = styled.div`
 // 헤더 :: [아이콘, 로고] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 
 const Header = (props) => {    
-    const {onLogout, userData, categoryData} = props;      
+    const {onLogout, userData} = props;      
     const {user} = userData ? userData : '';
     
+
+// 임시용 변수들 START
+    // [1] 카테고리 리스트 Item 생성 (임시) START
+    // 200911 MEMO, 카테고리 목록(categoryData)은 json으로 만들어 놓음. 나중에 DB만들때 변경하기
+    const categoryList = [];
+    categoryData.map((v, i) => {        
+        return categoryList.push(createCategory({...v}));
+    });
+    
+    // console.log(categoryList[15].items[0].value);
+    // [1] 카테고리 리스트 Item 생성 (임시) END
+// 임시용 변수들 END
 
     return (
         <>
@@ -206,8 +238,8 @@ const Header = (props) => {
 
             {/* *** 헤더 [카테고리] START *** */}
             <HeadWrapper type = "Category">
-                <HeadUL  type = "Category">         
-                    {categoryData.map( (v, i) => {  
+                <HeadUL  type = "Category">                                    
+                    {categoryList.map( (v, i) => {  
                         const childItems = v.items;
                         // const childItems = Object.values(v.items);
                         const isDropdown = (childItems.length <= 0 ? false : true);                                              
@@ -222,7 +254,7 @@ const Header = (props) => {
                                     to = {parentLink}
                                     margin = "0"                                                                     
                                 >
-                                    {v.displayValue}                                    
+                                    {v.value}                                    
                                 </CustomLink>                                
                                 {                                    
                                     isDropdown &&

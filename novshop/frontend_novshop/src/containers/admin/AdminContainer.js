@@ -1,52 +1,74 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AdminTemplate from "../../components/admin/AdminTemplate";
-import { insertCategory } from '../../modules/category';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { createCategory } from '../../modules/category';
+import categoryList from '../../lib/data/categoryList.json';
+
+import { createProduct } from '../../modules/product';
+import productList from '../../lib/data/productList.json';
+
+import AdminTemplate from '../../components/admin/AdminTemplate';
 
 const AdminContainer = () => {
     const dispatch = useDispatch();
-    const {category, categoryError} = useSelector(({category}) => {
-        return {
-            category: category.category,
-            categoryError: category.categoryError,
-        }
-    });
-    
-    const createCategories = () => {
-        dispatch(insertCategory({
-            key: 'tesssswts',
-            displayValue: 'ee',
-            items: '',
-        })) 
-    }
 
-    useEffect(() => {
-        console.log(category, categoryError);
-    }, [category, categoryError])
-
-    return (
-        <AdminTemplate
-            createCategories = {createCategories}
-        />
-    );
-};
-
-export default AdminContainer;
-
-/* 
-        import categoryList from '../../lib/data/categoryList.json';               
-       try {
-            categoryList.map( (v) => {                
+    const onClickCreateCategories = () => {
+        try {
+            categoryList.map((v) => {
                 return dispatch(
-                    insertCategory({
+                    createCategory({
                         key: v.key,
-                        value: v.value,
+                        displayValue: v.value,
                         items: v.items,
-                    })
+                    }),
                 );
-            })
+            });
         } catch (error) {
             console.error(error);
             throw error;
         }
-*/
+    };
+
+    const onClickCreateProducts = () => {
+        try {
+            productList.map((v) => {
+                const {
+                    itemName: name,
+                    itemImage: image,
+                    itemSize: sizes,
+                    itemColors: colors,
+                    price,
+                    sale,
+                    description,
+                } = v;
+
+                const data = {
+                    name,
+                    image,
+                    sizes,
+                    colors,
+                    price,
+                    sale,
+                    description,
+                    categorySub: 1, // 추후정의
+                    categoryId: 1   // 추후정의
+                };
+
+                return dispatch(
+                    createProduct(data),
+                );
+            });
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const onClickEvents = {
+        onClickCreateCategories,
+        onClickCreateProducts,
+    };
+
+    return <AdminTemplate onClickEvents={onClickEvents} />;
+};
+
+export default AdminContainer;

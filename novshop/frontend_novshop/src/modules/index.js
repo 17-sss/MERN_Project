@@ -1,21 +1,21 @@
-import {combineReducers} from 'redux';
-import {all} from 'redux-saga/effects';
-import auth, {authSaga} from './auth';
-import user, {userSaga} from './user';
-import category, {categorySaga} from './category';
+import { combineReducers } from 'redux';
+import { all } from 'redux-saga/effects';
+import auth, { authSaga } from './auth';
+import user, { userSaga } from './user';
+import category, { categorySaga } from './category';
+import product, { productSaga } from './product';
 import loading from './loading';
 
-
 const rootReducer = combineReducers({
-    auth,    
+    auth,
     category,
     user,
-
+    product,
     loading,
 });
 
 export function* rootSaga() {
-    yield all ([authSaga(), userSaga(), categorySaga()]);
+    yield all([authSaga(), userSaga(), categorySaga(), productSaga()]);
 }
 
 export default rootReducer;
