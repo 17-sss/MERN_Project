@@ -54,11 +54,12 @@ export function* categorySaga() {
 
 // 리듀서 초기값
 const initialState = {
-    category: {
+    categoryForm: {
         key: '',
         displayValue: '',
         items: [],
     },
+    category: null,
     categoryError: null,
 };
 // =======================================================================
@@ -99,7 +100,7 @@ const category = handleActions(
         },
         [GET_ALL_CATEGORY_FAILURE]: (state, action) => {
             const {payload: categoryError } = action;
-            console.log(categoryError);
+                        
             return {
                 ...state,
                 category: null,

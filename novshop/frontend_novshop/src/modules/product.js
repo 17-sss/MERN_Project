@@ -36,7 +36,7 @@ export function* productSaga() {
 
 // 리듀서 초기값 
 const initialState = {
-    product: {
+    productForm: {  
         name: "", 
         image: "", 
         sizes: [], 
@@ -47,6 +47,7 @@ const initialState = {
         categorySub: 0, 
         categoryId: 0,
     },
+    product: null,
     productError: null,
 };
 // =======================================================================
