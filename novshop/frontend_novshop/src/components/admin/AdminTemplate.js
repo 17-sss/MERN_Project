@@ -1,61 +1,80 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
+import {Link} from 'react-router-dom';
+import {TransparentBtn} from '../../components/common/StyleUtilModels'
 import { getSize } from '../../lib/utility/customFunc';
-import { CustomLink } from '../../components/common/StyleUtilModels';
-import { Button } from 'react-bootstrap';
 
 const AdminWrapper = styled.div`
-    width: ${getSize(1)};
-    height: ${getSize(1.5, 'height')};
+    width: ${getSize(1.45)};
     margin: 0 auto;
 `;
 
-const CreateBtnWrapper = styled.div`
-    width: 100%;
+const CreateLinkWrapper = styled.div`
+    padding-top: ${getSize(10)};
+    padding-bottom: ${getSize(7)}; 
     
-    /* text-align: center; */
-    /* align-items: center; */
-    /* justify-content: center; */
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 `;
 
-const CustomBtn = styled(Button)`
-    margin: 0 10px;
+const CSSLinkStyle = css`
+    background-color: #ccc; 
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+
+
+    padding: 20px;
+    margin: 20px 5px;
+    border-radius: 10px;
+    
+    &:focus,
+    &:hover,
+    &:visited,
+    &:link,
+    &:active {        
+        text-decoration: none;
+    }    
+    
+    &:hover {
+        color: rgb(240, 240, 240);
+    }
 `;
 
-const AdminTemplate = (props) => {
-    /*
-    const { onClickEvents } = props;    
-    const {
-        onClickCreateCategories,
-        onClickCreateProducts,
-    } = onClickEvents;
-    */
+
+const CreateLink = styled(Link)`
+    ${CSSLinkStyle}
+`;
+
+const CreateBtn = styled(TransparentBtn)`
+    ${CSSLinkStyle}
+`;
+
+
+const AdminTemplate = (props) => {    
+    const {onClickEvents} = props;
+    const {onClickCreateCategories} = onClickEvents;
 
     return (
         <>
             <AdminWrapper>
-                {/* 
-                <button onClick={onClickCreateCategories}>
-                    카테고리 리스트 생성
-                </button>
-                <br/>
-                <button onClick={onClickCreateProducts}>
-                    물품 생성
-                </button> 
-                */}
-                <CreateBtnWrapper>
-                    <CustomBtn variant="success">
-                        <CustomLink to = '/admin/createcategory'>
-                            카테고리 생성 폼
-                        </CustomLink>                    
-                    </CustomBtn>
 
-                    <CustomBtn variant="success">
-                        <CustomLink to = '/admin/createproduct'>
-                            물품 생성 폼
-                        </CustomLink>
-                    </CustomBtn>
-                </CreateBtnWrapper>
+                <CreateLinkWrapper>
+                    <CreateLink to = '/admin/createcategory'>
+                        카테고리 생성 폼
+                    </CreateLink>                                        
+                    <CreateLink to = '/admin/createproduct'>
+                        물품 생성 폼
+                    </CreateLink>
+                    <br/>
+                    <CreateBtn onClick = {() => {
+                        onClickCreateCategories();
+                        return alert('done');
+                    }}>
+                        이미 정의된 카테고리 생성
+                    </CreateBtn>
+                </CreateLinkWrapper>
+
             </AdminWrapper>
         </>
     );

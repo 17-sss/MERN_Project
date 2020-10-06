@@ -32,7 +32,7 @@ const App = () => {
                 {/* // Member (회원정보) */}
                 <Route component={MemberPage} path="/member/@:username" />
                 {/* // Admin (관리자 페이지) */}
-                <Route component={AdminPage} path="/admin" exact />
+                <Route component={AdminPage} path="/admin/:ctrlpage?" exact />
             </Switch>
 
             <Footer />

@@ -79,7 +79,7 @@ export const MarginBlock = (props) => {
 // **********************************************************************************
 export const CustomLink = styled(Link)`
     margin: ${(props) => props.margin || '0 5px'};
-    color: rgb(0, 0, 0);
+    color: ${props => props.color ? props.color : "rgb(0, 0, 0)"};
     font-size: ${(props) => props.fontSize && props.fontSize};
 
     text-decoration: ${(props) => props.textdeco ? "underline" : "none"};
@@ -88,7 +88,8 @@ export const CustomLink = styled(Link)`
     &:visited,
     &:link,
     &:active {
-        text-decoration: ${(props) => props.textdeco ? "underline" : "none"};      
+        text-decoration: ${(props) => props.textdeco ? "underline" : "none"}; 
+        color: ${props => props.hcolor ? props.hcolor : "rgb(0, 0, 0)"};     
     }    
 `;
 
