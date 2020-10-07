@@ -1,7 +1,49 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+import CreateInputContainer from '../../custom/containers/CreateInputContainer';
 import { getSize } from '../../lib/utility/customFunc';
 
+/* 그냥 메모.
+    #666 === rgb(102, 102, 102); 
+*/
+
+// *************** CSS ***************
+const CSSInput = css`
+    width: 100%;
+    margin-top: 1%;
+    padding-bottom: 0.5rem;
+    font-size: 16px;
+
+    border: none;
+    border-bottom: 1px solid rgb(233, 233, 233);
+    outline: none;
+
+    &:focus {
+        border-bottom: 1px solid rgb(209, 209, 209);
+    }
+`;
+
+const CSSCreateInputBtn = css`
+    margin-top: 1%;
+    padding: 0.5rem;
+    font-size: 16px;
+    color: white;
+    background-color: rgb(170, 170, 170);
+    border-radius: 1px;
+
+    &:hover {
+        background-color: rgb(150, 150, 150);
+    }
+`;
+
+const CSSResultDiv = css`
+    margin-top: 1%;
+    padding: 0.5rem 0;
+    font-size: 16px;
+`;
+
+// *************** Styled ***************
 const CreateItemWrapper = styled.div`
     width: ${getSize(1.45)};
     margin: 0 auto;
@@ -11,7 +53,7 @@ const InputForm = styled.form`
     width: ${getSize(3)};
     padding: 4% 0 4%;
     margin: 0 auto;
-    
+
     /*
     padding-top: ${getSize(10)};
     padding-bottom: ${getSize(7)};
@@ -22,18 +64,7 @@ const InputForm = styled.form`
 `;
 
 const Input = styled.input`
-    width: 100%;
-    margin-top: 1%;
-    padding-bottom: 0.5rem;
-    font-size: 16px;
-        
-    border: none;
-    border-bottom: 1px solid rgb(233, 233, 233);    
-    outline: none;
-
-    &:focus {
-        border-bottom: 1px solid rgb(209, 209, 209);
-    }
+    ${CSSInput}
 `;
 
 const AdminCreateItemTemplate = ({ ctrlpage }) => {
@@ -52,7 +83,7 @@ const AdminCreateItemTemplate = ({ ctrlpage }) => {
                         // onChange={onChange}
                         // value={form.userpwdConfirm}
                     />
-                    <br/>
+                    <br />
                     <Input
                         name={
                             ctrlpage === 'createproduct'
@@ -66,53 +97,74 @@ const AdminCreateItemTemplate = ({ ctrlpage }) => {
                         }
                         type={ctrlpage === 'createproduct' ? '미정의' : 'text'}
                     />
-                    <br/>
+                    <br />
+
+                    {/* 공사중 ============================ START */}
+                    <div>
+                        {/* 
+                            - 폼안에 또 폼있어서 크롬콘솔창에 워닝뜸. 
+                            CreateInputContainer -> CreateInputTemplate.js(CreateInputForm)                         
+                        */}
+                        <CreateInputContainer
+                            inputopt={{
+                                css: CSSInput,
+                                width: '95%',
+                                name: 'items',
+                            }}
+                            btnopt={{ css: CSSCreateInputBtn, width: '5%' }}
+                            resultopt={{ css: CSSResultDiv, width: '33%' }}
+                        />
+                    </div>
+                    {/* 공사중 ============================  END */}
+
+                    {/*                     
                     <Input
                         name={ctrlpage === 'createproduct' ? 'sizes' : 'items'}
                         placeholder={
                             ctrlpage === 'createproduct'
-                                ? '사이즈 (배열)'
-                                : '소분류'
+                                ? '사이즈 정보 추가'
+                                : '소분류 (3 * 배열)'
                         }
                         type={
                             ctrlpage === 'createproduct' ? '미정의' : '미정의'
                         }
-                    />                    
+                    />                     
+                    */}
 
                     {ctrlpage === 'createproduct' && (
                         <>
-                            <br/>
+                            <br />
                             <Input
                                 name="colors"
                                 placeholder="색상정보 (배열)"
                                 type="미정의"
                             />
-                            <br/>
+                            <br />
                             <Input
                                 name="price"
                                 placeholder="가격"
                                 type="text"
                             />
-                            <br/>
+                            <br />
                             <Input
                                 name="sale"
                                 placeholder="세일가"
                                 type="text"
                             />
-                            <br/>
+                            <br />
                             <Input
-                            // textarea로 변경해야함
+                                // textarea로 변경해야함
                                 name="description"
                                 placeholder="부가설명"
                                 type="text"
-                            />  
-                            <br/>
+                            />
+                            <br />
                             <Input
                                 name="categorySub"
                                 placeholder="카테고리 소분류 (id)"
                                 type="콤보박스사용"
                             />
-                            <br/>
+                            <br />
                             <Input
                                 name="categoryId"
                                 placeholder="카테고리 대분류 (id)"

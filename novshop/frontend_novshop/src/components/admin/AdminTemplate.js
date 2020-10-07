@@ -23,9 +23,10 @@ const CSSLinkStyle = css`
     color: rgb(255, 255, 255);
     text-decoration: none;
 
+    width: 200px;
+    height: 100px;
 
-    padding: 20px;
-    margin: 20px 5px;
+    margin: 5px 5px;
     border-radius: 10px;
     
     &:focus,
@@ -43,6 +44,8 @@ const CSSLinkStyle = css`
 
 
 const CreateLink = styled(Link)`
+    display: inline-block;
+    line-height: 100px;
     ${CSSLinkStyle}
 `;
 

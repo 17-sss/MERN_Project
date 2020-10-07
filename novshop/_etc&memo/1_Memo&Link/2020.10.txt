@@ -3,3 +3,12 @@
         링크: https://dog-developers.tistory.com/102
 
 
+
+@@@ 201007
+    1. CSS - flex 학습하기 좋은 사이트
+        링크: http://flexboxfroggy.com/#ko
+    2. react icons
+        1) 링크: https://react-icons.github.io/
+        2) 설치: npm i react-icons
+
+
