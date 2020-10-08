@@ -70,10 +70,7 @@ const AdminTemplate = (props) => {
                         물품 생성 폼
                     </CreateLink>
                     <br/>
-                    <CreateBtn onClick = {() => {
-                        onClickCreateCategories();
-                        return alert('done');
-                    }}>
+                    <CreateBtn onClick = {onClickCreateCategories}>
                         이미 정의된 카테고리 생성
                     </CreateBtn>
                 </CreateLinkWrapper>

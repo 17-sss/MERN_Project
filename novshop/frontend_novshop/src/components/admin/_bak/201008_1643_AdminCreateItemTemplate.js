@@ -1,11 +1,16 @@
+//*-------------------------------
+// NOT USE
+//*-------------------------------
+
 import React from 'react';
 import styled, { css } from 'styled-components';
 
 import CreateInputContainer from '../../custom/containers/CreateInputContainer';
-import { getSize } from '../../lib/utility/customFunc';
+import { getSize } from '../../../lib/utility/customFunc';
 
 /* 그냥 메모.
     #666 === rgb(102, 102, 102); 
+    
 */
 
 // *************** CSS ***************
@@ -100,21 +105,33 @@ const AdminCreateItemTemplate = ({ ctrlpage }) => {
                     <br />
 
                     {/* 공사중 ============================ START */}
-                    <div>
-                        {/* 
-                            - 폼안에 또 폼있어서 크롬콘솔창에 워닝뜸. 
-                            CreateInputContainer -> CreateInputTemplate.js(CreateInputForm)                         
-                        */}
-                        <CreateInputContainer
+                    
+                    
+                    {ctrlpage === 'createproduct' ?
+                        <CreateInputContainer                        
                             inputopt={{
-                                css: CSSInput,
+                                css: CSSInput,                                                                
+                                name: 'sizes',   
+                                placeholder: '상품 사이즈',
                                 width: '95%',
-                                name: 'items',
                             }}
                             btnopt={{ css: CSSCreateInputBtn, width: '5%' }}
                             resultopt={{ css: CSSResultDiv, width: '33%' }}
-                        />
-                    </div>
+                        />   
+                        :
+                        <CreateInputContainer                        
+                            inputopt={{
+                                css: CSSInput,                                                                
+                                defineInput: [    // items
+                                    { name: 'itemKey', placeholder: '소분류 key', width: '47.5%' },
+                                    { name: 'itemValue', placeholder: '소분류 value', width: '47.5%' }
+                                ]                            
+                            }}
+                            btnopt={{ css: CSSCreateInputBtn, width: '5%' }}
+                            resultopt={{ css: CSSResultDiv, width: '33%' }}
+                        />   
+                    }
+                    
                     {/* 공사중 ============================  END */}
 
                     {/*                     
