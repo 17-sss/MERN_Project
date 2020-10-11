@@ -110,8 +110,8 @@ const AdminCreateItemTemplate = ({ ctrlpage }) => {
                     {ctrlpage === 'createproduct' ?
                         <CreateInputContainer                        
                             inputopt={{
-                                css: CSSInput,                                                                
-                                name: 'sizes',   
+                                css: CSSInput,
+                                name: 'sizes',
                                 placeholder: '상품 사이즈',
                                 width: '95%',
                             }}
@@ -119,9 +119,9 @@ const AdminCreateItemTemplate = ({ ctrlpage }) => {
                             resultopt={{ css: CSSResultDiv, width: '33%' }}
                         />   
                         :
-                        <CreateInputContainer                        
+                        <CreateInputContainer
                             inputopt={{
-                                css: CSSInput,                                                                
+                                css: CSSInput,
                                 defineInput: [    // items
                                     { name: 'itemKey', placeholder: '소분류 key', width: '47.5%' },
                                     { name: 'itemValue', placeholder: '소분류 value', width: '47.5%' }

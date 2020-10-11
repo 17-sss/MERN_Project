@@ -1,10 +1,13 @@
 import { createRequestActionTypes, createRequestSaga } from '../lib/reduxUtil';
-import { createAction, handleActions } from 'redux-actions';
+import { createAction,  handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
 import * as categoryAPI from '../lib/api/category';
 
 
 // 액션 이름 설정
+const INITALIZE_CATEGORY = 'category/INITALIZE_CATEGORY';
+const CHANGE_CATEGORY = 'category/CHANGE_CATEGORY';
+
 const [
     CREATE_CATEGORY,
     CREATE_CATEGORY_SUCCESS,
@@ -18,8 +21,17 @@ const [
 ] = createRequestActionTypes('category/GET_ALL_CATEGORY');
 // =======================================================================
 
-
 // 액션 생성 함수 작성
+export const changeCategoryForm = createAction(
+    CHANGE_CATEGORY,
+    ({key, value}) => ({
+        key, 
+        value,
+    }),
+);
+
+export const initializeCategory = createAction(INITALIZE_CATEGORY);
+
 export const createCategory = createAction(
     CREATE_CATEGORY,
     ({ key, displayValue, items }) => {
@@ -57,6 +69,8 @@ const initialState = {
     categoryForm: {
         key: '',
         displayValue: '',
+        itemKey: '',
+        itemValue: '',
         items: [],
     },
     category: null,
@@ -68,6 +82,27 @@ const initialState = {
 // 리듀서
 const category = handleActions(
     {
+        [INITALIZE_CATEGORY]: (state) => {
+            return {
+                ...state,
+                categoryForm: initialState['categoryForm'],
+                category: null,
+                categoryError: null,
+            }
+        },
+
+        [CHANGE_CATEGORY]: (state, action) => {
+            const { payload } = action;
+            const { key, value } = payload;
+            return {
+                ...state,
+                categoryForm: {       
+                    ...state['categoryForm'],
+                    [key]: value, 
+                },
+            };
+        },
+        
         // createCategory
         [CREATE_CATEGORY_SUCCESS]: (state, action) => {            
             const { payload: category } = action;   // @@200930 참고, 데이터(payload)는 어디서 들어오는지 메모해둠. 
