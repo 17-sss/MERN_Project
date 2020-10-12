@@ -7,7 +7,6 @@ import { getSize } from '../../lib/utility/customFunc';
 import { Modal, InputGroup, FormControl, Button } from 'react-bootstrap';    // https://react-bootstrap.github.io/components/modal/
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';       // fas
-import { MdAdd } from "react-icons/md"; 
 
 // **********************************************************************************
 // *** BoxModel (임시 레이아웃 채우기용..)  ***
@@ -222,7 +221,7 @@ export const CustomInput = (props) => {
 // *** CustomInputOptionBtn : CustomInput에서 작성한 값들을 전송하는 버튼 
 //      (배열, 다수의 값 등을 생성해야할때 사용) ***
 // **********************************************************************************
-const StyledCustomInputOptionBtn = styled.button`
+const StyledCustomInputOptionBtn = styled.input`
     ${props => {
         const {stylecss, addcss} = props;
 
@@ -262,12 +261,11 @@ export const CustomInputOptionBtn = (props) => {
             type = 'button'
             onClick = {onClick}
             name = {name && name}
+            value = {children || "+"}
 
             stylecss = {stylecss && stylecss}
             addcss = {addcss && addcss} 
-        >
-            {children || <MdAdd />}
-        </StyledCustomInputOptionBtn>
+        />        
     );
 };
 
@@ -281,15 +279,21 @@ const StyledCustomInputOptionResult = styled.span`
     `};
 
     color: ${props => props.color && props.color};
+    font-weight: bold;
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 export const CustomInputOptionResult = (props) => {
-    const {css, color, children} = props;
+    const {css, color, children, onClick} = props;
 
     return (
         <StyledCustomInputOptionResult
             css = {css && css}     
-            color = {color && color}       
+            color = {color && color}      
+            onClick = {onClick && onClick}
         >
             {children}
         </StyledCustomInputOptionResult>

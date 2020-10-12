@@ -27,11 +27,15 @@ const InputForm = styled.form`
 `;
 
 const CustomInputOptionResultWrapper = styled.div`
+    width: 100%;
+    height: auto;
+    word-break: break-all; /* 텍스트가 div영역을 나가버려서 추가. */
     margin-bottom: 10px;
+    
 `;
 
 const CreateProductRelatedTemplate = (props) => {
-    const { ctrlpage, onChange, category, product } = props;
+    const { ctrlpage, onChange, onDelete, category, product } = props;
 
     return (
         <CreateProductRelatedWrapper>
@@ -71,7 +75,7 @@ const CreateProductRelatedTemplate = (props) => {
                 />
 
                 {ctrlpage === 'createproduct' ? (
-                    <>
+                    <>                    
                         <CustomInput
                             name="size"
                             placeholder="상품 사이즈"
@@ -96,6 +100,7 @@ const CreateProductRelatedTemplate = (props) => {
                                     return (
                                         <CustomInputOptionResult
                                             key = {i}
+                                            onClick = {onDelete}
                                         >
                                             {v}
                                         </CustomInputOptionResult>
@@ -145,6 +150,7 @@ const CreateProductRelatedTemplate = (props) => {
                 {ctrlpage === 'createproduct' && (
                     <>
                         <>
+                            
                             <CustomInput
                                 name="color"
                                 placeholder="색상정보 (배열)"
@@ -171,6 +177,7 @@ const CreateProductRelatedTemplate = (props) => {
                                             <CustomInputOptionResult
                                                 color={v}
                                                 key={i}
+                                                onClick = {onDelete}
                                             >
                                                 {v}
                                             </CustomInputOptionResult>

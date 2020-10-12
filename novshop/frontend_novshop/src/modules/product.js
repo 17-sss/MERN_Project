@@ -6,6 +6,7 @@ import { replaceAll } from '../lib/utility/customFunc';
 
 // 액션 이름 정의
 const INITALIZE_PRODUCT = 'product/INITALIZE_PRODUCT';
+const INITALIZE_PRODUCT_ITEM = 'product/INITALIZE_PRODUCT_ITEM';
 const CHANGE_PRODUCT = 'product/CHANGE_PRODUCT';
 
 const [
@@ -24,6 +25,7 @@ export const changeProductForm = createAction(
     }),
 );
 export const initializeProduct = createAction(INITALIZE_PRODUCT);
+export const initializeProductItem = createAction(INITALIZE_PRODUCT_ITEM, ({key}) => ({key}) );
 export const createProduct = createAction(
     CREATE_PRODUCT,
     // ({name, image, sizes, colors, price, sale, description, categorySub, categoryId})
@@ -71,6 +73,19 @@ const product = handleActions(
                 productForm: initialState['productForm'],
                 product: null,
                 productError: null,
+            };
+        },
+
+        [INITALIZE_PRODUCT_ITEM]: (state, action) => {
+            const {payload} = action;
+            const {key} = payload;
+            console.log(key);
+            return {
+                ...state,
+                productForm: {
+                    ...state['productForm'],
+                    [key]: initialState['productForm'][key],
+                }
             };
         },
 
