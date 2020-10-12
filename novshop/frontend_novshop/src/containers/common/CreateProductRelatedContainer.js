@@ -6,8 +6,7 @@ import { changeProductForm, initializeProduct, initializeProductItem } from "../
 import CreateProductRelatedTemplate from '../../components/common/CreateProductRelatedTemplate';
 
 const CreateProductRelatedContainer = (props) => {
-    const {ctrlpage} = props;
- 
+    const {ctrlpage} = props;    
     const { category, product } = useSelector( ({category, product}) => {   
         return {
             category: category.categoryForm,
@@ -28,12 +27,20 @@ const CreateProductRelatedContainer = (props) => {
                     case 'insertColors': {
                         value = product.color;                   
                         if(!value) return;
+
+                        /*  굳이..? 
+                        dispatch(initializeProductItem({key: 'color'}));                         
+                        document.getElementsByName('color')[0].value = '';                         
+                        */
                         break;
                     }
                     case 'insertSizes': {
                         value = product.size;                        
-                        if(!value) return;
-                        dispatch(initializeProductItem({key: 'size'}));
+                        if(!value) return;                      
+
+                        dispatch(initializeProductItem({key: 'size'}));  
+                        // ▼ 바로 위 코드에서 초기화했는데 input 태그의 값이 초기화되지않아 이렇게 처리.. 추후 방법 찾기
+                        document.getElementsByName('size')[0].value = '';                                                
                         break;
                     }
                     default:
@@ -54,12 +61,12 @@ const CreateProductRelatedContainer = (props) => {
                         value,                                   
                     })
                 );
-            }
-        
+            }        
             default:
                 break;
         }
     };
+
 
     // result(span) 배열적인 아이템 Delete
     const onDelete = (e) => {

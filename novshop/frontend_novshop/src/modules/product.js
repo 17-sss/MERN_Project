@@ -79,7 +79,7 @@ const product = handleActions(
         [INITALIZE_PRODUCT_ITEM]: (state, action) => {
             const {payload} = action;
             const {key} = payload;
-            console.log(key);
+            
             return {
                 ...state,
                 productForm: {
