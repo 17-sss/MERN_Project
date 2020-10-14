@@ -146,6 +146,162 @@ export const BorderBotLine = styled.div`
 `;
 
 
+// Input 관련 START ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+// **********************************************************************************
+// *** CustomInput ***
+// **********************************************************************************
+const StyledCustomInput = styled.input`
+    ${props => {
+        const {stylecss, addcss, type} = props;
+
+        let defaultcss = '';
+        switch (type) {
+            case "color": {
+                defaultcss = css`
+                    width: 100%;
+                    border: none;
+                    height: 40px;
+                    margin: 0;
+                    padding: 0;
+                `;
+                break;
+            }
+        
+            default: {
+                defaultcss = css`
+                    width: 100%;
+                    margin-top: 1%;
+                    padding-bottom: 0.5rem;
+                    font-size: 16px;
+
+                    border: none;
+                    border-bottom: 1px solid rgb(233, 233, 233);
+                    outline: none;
+
+                    &:focus {
+                        border-bottom: 1px solid rgb(209, 209, 209);
+                    }
+                `;
+                break;
+            }    
+        }
+        
+        
+        if (!stylecss) {
+            if (addcss) return (defaultcss + addcss)
+            else        return defaultcss;                        
+        } else {
+            if (addcss) return (stylecss + addcss)
+            else        return stylecss;
+        }
+
+    }}
+`;
+
+export const CustomInput = (props) => {
+    const {stylecss, addcss} = props;
+    const {name, type, placeholder, onChange, min, max} = props;
+    
+    return (
+        <StyledCustomInput              
+            name = {name}    
+            type = {type}
+            placeholder = {placeholder}
+            onChange = {onChange && onChange}
+            min = {min && min}
+            max = {max && max}
+
+            stylecss = {stylecss && stylecss}  
+            addcss = {addcss && addcss} 
+        />
+    );
+};
+
+// **********************************************************************************
+// *** CustomInputOptionBtn : CustomInput에서 작성한 값들을 전송하는 버튼 
+//      (배열, 다수의 값 등을 생성해야할때 사용) ***
+// **********************************************************************************
+const StyledCustomInputOptionBtn = styled.input`
+    ${props => {
+        const {stylecss, addcss} = props;
+
+        const defaultcss = css`            
+            border: none;
+            font: inherit;
+            cursor: pointer;
+            outline: inherit;
+            
+            padding: 0.5rem;
+            font-size: 16px;
+            color: white;
+            background-color: rgb(170, 170, 170);
+            border-radius: 2px;
+
+            &:hover {
+                background-color: rgb(150, 150, 150);
+            }  
+        `;
+        
+        if (!stylecss) {
+            if (addcss) return (defaultcss + addcss)
+            else        return defaultcss;                        
+        } else {
+            if (addcss) return (stylecss + addcss)
+            else        return stylecss;
+        }
+    }}
+`;
+
+export const CustomInputOptionBtn = (props) => {
+    const {stylecss, addcss} = props;
+    const {onClick, name, children} = props;
+
+    return (
+        <StyledCustomInputOptionBtn            
+            type = 'button'
+            onClick = {onClick}
+            name = {name && name}
+            value = {children || "+"}
+
+            stylecss = {stylecss && stylecss}
+            addcss = {addcss && addcss} 
+        />        
+    );
+};
+
+// **********************************************************************************
+// *** CustomInputOptionResult : CustomInputOptionBtn으로 전송한 값들 ***
+// **********************************************************************************
+const StyledCustomInputOptionResult = styled.span`
+    ${props => props.css || css`        
+        font-size: 12px;
+        margin: 0 10px 0 0;
+    `};
+
+    color: ${props => props.color && props.color};
+    font-weight: bold;
+
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
+export const CustomInputOptionResult = (props) => {
+    const {css, color, children, onClick} = props;
+
+    return (
+        <StyledCustomInputOptionResult
+            css = {css && css}     
+            color = {color && color}      
+            onClick = {onClick && onClick}
+        >
+            {children}
+        </StyledCustomInputOptionResult>
+    );
+};
+// Input 관련 END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+
+
 
 // Dropdown 관련 START ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 // **********************************************************************************

@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => (
             },
             image: {
                 type: DataTypes.STRING(100),
-                allowNull: false,                                         
+                allowNull: false,            
+                defaultValue: "",
             },             
             sizes: {
                 type: DataTypes.STRING(200),
@@ -51,7 +52,7 @@ module.exports = (sequelize, DataTypes) => (
             categorySub: {
                 type: DataTypes.INTEGER(10),
                 allowNull: false,
-                defaultValue: 0,
+                defaultValue: 1,
             }
         }, {
             timestamps: true,   // createdAt, updatedAt 컬럼 추가. 

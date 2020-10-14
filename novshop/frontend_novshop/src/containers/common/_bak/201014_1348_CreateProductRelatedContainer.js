@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { changeCategoryForm, initializeCategory } from '../../modules/category';
 import {
     changeProductForm,
@@ -11,13 +12,11 @@ import CreateProductRelatedTemplate from '../../components/common/CreateProductR
 
 const CreateProductRelatedContainer = (props) => {
     const { ctrlpage } = props;
-    // ~: 전송이 완료됬을 경우  |   ~Form: 현재 작성하고 있는 값들
-    const { category, categoryForm, product, productForm,  } = useSelector(({ category, product }) => {
+    const { category, product, productOK } = useSelector(({ category, product }) => {
         return {
-            category: category.category,            
-            categoryForm: category.categoryForm,
-            product: product.product,
-            productForm: product.productForm,
+            category: category.categoryForm,
+            product: product.productForm,            
+            productOK: product.product,
         };
     });
 
@@ -32,7 +31,7 @@ const CreateProductRelatedContainer = (props) => {
             case 'createproduct': {
                 switch (name) {
                     case 'insertColors': {
-                        value = productForm.color;                        
+                        value = product.color;
                         if (!value) return;
 
                         /*  굳이..? 
@@ -42,14 +41,13 @@ const CreateProductRelatedContainer = (props) => {
                         break;
                     }
                     case 'insertSizes': {
-                        value = productForm.size;
+                        value = product.size;
                         if (!value) return;
 
                         dispatch(initializeProductItem({ key: 'size' }));
                         // ▼ 바로 위 코드에서 초기화했는데 input 태그의 값이 초기화되지않아 이렇게 처리.. 추후 방법 찾기
                         // 이 초기화안되는 문제가.. CustomInput 태그의 구조때문인듯 내일연구하기.
-                        // 201014 
-                        //document.getElementsByName('size')[0].value = '';
+                        document.getElementsByName('size')[0].value = '';
                         break;
                     }
                     default:
@@ -96,7 +94,7 @@ const CreateProductRelatedContainer = (props) => {
                     price,
                     sale,
                     /*description, categorySub, categoryId, */
-                } = productForm;
+                } = product;
                 dispatch(
                     createProduct({
                         name,
@@ -133,7 +131,7 @@ const CreateProductRelatedContainer = (props) => {
             default:
                 break;
         }
-    }, [dispatch, ctrlpage, product, category]);
+    }, [dispatch, ctrlpage, productOK]);
 
     return (
         <CreateProductRelatedTemplate
@@ -141,8 +139,8 @@ const CreateProductRelatedContainer = (props) => {
             onChange={onChange}
             onDelete={onDelete}
             onSubmit={onSubmit}
-            categoryForm={categoryForm && categoryForm}
-            productForm={productForm && productForm}
+            category={category && category}
+            product={product && product}
         />
     );
 };

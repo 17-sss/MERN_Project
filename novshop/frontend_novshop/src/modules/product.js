@@ -28,8 +28,11 @@ export const initializeProduct = createAction(INITALIZE_PRODUCT);
 export const initializeProductItem = createAction(INITALIZE_PRODUCT_ITEM, ({key}) => ({key}) );
 export const createProduct = createAction(
     CREATE_PRODUCT,
-    // ({name, image, sizes, colors, price, sale, description, categorySub, categoryId})
-    (productData) => productData,
+    ({name, image, sizes, colors, price, sale, description, categorySub, categoryId}) => {
+        return {
+            name, image, sizes, colors, price, sale, description, categorySub, categoryId 
+        };
+    },
 );
 // =======================================================================
 
@@ -51,7 +54,7 @@ const initialState = {
         image: '',
         size: '',
         sizes: [],
-        color: '',
+        color: '#000000',
         colors: [],
         price: 1000,
         sale: 0,
