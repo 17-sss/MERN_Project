@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeCategoryForm, initializeCategory } from '../../modules/category';
 import {
@@ -7,19 +7,26 @@ import {
     initializeProduct,
     initializeProductItem,
 } from '../../modules/product';
-import CreateProductRelatedTemplate from '../../components/common/CreateProductRelatedTemplate';
+import CreateProductRelatedTemplate from '../../components/admin/CreateProductRelatedTemplate';
 
 const CreateProductRelatedContainer = (props) => {
     const { ctrlpage } = props;
-    // ~: 전송이 완료됬을 경우  |   ~Form: 현재 작성하고 있는 값들
-    const { category, categoryForm, product, productForm,  } = useSelector(({ category, product }) => {
+    const {
+        category, // ~: 전송이 완료된 경우
+        categoryForm, // ~Form: 현재 작성하고 있는 값들
+        categoryStatus, // 현재 데이터베이스에 있는 카테고리 정보들
+        product,
+        productForm,
+    } = useSelector(({ category, product }) => {
         return {
-            category: category.category,            
+            category: category.category,
             categoryForm: category.categoryForm,
+            categoryStatus: category.categoryStatus,
             product: product.product,
             productForm: product.productForm,
         };
     });
+    const [categories, setCategories] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -32,7 +39,7 @@ const CreateProductRelatedContainer = (props) => {
             case 'createproduct': {
                 switch (name) {
                     case 'insertColors': {
-                        value = productForm.color;                        
+                        value = productForm.color;
                         if (!value) return;
 
                         /*  굳이..? 
@@ -48,7 +55,7 @@ const CreateProductRelatedContainer = (props) => {
                         dispatch(initializeProductItem({ key: 'size' }));
                         // ▼ 바로 위 코드에서 초기화했는데 input 태그의 값이 초기화되지않아 이렇게 처리.. 추후 방법 찾기
                         // 이 초기화안되는 문제가.. CustomInput 태그의 구조때문인듯 내일연구하기.
-                        // 201014 
+                        // 201014
                         //document.getElementsByName('size')[0].value = '';
                         break;
                     }
@@ -100,13 +107,13 @@ const CreateProductRelatedContainer = (props) => {
                 dispatch(
                     createProduct({
                         name,
-                        image: (image || '/images/bymono_test1.webp'),
+                        image: image || '/images/bymono_test1.webp',
                         sizes,
                         colors,
                         price,
                         sale,
                         description: '',
-                        categorySub: 1, 
+                        categorySub: 1,
                         categoryId: 1,
                     }),
                 );
@@ -122,18 +129,48 @@ const CreateProductRelatedContainer = (props) => {
     };
 
     // 페이지 초기화 (데이터가 전송됬을때도 초기화)
+    // 1) category 생성
     useEffect(() => {
-        switch (ctrlpage) {
-            case 'createproduct':                
-                dispatch(initializeProduct());                
-                break;
-            case 'createcategory':
-                dispatch(initializeCategory());
-                break;
-            default:
-                break;
+        if (ctrlpage === 'createcategory') {
+            dispatch(initializeCategory());
         }
-    }, [dispatch, ctrlpage, product, category]);
+    }, [dispatch, ctrlpage, category]);
+    // ---
+
+    // 2) product 생성
+
+    useEffect(() => {
+        if (ctrlpage === 'createproduct') {
+            dispatch(initializeProduct());
+
+            if (categoryStatus && typeof categoryStatus === 'object') {
+                if ( categoryStatus.hasOwnProperty('data') && categoryStatus.data instanceof Array ) {
+                    const arrTmp = [];
+                    categoryStatus.data.map((value) => {
+                        let items = [];
+                        let jsonItems = JSON.parse(value.items);
+
+                        if (jsonItems.length > 0) {
+                            jsonItems.map((v) => {
+                                return items.push({
+                                    id: v.id,
+                                    displayValue: v.value,
+                                })
+                            })
+                        };
+
+                        return arrTmp.push({
+                            id: value.id,
+                            displayValue: value.displayValue,
+                            items,
+                        });
+                    });                         
+                    setCategories(arrTmp);
+                }
+            }
+        }
+    }, [dispatch, ctrlpage, product, categoryStatus]);
+    // ---
 
     return (
         <CreateProductRelatedTemplate
@@ -141,8 +178,13 @@ const CreateProductRelatedContainer = (props) => {
             onChange={onChange}
             onDelete={onDelete}
             onSubmit={onSubmit}
+            // 1) 카테고리
             categoryForm={categoryForm && categoryForm}
+            // --
+            // 2) 상품
             productForm={productForm && productForm}
+            categories={categories && categories}
+            // --
         />
     );
 };

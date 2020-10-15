@@ -10,10 +10,10 @@ import Header from "../../components/base/Header";
 const HeaderContainer = () => {  
     const [categoryData, setCategoryData] = useState([]);
     const dispatch = useDispatch();  
-    const {userData, category} = useSelector( ({user, category}) => {
+    const {userData, categoryStatus} = useSelector( ({user, category}) => {
         return {
             userData: user.user,
-            category: category.category,
+            categoryStatus: category.categoryStatus
         }
     });
 
@@ -26,8 +26,8 @@ const HeaderContainer = () => {
     }, [dispatch]);
 
     useEffect(()=>{
-        if (category) {
-            const {data: arrayData} = category;   
+        if (categoryStatus) {
+            const {data: arrayData} = categoryStatus;   
 
             if (arrayData) {            
                 if (typeof arrayData.map !== 'function') return;
@@ -46,7 +46,7 @@ const HeaderContainer = () => {
                 setCategoryData(result);
             }
         }
-    }, [category]);
+    }, [categoryStatus]);
 
 
     return (

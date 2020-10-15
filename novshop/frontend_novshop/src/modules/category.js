@@ -74,6 +74,7 @@ const initialState = {
         items: [],
     },
     category: null,
+    categoryStatus: null,
     categoryError: null,
 };
 // =======================================================================
@@ -125,11 +126,11 @@ const category = handleActions(
         
         // getAllCategory
         [GET_ALL_CATEGORY_SUCCESS]: (state, action) => {
-            const {payload: category} = action;
+            const {payload: categoryStatus} = action;
   
             return {
                 ...state,
-                category,
+                categoryStatus,
                 categoryError: null,
             }
         },

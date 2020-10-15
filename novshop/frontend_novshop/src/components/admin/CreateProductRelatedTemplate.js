@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { TransparentBtn } from '../../components/common/StyleUtilModels';
-import { cssCustomInput, cssCustomSpan } from '../../components/common/StyleUtilCSS';
+import { TransparentBtn } from '../common/StyleUtilModels';
+import { cssCustomInput, cssCustomSpan } from '../common/StyleUtilCSS';
 import { getSize } from '../../lib/utility/customFunc';
 
 // 1) CreateProductRelatedWrapper: 전체 Wrapper
@@ -43,22 +43,21 @@ const TextArea = styled.textarea`
 // 2-3) StyledP: Styled된 p 태그
 const StyledP = styled.p`
     font-size: 16px;
-    color: rgb(163,163,163);
-    margin: ${props => props.margin || "8px 0px 4px 0px"};
+    color: rgb(163, 163, 163);
+    margin: ${(props) => props.margin || '8px 0px 4px 0px'};
 `;
 
 // 2-4) SelectBox: 분류 선택용 콤보박스 (select)
 const SelectBox = styled.select`
     ${cssCustomInput};
     width: 50%;
-    color: rgb(163,163,163);
+    color: rgb(163, 163, 163);
 `;
 
 // 2-4-1) StyledOpt: select 태그의 option 태그
 const StyledOpt = styled.option`
-    color: ${props => props.noblack || "black"};
+    color: ${(props) => props.noblack || 'black'};
 `;
-
 
 // 3) ResultSpanWrapper: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 ResultSpan를 위한 Wrapper
 const ResultSpanWrapper = styled.div`
@@ -92,23 +91,37 @@ const SubmitBtn = styled(TransparentBtn)`
 // -------------------------------------------------------------------------/
 
 const CreateProductRelatedTemplate = (props) => {
-    const { 
-        ctrlpage, categoryForm, productForm,
-        onChange, onDelete, onSubmit,        
+    const {
+        ctrlpage,
+        categoryForm,
+        productForm,
+        categories,
+        onChange,
+        onDelete,
+        onSubmit,
     } = props;
+
+    
+    categories.map((v) => {        
+        if (v.items.length === 0) {
+            return console.log(v.id, "이놈 아이템 비었음");
+        }
+        return console.log('템플릿작업해라~~~');
+    });
+
 
     return (
         <CreateProductRelatedWrapper>
             <InputWrapper>
                 <form onSubmit={onSubmit}>
-                    <Input                    
+                    <Input
                         type="text"
                         name={ctrlpage === 'createproduct' ? 'name' : 'key'}
                         placeholder={
                             ctrlpage === 'createproduct'
                                 ? '상품명'
                                 : '카테고리 키 (영문)'
-                        }                        
+                        }
                         onChange={onChange}
                         value={
                             ctrlpage === 'createproduct'
@@ -128,7 +141,7 @@ const CreateProductRelatedTemplate = (props) => {
                             ctrlpage === 'createproduct'
                                 ? '상품 이미지 경로 (불러오기)'
                                 : '페이지에 보일 값'
-                        }                        
+                        }
                         onChange={onChange}
                         value={
                             ctrlpage === 'createproduct'
@@ -142,7 +155,7 @@ const CreateProductRelatedTemplate = (props) => {
                             <Input
                                 type="text"
                                 name="size"
-                                placeholder="상품 사이즈"                                
+                                placeholder="상품 사이즈"
                                 onChange={onChange}
                                 value={productForm.size}
                                 addcss={css`
@@ -150,10 +163,10 @@ const CreateProductRelatedTemplate = (props) => {
                                     margin-top: 16px;
                                 `}
                             />
-                            <Input  
-                                type="button"   // button
+                            <Input
+                                type="button" // button
                                 name="insertSizes"
-                                value="+" 
+                                value="+"
                                 onClick={onChange}
                                 addcss={css`
                                     width: 5%;
@@ -189,7 +202,7 @@ const CreateProductRelatedTemplate = (props) => {
                             <Input
                                 type="text"
                                 name="itemValue"
-                                placeholder="소분류 value"                                
+                                placeholder="소분류 value"
                                 onChange={onChange}
                                 value={categoryForm.itemValue}
                                 addcss={css`
@@ -198,18 +211,16 @@ const CreateProductRelatedTemplate = (props) => {
                                 `}
                             />
                             <Input
-                                type="button"   // button
+                                type="button" // button
                                 name="insertItems"
-                                value="+" 
+                                value="+"
                                 onClick={onChange}
                                 addcss={css`
                                     width: 5%;
                                 `}
                             />
                             <ResultSpanWrapper>
-                                <ResultSpan>
-                                    {categoryForm.items}
-                                </ResultSpan>
+                                <ResultSpan>{categoryForm.items}</ResultSpan>
                             </ResultSpanWrapper>
                         </>
                     )}
@@ -221,7 +232,7 @@ const CreateProductRelatedTemplate = (props) => {
                                 <Input
                                     type="color"
                                     name="color"
-                                    placeholder="색상정보 (배열)"                                    
+                                    placeholder="색상정보 (배열)"
                                     onChange={onChange}
                                     value={productForm.color}
                                     addcss={css`
@@ -229,13 +240,13 @@ const CreateProductRelatedTemplate = (props) => {
                                     `}
                                 />
                                 <Input
-                                    type="button"   // button
+                                    type="button" // button
                                     name="insertColors"
-                                    value="+" 
+                                    value="+"
                                     onClick={onChange}
-                                    addcss={css`        
+                                    addcss={css`
                                         position: relative;
-                                        top: -10px;                                                                    
+                                        top: -10px;
                                         width: 5%;
                                     `}
                                 />
@@ -258,7 +269,7 @@ const CreateProductRelatedTemplate = (props) => {
                             <StyledP margin="8px 0 0 0">가격</StyledP>
                             <Input
                                 type="number"
-                                name="price"                                                               
+                                name="price"
                                 min="1000"
                                 max="9999999"
                                 onChange={onChange}
@@ -267,50 +278,37 @@ const CreateProductRelatedTemplate = (props) => {
                             <StyledP margin="8px 0 0 0">세일가</StyledP>
                             <Input
                                 type="number"
-                                name="sale"                                
+                                name="sale"
                                 min="0"
                                 max="9999999"
                                 onChange={onChange}
                                 value={productForm.sale}
                             />
-                            <TextArea                                             
+                            <TextArea
                                 name="description"
-                                rows="2" 
+                                rows="2"
                                 /* cols="50" */
-                                placeholder="부가설명"                                                                
-                                onChange={onChange}                                
+                                placeholder="부가설명"
+                                onChange={onChange}
                                 value={productForm.description}
-
-                                style={{width: "100%"}}
-                            />                                                                
-                            <SelectBox name="categoryId">
-                                <StyledOpt value="" noblack>카테고리 대분류 선택</StyledOpt>
-                                <StyledOpt value="대분류1의 id">대분류1</StyledOpt>
-                            </SelectBox>
-                            <SelectBox name="categoryId">
-                                <StyledOpt value="" noblack>카테고리 소분류 선택</StyledOpt>
-                                <StyledOpt value="0">없음</StyledOpt>
-                                <StyledOpt value="소분류1 id">소분류1</StyledOpt>
-                            </SelectBox>
-
-
-                            {/*                                
-                            // 이거 2개다 카테고리 모듈에서 가져와야할듯.             
-                            <Input
-                                type="콤보박스사용"
-                                name="categorySub"
-                                placeholder="카테고리 소분류 (id)"                                
-                                onChange={onChange}
-                                value={productForm.categorySub}
+                                style={{ width: '100%' }}
                             />
-                            <Input
-                                type="콤보박스사용"
-                                name="categoryId"
-                                placeholder="카테고리 대분류 (id)"                                
-                                onChange={onChange}
-                                value={productForm.categoryId}
-                            />
-                            */}
+                            <SelectBox name="categoryId" defaultValue={''}>
+                                <StyledOpt value="" noblack disabled>
+                                    카테고리 대분류 선택
+                                </StyledOpt>
+                                <StyledOpt value="대분류1의 id">
+                                    대분류1
+                                </StyledOpt>
+                            </SelectBox>
+                            <SelectBox name="categorySub" defaultValue={''}>
+                                <StyledOpt value="" noblack disabled>
+                                    카테고리 소분류 선택
+                                </StyledOpt>                                
+                                <StyledOpt value="소분류1 id">
+                                    소분류1
+                                </StyledOpt>
+                            </SelectBox>
                         </>
                     )}
                     <InputWrapper alignCenter padding={'0px'}>

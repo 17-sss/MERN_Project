@@ -6,7 +6,7 @@ import { createCategory } from '../../modules/category';
 import categoryList from '../../lib/data/categoryList.json';
 
 import AdminTemplate from '../../components/admin/AdminTemplate';
-import CreateProductRelatedContainer from '../../containers/common/CreateProductRelatedContainer';
+import CreateProductRelatedContainer from '../../containers/admin/CreateProductRelatedContainer';
 
 const AdminContainer = (props) => {
     const { match } = props;
