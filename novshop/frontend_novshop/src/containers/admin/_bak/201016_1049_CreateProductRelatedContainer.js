@@ -27,7 +27,6 @@ const CreateProductRelatedContainer = (props) => {
         };
     });
     const [categories, setCategories] = useState([]);
-    const [subCategories, setSubCategories] = useState(null);
 
     const dispatch = useDispatch();
 
@@ -42,6 +41,11 @@ const CreateProductRelatedContainer = (props) => {
                     case 'insertColors': {
                         value = productForm.color;
                         if (!value) return;
+
+                        /*  굳이..? 
+                        dispatch(initializeProductItem({key: 'color'}));                         
+                        document.getElementsByName('color')[0].value = '';                         
+                        */
                         break;
                     }
                     case 'insertSizes': {
@@ -49,21 +53,10 @@ const CreateProductRelatedContainer = (props) => {
                         if (!value) return;
 
                         dispatch(initializeProductItem({ key: 'size' }));
-                        break;
-                    }
-                    
-                    case 'categoryId': {
-                        let tmpCategory = null;
-                        if (categories) {
-                            if (!productForm.categorySub || productForm.categorySub > 0) {
-                                dispatch(initializeProductItem({ key: 'categorySub' }));
-                            }
-
-                            tmpCategory = categories.filter((v) => {
-                                return Number(v.id) === Number(value);
-                            })[0];                            
-                            setSubCategories(tmpCategory);                            
-                        }
+                        // ▼ 바로 위 코드에서 초기화했는데 input 태그의 값이 초기화되지않아 이렇게 처리.. 추후 방법 찾기
+                        // 이 초기화안되는 문제가.. CustomInput 태그의 구조때문인듯 내일연구하기.
+                        // 201014
+                        //document.getElementsByName('size')[0].value = '';
                         break;
                     }
                     default:
@@ -90,6 +83,20 @@ const CreateProductRelatedContainer = (props) => {
         }
     };
 
+    // select box onChange
+    const onChangeSelectBox = () => {
+        switch (ctrlpage) {
+            case "createproduct":                
+                break;
+
+            case "createcategory":
+                break;
+        
+            default:
+                break;
+        }
+    };
+
     // result(span) 배열적인 아이템 Delete
     const onDelete = (e) => {
         const delItem = e.target.innerHTML;
@@ -109,9 +116,7 @@ const CreateProductRelatedContainer = (props) => {
                     colors,
                     price,
                     sale,
-                    description, 
-                    categorySub, 
-                    categoryId, 
+                    /*description, categorySub, categoryId, */
                 } = productForm;
                 dispatch(
                     createProduct({
@@ -121,9 +126,9 @@ const CreateProductRelatedContainer = (props) => {
                         colors,
                         price,
                         sale,
-                        description,
-                        categorySub,
-                        categoryId,
+                        description: '',
+                        categorySub: 1,
+                        categoryId: 1,
                     }),
                 );
                 break;
@@ -187,14 +192,13 @@ const CreateProductRelatedContainer = (props) => {
             onChange={onChange}
             onDelete={onDelete}
             onSubmit={onSubmit}
-
+            onChangeSelectBox={onChangeSelectBox}
             // 1) 카테고리
             categoryForm={categoryForm && categoryForm}
             // --
             // 2) 상품
             productForm={productForm && productForm}
             categories={categories && categories}
-            subCategories={subCategories && subCategories}
             // --
         />
     );

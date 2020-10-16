@@ -39,4 +39,12 @@
         1) 링크
             http://riptutorial.com/ko/javascript/example/4066/객체가-배열인지-확인하기
 
-        
+
+
+@@ 201016
+    1. input 태그 file 사용 시, 확장자 제한
+        1) 링크
+            https://blog.munilive.com/posts/input-file-type-accept-attribute.html
+    2. react & express 파일 업로드
+        1) 링크
+            https://basketdeveloper.tistory.com/55

@@ -103,7 +103,7 @@ const product = handleActions(
                 case 'price':
                 case 'sale':
                 case 'categorySub':
-                case 'categoryId': {
+                case 'categoryId': {                    
                     value = Number(value);
                     break;
                 }

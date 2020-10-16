@@ -93,22 +93,14 @@ const SubmitBtn = styled(TransparentBtn)`
 const CreateProductRelatedTemplate = (props) => {
     const {
         ctrlpage,
-        categoryForm,
-        productForm,
-        categories,
         onChange,
         onDelete,
         onSubmit,
+        categoryForm,
+        productForm,
+        categories,
+        subCategories,
     } = props;
-
-    
-    categories.map((v) => {        
-        if (v.items.length === 0) {
-            return console.log(v.id, "이놈 아이템 비었음");
-        }
-        return console.log('템플릿작업해라~~~');
-    });
-
 
     return (
         <CreateProductRelatedWrapper>
@@ -131,7 +123,14 @@ const CreateProductRelatedTemplate = (props) => {
                     />
 
                     <Input
-                        type="text"
+                        type={
+                            ctrlpage === 'createproduct'
+                            ? 'file'
+                            : 'text'
+                        }
+                        accept={
+                            (ctrlpage === 'createproduct') ? "image/*" : undefined
+                        }
                         name={
                             ctrlpage === 'createproduct'
                                 ? 'image'
@@ -293,21 +292,40 @@ const CreateProductRelatedTemplate = (props) => {
                                 value={productForm.description}
                                 style={{ width: '100%' }}
                             />
-                            <SelectBox name="categoryId" defaultValue={''}>
-                                <StyledOpt value="" noblack disabled>
+                            <SelectBox name="categoryId" 
+                                onChange={onChange}
+                                value={productForm.categoryId || 0}
+                            >
+                                <StyledOpt value={0} noblack disabled>
                                     카테고리 대분류 선택
                                 </StyledOpt>
-                                <StyledOpt value="대분류1의 id">
-                                    대분류1
-                                </StyledOpt>
+                                {categories && 
+                                    categories.map((v)=>{
+                                        return (
+                                            <StyledOpt key={v.id} value={v.id}>
+                                                {v.displayValue}
+                                            </StyledOpt>
+                                        );
+                                    } 
+                                )}
                             </SelectBox>
-                            <SelectBox name="categorySub" defaultValue={''}>
-                                <StyledOpt value="" noblack disabled>
+                            <SelectBox name="categorySub"                                 
+                                onChange={onChange} 
+                                disabled={!(subCategories && subCategories.items.length > 0)}                                
+                                value={productForm.categorySub || 0}
+                            >
+                                <StyledOpt value={0} noblack disabled>
                                     카테고리 소분류 선택
                                 </StyledOpt>                                
-                                <StyledOpt value="소분류1 id">
-                                    소분류1
-                                </StyledOpt>
+                                {subCategories &&                                     
+                                    subCategories.items.map((v) => {                                        
+                                        return (
+                                            <StyledOpt key={v.id} value={v.id}>
+                                                {v.displayValue}
+                                            </StyledOpt>
+                                        );
+                                    })
+                                }
                             </SelectBox>
                         </>
                     )}
