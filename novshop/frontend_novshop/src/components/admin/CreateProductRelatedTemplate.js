@@ -105,7 +105,7 @@ const CreateProductRelatedTemplate = (props) => {
     return (
         <CreateProductRelatedWrapper>
             <InputWrapper>
-                <form onSubmit={onSubmit}>
+                <form onSubmit={onSubmit} encType='multipart/form-data'>
                     <Input
                         type="text"
                         name={ctrlpage === 'createproduct' ? 'name' : 'key'}

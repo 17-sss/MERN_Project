@@ -28,11 +28,8 @@ export const initializeProduct = createAction(INITALIZE_PRODUCT);
 export const initializeProductItem = createAction(INITALIZE_PRODUCT_ITEM, ({key}) => ({key}) );
 export const createProduct = createAction(
     CREATE_PRODUCT,
-    ({name, image, sizes, colors, price, sale, description, categorySub, categoryId}) => {
-        return {
-            name, image, sizes, colors, price, sale, description, categorySub, categoryId 
-        };
-    },
+    ({name, image, sizes, colors, price, sale, description, categorySub, categoryId}) => 
+    ({name, image, sizes, colors, price, sale, description, categorySub, categoryId})
 );
 // =======================================================================
 
@@ -140,7 +137,7 @@ const product = handleActions(
         },
         [CREATE_PRODUCT_FAILURE]: (state, action) => {
             const { payload: productError } = action;
-
+            
             return {
                 ...state,
                 product: null,

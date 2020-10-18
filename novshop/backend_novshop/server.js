@@ -23,7 +23,7 @@ app.use(logger('dev'));
 // 추후 참고: https://jeonghwan-kim.github.io/2018/08/19/express-travis-beanstalk.html
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));   // 비밀키(.env의 COOKIE_SECRET 불러옴)
 app.use(
     session({

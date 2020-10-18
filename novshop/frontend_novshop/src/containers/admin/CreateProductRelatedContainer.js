@@ -33,12 +33,17 @@ const CreateProductRelatedContainer = (props) => {
 
     // input onChange
     const onChange = (e) => {
-        let { name, value } = e.target;
+        let { name, value, files } = e.target;
         if (!name) return; // 버튼에서 계속 name이 사라짐. (input type = 'button'로 하니까 해결됨)
 
         switch (ctrlpage) {
             case 'createproduct': {
                 switch (name) {
+                    case 'image': {
+                        productForm.image = files[0];                 
+                        break;
+                    }
+
                     case 'insertColors': {
                         value = productForm.color;
                         if (!value) return;
@@ -113,10 +118,10 @@ const CreateProductRelatedContainer = (props) => {
                     categorySub, 
                     categoryId, 
                 } = productForm;
-                dispatch(
+                dispatch(                    
                     createProduct({
                         name,
-                        image: image || '/images/bymono_test1.webp',
+                        image,
                         sizes,
                         colors,
                         price,
