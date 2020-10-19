@@ -41,12 +41,38 @@
 
 
 
-@@ 201016
+@@ 201016 ~ 201018
     1. input 태그 file 사용 시, 확장자 제한
         1) 링크
             https://blog.munilive.com/posts/input-file-type-accept-attribute.html
     2. react & express 파일 업로드
         1) 링크
-            https://basketdeveloper.tistory.com/55
+            https://basketdeveloper.tistory.com/55  (201019 이거보고 답을 얻음)
             https://gaemi606.tistory.com/38
             https://gaemi606.tistory.com/37
+            https://velog.io/@nomadhash/TIL-multer를-이용한-이미지-업로드-feat.React-x-Node-js
+
+
+
+@@ 201019
+    1. [☆☆☆] react & express 파일 업로드 관련
+        + 파일 참고 리스트 
+            1. 프론트
+                1)  /components/admin/CreateProductRelatedContainer.js 
+                        && 
+                    /components/admin/CreateProductRelatedTemplate.js
+                2)  /modules/product.js
+                3)  /api/product.js
+            2. 백
+                1)  /routes/product.js
+
+        + 알게 된 점 메모
+            1. 201016 ~ 201018 동안 연구했던 이미지 multer 활용하여 올릴 시, 많이 애먹음.
+                1) redux store에 등록된 값으로 axios 이용해 넘기려했으나 제대로 넘어가질 않았음.
+                    productForm.image에 바로 e.target.files[0] 대입했을시엔
+                    계속 서버에서 req.file을 콘솔할 시 undefined만 뜸.
+                2) 오늘 201019일에 다른 방법으로 테스트해봄.
+                    useState를 사용하여 <input name = 'image' type = 'file'/> 의 상태를 저장한 후, 
+                    서버로 요청 보낼 시 해당 state를 [객체의 속성(프로퍼티) 중 image]에 대입.
+                    이 방법으로 하니 더이상 undefined가 뜨지 않음. 제대로 저장됨.
+

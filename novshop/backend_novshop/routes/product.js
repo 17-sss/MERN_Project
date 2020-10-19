@@ -7,7 +7,7 @@ import path from "path";
 
 const router = Router();
 
-// 파일 업로드 관련 START
+// 파일 업로드 관련 START -------------
 // 1) 폴더 생성
 fs.readdir('uploads', (err) => {
     if (err) {
@@ -32,27 +32,12 @@ const upload = multer({
         fileSize: 10 * 1024 * 1024
     }
 });
-// 파일 업로드 관련 END
-
-
-
-// 상품 데이터 생성 (POST /api/product/create)
-/*
-router.post('/create', upload.single('image'), (req, res) => {
-    console.log(req.file);
-    res.json({
-        error: null,
-        success: true,
-        data: 'test',
-    })
-});
-*/
-// https://velog.io/@nomadhash/TIL-multer를-이용한-이미지-업로드-feat.React-x-Node-js 참고해보기..
+// 파일 업로드 관련 END -------------
 
 router.post('/create', upload.single('image'), async (req, res) => {
     const {
-        name,
-        image,
+        name,     
+        // image,
         sizes,
         colors,
         price,
@@ -62,21 +47,20 @@ router.post('/create', upload.single('image'), async (req, res) => {
         categoryId,
     } = req.body;
     
-    if (!req.file || !req.files) {        
-        return res.status(500).json({            
-            error: ('req.file: ' + req.file + ' // ' + 'req.files: ' + req.files), 
+    if (!req.file) {                
+        res.statusMessage = 'IMAGE UPLOAD ERROR';
+        return res.status(512).json({            
+            error: ('req.file: ' + req.file), 
+            bodyStatus: req.body,
             code: -2,
             message: '이미지 파일 업로드 오류',
         });
-    } else {
-        console.log(req.file)
-    }
-
+    }    
 
     try {
         const createData = await Product.create({
             name,
-            image,
+            image: req.file.filename,
             sizes: JSON.stringify(sizes),
             colors: JSON.stringify(colors),
             price,

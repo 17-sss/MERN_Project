@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { TransparentBtn } from '../common/StyleUtilModels';
 import { cssCustomInput, cssCustomSpan } from '../common/StyleUtilCSS';
-import { getSize } from '../../lib/utility/customFunc';
+import { getSize, randomColor } from '../../lib/utility/customFunc';
 
 // 1) CreateProductRelatedWrapper: 전체 Wrapper
 const CreateProductRelatedWrapper = styled.div`
@@ -70,6 +70,9 @@ const ResultSpanWrapper = styled.div`
 // 3-1) ResultSpan: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 Span
 const ResultSpan = styled.span`
     ${cssCustomSpan}
+    ${props => props.randomColor && css`
+        color: ${randomColor()};
+    `}
 `;
 
 // 4) SubmitBtn: 전송버튼
@@ -96,6 +99,7 @@ const CreateProductRelatedTemplate = (props) => {
         onChange,
         onDelete,
         onSubmit,
+        errorMessage,
         categoryForm,
         productForm,
         categories,
@@ -218,8 +222,15 @@ const CreateProductRelatedTemplate = (props) => {
                                     width: 5%;
                                 `}
                             />
-                            <ResultSpanWrapper>
-                                <ResultSpan>{categoryForm.items}</ResultSpan>
+                            <ResultSpanWrapper>                                
+                                {categoryForm.items && categoryForm.items.map((v) => {                                                              
+                                    return (
+                                        <ResultSpan key = {v.id} randomColor>
+                                            {v.key} &amp; {v.value} 
+                                        </ResultSpan>
+                                    )
+                                })}
+                                
                             </ResultSpanWrapper>
                         </>
                     )}
@@ -329,7 +340,11 @@ const CreateProductRelatedTemplate = (props) => {
                             </SelectBox>
                         </>
                     )}
+
                     <InputWrapper alignCenter padding={'0px'}>
+                        {errorMessage && (
+                            <p style={{color: 'red'}}>{errorMessage}</p>
+                        )}
                         <SubmitBtn type="submit">전송</SubmitBtn>
                     </InputWrapper>
                 </form>

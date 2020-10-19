@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MemberPage from './pages/MemberPage';
 import AdminPage from './pages/AdminPage';
+import TestPage from './pages/TestPage';
 
 
 const App = () => {    
@@ -33,6 +34,9 @@ const App = () => {
                 <Route component={MemberPage} path="/member/@:username" />
                 {/* // Admin (관리자 페이지) */}
                 <Route component={AdminPage} path="/admin/:ctrlpage?" exact />
+                {/* // Test (테스트 페이지) */}
+                <Route component={TestPage} path="/test/:opt?" exact />
+
             </Switch>
 
             <Footer />

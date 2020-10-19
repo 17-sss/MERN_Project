@@ -2,6 +2,7 @@ import { createRequestActionTypes, createRequestSaga } from '../lib/reduxUtil';
 import { createAction,  handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
 import * as categoryAPI from '../lib/api/category';
+import { replaceAll } from '../lib/utility/customFunc';
 
 
 // 액션 이름 설정
@@ -73,9 +74,9 @@ const initialState = {
         itemValue: '',
         items: [],
     },
-    category: null,
-    categoryStatus: null,
+    category: null,    
     categoryError: null,
+    categoryStatus: null,
 };
 // =======================================================================
 
@@ -94,20 +95,35 @@ const category = handleActions(
 
         [CHANGE_CATEGORY]: (state, action) => {
             const { payload } = action;
-            const { key, value } = payload;
+            const { categoryForm: tmpCategory } = state;
+            
+            let { key, value } = payload;
+            let arrTmp = [];
+
+            if (key === "insertItems") {
+                key = replaceAll(key, "insert", '').toLowerCase();
+                let {items, itemKey, itemValue} = tmpCategory;
+                let id = items.length + 1;                
+
+                arrTmp = items.concat({
+                    id, 
+                    key: itemKey,
+                    value: itemValue,
+                });                                    
+            }
+
             return {
                 ...state,
                 categoryForm: {       
                     ...state['categoryForm'],
-                    [key]: value, 
+                    [key]: key === "items" ? arrTmp : value, 
                 },
             };
         },
         
         // createCategory
         [CREATE_CATEGORY_SUCCESS]: (state, action) => {            
-            const { payload: category } = action;   // @@200930 참고, 데이터(payload)는 어디서 들어오는지 메모해둠. 
-            
+            const { payload: category } = action;   // @@200930 참고, 데이터(payload)는 어디서 들어오는지 메모해둠.             
             return {
                 ...state,
                 category,

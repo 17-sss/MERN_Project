@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeCategoryForm, initializeCategory } from '../../modules/category';
+import { changeCategoryForm, createCategory, initializeCategory } from '../../modules/category';
 import {
     changeProductForm,
     createProduct,
@@ -28,6 +28,8 @@ const CreateProductRelatedContainer = (props) => {
     });
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState(null);
+    const [file, setFile] = useState(null); // image 파일을 서버로 전송하기 위한 state
+    const [errorMessage, setErrorMesssage] = useState('');
 
     const dispatch = useDispatch();
 
@@ -40,7 +42,9 @@ const CreateProductRelatedContainer = (props) => {
             case 'createproduct': {
                 switch (name) {
                     case 'image': {
-                        productForm.image = files[0];                 
+                        // productForm.image는 그냥 보여지는 값일 뿐임. 서버엔 들어가지 않음.
+                        // state - file이 들어감.
+                        setFile(files[0]);
                         break;
                     }
 
@@ -56,18 +60,25 @@ const CreateProductRelatedContainer = (props) => {
                         dispatch(initializeProductItem({ key: 'size' }));
                         break;
                     }
-                    
+
                     case 'categoryId': {
                         let tmpCategory = null;
                         if (categories) {
-                            if (!productForm.categorySub || productForm.categorySub > 0) {
-                                dispatch(initializeProductItem({ key: 'categorySub' }));
+                            if (
+                                !productForm.categorySub ||
+                                productForm.categorySub > 0
+                            ) {
+                                dispatch(
+                                    initializeProductItem({
+                                        key: 'categorySub',
+                                    }),
+                                );
                             }
 
                             tmpCategory = categories.filter((v) => {
                                 return Number(v.id) === Number(value);
-                            })[0];                            
-                            setSubCategories(tmpCategory);                            
+                            })[0];
+                            setSubCategories(tmpCategory);
                         }
                         break;
                     }
@@ -83,10 +94,11 @@ const CreateProductRelatedContainer = (props) => {
                 );
             }
             case 'createcategory': {
+
                 return dispatch(
                     changeCategoryForm({
                         key: name,
-                        value,
+                        value   //: name === "insertItems" ?  : value,
                     }),
                 );
             }
@@ -109,19 +121,80 @@ const CreateProductRelatedContainer = (props) => {
             case 'createproduct': {
                 const {
                     name,
-                    image,
+                    // image,
                     sizes,
                     colors,
                     price,
                     sale,
-                    description, 
-                    categorySub, 
-                    categoryId, 
+                    description,
+                    categorySub,
+                    categoryId,
                 } = productForm;
-                dispatch(                    
+
+                // errormessage 정의 start..
+                let bBreak = false;
+                for (const key in productForm) {
+                    if (bBreak) break;
+
+                    switch (key) {
+                        case 'size':
+                        case 'color':
+                        case 'sale':
+                        case 'description':
+                        case 'categorySub':
+                            continue;
+
+                        default: {
+                            let value = productForm[key];
+                            if (!value) {
+                                switch (key) {
+                                    case 'name':
+                                        setErrorMesssage(
+                                            '상품명을 입력해주세요.',
+                                        );
+                                        break;
+                                    case 'image':
+                                        setErrorMesssage(
+                                            '이미지를 등록해주세요.',
+                                        );
+                                        break;
+                                    case 'price':
+                                        setErrorMesssage(
+                                            '가격을 입력해주세요.',
+                                        );
+                                        break;
+
+                                    case 'categoryId': {
+                                        setErrorMesssage(
+                                            '대분류 값을 등록해주세요.',
+                                        );
+                                        break;
+                                    }
+                                    default:
+                                        break;
+                                }
+                                bBreak = true;
+                            } else if (key === 'sizes' && value.length <= 0) {
+                                setErrorMesssage('사이즈 정보를 등록해주세요.');
+                                bBreak = true;
+                                break;
+                            } else if (key === 'colors' && value.length <= 0) {
+                                setErrorMesssage('색상 정보를 등록해주세요.');
+                                bBreak = true;
+                                break;
+                            } else {
+                                continue;
+                            }
+                        }
+                    }
+                }
+                // errormessage 정의 end..
+                if (bBreak) return;
+
+                dispatch(
                     createProduct({
                         name,
-                        image,
+                        image: file,
                         sizes,
                         colors,
                         price,
@@ -133,8 +206,17 @@ const CreateProductRelatedContainer = (props) => {
                 );
                 break;
             }
+
             case 'createcategory': {
-                //dispatch(());
+                const {key, displayValue, items} = categoryForm;
+            
+                dispatch(
+                    createCategory({   
+                        key,
+                        displayValue,
+                        items,                     
+                    }),
+                );
                 break;
             }
             default:
@@ -156,9 +238,14 @@ const CreateProductRelatedContainer = (props) => {
     useEffect(() => {
         if (ctrlpage === 'createproduct') {
             dispatch(initializeProduct());
+            setErrorMesssage('');
 
+            // 대분류, 소분류 select box 생성하기 위해 categoryStatus 기반으로 재정의.
             if (categoryStatus && typeof categoryStatus === 'object') {
-                if ( categoryStatus.hasOwnProperty('data') && categoryStatus.data instanceof Array ) {
+                if (
+                    categoryStatus.hasOwnProperty('data') &&
+                    categoryStatus.data instanceof Array
+                ) {
                     const arrTmp = [];
                     categoryStatus.data.map((value) => {
                         let items = [];
@@ -169,16 +256,18 @@ const CreateProductRelatedContainer = (props) => {
                                 return items.push({
                                     id: v.id,
                                     displayValue: v.value,
-                                })
-                            })
-                        };
+                                });
+                            });
+                        }
 
                         return arrTmp.push({
                             id: value.id,
-                            displayValue: (value.displayValue || String(value.key).toUpperCase()),
+                            displayValue:
+                                value.displayValue ||
+                                String(value.key).toUpperCase(),
                             items,
                         });
-                    });                         
+                    });
                     setCategories(arrTmp);
                 }
             }
@@ -192,7 +281,7 @@ const CreateProductRelatedContainer = (props) => {
             onChange={onChange}
             onDelete={onDelete}
             onSubmit={onSubmit}
-
+            errorMessage={errorMessage}
             // 1) 카테고리
             categoryForm={categoryForm && categoryForm}
             // --

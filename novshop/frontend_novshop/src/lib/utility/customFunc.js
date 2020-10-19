@@ -55,3 +55,17 @@ export const getSize = (
 export function replaceAll(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
+
+// 색상 랜덤 #000~#999
+export function randomColor() {
+    const random = () => {
+        return String(Math.floor(Math.random() * 10));
+    };
+
+    let result = "";
+    for (let index = 0; index <= 2; index++) {
+        result = result + random();        
+    }
+
+    return "#" + result;
+}
