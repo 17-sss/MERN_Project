@@ -229,7 +229,7 @@ const CreateProductRelatedContainer = (props) => {
             setErrorMesssage('');
         }
     }, [dispatch, ctrlpage, category]);
-    // ---
+    // ----
 
     // 2) product 생성
 
