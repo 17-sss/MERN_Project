@@ -92,6 +92,7 @@ const product = handleActions(
         [CHANGE_PRODUCT]: (state, action) => {
             const { payload } = action;
             const { productForm: tmpProduct } = state;
+            
 
             let { key, value } = payload;
             let arrTmp = [];
@@ -105,12 +106,21 @@ const product = handleActions(
                     break;
                 }
                 case 'insertColors':
-                case 'insertSizes': {
+                case 'insertSizes': {          
+                    const {size, sizes, color, colors} = tmpProduct;                    
                     key = replaceAll(key, 'insert', '').toLowerCase();
 
-                    if (key === 'sizes')    arrTmp = tmpProduct.sizes.concat(value);
-                    else                    arrTmp = tmpProduct.colors.concat(value);
-
+                    if (key === 'sizes') {
+                        if (sizes.indexOf(size) > -1) 
+                            arrTmp = sizes
+                        else 
+                            arrTmp = sizes.concat(size);
+                    } else {                        
+                        if (colors.indexOf(color) > -1) 
+                            arrTmp = colors
+                        else 
+                            arrTmp = colors.concat(color);                
+                    }                    
                     break;
                 }
                 default:

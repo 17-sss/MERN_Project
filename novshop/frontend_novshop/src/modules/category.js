@@ -105,6 +105,7 @@ const category = handleActions(
                 let {items, itemKey, itemValue} = tmpCategory;
                 let id = items.length + 1;                
 
+                // 원래있는 소분류 추가 안되게하기
                 arrTmp = items.concat({
                     id, 
                     key: itemKey,

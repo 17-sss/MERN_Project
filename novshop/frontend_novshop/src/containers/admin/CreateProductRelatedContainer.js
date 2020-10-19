@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeCategoryForm, createCategory, initializeCategory } from '../../modules/category';
+import {
+    changeCategoryForm,
+    createCategory,
+    initializeCategory,
+} from '../../modules/category';
 import {
     changeProductForm,
     createProduct,
@@ -48,19 +52,6 @@ const CreateProductRelatedContainer = (props) => {
                         break;
                     }
 
-                    case 'insertColors': {
-                        value = productForm.color;
-                        if (!value) return;
-                        break;
-                    }
-                    case 'insertSizes': {
-                        value = productForm.size;
-                        if (!value) return;
-
-                        dispatch(initializeProductItem({ key: 'size' }));
-                        break;
-                    }
-
                     case 'categoryId': {
                         let tmpCategory = null;
                         if (categories) {
@@ -85,20 +76,24 @@ const CreateProductRelatedContainer = (props) => {
                     default:
                         break;
                 }
-
-                return dispatch(
-                    changeProductForm({
-                        key: name,
-                        value,
-                    }),
-                );
+                // initializeProductItem({ key: 'size' })
+                return [
+                    dispatch(
+                        changeProductForm({
+                            key: name,
+                            value,
+                        }),
+                    ),
+                    name === "insertSizes" && dispatch(
+                        initializeProductItem({ key: 'size' }),
+                    ),
+                ];
             }
             case 'createcategory': {
-
                 return dispatch(
                     changeCategoryForm({
                         key: name,
-                        value   //: name === "insertItems" ?  : value,
+                        value, //: name === "insertItems" ?  : value,
                     }),
                 );
             }
@@ -107,7 +102,7 @@ const CreateProductRelatedContainer = (props) => {
         }
     };
 
-    // result(span) 배열적인 아이템 Delete
+    // result(span) 배열적인 아이템 Delete(미완)
     const onDelete = (e) => {
         const delItem = e.target.innerHTML;
         console.log(delItem);
@@ -208,13 +203,15 @@ const CreateProductRelatedContainer = (props) => {
             }
 
             case 'createcategory': {
-                const {key, displayValue, items} = categoryForm;
-            
+                const { key, displayValue, items } = categoryForm;
+
+                if (!key) return setErrorMesssage('카테고리 키를 입력해주세요.');
+
                 dispatch(
-                    createCategory({   
+                    createCategory({
                         key,
-                        displayValue,
-                        items,                     
+                        displayValue: displayValue || key.toUpperCase(),
+                        items,
                     }),
                 );
                 break;
@@ -229,6 +226,7 @@ const CreateProductRelatedContainer = (props) => {
     useEffect(() => {
         if (ctrlpage === 'createcategory') {
             dispatch(initializeCategory());
+            setErrorMesssage('');
         }
     }, [dispatch, ctrlpage, category]);
     // ---
