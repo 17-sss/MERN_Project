@@ -6,7 +6,6 @@ import ProductDetailContainer from "../containers/product/ProductDetailContainer
 const ShoppingPage = (props) => {
     const {location, /* match */} = props;    
     const query = queryString.parse(location.search);
-    console.log(query)
     const bIsDetailView = query.itemId ? true : false;
 
     if (bIsDetailView) {
@@ -25,7 +24,8 @@ const ShoppingPage = (props) => {
         // [2] 상품 목록 페이지
         return (
             <> 
-                <ProductContainer {...props} />
+                <ProductContainer {...props} />                
+                
             </>
         );        
     }

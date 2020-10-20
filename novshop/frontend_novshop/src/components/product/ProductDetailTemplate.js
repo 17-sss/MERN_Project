@@ -279,8 +279,10 @@ const ProductDetailTemplate = (props) => {
                         {/* 색상 선택 */}
                         <ProductInfoSelectP>
                             <span className="select_caption">Color</span>        
-                            <ProductInfoSelectBox>  
-                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>
+                            <ProductInfoSelectBox
+                                defaultValue={"- [필수] 옵션을 선택해 주세요 -"}
+                            >  
+                                <option>- [필수] 옵션을 선택해 주세요 -</option>
                                 {itemColors.map((v, i) => {
                                     return <option key={i}>{v}</option>;
                                 })}
@@ -292,8 +294,10 @@ const ProductDetailTemplate = (props) => {
                         {/* 사이즈 선택 */}
                         <ProductInfoSelectP>
                             <span className="select_caption">Size</span>        
-                            <ProductInfoSelectBox>  
-                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>
+                            <ProductInfoSelectBox
+                                defaultValue={"- [필수] 옵션을 선택해 주세요 -"}
+                            >  
+                                <option>- [필수] 옵션을 선택해 주세요 -</option>
                                 {itemSize.map((v, i) => {
                                     return <option key={i}>{v}</option>;
                                 })}
@@ -303,19 +307,18 @@ const ProductDetailTemplate = (props) => {
                         <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
                         
                         {/* 구매관련 설명 */}
-                        <p>
+                        <div>
                             <p className = "buy_ea">(최소주문수량 1개 이상)</p>
                             <p className = "buy_desc">
                                 위 옵션선택 박스를 선택하시면 아래에 상품이 추가됩니다.
                             </p>
-                        </p>
+                        </div>
                         <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
                         
                         {/* 선택 품목 리스트 (조건부 visible) */}
                         <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
                         
                         {/* 총상품금액(수량), 구매 & 장바구니추가 btn */}
-
                         <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
 
 

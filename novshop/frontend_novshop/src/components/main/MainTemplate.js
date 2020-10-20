@@ -1,12 +1,12 @@
 import React from 'react';
 import SwipeTemplate from '../swipe/SwipeTemplate';
-import ProductTemplate from '../product/ProductTemplate';
+import ProductContainer from '../../containers/product/ProductContainer';
 
 const MainTemplate = () => {
     return (
         <>
             <SwipeTemplate />
-            <ProductTemplate 
+            <ProductContainer 
                 // Items = {TestItem()}
             />
         </>

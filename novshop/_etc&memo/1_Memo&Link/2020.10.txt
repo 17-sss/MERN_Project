@@ -76,3 +76,27 @@
                     서버로 요청 보낼 시 해당 state를 [객체의 속성(프로퍼티) 중 image]에 대입.
                     이 방법으로 하니 더이상 undefined가 뜨지 않음. 제대로 저장됨.
 
+
+
+@@ 201020
+    1. 2020.10.20 :: 현 프로젝트 메모
+        1) styledComponent 관련
+            - 일반적인 경우
+                const ResultSpan = styled.span`
+                    ${cssCustomSpan}
+                    ${props => props.randomColor && css`
+                        color: ${randomColor()};
+                    `}
+                `;
+            - 계속 css 값이 변경되는 태그가 있다면..?
+                const ResultSpan = styled.span.attrs(props => props.randomColor && ({
+                    style: {
+                        color: randomColor(),
+                    }
+                }))`${cssCustomSpan}`;
+
+        2) 상품 디테일 페이지의 색상, 사이즈 selectbox
+            - 추후 색상 선택한 후, 사이즈 정보 보이기. (품절 관련 정보도 DB에 넣는것도?)
+                이 경우, select 태그엔 value와 onChange 속성 같이 사용.
+
+
