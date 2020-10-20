@@ -116,7 +116,8 @@ const LoginRegisterTemplate = (props) => {
                             value={form.usernick}                            
                         />                        
                     }
-                    <LoginRegisterInput                         
+                    <LoginRegisterInput     
+                        autoComplete="off"
                         name="userpwd"
                         placeholder="비밀번호"
                         type="password"
@@ -125,6 +126,7 @@ const LoginRegisterTemplate = (props) => {
                     />  
                     {(type === "register") && 
                         <LoginRegisterInput                         
+                            autoComplete="off"
                             name="userpwdConfirm"
                             placeholder="비밀번호 확인"
                             type="password"
@@ -151,10 +153,6 @@ const LoginRegisterTemplate = (props) => {
                     </LinkFooter>
                     
                 </LoginRegisterForm>
-
-
-
-
             </LoginRegisterTemplateWrapper>
         </>
     );

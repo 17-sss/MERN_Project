@@ -7,6 +7,7 @@ import { replaceAll } from '../lib/utility/customFunc';
 
 // 액션 이름 설정
 const INITALIZE_CATEGORY = 'category/INITALIZE_CATEGORY';
+const INITALIZE_CATEGORY_KEY = 'category/INITALIZE_CATEGORY_KEY';
 const CHANGE_CATEGORY = 'category/CHANGE_CATEGORY';
 
 const [
@@ -32,6 +33,7 @@ export const changeCategoryForm = createAction(
 );
 
 export const initializeCategory = createAction(INITALIZE_CATEGORY);
+export const initializeCategoryKey = createAction(INITALIZE_CATEGORY_KEY, ({key}) => ({key}));
 
 export const createCategory = createAction(
     CREATE_CATEGORY,
@@ -93,6 +95,18 @@ const category = handleActions(
             }
         },
 
+        [INITALIZE_CATEGORY_KEY]: (state, action) => {
+            const {payload} = action;
+            const {key} = payload;
+            return {
+                ...state,
+                categoryForm: {
+                    ...state['categoryForm'],
+                    [key]: initialState['categoryForm'][key],
+                }                            
+            }
+        },
+
         [CHANGE_CATEGORY]: (state, action) => {
             const { payload } = action;
             const { categoryForm: tmpCategory } = state;
@@ -104,13 +118,21 @@ const category = handleActions(
                 key = replaceAll(key, "insert", '').toLowerCase();
                 let {items, itemKey, itemValue} = tmpCategory;
                 let id = items.length + 1;                
-
-                // 원래있는 소분류 추가 안되게하기
-                arrTmp = items.concat({
-                    id, 
-                    key: itemKey,
-                    value: itemValue,
-                });                                    
+                
+                if (items.find((aObj) => aObj.key === itemKey)) {   
+                    // 추가하려는 itemKey가 items에 이미 존재한다면 concat하지 않음
+                    arrTmp = items;
+                } else {
+                    if (itemKey && itemValue) {
+                        arrTmp = items.concat({
+                            id, 
+                            key: itemKey,
+                            value: itemValue,
+                        });                    
+                    } else {
+                        arrTmp = items;
+                    }
+                }                                
             }
 
             return {

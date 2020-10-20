@@ -4,30 +4,36 @@ import {
     changeCategoryForm,
     createCategory,
     initializeCategory,
+    initializeCategoryKey,
 } from '../../modules/category';
 import {
     changeProductForm,
     createProduct,
     initializeProduct,
-    initializeProductItem,
+    initializeProductKey,
 } from '../../modules/product';
 import CreateProductRelatedTemplate from '../../components/admin/CreateProductRelatedTemplate';
 
 const CreateProductRelatedContainer = (props) => {
     const { ctrlpage } = props;
+
     const {
         category, // ~: 전송이 완료된 경우
         categoryForm, // ~Form: 현재 작성하고 있는 값들
         categoryStatus, // 현재 데이터베이스에 있는 카테고리 정보들
+        categoryError,
         product,
         productForm,
+        productError,
     } = useSelector(({ category, product }) => {
         return {
             category: category.category,
             categoryForm: category.categoryForm,
             categoryStatus: category.categoryStatus,
+            categoryError: category.categoryError,
             product: product.product,
             productForm: product.productForm,
+            productError: product.productError,
         };
     });
     const [categories, setCategories] = useState([]);
@@ -60,7 +66,7 @@ const CreateProductRelatedContainer = (props) => {
                                 productForm.categorySub > 0
                             ) {
                                 dispatch(
-                                    initializeProductItem({
+                                    initializeProductKey({
                                         key: 'categorySub',
                                     }),
                                 );
@@ -76,7 +82,7 @@ const CreateProductRelatedContainer = (props) => {
                     default:
                         break;
                 }
-                // initializeProductItem({ key: 'size' })
+                // initializeProductKey({ key: 'size' })
                 return [
                     dispatch(
                         changeProductForm({
@@ -84,18 +90,32 @@ const CreateProductRelatedContainer = (props) => {
                             value,
                         }),
                     ),
-                    name === "insertSizes" && dispatch(
-                        initializeProductItem({ key: 'size' }),
-                    ),
+                    name === 'insertSizes' &&
+                        dispatch(initializeProductKey({ key: 'size' })),
                 ];
             }
             case 'createcategory': {
-                return dispatch(
-                    changeCategoryForm({
-                        key: name,
-                        value, //: name === "insertItems" ?  : value,
-                    }),
-                );
+                if (name === 'key' || name === 'itemKey') {
+                    // 영문(대, 소문자), 숫자만 허용
+                    let regType = /^[A-Za-z0-9+]*$/;
+                    if (!regType.test(value))
+                        return setErrorMesssage(
+                            'key 값은 영문, 숫자만 입력할 수 있습니다.',
+                        );
+                }
+
+                return [
+                    dispatch(
+                        changeCategoryForm({
+                            key: name,
+                            value, //: name === "insertItems" ?  : value,
+                        }),
+                    ),
+                    name === 'insertItems' && [
+                        dispatch(initializeCategoryKey({ key: 'itemKey' })),
+                        dispatch(initializeCategoryKey({ key: 'itemValue' })),
+                    ],
+                ];
             }
             default:
                 break;
@@ -104,7 +124,9 @@ const CreateProductRelatedContainer = (props) => {
 
     // result(span) 배열적인 아이템 Delete(미완)
     const onDelete = (e) => {
-        const delItem = e.target.innerHTML;
+        const { innerHTML } = e.target;
+        const delItem = innerHTML;
+
         console.log(delItem);
     };
 
@@ -205,7 +227,8 @@ const CreateProductRelatedContainer = (props) => {
             case 'createcategory': {
                 const { key, displayValue, items } = categoryForm;
 
-                if (!key) return setErrorMesssage('카테고리 키를 입력해주세요.');
+                if (!key)
+                    return setErrorMesssage('카테고리 키를 입력해주세요.');
 
                 dispatch(
                     createCategory({
@@ -222,55 +245,66 @@ const CreateProductRelatedContainer = (props) => {
     };
 
     // 페이지 초기화 (데이터가 전송됬을때도 초기화)
-    // 1) category 생성
+    // 1) product & category 생성
     useEffect(() => {
-        if (ctrlpage === 'createcategory') {
-            dispatch(initializeCategory());
-            setErrorMesssage('');
-        }
-    }, [dispatch, ctrlpage, category]);
-    // ----
+        switch (ctrlpage) {
+            case 'createproduct': {
+                dispatch(initializeProduct());
+                setErrorMesssage('');
 
-    // 2) product 생성
+                // 대분류, 소분류 select box 생성하기 위해 categoryStatus 기반으로 재정의.
+                if (categoryStatus && typeof categoryStatus === 'object') {
+                    if (
+                        categoryStatus.hasOwnProperty('data') &&
+                        categoryStatus.data instanceof Array
+                    ) {
+                        const arrTmp = [];
+                        categoryStatus.data.map((value) => {
+                            let items = [];
+                            let jsonItems = JSON.parse(value.items);
 
-    useEffect(() => {
-        if (ctrlpage === 'createproduct') {
-            dispatch(initializeProduct());
-            setErrorMesssage('');
-
-            // 대분류, 소분류 select box 생성하기 위해 categoryStatus 기반으로 재정의.
-            if (categoryStatus && typeof categoryStatus === 'object') {
-                if (
-                    categoryStatus.hasOwnProperty('data') &&
-                    categoryStatus.data instanceof Array
-                ) {
-                    const arrTmp = [];
-                    categoryStatus.data.map((value) => {
-                        let items = [];
-                        let jsonItems = JSON.parse(value.items);
-
-                        if (jsonItems.length > 0) {
-                            jsonItems.map((v) => {
-                                return items.push({
-                                    id: v.id,
-                                    displayValue: v.value,
+                            if (jsonItems.length > 0) {
+                                jsonItems.map((v) => {
+                                    return items.push({
+                                        id: v.id,
+                                        displayValue: v.value,
+                                    });
                                 });
-                            });
-                        }
+                            }
 
-                        return arrTmp.push({
-                            id: value.id,
-                            displayValue:
-                                value.displayValue ||
-                                String(value.key).toUpperCase(),
-                            items,
+                            return arrTmp.push({
+                                id: value.id,
+                                displayValue:
+                                    value.displayValue ||
+                                    String(value.key).toUpperCase(),
+                                items,
+                            });
                         });
-                    });
-                    setCategories(arrTmp);
+                        setCategories(arrTmp);
+                    }
                 }
+                break;
             }
+
+            case 'createcategory': {
+                dispatch(initializeCategory());
+                setErrorMesssage('');
+                break;
+            }
+
+            default:
+                break;
         }
-    }, [dispatch, ctrlpage, product, categoryStatus]);
+    }, [dispatch, ctrlpage, product, category, categoryStatus]);
+
+    // 2) category or product 생성 중 에러 메시지
+    useEffect(() => {
+        if (ctrlpage === 'createproduct' && productError) {
+            setErrorMesssage(productError.data.message);
+        } else if (ctrlpage === 'createcategory' && categoryError) {
+            setErrorMesssage(categoryError.data.message);
+        }
+    }, [ctrlpage, productError, categoryError]);
     // ---
 
     return (

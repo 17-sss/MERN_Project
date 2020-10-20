@@ -50,7 +50,7 @@ const AdminContainer = (props) => {
         } 
         */
         default:
-            return <div>s</div>;
+            return <div>Admin - Default Page</div>;
     }
 };
 

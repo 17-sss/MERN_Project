@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { changeField, initializeForm, register } from "../../modules/auth";
+import { changeField, initializeForm, register, login } from "../../modules/auth";
 import { check } from "../../modules/user";
 
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
@@ -77,9 +77,11 @@ const RegisterContainer = ({history}) => {
             const {success} = auth;            
             success && console.log('회원가입 성공');   
             
+            const {userid, userpwd} = form;
+            dispatch(login({userid, userpwd}));
             dispatch(check());
         }
-    }, [auth, authError, dispatch])
+    }, [auth, authError, dispatch, form])
 
     // 회원가입 성공 후, 유저 체크
     useEffect(() => {

@@ -6,7 +6,7 @@ import { replaceAll } from '../lib/utility/customFunc';
 
 // 액션 이름 정의
 const INITALIZE_PRODUCT = 'product/INITALIZE_PRODUCT';
-const INITALIZE_PRODUCT_ITEM = 'product/INITALIZE_PRODUCT_ITEM';
+const INITALIZE_PRODUCT_KEY = 'product/INITALIZE_PRODUCT_KEY';
 const CHANGE_PRODUCT = 'product/CHANGE_PRODUCT';
 
 const [
@@ -25,7 +25,7 @@ export const changeProductForm = createAction(
     }),
 );
 export const initializeProduct = createAction(INITALIZE_PRODUCT);
-export const initializeProductItem = createAction(INITALIZE_PRODUCT_ITEM, ({key}) => ({key}) );
+export const initializeProductKey = createAction(INITALIZE_PRODUCT_KEY, ({key}) => ({key}) );
 export const createProduct = createAction(
     CREATE_PRODUCT,
     ({name, image, sizes, colors, price, sale, description, categorySub, categoryId}) => 
@@ -76,7 +76,7 @@ const product = handleActions(
             };
         },
 
-        [INITALIZE_PRODUCT_ITEM]: (state, action) => {
+        [INITALIZE_PRODUCT_KEY]: (state, action) => {
             const {payload} = action;
             const {key} = payload;
             
@@ -111,7 +111,7 @@ const product = handleActions(
                     key = replaceAll(key, 'insert', '').toLowerCase();
 
                     if (key === 'sizes') {
-                        if (sizes.indexOf(size) > -1) 
+                        if ((sizes.indexOf(size) > -1) || (size === ""))
                             arrTmp = sizes
                         else 
                             arrTmp = sizes.concat(size);

@@ -10,10 +10,11 @@ import Header from "../../components/base/Header";
 const HeaderContainer = () => {  
     const [categoryData, setCategoryData] = useState([]);
     const dispatch = useDispatch();  
-    const {userData, categoryStatus} = useSelector( ({user, category}) => {
+    const {userData, category, categoryStatus} = useSelector( ({user, category}) => {
         return {
             userData: user.user,
-            categoryStatus: category.categoryStatus
+            categoryStatus: category.categoryStatus,
+            category: category.category,
         }
     });
 
@@ -22,8 +23,8 @@ const HeaderContainer = () => {
     };
     
     useEffect(()=>{
-        dispatch(getAllCategory());
-    }, [dispatch]);
+        dispatch(getAllCategory());        
+    }, [dispatch, category]);
 
     useEffect(()=>{
         if (categoryStatus) {
@@ -46,7 +47,7 @@ const HeaderContainer = () => {
                 setCategoryData(result);
             }
         }
-    }, [categoryStatus]);
+    }, [categoryStatus, category]);
 
 
     return (

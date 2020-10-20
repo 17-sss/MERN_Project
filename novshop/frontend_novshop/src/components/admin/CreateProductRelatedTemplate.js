@@ -68,12 +68,22 @@ const ResultSpanWrapper = styled.div`
 `;
 
 // 3-1) ResultSpan: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 Span
+// randomcolor 사용하기에 attrs 사용.
+const ResultSpan = styled.span.attrs(props => props.randomColor && ({
+    style: {
+        color: randomColor(),
+    }
+}))`${cssCustomSpan}`;
+/*
+// 일반 styled
 const ResultSpan = styled.span`
     ${cssCustomSpan}
     ${props => props.randomColor && css`
         color: ${randomColor()};
     `}
 `;
+*/
+
 
 // 4) SubmitBtn: 전송버튼
 const SubmitBtn = styled(TransparentBtn)`
@@ -116,7 +126,7 @@ const CreateProductRelatedTemplate = (props) => {
                         placeholder={
                             ctrlpage === 'createproduct'
                                 ? '상품명'
-                                : '카테고리 키 (영문)'
+                                : '카테고리 Key (영문, 숫자)'
                         }
                         onChange={onChange}
                         value={
@@ -194,7 +204,7 @@ const CreateProductRelatedTemplate = (props) => {
                             <Input
                                 type="text"
                                 name="itemKey"
-                                placeholder="소분류 key"
+                                placeholder="소분류 Key (영문, 숫자)"
                                 onChange={onChange}
                                 value={categoryForm.itemKey}
                                 addcss={css`
@@ -229,8 +239,7 @@ const CreateProductRelatedTemplate = (props) => {
                                             {v.key} &amp; {v.value} 
                                         </ResultSpan>
                                     )
-                                })}
-                                
+                                })}                                
                             </ResultSpanWrapper>
                         </>
                     )}

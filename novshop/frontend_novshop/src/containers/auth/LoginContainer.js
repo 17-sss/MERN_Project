@@ -6,8 +6,6 @@ import { check } from '../../modules/user';
 
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
 
-
-
 const LoginContainer = ({history}) => {
     const [error, setError] = useState(null);
 
