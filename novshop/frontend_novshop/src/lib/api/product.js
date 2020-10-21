@@ -10,7 +10,7 @@ export const createProduct = ({
     description,
     categorySub,
     categoryId,
-}) => {
+}) => {    
     const formData = new FormData();
     formData.append('name', name);
     formData.append('image', image);
@@ -24,3 +24,7 @@ export const createProduct = ({
 
     return client.post('/api/product/create', formData);
 };
+
+export const getAllProduct = () => {
+    return client.post('/api/product/getall');
+}

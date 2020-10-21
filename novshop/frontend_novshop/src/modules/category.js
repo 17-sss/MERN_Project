@@ -115,10 +115,10 @@ const category = handleActions(
             let arrTmp = [];
 
             if (key === "insertItems") {
-                key = replaceAll(key, "insert", '').toLowerCase();
                 let {items, itemKey, itemValue} = tmpCategory;
-                let id = items.length + 1;                
-                
+                let id = items.length + 1;
+                key = replaceAll(key, "insert", '').toLowerCase();                
+                                
                 if (items.find((aObj) => aObj.key === itemKey)) {   
                     // 추가하려는 itemKey가 items에 이미 존재한다면 concat하지 않음
                     arrTmp = items;

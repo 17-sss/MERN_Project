@@ -14,6 +14,12 @@ const [
     CREATE_PRODUCT_SUCCESS,
     CREATE_PRODUCT_FAILURE,
 ] = createRequestActionTypes('product/CREATE_PRODUCT');
+
+const [
+    GET_ALL_PRODUCT,
+    GET_ALL_PRODUCT_SUCCESS,
+    GET_ALL_PRODUCT_FAILURE,
+] = createRequestActionTypes('product/GET_ALL_PRODUCT');
 // =======================================================================
 
 // 액션 생성 함수 작성
@@ -31,6 +37,7 @@ export const createProduct = createAction(
     ({name, image, sizes, colors, price, sale, description, categorySub, categoryId}) => 
     ({name, image, sizes, colors, price, sale, description, categorySub, categoryId})
 );
+export const getAllProduct = createAction(GET_ALL_PRODUCT);
 // =======================================================================
 
 // 사가 생성
@@ -39,8 +46,14 @@ const createProductSaga = createRequestSaga(
     productAPI.createProduct,
 );
 
+const getAllProductSaga = createRequestSaga(
+    GET_ALL_PRODUCT,
+    productAPI.getAllProduct,
+);
+
 export function* productSaga() {
     yield takeLatest(CREATE_PRODUCT, createProductSaga);
+    yield takeLatest(GET_ALL_PRODUCT, getAllProductSaga);
 }
 // =======================================================================
 
@@ -60,6 +73,7 @@ const initialState = {
         categoryId: 0,
     },
     product: null,
+    productStatus: null,
     productError: null,
 };
 // =======================================================================
@@ -93,7 +107,6 @@ const product = handleActions(
             const { payload } = action;
             const { productForm: tmpProduct } = state;
             
-
             let { key, value } = payload;
             let arrTmp = [];
 
@@ -134,7 +147,7 @@ const product = handleActions(
                     [key]: key === 'sizes' || key === 'colors' ? arrTmp : value,
                 },
             };
-        },
+        },        
 
         [CREATE_PRODUCT_SUCCESS]: (state, action) => {
             const { payload: product } = action;
@@ -153,6 +166,26 @@ const product = handleActions(
                 product: null,
                 productError,
             };
+        },
+
+        [GET_ALL_PRODUCT_SUCCESS]: (state, action) => {
+            const {payload: productStatus} = action;
+
+            return {
+                ...state,
+                productStatus,
+                productError: null,
+            }
+        },
+
+        [GET_ALL_PRODUCT_FAILURE]: (state, action) => {
+            const {payload: productError} = action;
+
+            return {
+                ...state,
+                productStatus: null,
+                productError,
+            }
         },
     },
     initialState,

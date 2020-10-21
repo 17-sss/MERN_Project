@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Col } from 'react-bootstrap';
 import styled from 'styled-components';
-import { getSize } from '../../../lib/utility/customFunc';
+import { getSize } from '../../../../lib/utility/customFunc';
 
 const StyledItem = styled(Col)`
     height: ${getSize(1.6, 'height')};

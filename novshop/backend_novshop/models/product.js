@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => (
                 type: DataTypes.STRING(200),
                 allowNull: false,
                 defaultValue: "",
-                get() { 
+                get() {                     
                     return JSON.parse (this.getDataValue ('colors')) ; 
                 }, 
                 set(val) {                     
