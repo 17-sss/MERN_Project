@@ -28,3 +28,15 @@ export const createProduct = ({
 export const getAllProduct = () => {
     return client.post('/api/product/getall');
 }
+
+export const getProduct = ({ categoryId, categorySub, id })  => {        
+    return client.get('/api/product/get', {
+        params: {           // 쿼리스트링 전달  
+            // ------- 실제 url에선  ▼
+            categoryId,         // main
+            categorySub,        // sub
+            id,                 // itemId
+            // ----------------------
+        }
+    });  
+};

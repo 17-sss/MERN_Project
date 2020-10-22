@@ -108,3 +108,9 @@
             - /routes/product.js 참고. 이 라우터에 폴더 생성 로직 있음.
 
 
+
+@@ 201022
+    1. axios 사용법
+        1) 링크
+            https://wpsn-axios-example.glitch.me/
+

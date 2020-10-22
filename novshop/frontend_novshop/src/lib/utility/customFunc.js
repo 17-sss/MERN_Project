@@ -51,21 +51,41 @@ export const getSize = (
     return result - (isMaxAvailWidth ? 18 : 0) + px;
 };
 
+// **********************************************************************************
 // 문자열 replaceAll
+// **********************************************************************************
 export function replaceAll(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
 
+// **********************************************************************************
 // 색상 랜덤 #000~#999
+// **********************************************************************************
 export function randomColor() {
     const random = () => {
         return String(Math.floor(Math.random() * 10));
     };
 
-    let result = "";
+    let result = '';
     for (let index = 0; index <= 2; index++) {
-        result = result + random();        
+        result = result + random();
     }
 
-    return "#" + result;
+    return '#' + result;
 }
+
+// **********************************************************************************
+// 이미지 비율을 계산하는 function (상품 상세 페이지에서 쓰임)
+// **********************************************************************************
+export const calcImageRatio = (AnNum, AstrType) => {
+    const strType = AstrType !== ('width' && 'height') ? 'err' : AstrType;
+    const nDiv10 = Number(getSize(1.5, strType, false, true)) / 10;
+    return nDiv10 * AnNum + 'px';
+};
+
+// **********************************************************************************
+// 빈 객체 or 배열인지 확인
+// **********************************************************************************
+export const isEmpty = (param) => {
+    return Object.keys(param).length === 0;
+};

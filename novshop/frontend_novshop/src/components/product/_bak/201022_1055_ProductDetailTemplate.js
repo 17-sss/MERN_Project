@@ -1,7 +1,18 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
-import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
+import { getSize } from '../../lib/utility/customFunc';
+import { /*StyledHr,*/ ClearEx, BorderBotLine } from '../common/StyleUtilModels';
+
+import productDataList from '../../lib/data/productList.json';
+
+// 각종 함수 or 변수 START ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+const calcImageRatio = (AnNum, AstrType) => {
+    const strType = AstrType !== ('width' && 'height') ? 'err' : AstrType;
+    const nDiv10 = Number(getSize(1.5, strType, false, true)) / 10;
+    return nDiv10 * AnNum + 'px';
+};
+
+// 각종 함수 or 변수 END ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 // ========================================================================================
 // [1] 상품 공통
@@ -198,21 +209,27 @@ const ProductInfoSelectP = styled.p`
 
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
 
-const ProductDetailTemplate = (props) => {    
-    const { productData } = props;
+const ProductDetailTemplate = (props) => {
+    // 추후 container 단 START ----------
+    const { itemId } = props.query;
+
+    const productData = productDataList.find((item) => { // 추후에 백앤드로 findOne 하기.
+        return item.itemId === Number(itemId);
+    });
 
     const {
-        // categoryId,
-        // categorySub,
-        name,
-        colors,
-        sizes,
+        itemName,
+        itemImage,
+        itemSize,
+        itemColors,
+        // eslint-disable-next-line
+        price,
+        // eslint-disable-next-line
+        sale,
         description,
-        image,
-        price,     
-        // eslint-disable-next-line   
-        sale,        
     } = productData;
+
+    // 추후 container 단 END -------
 
     return (
         <>
@@ -223,11 +240,11 @@ const ProductDetailTemplate = (props) => {
                 {/* 상품 이미지, 색상정보(사각형) */}
                 <ProductMultiWrapper width="41%" margin= "0 0 0 9%">                            {/* 추후에 이미지 사이즈에 따라 조정하기 */}
                     <ProductImageWrapper>
-                        <img src={image} alt={name} />
+                        <img src={itemImage} alt={itemName} />
                     </ProductImageWrapper>
                     
                     <ProductSquareColorWrapper>
-                        {colors && colors.map((v, i) => {
+                        {itemColors.map((v, i) => {
                             return <ProductSquareColor key={i} color={v} />;
                         })}
                     </ProductSquareColorWrapper>               
@@ -238,9 +255,9 @@ const ProductDetailTemplate = (props) => {
                     <ProductInfoWrapper>
                         {/* 상품명, 사이즈정보, 부가설명 */}
                         <p className="it_name">
-                            {name}
+                            {itemName}
                             <span className="it_size">
-                                {sizes && '[' + sizes.join(', ') + ']'}
+                                {'[' + itemSize.join(', ') + ']'}
                             </span>
                         </p>
                         <p className="it_desc">{description}</p>
@@ -266,7 +283,7 @@ const ProductDetailTemplate = (props) => {
                                 defaultValue={"- [필수] 옵션을 선택해 주세요 -"}
                             >  
                                 <option>- [필수] 옵션을 선택해 주세요 -</option>
-                                {colors && colors.map((v, i) => {
+                                {itemColors.map((v, i) => {
                                     return <option key={i}>{v}</option>;
                                 })}
                             </ProductInfoSelectBox>           
@@ -281,7 +298,7 @@ const ProductDetailTemplate = (props) => {
                                 defaultValue={"- [필수] 옵션을 선택해 주세요 -"}
                             >  
                                 <option>- [필수] 옵션을 선택해 주세요 -</option>
-                                {sizes && sizes.map((v, i) => {
+                                {itemSize.map((v, i) => {
                                     return <option key={i}>{v}</option>;
                                 })}
                             </ProductInfoSelectBox>           

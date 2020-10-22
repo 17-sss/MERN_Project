@@ -20,6 +20,13 @@ const [
     GET_ALL_PRODUCT_SUCCESS,
     GET_ALL_PRODUCT_FAILURE,
 ] = createRequestActionTypes('product/GET_ALL_PRODUCT');
+
+const [
+    GET_PRODUCT,
+    GET_PRODUCT_SUCCESS,
+    GET_PRODUCT_FAILURE,
+] = createRequestActionTypes('product/GET_PRODUCT');
+
 // =======================================================================
 
 // 액션 생성 함수 작성
@@ -31,13 +38,39 @@ export const changeProductForm = createAction(
     }),
 );
 export const initializeProduct = createAction(INITALIZE_PRODUCT);
-export const initializeProductKey = createAction(INITALIZE_PRODUCT_KEY, ({key}) => ({key}) );
+export const initializeProductKey = createAction(
+    INITALIZE_PRODUCT_KEY,
+    ({ key }) => ({ key }),
+);
 export const createProduct = createAction(
     CREATE_PRODUCT,
-    ({name, image, sizes, colors, price, sale, description, categorySub, categoryId}) => 
-    ({name, image, sizes, colors, price, sale, description, categorySub, categoryId})
+    ({
+        name,
+        image,
+        sizes,
+        colors,
+        price,
+        sale,
+        description,
+        categorySub,
+        categoryId,
+    }) => ({
+        name,
+        image,
+        sizes,
+        colors,
+        price,
+        sale,
+        description,
+        categorySub,
+        categoryId,
+    }),
 );
 export const getAllProduct = createAction(GET_ALL_PRODUCT);
+export const getProduct = createAction(
+    GET_PRODUCT,
+    ({ categoryId, categorySub, id }) => ({ categoryId, categorySub, id }),
+);
 // =======================================================================
 
 // 사가 생성
@@ -51,9 +84,12 @@ const getAllProductSaga = createRequestSaga(
     productAPI.getAllProduct,
 );
 
+const getProductSaga = createRequestSaga(GET_PRODUCT, productAPI.getProduct);
+
 export function* productSaga() {
     yield takeLatest(CREATE_PRODUCT, createProductSaga);
     yield takeLatest(GET_ALL_PRODUCT, getAllProductSaga);
+    yield takeLatest(GET_PRODUCT, getProductSaga);
 }
 // =======================================================================
 
@@ -81,6 +117,7 @@ const initialState = {
 // 리듀서
 const product = handleActions(
     {
+        // 초기화
         [INITALIZE_PRODUCT]: (state) => {
             return {
                 ...state,
@@ -89,24 +126,24 @@ const product = handleActions(
                 productError: null,
             };
         },
-
+        // 특정 키 초기화
         [INITALIZE_PRODUCT_KEY]: (state, action) => {
-            const {payload} = action;
-            const {key} = payload;
-            
+            const { payload } = action;
+            const { key } = payload;
+
             return {
                 ...state,
                 productForm: {
                     ...state['productForm'],
                     [key]: initialState['productForm'][key],
-                }
+                },
             };
         },
-
+        // 상품 생성 폼 전용 CHANGE
         [CHANGE_PRODUCT]: (state, action) => {
             const { payload } = action;
             const { productForm: tmpProduct } = state;
-            
+
             let { key, value } = payload;
             let arrTmp = [];
 
@@ -114,26 +151,23 @@ const product = handleActions(
                 case 'price':
                 case 'sale':
                 case 'categorySub':
-                case 'categoryId': {                    
+                case 'categoryId': {
                     value = Number(value);
                     break;
                 }
                 case 'insertColors':
-                case 'insertSizes': {          
-                    const {size, sizes, color, colors} = tmpProduct;                    
+                case 'insertSizes': {
+                    const { size, sizes, color, colors } = tmpProduct;
                     key = replaceAll(key, 'insert', '').toLowerCase();
 
                     if (key === 'sizes') {
-                        if ((sizes.indexOf(size) > -1) || (size === ""))
-                            arrTmp = sizes
-                        else 
-                            arrTmp = sizes.concat(size);
-                    } else {                        
-                        if (colors.indexOf(color) > -1) 
-                            arrTmp = colors
-                        else 
-                            arrTmp = colors.concat(color);                
-                    }                    
+                        if (sizes.indexOf(size) > -1 || size === '')
+                            arrTmp = sizes;
+                        else arrTmp = sizes.concat(size);
+                    } else {
+                        if (colors.indexOf(color) > -1) arrTmp = colors;
+                        else arrTmp = colors.concat(color);
+                    }
                     break;
                 }
                 default:
@@ -147,8 +181,8 @@ const product = handleActions(
                     [key]: key === 'sizes' || key === 'colors' ? arrTmp : value,
                 },
             };
-        },        
-
+        },
+        // 상품 생성
         [CREATE_PRODUCT_SUCCESS]: (state, action) => {
             const { payload: product } = action;
 
@@ -160,32 +194,52 @@ const product = handleActions(
         },
         [CREATE_PRODUCT_FAILURE]: (state, action) => {
             const { payload: productError } = action;
-            
+
             return {
                 ...state,
                 product: null,
                 productError,
             };
         },
-
+        // 상품 전체
         [GET_ALL_PRODUCT_SUCCESS]: (state, action) => {
-            const {payload: productStatus} = action;
+            const { payload: productStatus } = action;
 
             return {
                 ...state,
                 productStatus,
                 productError: null,
-            }
+            };
         },
 
         [GET_ALL_PRODUCT_FAILURE]: (state, action) => {
-            const {payload: productError} = action;
+            const { payload: productError } = action;
 
             return {
                 ...state,
                 productStatus: null,
                 productError,
-            }
+            };
+        },
+        // 상품 상세
+        [GET_PRODUCT_SUCCESS]: (state, action) => {
+            const { payload: productStatus } = action;
+
+            return {
+                ...state,
+                productStatus,
+                productError: null,
+            };
+        },
+
+        [GET_PRODUCT_FAILURE]: (state, action) => {
+            const { payload: productError } = action;
+
+            return {
+                ...state,
+                productStatus: null,
+                productError,
+            };
         },
     },
     initialState,
