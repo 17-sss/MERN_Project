@@ -228,7 +228,7 @@ const ProductDetailTemplate = (props) => {
                     
                     <ProductSquareColorWrapper>
                         {colors && colors.map((v, i) => {
-                            return <ProductSquareColor key={i} color={v} />;
+                            return <ProductSquareColor key={i} color={v.key} />;
                         })}
                     </ProductSquareColorWrapper>               
                 </ProductMultiWrapper>
@@ -266,8 +266,8 @@ const ProductDetailTemplate = (props) => {
                                 defaultValue={"- [필수] 옵션을 선택해 주세요 -"}
                             >  
                                 <option>- [필수] 옵션을 선택해 주세요 -</option>
-                                {colors && colors.map((v, i) => {
-                                    return <option key={i}>{v}</option>;
+                                {colors && colors.map((v, i) => {                        
+                                    return <option key={i}>{v.value}</option>;
                                 })}
                             </ProductInfoSelectBox>           
                         </ProductInfoSelectP>

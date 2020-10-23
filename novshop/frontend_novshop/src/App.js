@@ -25,7 +25,7 @@ const App = () => {
                         2. querystring ▷ 
                             + 라우트 내부 (ShoppingPage 파일)에서 query-string 미들웨어 사용하여 해결하기.
                 */}
-                <Route component={ShoppingPage} path="/shopping" /> 
+                <Route component={ShoppingPage} path="/shopping" exact /> 
                 {/* <Route component={ShoppingPage} path="/shopping/:category/:subcategory?" /> */}
                 {/* // Register (회원가입) */}
                 <Route component={RegisterPage} path="/auth/register" />

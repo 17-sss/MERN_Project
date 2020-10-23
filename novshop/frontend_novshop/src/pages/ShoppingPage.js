@@ -4,23 +4,35 @@ import ProductContainer from '../containers/product/ProductContainer';
 import ProductDetailContainer from '../containers/product/ProductDetailContainer';
 
 const ShoppingPage = (props) => {
-    const { location /* match */ } = props;    
-    // 쿼리스트링 가져옴. 여기선 itemId 값 (product의 id 값)   
-    const query = queryString.parse(location.search);   
-    const bIsDetailView = query.itemId ? true : false;
+    const { location /* match */ } = props;        
+    const query = queryString.parse(location.search);   // 쿼리스트링 가져옴 (main, sub, itemId)  
     
-    if (bIsDetailView) {
-        const propsTmp = {
+    if (query) {
+        const {main, itemId} = query;
+        const propTmp = {
             ...props,
-            query: query,
+            query: query
         };
 
-        // [1] 상품 상세 정보
-        return <ProductDetailContainer {...propsTmp} />;
+        if (itemId) {
+            // [1] 상품 상세 정보
+            return <ProductDetailContainer {...propTmp} />;
+        } else {
+            // [2] 상품 목록 페이지
+            if (main) {
+                // 1) main 값이 있으면 해당 대분류의 상품목록 페이지            (컨테이너에서 해결)
+                // 2) sub 값도 있으면 해당 대분류, 소분류의 상품목록 페이지      (컨테이너에서 해결)
+                return <ProductContainer {...propTmp} /> 
+            } else {
+                // +) main 없으면 돌아가면 안댐.
+                return <div>query is null</div>
+            }
+            
+        }
     } else {
-        // [2] 상품 목록 페이지
-        return <ProductContainer />;
+        return <div>query is null</div>
     }
+    
 };
 
 export default ShoppingPage;

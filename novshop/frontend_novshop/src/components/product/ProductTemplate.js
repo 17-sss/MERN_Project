@@ -222,11 +222,11 @@ export const ProductItem = (props) => {
             <ProductItemWrapper>
                 {/* 색상 */}
                 <ItemColorWrapper>
-                    {itemColors.map( (value, i) => {
+                    {itemColors.map( (v, i) => {
                         return (
                             <ItemColor 
                                 key = {i}
-                                color = {value}
+                                color = {v.key}
                             />
                         );
                     })}

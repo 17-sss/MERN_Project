@@ -66,7 +66,10 @@ export const createProduct = createAction(
         categoryId,
     }),
 );
-export const getAllProduct = createAction(GET_ALL_PRODUCT);
+export const getAllProduct = createAction(
+    GET_ALL_PRODUCT,
+    ({ categoryId, categorySub }) => ({ categoryId, categorySub }),
+);
 export const getProduct = createAction(
     GET_PRODUCT,
     ({ categoryId, categorySub, id }) => ({ categoryId, categorySub, id }),
@@ -101,6 +104,7 @@ const initialState = {
         size: '',
         sizes: [],
         color: '#000000',
+        colorName: '',
         colors: [],
         price: 1000,
         sale: 0,
@@ -157,7 +161,13 @@ const product = handleActions(
                 }
                 case 'insertColors':
                 case 'insertSizes': {
-                    const { size, sizes, color, colors } = tmpProduct;
+                    const {
+                        size,
+                        sizes,
+                        color,
+                        colorName,
+                        colors,
+                    } = tmpProduct;
                     key = replaceAll(key, 'insert', '').toLowerCase();
 
                     if (key === 'sizes') {
@@ -165,8 +175,14 @@ const product = handleActions(
                             arrTmp = sizes;
                         else arrTmp = sizes.concat(size);
                     } else {
-                        if (colors.indexOf(color) > -1) arrTmp = colors;
-                        else arrTmp = colors.concat(color);
+                        if (colors.find((aObj) => aObj.key === color)) {
+                            arrTmp = colors;
+                        } else {
+                            arrTmp = colors.concat({
+                                key: color,
+                                value: colorName,
+                            });
+                        }
                     }
                     break;
                 }

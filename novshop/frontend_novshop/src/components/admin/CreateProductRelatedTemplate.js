@@ -247,15 +247,27 @@ const CreateProductRelatedTemplate = (props) => {
                     {ctrlpage === 'createproduct' && (
                         <>
                             <>
-                                <StyledP>색상</StyledP>
+                                <StyledP posTop>색상</StyledP>
                                 <Input
                                     type="color"
                                     name="color"
-                                    placeholder="색상정보 (배열)"
                                     onChange={onChange}
                                     value={productForm.color}
-                                    addcss={css`
-                                        width: 95%;
+                                    addcss={css`                                        
+                                        width: 44.5%;
+                                        margin-right: 3%;
+                                    `}
+                                />
+                                <Input
+                                    type="text"
+                                    name="colorName"
+                                    placeholder="보여질 색상 이름"
+                                    onChange={onChange}
+                                    value={productForm.colorName}
+                                    addcss={css`                                                                                
+                                        width: 47.5%;   
+                                        position: relative;
+                                        top: -10px;
                                     `}
                                 />
                                 <Input
@@ -264,9 +276,9 @@ const CreateProductRelatedTemplate = (props) => {
                                     value="+"
                                     onClick={onChange}
                                     addcss={css`
+                                        width: 5%;
                                         position: relative;
                                         top: -10px;
-                                        width: 5%;
                                     `}
                                 />
                                 <ResultSpanWrapper>
@@ -274,11 +286,11 @@ const CreateProductRelatedTemplate = (props) => {
                                         productForm.colors.map((v, i) => {
                                             return (
                                                 <ResultSpan
-                                                    color={v}
                                                     key={i}
+                                                    color={v.key}                                                    
                                                     onClick={onDelete}
                                                 >
-                                                    {v}
+                                                    {`${v.key} & ${v.value}`}
                                                 </ResultSpan>
                                             );
                                         })}

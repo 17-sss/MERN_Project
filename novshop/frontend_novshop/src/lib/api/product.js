@@ -14,19 +14,24 @@ export const createProduct = ({
     const formData = new FormData();
     formData.append('name', name);
     formData.append('image', image);
-    formData.append('sizes', sizes);
-    formData.append('colors', colors);
+    formData.append('sizes', JSON.stringify(sizes));
+    formData.append('colors', JSON.stringify(colors));
     formData.append('price', price);
     formData.append('sale', sale);
     formData.append('description', description);
     formData.append('categorySub', categorySub);
     formData.append('categoryId', categoryId);
-
+    
     return client.post('/api/product/create', formData);
 };
 
-export const getAllProduct = () => {
-    return client.post('/api/product/getall');
+export const getAllProduct = ({categoryId, categorySub}) => {
+    return client.get('/api/product/getall', {
+        params:{
+            categoryId,         // main
+            categorySub,        // sub       
+        }
+    });
 }
 
 export const getProduct = ({ categoryId, categorySub, id })  => {        

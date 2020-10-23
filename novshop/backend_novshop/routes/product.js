@@ -44,6 +44,7 @@ const upload = multer({
 
 // 상품 생성
 router.post('/create', upload.single('image'), async (req, res) => {
+    
     const {
         name,
         // image,
@@ -54,7 +55,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
         description,
         categorySub,
         categoryId,
-    } = req.body;
+    } = req.body;   // formData로 받아옴. 일부 JSON.stringify해서 옴
 
     if (!req.file) {
         res.statusMessage = 'IMAGE UPLOAD ERROR';
@@ -66,17 +67,12 @@ router.post('/create', upload.single('image'), async (req, res) => {
         });
     }
 
-    // formData로 받아오니 (sizes, colors) string으로 변환되어 옴.
-    // 그러므로 다시 배열로 변환 후 작업.
-    let encSize = sizes.split(',');
-    let encColors = colors.split(',');
-
     try {
         const createData = await Product.create({
             name,
             image: req.file.filename,
-            sizes: JSON.stringify(encSize),
-            colors: JSON.stringify(encColors),
+            sizes,
+            colors,
             price,
             sale,
             description,
@@ -102,9 +98,28 @@ router.post('/create', upload.single('image'), async (req, res) => {
 });
 
 // 상품 목록 전부 불러오기
-router.post('/getAll', async (req, res) => {
+router.get('/getAll', async (req, res) => {
+    const {categoryId, categorySub} = req.query;
+
     try {
-        const allProduct = await Product.findAll();
+        let where = {};
+
+        if (categoryId) {
+            if (categorySub) {
+                where = {
+                    ...where,
+                    categoryId,
+                    categorySub,
+                }
+            } else {
+                where = {
+                    ...where,
+                    categoryId,                    
+                } 
+            }            
+        };
+                
+        const allProduct = await Product.findAll({where: where});
 
         if (!allProduct) {
             res.statusMessage = 'PRODUCT_LIST IS NULL.';
