@@ -39,7 +39,7 @@ const ProductItemWrapper = styled.div`
 // 2-1) ProductItemImageWrapper: 상품 이미지 Wrapper 
 const ProductItemImageWrapper = styled.div`
     text-align: center;
-    margin: 5px 0;
+    margin: 5px 0;  
 `;
 
 // 2-2) ItemColorWrapper: 상품 색상 Wrapper 
@@ -196,10 +196,11 @@ export const ProductItem = (props) => {
         description,        // 상품 부가설명
     } = props;
 
-    const {refs, events, funcs} = props;
+    const {refs, events, /*funcs*/} = props;
     const {colRef, imgRef} = refs;
     const {imageOnLoad} = events;
-    const {imageTagHeight} = funcs;
+    // 201025 안쓰는걸로.
+    // const {imageTagHeight} = funcs;
 
     return (
         <ProductItemContainer ref = {colRef}>
@@ -212,7 +213,7 @@ export const ProductItem = (props) => {
                     src={itemImage}
                     alt={itemName}
                     width="100%"
-                    height={imageTagHeight()}
+                    // height={imageTagHeight()} // 비활성. 굳이..
                 />
                 </CustomLink>
             </ProductItemImageWrapper>
@@ -265,7 +266,7 @@ export const ProductItem = (props) => {
 
                     {/* [2] 세일 */}
                     <ItemPriceLi className="sale" sale={sale}>
-                        {sale}원
+                        {price - (price / sale)}원
                     </ItemPriceLi>
                 </ItemPriceUl>
 

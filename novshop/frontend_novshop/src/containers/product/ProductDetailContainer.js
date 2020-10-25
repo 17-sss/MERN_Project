@@ -21,10 +21,10 @@ const ProductDetailContainer = (props) => {
     let productData = {};
     if (productStatus && productStatus.data) {
         const {image, sizes, colors} = productStatus.data;
-
+        
         productData = {
             ...productStatus.data,
-            image: "/uploads/" + image,
+            image: image && "/uploads/" + image,
             sizes: sizes && JSON.parse(sizes),
             colors: colors && JSON.parse(colors),
         }

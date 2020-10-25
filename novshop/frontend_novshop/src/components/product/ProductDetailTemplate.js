@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
+import { cssStrike } from '../common/StyleUtilCSS';
 
 // ========================================================================================
 // [1] 상품 공통
@@ -71,7 +72,7 @@ const PaddingTB20 = styled.div`
 // ========================================================================================
 // 1) 상품 이미지 - Wrapper
 const ProductImageWrapper = styled.div`
-    height: 90%;
+    /* height: 90%; */
     overflow: hidden;    
                                 
     /* align-items: center;
@@ -81,7 +82,9 @@ const ProductImageWrapper = styled.div`
     img {
         max-height: 100%;
         max-width: 100%;
-        height: 100%;
+        ${props => props.h100 && 
+            css`height: 100%;`
+        };          
         width: auto;
     }
 `;
@@ -134,29 +137,25 @@ const ProductInfoWrapper = styled.div`
         }
     }
 
+    /* 상품 가격 & 마일리지 */    
+    p.it_price, p.it_mileage {  /*  Wrapper (p 태그) */
+        padding : 8px 0;
+        overflow: hidden;
+    }
+    
+    span.price_caption, span.mile_caption {     /* caption */      
+        font-size: 12px;
+        font-family: "Martel Sans", "Nanum Gothic";
+        width: 85px;
+        display: inline-block;
+    }
+
+
     /* 부가설명 */
     p.it_desc {
         padding: 5px 0 12px 0;
         color: #ababab;
         font-size: 13px;
-    }
-
-    /* 상품 가격 & 마일리지 */
-    p.it_price, p.it_mileage {
-        padding : 8px 0;
-        overflow: hidden;
-        
-        span.price_caption, span.mile_caption {            
-            font-size: 12px;
-            font-family: "Martel Sans", "Nanum Gothic";
-            width: 85px;
-            display: inline-block;
-        }
-
-        span.price, span.mileage {
-            font-size: 12px;
-            display: inline-block;
-        }
     }
 
     /* 구매 관련 설명 */
@@ -169,6 +168,21 @@ const ProductInfoWrapper = styled.div`
         font-size: 12px;
         color: red;
     }
+`;
+
+// 1.1) 상품 가격 & 마일리지 표시용
+const ProductPriceViewSpan = styled.span`
+    ${props => {
+        const {sale} = props;
+        return css`
+            font-size: 12px;
+            display: inline-block;
+            ${sale && css`
+                ${cssStrike}
+                margin-right: 8px;
+            `}
+        `;
+    }}
 `;
 // ---------------------------------------------------/
 
@@ -210,7 +224,6 @@ const ProductDetailTemplate = (props) => {
         description,
         image,
         price,     
-        // eslint-disable-next-line   
         sale,        
     } = productData;
 
@@ -222,7 +235,7 @@ const ProductDetailTemplate = (props) => {
 
                 {/* 상품 이미지, 색상정보(사각형) */}
                 <ProductMultiWrapper width="41%" margin= "0 0 0 9%">                            {/* 추후에 이미지 사이즈에 따라 조정하기 */}
-                    <ProductImageWrapper>
+                    <ProductImageWrapper /*h100*/>
                         <img src={image} alt={name} />
                     </ProductImageWrapper>
                     
@@ -250,11 +263,24 @@ const ProductDetailTemplate = (props) => {
                         {/* 가격, 마일리지 */}
                         <p className="it_price">
                             <span className="price_caption">Price</span>
-                            <span className="price">{price}원</span>
+                            <ProductPriceViewSpan sale={sale}>
+                                {price}원
+                            </ProductPriceViewSpan> 
+                            {(sale > 0) && 
+                                <ProductPriceViewSpan>
+                                    <b>{price - (price / sale)}원</b>
+                                </ProductPriceViewSpan>
+                            }                           
                         </p>
                         <p className="it_mileage">
                             <span className="mile_caption">Mileage</span>
-                            <span className="mileage">{(price * 0.01)}원</span>
+                            <ProductPriceViewSpan>
+                                {(sale > 0) ? 
+                                    Math.floor( (price - (price / sale)) * 0.01 )
+                                    : 
+                                    Math.floor(price * 0.01)
+                                }원
+                            </ProductPriceViewSpan>
                         </p>
 
                         <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />

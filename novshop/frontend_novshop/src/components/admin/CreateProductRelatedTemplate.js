@@ -306,12 +306,12 @@ const CreateProductRelatedTemplate = (props) => {
                                 onChange={onChange}
                                 value={productForm.price}
                             />
-                            <StyledP margin="8px 0 0 0">세일가</StyledP>
+                            <StyledP margin="8px 0 0 0">세일가 (할인율)</StyledP>
                             <Input
                                 type="number"
                                 name="sale"
                                 min="0"
-                                max="9999999"
+                                max="100"
                                 onChange={onChange}
                                 value={productForm.sale}
                             />

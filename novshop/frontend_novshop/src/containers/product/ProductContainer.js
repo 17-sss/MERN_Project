@@ -41,7 +41,7 @@ const ProductContainer = (props) => {
     const imageOnLoad = () => {
         return setImgHeight(imgRef.current.clientHeight);
     };
-
+    
     const imageTagHeight = () => {
         if (colHeight === 0 || imgHeight === 0) {
             return;
