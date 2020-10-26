@@ -67,7 +67,6 @@ const cssCustomInput = css`
                 break;
             }
         }
-        
 
         if (!stylecss) {
             if (addcss) return defaultcss + addcss;
@@ -100,5 +99,16 @@ const cssCustomSpan = css`
     1. cssCustomInput, cssCustomSpan
         - CreateProductRelatedTemplate.js 에서 쓰임.
 */
-export { cssStrike, cssDisplayNone, cssCustomInput, cssCustomSpan };
 
+
+// cssTransparent: input type(btn), button 태그 투명
+const cssTransparent = css`
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+`;
+export { cssStrike, cssDisplayNone, cssCustomInput, cssCustomSpan, cssTransparent };

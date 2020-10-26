@@ -2,14 +2,14 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
-import { cssStrike, cssTransparent } from '../common/StyleUtilCSS';
+import { cssStrike } from '../common/StyleUtilCSS';
 import { Container, Row, Col } from 'react-bootstrap';
 
 // ========================================================================================
 // [1] 상품 공통
 // ========================================================================================
 // 1) 상품 상세 -  Wrapper
-const PdDetailWrapper = styled.div`
+const PdDetailWrapper = styled.div`    
     margin: 0 auto;
 
     ${(props) => {
@@ -37,7 +37,7 @@ const PdDetailWrapper = styled.div`
 
 // 2) 상품 상세 - 다용도 wrapper
 const ProductMultiWrapper = styled.div`
-    padding: ${(props) => props.padding || '0 30px'};
+    padding: ${props => props.padding || "0 30px"};
     ${(props) => {
         const { mode, height, width, margin } = props;
         const caseMode = mode !== ('detail' && 'additional') ? 'detail' : mode;
@@ -45,11 +45,11 @@ const ProductMultiWrapper = styled.div`
         switch (caseMode) {
             case 'detail': {
                 return css`
-                    height: ${() => height || calcImageRatio(5, 'width')};
+                    height: ${() => height || calcImageRatio(5, 'width')};                    
                     display: inline-block;
                     float: left;
-                    width: ${() => width || '50%'};
-                    margin: ${() => margin && margin};
+                    width: ${() => width || '50%'};   
+                    margin: ${() => margin && margin};   
                 `;
             }
             case 'additional': {
@@ -75,24 +75,21 @@ const PaddingTB20 = styled.div`
 // 1) 상품 이미지 - Wrapper
 const ProductImageWrapper = styled.div`
     /* height: 90%; */
-    overflow: hidden;
-
+    overflow: hidden;    
+                                
     /* align-items: center;
     justify-content: center;      
     text-align: center; */
-
+       
     img {
         max-height: 100%;
         max-width: 100%;
-        ${(props) =>
-            props.autosize
-                ? css`
-                      height: auto;
-                      width: auto;
-                  `
-                : css`
-                      width: 100%;
-                  `};
+        ${props => props.autosize ? 
+            css`height: auto; width: auto;`
+            :
+            css`width: 100%;`
+        };          
+        
     }
 `;
 // ---------------------------------------------------/
@@ -128,7 +125,7 @@ const ProductSquareColor = styled.span`
 // ========================================================================================
 // 1) 상품 일반 정보 - 상품명, 부가설명, 상품가, 마일리지 Wrapper
 const ProductInfoWrapper = styled.div`
-    position: relative;
+    position: relative;    
     text-align: left;
 
     /* 상품명 */
@@ -144,22 +141,19 @@ const ProductInfoWrapper = styled.div`
         }
     }
 
-    /* 상품 가격 & 마일리지 */
-    p.it_price,
-    p.it_mileage {
-        /*  Wrapper (p 태그) */
-        padding: 8px 0;
+    /* 상품 가격 & 마일리지 */    
+    p.it_price, p.it_mileage {  /*  Wrapper (p 태그) */
+        padding : 8px 0;
         overflow: hidden;
     }
-
-    span.price_caption,
-    span.mile_caption {
-        /* caption */
+    
+    span.price_caption, span.mile_caption {     /* caption */      
         font-size: 12px;
-        font-family: 'Martel Sans', 'Nanum Gothic';
+        font-family: "Martel Sans", "Nanum Gothic";
         width: 85px;
         display: inline-block;
     }
+
 
     /* 부가설명 */
     p.it_desc {
@@ -182,13 +176,12 @@ const ProductInfoWrapper = styled.div`
 
 // 1.1) 상품 가격 & 마일리지 표시용
 const ProductPriceViewSpan = styled.span`
-    ${(props) => {
-        const { sale } = props;
+    ${props => {
+        const {sale} = props;
         return css`
             font-size: 12px;
             display: inline-block;
-            ${sale &&
-            css`
+            ${sale && css`
                 ${cssStrike}
                 margin-right: 8px;
             `}
@@ -202,14 +195,14 @@ const ProductInfoSelectBox = styled.select`
     width: 250px;
 `;
 
-// 2.2) 상품 일반 정보 - 색상, 사이즈 정보 & SelectBOX (종류: p Tag, ProductInfoSelectBox 포함하여 래핑.)
+// 2.2) 상품 일반 정보 - 색상, 사이즈 정보 & SelectBOX (종류: p Tag, ProductInfoSelectBox 포함하여 래핑.) 
 const ProductInfoSelectP = styled.p`
-    padding: 8px 0;
-    overflow: hidden;
+    padding : 8px 0;
+    overflow: hidden;   
 
-    span.select_caption {
+    span.select_caption {            
         font-size: 12px;
-        font-family: 'Martel Sans', 'Nanum Gothic';
+        font-family: "Martel Sans", "Nanum Gothic";
         width: 85px;
         display: inline-block;
     }
@@ -227,21 +220,19 @@ const ProductSelOptCol = styled(Col)`
     padding: 0;
     font-size: 12px;
 
-    ${(props) => {
-        let { align, lineheight, padding } = props;
-        if (!align) align = 'left';
+    ${props => {
+        let {align, lineheight, padding} = props;
+        if (!align) align="left";
         return css`
             align-items: ${align};
-            justify-content: ${align};
+            justify-content: ${align};      
             text-align: ${align};
-            ${lineheight &&
-            css`
+            ${lineheight && css`
                 line-height: ${lineheight};
             `};
-            ${padding &&
-            css`
+            ${padding && css`
                 padding: ${padding};
-            `}
+            `}            
         `;
     }};
 
@@ -249,8 +240,8 @@ const ProductSelOptCol = styled(Col)`
         position: relative;
         top: 18px;
 
-        input[type='number']::-webkit-inner-spin-button,
-        input[type='number']::-webkit-outer-spin-button {
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button {  
             //-webkit-appearance: "Always Show Up/Down Arrows";
             opacity: 1;
         }
@@ -258,45 +249,13 @@ const ProductSelOptCol = styled(Col)`
 
     div#sel_price_wrap {
         position: relative;
-        top: 10px;
+        top: 10px;        
     }
 `;
-// ---------------------------------------------------/
-
-// ========================================================================================
-// [6] 버튼 (구매, 장바구니)
-// ========================================================================================
-const ProductInputBtns = styled.input`
-    margin-top: 10px;
-    
-    ${cssTransparent};
-
-    ${props => {
-        const {mode} = props;
-        switch (mode) {
-            case "buy": {
-                return css`
-                    width: 100%;
-                    height: 50px;
-                    background-color: #1c4fe9;
-                    color: white;
-                    &:hover{
-                        background-color: #3759be;    
-                        color: white;
-                    }
-                `;
-            }        
-            default:
-                break;
-        }
-    }}
-`;
-
-// ---------------------------------------------------/
 
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
 
-const ProductDetailTemplate = (props) => {
+const ProductDetailTemplate = (props) => {    
     const { productData } = props;
 
     const {
@@ -307,8 +266,8 @@ const ProductDetailTemplate = (props) => {
         sizes,
         description,
         image,
-        price,
-        sale,
+        price,     
+        sale,        
     } = productData;
 
     return (
@@ -316,27 +275,22 @@ const ProductDetailTemplate = (props) => {
             <PaddingTB20 />
             {/* 상품 상세 :: 구매, 이미지, 가격 등 */}
             <PdDetailWrapper>
+
                 {/* 상품 이미지, 색상정보(사각형) */}
-                <ProductMultiWrapper>
-                    {' '}
-                    {/* 추후에 이미지 사이즈에 따라 조정하기 */}
+                <ProductMultiWrapper /*width="41%" margin= "0 0 0 9%"*/ >                            {/* 추후에 이미지 사이즈에 따라 조정하기 */}
                     <ProductImageWrapper autosize>
                         <img src={image} alt={name} />
                     </ProductImageWrapper>
+                    
                     <ProductSquareColorWrapper>
-                        {colors &&
-                            colors.map((v, i) => {
-                                return (
-                                    <ProductSquareColor key={i} color={v.key} />
-                                );
-                            })}
-                    </ProductSquareColorWrapper>
+                        {colors && colors.map((v, i) => {
+                            return <ProductSquareColor key={i} color={v.key} />;
+                        })}
+                    </ProductSquareColorWrapper>               
                 </ProductMultiWrapper>
 
-                {/* 상품의 전반적인 정보 및 구매 & 장바구니 */}
-                <ProductMultiWrapper padding={'0 0 0 50px'}>
-                    {' '}
-                    {/* 추후에 이미지 사이즈에 따라 조정하기 */}
+                {/* 상품의 전반적인 정보 및 구매 & 장바구니 */}                
+                <ProductMultiWrapper /*width="46%" margin= "0 0 0 4%"*/>                            {/* 추후에 이미지 사이즈에 따라 조정하기 */}
                     <ProductInfoWrapper>
                         {/* 상품명, 사이즈정보, 부가설명 */}
                         <p className="it_name">
@@ -347,128 +301,86 @@ const ProductDetailTemplate = (props) => {
                         </p>
                         <p className="it_desc">{description}</p>
 
-                        <BorderBotLine
-                            margin="12px 0"
-                            width="100%"
-                            color="#e6e6e6"
-                        />
-
+                        <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
+                        
                         {/* 가격, 마일리지 */}
                         <p className="it_price">
                             <span className="price_caption">Price</span>
                             <ProductPriceViewSpan sale={sale}>
                                 {price}원
-                            </ProductPriceViewSpan>
-                            {sale > 0 && (
+                            </ProductPriceViewSpan> 
+                            {(sale > 0) && 
                                 <ProductPriceViewSpan>
-                                    <b>{price - price / sale}원</b>
+                                    <b>{price - (price / sale)}원</b>
                                 </ProductPriceViewSpan>
-                            )}
+                            }                           
                         </p>
                         <p className="it_mileage">
                             <span className="mile_caption">Mileage</span>
                             <ProductPriceViewSpan>
-                                {sale > 0
-                                    ? Math.floor((price - price / sale) * 0.01)
-                                    : Math.floor(price * 0.01)}
-                                원
+                                {(sale > 0) ? 
+                                    Math.floor( (price - (price / sale)) * 0.01 )
+                                    : 
+                                    Math.floor(price * 0.01)
+                                }원
                             </ProductPriceViewSpan>
                         </p>
 
-                        <BorderBotLine
-                            margin="12px 0"
-                            width="100%"
-                            color="#e6e6e6"
-                        />
+                        <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
 
                         {/* 색상 선택 */}
                         <ProductInfoSelectP>
-                            <span className="select_caption">Color</span>
+                            <span className="select_caption">Color</span>        
                             <ProductInfoSelectBox
-                                defaultValue={'- [필수] 옵션을 선택해 주세요 -'}
-                            >
+                                defaultValue={"- [필수] 옵션을 선택해 주세요 -"}
+                            >  
                                 <option>- [필수] 옵션을 선택해 주세요 -</option>
-                                {colors &&
-                                    colors.map((v, i) => {
-                                        return (
-                                            <option key={i}>{v.value}</option>
-                                        );
-                                    })}
-                            </ProductInfoSelectBox>
+                                {colors && colors.map((v, i) => {                        
+                                    return <option key={i}>{v.value}</option>;
+                                })}
+                            </ProductInfoSelectBox>           
                         </ProductInfoSelectP>
 
-                        <BorderBotLine
-                            margin="12px 0"
-                            width="100%"
-                            color="#e6e6e6"
-                        />
-
+                        <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
+                        
                         {/* 사이즈 선택 */}
                         <ProductInfoSelectP>
-                            <span className="select_caption">Size</span>
+                            <span className="select_caption">Size</span>        
                             <ProductInfoSelectBox
-                                defaultValue={'- [필수] 옵션을 선택해 주세요 -'}
-                            >
+                                defaultValue={"- [필수] 옵션을 선택해 주세요 -"}
+                            >  
                                 <option>- [필수] 옵션을 선택해 주세요 -</option>
-                                {sizes &&
-                                    sizes.map((v, i) => {
-                                        return <option key={i}>{v}</option>;
-                                    })}
-                            </ProductInfoSelectBox>
+                                {sizes && sizes.map((v, i) => {
+                                    return <option key={i}>{v}</option>;
+                                })}
+                            </ProductInfoSelectBox>           
                         </ProductInfoSelectP>
 
-                        <BorderBotLine
-                            margin="12px 0"
-                            width="100%"
-                            color="#e6e6e6"
-                        />
-
+                        <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
+                        
                         {/* 구매관련 설명 */}
                         <div>
-                            <p className="buy_ea">(최소주문수량 1개 이상)</p>
-                            <p className="buy_desc">
-                                위 옵션선택 박스를 선택하시면 아래에 상품이
-                                추가됩니다.
+                            <p className = "buy_ea">(최소주문수량 1개 이상)</p>
+                            <p className = "buy_desc">
+                                위 옵션선택 박스를 선택하시면 아래에 상품이 추가됩니다.
                             </p>
                         </div>
-                        <BorderBotLine
-                            margin="12px 0"
-                            width="100%"
-                            color="#e6e6e6"
-                        />
-
-                        {/* Select 박스에서 선택한 옵션 View (조건부 visible) */}
+                        <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
+                        
+                        {/* Select 박스에서 선택한 옵션 View (조건부 visible) */}                        
                         <Container>
                             <Row>
                                 <ProductSelOptCol>
                                     <p>{name}</p>
-                                    {sizes && (
-                                        <p style={{ fontWeight: 'bold' }}>
-                                            {'[' + sizes.join(', ') + ']'}
-                                        </p>
-                                    )}
-                                    <p>- 선택한 옵션 View</p>
+                                    {sizes && 
+                                        <p style={{fontWeight: "bold"}}>{'[' + sizes.join(', ')+']'}</p>}
+                                    <p>- 선택한 옵션 View</p>                                    
                                 </ProductSelOptCol>
                                 <ProductSelOptCol align="right">
                                     <div id="volume_wrap">
                                         <span>수량: </span>
-                                        <input
-                                            type="number"
-                                            value={1}
-                                            name="volume"
-                                            min="1"
-                                            max="20"
-                                        />
-                                        <input
-                                            type="button"
-                                            value={'X'}
-                                            name="delThis"
-                                            style={{
-                                                marginLeft: '4px',
-                                                width: '20px',
-                                                height: 'auto',
-                                            }}
-                                        />
+                                        <input type="number" value={1} name="volume" min="1" max="20"/>
+                                        <input type="button" value={"X"} name="delThis"/>
                                     </div>
                                 </ProductSelOptCol>
                                 <ProductSelOptCol align="right">
@@ -476,29 +388,23 @@ const ProductDetailTemplate = (props) => {
                                         <p>{price}원</p>
                                         <p>
                                             적: &nbsp;
-                                            {sale > 0
-                                                ? Math.floor(
-                                                      (price - price / sale) *
-                                                          0.01,
-                                                  )
-                                                : Math.floor(price * 0.01)}
-                                            원
+                                            {(sale > 0) ? 
+                                                Math.floor( (price - (price / sale)) * 0.01 )
+                                                : 
+                                                Math.floor(price * 0.01)
+                                            }원
                                         </p>
                                     </div>
                                 </ProductSelOptCol>
                             </Row>
-                        </Container>
-                        <BorderBotLine
-                            margin="12px 0"
-                            width="100%"
-                            color="#e6e6e6"
-                        />
-
+                        </Container> 
+                        <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
+                        
                         {/* 총상품금액(수량), 구매 & 장바구니추가 btn */}
                         <div>
-                            <p>총 상품금액(수량) : {price}원</p>
-                            <ProductInputBtns mode="buy" type="button" value={"BUY NOW"}/>
+                            <span>총 상품금액(수량) : {price}원</span>
                         </div>
+
                     </ProductInfoWrapper>
                 </ProductMultiWrapper>
 
