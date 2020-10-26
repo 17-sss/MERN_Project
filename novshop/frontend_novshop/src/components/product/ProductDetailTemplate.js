@@ -3,12 +3,13 @@ import styled, { css } from 'styled-components';
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
 import { cssStrike } from '../common/StyleUtilCSS';
+import { Container, Row, Col } from 'react-bootstrap';
 
 // ========================================================================================
 // [1] 상품 공통
 // ========================================================================================
 // 1) 상품 상세 -  Wrapper
-const PdDetailWrapper = styled.div`
+const PdDetailWrapper = styled.div`    
     margin: 0 auto;
 
     ${(props) => {
@@ -18,7 +19,7 @@ const PdDetailWrapper = styled.div`
         switch (caseMode) {
             case 'detail': {
                 return css`
-                    width: ${getSize(1.8)};
+                    width: ${getSize(1.95)};
                 `;
             }
             case 'additional': {
@@ -82,10 +83,12 @@ const ProductImageWrapper = styled.div`
     img {
         max-height: 100%;
         max-width: 100%;
-        ${props => props.h100 && 
-            css`height: 100%;`
+        ${props => props.autosize ? 
+            css`height: 100%; width: auto;`
+            :
+            css`width: 100%;`
         };          
-        width: auto;
+        
     }
 `;
 // ---------------------------------------------------/
@@ -209,6 +212,45 @@ const ProductInfoSelectP = styled.p`
 `;
 // ---------------------------------------------------/
 
+// ========================================================================================
+// [5] 선택한 상품 옵션 View (with Bootstrap)
+// ========================================================================================
+const ProductSelOptCol = styled(Col)`
+    padding: 0;
+    font-size: 12px;
+
+    ${props => {
+        let {align, lineheight, padding} = props;
+        if (!align) align="left";
+        return css`
+            align-items: ${align};
+            justify-content: ${align};      
+            text-align: ${align};
+            ${lineheight && css`
+                line-height: ${lineheight};
+            `};
+            ${padding && css`
+                padding: ${padding};
+            `}            
+        `;
+    }};
+
+    div#volume_wrap {
+        position: relative;
+        top: 18px;
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button {  
+            //-webkit-appearance: "Always Show Up/Down Arrows";
+            opacity: 1;
+        }
+    }
+
+    div#sel_price_wrap {
+        position: relative;
+        top: 10px;        
+    }
+`;
 
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
 
@@ -234,8 +276,8 @@ const ProductDetailTemplate = (props) => {
             <PdDetailWrapper>
 
                 {/* 상품 이미지, 색상정보(사각형) */}
-                <ProductMultiWrapper width="41%" margin= "0 0 0 9%">                            {/* 추후에 이미지 사이즈에 따라 조정하기 */}
-                    <ProductImageWrapper /*h100*/>
+                <ProductMultiWrapper /*width="41%" margin= "0 0 0 9%"*/>                            {/* 추후에 이미지 사이즈에 따라 조정하기 */}
+                    <ProductImageWrapper autosize>
                         <img src={image} alt={name} />
                     </ProductImageWrapper>
                     
@@ -247,7 +289,7 @@ const ProductDetailTemplate = (props) => {
                 </ProductMultiWrapper>
 
                 {/* 상품의 전반적인 정보 및 구매 & 장바구니 */}                
-                <ProductMultiWrapper width="46%" margin= "0 0 0 4%">                            {/* 추후에 이미지 사이즈에 따라 조정하기 */}
+                <ProductMultiWrapper /*width="46%" margin= "0 0 0 4%"*/>                            {/* 추후에 이미지 사이즈에 따라 조정하기 */}
                     <ProductInfoWrapper>
                         {/* 상품명, 사이즈정보, 부가설명 */}
                         <p className="it_name">
@@ -324,12 +366,43 @@ const ProductDetailTemplate = (props) => {
                         </div>
                         <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
                         
-                        {/* 선택 품목 리스트 (조건부 visible) */}
+                        {/* Select 박스에서 선택한 옵션 View (조건부 visible) */}                        
+                        <Container>
+                            <Row>
+                                <ProductSelOptCol>
+                                    <p>{name}</p>
+                                    {sizes && 
+                                        <p style={{fontWeight: "bold"}}>{'[' + sizes.join(', ')+']'}</p>}
+                                    <p>- 선택한 옵션 View</p>                                    
+                                </ProductSelOptCol>
+                                <ProductSelOptCol align="right">
+                                    <div id="volume_wrap">
+                                        <span>수량: </span>
+                                        <input type="number" value={1} name="volume" min="1" max="20"/>
+                                        <button>X</button>
+                                    </div>
+                                </ProductSelOptCol>
+                                <ProductSelOptCol align="right">
+                                    <div id="sel_price_wrap">
+                                        <p>{price}원</p>
+                                        <p>
+                                            적: &nbsp;
+                                            {(sale > 0) ? 
+                                                Math.floor( (price - (price / sale)) * 0.01 )
+                                                : 
+                                                Math.floor(price * 0.01)
+                                            }원
+                                        </p>
+                                    </div>
+                                </ProductSelOptCol>
+                            </Row>
+                        </Container> 
                         <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
                         
                         {/* 총상품금액(수량), 구매 & 장바구니추가 btn */}
-                        <BorderBotLine margin = "12px 0" width = "100%" color= "#e6e6e6" />
-
+                        <div>
+                            <span>총 상품금액(수량) : {price}원</span>
+                        </div>
 
                     </ProductInfoWrapper>
                 </ProductMultiWrapper>

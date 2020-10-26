@@ -124,3 +124,9 @@
                 (formdata로 받아오면 뭔가 이상하게 변환 되어 오는 건지. 원본값인지 무조건 string으로 변환되는건지..)
             ▷ 해당 필드들, formData 정의 시 JSON.stringify해서 서버로 보내는 걸로 해결.    
 
+
+    
+@@ 201026 
+    1. CSS: input [type=number] 항상 숫자 컨트롤 버튼 보이게 하기
+        링크: https://stackoverflow.com/questions/25194631/is-it-possible-to-always-show-up-down-arrows-for-input-number
+

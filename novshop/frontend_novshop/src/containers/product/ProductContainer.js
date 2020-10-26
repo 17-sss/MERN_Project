@@ -55,16 +55,11 @@ const ProductContainer = (props) => {
     const refs = { colRef, imgRef };
     const events = { imageOnLoad };
     const funcs = { imageTagHeight };
-    /*
-    const {colRef, imgRef} = refs;
-    const {imageOnLoad} = events;
-    const {imageTagHeight} = funcs;
-    */
 
     return (
         <ProductTemplate>
-            {productStatus &&
-                productStatus.data.length > 0 &&
+            {productStatus && (productStatus.data.length > 0) 
+                &&
                 productStatus.data.map((v) => {
                     const {
                         id,
