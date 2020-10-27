@@ -7,7 +7,7 @@ import {
     initializeCategoryKey,
 } from '../../modules/category';
 import {
-    changeProductForm,
+    changeProductForms,
     createProduct,
     initializeProduct,
     initializeProductKey,
@@ -67,6 +67,7 @@ const CreateProductRelatedContainer = (props) => {
                             ) {
                                 dispatch(
                                     initializeProductKey({
+                                        form: 'productForm',
                                         key: 'categorySub',
                                     }),
                                 );
@@ -82,16 +83,17 @@ const CreateProductRelatedContainer = (props) => {
                     default:
                         break;
                 }
-                // initializeProductKey({ key: 'size' })
+                
                 return [
                     dispatch(
-                        changeProductForm({
+                        changeProductForms({
+                            form: "productForm",
                             key: name,
                             value,
                         }),
                     ),
                     name === 'insertSizes' &&
-                        dispatch(initializeProductKey({ key: 'size' })),
+                        dispatch(initializeProductKey({ form: 'productForm', key: 'size' })),
                 ];
             }
             case 'createcategory': {

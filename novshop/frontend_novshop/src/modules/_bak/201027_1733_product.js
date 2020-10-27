@@ -225,8 +225,9 @@ const product = handleActions(
                     default:
                         break;
                 }
-            } else if (form === "productSelectItems") {                                
-                const {items} = productSelectItems;
+            } else if (form === "productSelectItems") {                
+                // eslint-disable-next-line
+                const {items, totalprice} = productSelectItems;
                 const {inputName, id} = opt;   
                  
                 switch (key) {
@@ -258,32 +259,46 @@ const product = handleActions(
                     default:
                         break;
                 }            
+            }   
+        
+
+            if (form === "productForm") {   
+                return {
+                    ...state,
+                    [form]: {
+                        ...state[form],
+                        [key]: (form === "productForm") ? 
+                            (key === 'sizes' || key === 'colors') ? arrTmp : value
+                            :
+                            (key === 'items') ? arrTmp : value,                   
+                    },
+                };
+            } else {
+                return {
+                    ...state,
+                    [form]: {
+                        ...state[form],
+                        [key]: (form === "productForm") ? 
+                            (key === 'sizes' || key === 'colors') ? arrTmp : value
+                            :
+                            (key === 'items') ? arrTmp : value,                   
+                    },
+                };
             }
-            
-            let returnObj = {
-                ...state[form],
-                [key]: (form === "productForm") ? 
-                    (key === 'sizes' || key === 'colors') ? arrTmp : value
-                    :
-                    (key === 'items') ? arrTmp : value,
-            };
 
-            if (form === "productSelectItems") {   
-                // form이 productSelectItems 경우 totalprice 속성 계산
-                let totalprice = 10;    // 임시 arrTmp안의 price 전부 더해 값을 계산하는 로직필요.
-
-                returnObj = {
-                    ...returnObj,
-                    totalprice,
-                }
-            } 
-
-
-            return {
-                ...state,
-                [form]: returnObj,
-            };
-    
+            /* 
+                // ▲ 백업용 (조건 없었을 시 이 리턴 썼음.)
+                return {
+                    ...state,
+                    [form]: {
+                        ...state[form],
+                        [key]: (form === "productForm") ? 
+                            (key === 'sizes' || key === 'colors') ? arrTmp : value
+                            :
+                            (key === 'items') ? arrTmp : value,                   
+                    },
+                };                
+            */            
         },
         // 상품 생성
         [CREATE_PRODUCT_SUCCESS]: (state, action) => {
