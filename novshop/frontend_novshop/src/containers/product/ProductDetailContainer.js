@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { addSelectProduct, changeProductForms, getProduct } from "../../modules/product";
+import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, } from "../../modules/product";
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
 
@@ -14,6 +14,10 @@ const ProductDetailContainer = (props) => {
             productSelectItems: product.productSelectItems,
         }
     });
+
+    const colorRef = useRef();
+    const sizeRef = useRef();
+    
     
     const [imgClientSize, setImgClientSize] = useState({width: 0, height: 0});
     const imgRef = useRef();    
@@ -43,19 +47,40 @@ const ProductDetailContainer = (props) => {
 
     // 색상, 사이즈 둘 다 정했을 시 현재 선택 목록에 IN
     const onOptionConfirmation = (e) => {
-        if (!productStatus) return;
+        // const {name: selName, selectedIndex} = e.target;     // ref 사용하기로
+        if (!productStatus || !productSelectItems) return;        
+        if (!colorRef.current || !sizeRef.current) return;
+        if (colorRef.current.selectedIndex <= 0 || sizeRef.current.selectedIndex <= 0) return;        
+
         const {name, sizes, price, sale} = productStatus.data;
+        const {items} = productSelectItems;
+        const color = colorRef.current.value;
+        const size = sizeRef.current.value;        
+        
+        e.preventDefault();
+
+        let id = -1;
+        if (items.length > 0) {
+            let arrTmp = [];
+            items.map((v) => arrTmp.push(v.id));   
+            id = arrTmp.reduce((acc, cur) => (acc > cur) ? acc : cur);              
+            id++;                      
+        } else {
+            id = 1;    
+        }   
+
         let sizeinfo = sizes && JSON.parse(sizes).join(', ');
         let mileage = 
             (sale > 0) ? 
                 Math.floor((price - price / sale) * 0.01)
                 : Math.floor(price * 0.01);        
-        e.preventDefault();
+        
         dispatch(addSelectProduct({
+            id,
             name,
             sizeinfo,
-            size: '',
-            color: '',
+            size,
+            color,
             volume: 1,
             price,
             mileage,
@@ -78,7 +103,18 @@ const ProductDetailContainer = (props) => {
         }));
     };
 
-    const events = {onOptionConfirmation, onVolumeChange};    
+    // 현재 선택 목록 중 제거버튼 누른 항목 제거
+    const onOptionDelete = (e) => {
+        const {id} = e.target;        
+        if (id <= -1) return;
+        e.preventDefault();
+
+        dispatch(delSelectProduct({id}));
+    }
+
+
+    const refs = {colorRef, sizeRef};
+    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete};    
     const imgDivInfo = {imgRef, imgClientSize};
 
     // render
@@ -86,6 +122,7 @@ const ProductDetailContainer = (props) => {
         <ProductDetailTemplate 
             productData = {productData} 
             productSelectItems = {productSelectItems}            
+            refs = {refs}
             events = {events}
             imgDivInfo = {imgDivInfo} 
         />

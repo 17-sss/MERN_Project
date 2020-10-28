@@ -323,7 +323,7 @@ const ProductInputBtns = styled.input`
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
 
 const ProductDetailTemplate = (props) => {
-    const { productData, productSelectItems, events, imgDivInfo } = props;
+    const { productData, productSelectItems, refs, events, imgDivInfo } = props;
 
     const {
         // categoryId,
@@ -337,7 +337,8 @@ const ProductDetailTemplate = (props) => {
         sale,
     } = productData;
 
-    const { onOptionConfirmation, onVolumeChange } = events;    
+    const {colorRef, sizeRef} = refs;
+    const { onOptionConfirmation, onVolumeChange, onOptionDelete } = events;    
     const { imgRef, imgClientSize } = imgDivInfo;
 
     return (
@@ -418,6 +419,9 @@ const ProductDetailTemplate = (props) => {
                             <span className="select_caption">Color</span>
                             <ProductInfoSelectBox
                                 defaultValue={'- [필수] 옵션을 선택해 주세요 -'}
+                                onChange={onOptionConfirmation}
+                                name="color_select"
+                                ref={colorRef}
                             >
                                 <option>- [필수] 옵션을 선택해 주세요 -</option>
                                 {colors &&
@@ -440,6 +444,9 @@ const ProductDetailTemplate = (props) => {
                             <span className="select_caption">Size</span>
                             <ProductInfoSelectBox
                                 defaultValue={'- [필수] 옵션을 선택해 주세요 -'}
+                                onChange={onOptionConfirmation}
+                                name="size_select"
+                                ref={sizeRef}
                             >
                                 <option>- [필수] 옵션을 선택해 주세요 -</option>
                                 {sizes &&
@@ -472,9 +479,9 @@ const ProductDetailTemplate = (props) => {
                         {/* Select 박스에서 선택한 옵션 View (조건부 visible) */}
                         {productSelectItems &&
                             productSelectItems.items.length > 0 &&
-                            productSelectItems.items.map((v, i) => {
+                            productSelectItems.items.map((v) => {
                                 return (
-                                    <Container key={i}>
+                                    <Container key={v.id}>
                                         <Row>
                                             <ProductSelOptCol>
                                                 <p>{v.name}</p>
@@ -491,7 +498,7 @@ const ProductDetailTemplate = (props) => {
                                                 <div id="volume_wrap">
                                                     <span>수량: </span>
                                                     <input
-                                                        id={i}                                                        
+                                                        id={v.id}
                                                         type="number"
                                                         name="volume"
                                                         value={v.volume}
@@ -500,9 +507,12 @@ const ProductDetailTemplate = (props) => {
                                                         onChange={onVolumeChange}
                                                     />                                                                  
                                                     <input
+                                                        id={v.id}
                                                         type="button"
                                                         value={'X'}
                                                         name="delThis"
+                                                        onClick={onOptionDelete}
+
                                                         style={{
                                                             marginLeft: '4px',
                                                             width: '20px',
@@ -533,7 +543,7 @@ const ProductDetailTemplate = (props) => {
                                         color="#e6e6e6"
                                     />
                                     <div>
-                                        <p>총 상품금액(수량) : {price}원</p>
+                                        <p>총 상품금액(수량) : {productSelectItems.totalprice}원</p>
                                     </div>
                                 </>
                             )}
