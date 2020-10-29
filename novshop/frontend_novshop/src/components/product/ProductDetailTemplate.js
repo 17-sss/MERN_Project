@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
-import { cssStrike, cssTransparent } from '../common/StyleUtilCSS';
+import { cssStrike, cssTransparent, cssDisplayNone } from '../common/StyleUtilCSS';
 import { Container, Row, Col } from 'react-bootstrap';
 
 // ========================================================================================
@@ -11,6 +11,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 // 1) 상품 상세 -  Wrapper
 const PdDetailWrapper = styled.div`
     margin: 0 auto;
+    
 
     ${(props) => {
         const { mode } = props;
@@ -45,11 +46,11 @@ const ProductMultiWrapper = styled.div`
         switch (caseMode) {
             case 'detail': {
                 return css`
-                    height: ${() => height || calcImageRatio(5, 'width')};
+                    height: ${ height || calcImageRatio(5, 'width')};                    
                     display: inline-block;
                     float: left;
-                    width: ${() => width || '50%'};
-                    margin: ${() => margin && margin};
+                    width: ${width || '50%'};
+                    margin: ${margin && margin};
                 `;
             }
             case 'additional': {
@@ -286,6 +287,10 @@ const ProductSelOptCol = styled(Col)`
     p#sizeinfo {
         font-weight: bold;
     }
+
+    p#colorsize{
+        color: #6c6565;
+    }
 `;
 // ---------------------------------------------------/
 
@@ -317,13 +322,30 @@ const ProductInputBtns = styled.input`
         }
     }}
 `;
-
 // ---------------------------------------------------/
+
+// ========================================================================================
+// [+] 기타 (에러메세지 등)
+// ========================================================================================
+const ProductErrorMessage = styled.div`
+    ${props => props.children || css`${cssDisplayNone}`};
+    color: red;
+    padding: 10px 0px;
+    font-weight: bold;
+
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    cursor: pointer;
+`;
+// ---------------------------------------------------/
+
 
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
 
 const ProductDetailTemplate = (props) => {
-    const { productData, productSelectItems, refs, events, imgDivInfo } = props;
+    const { productData, productSelectItems, refs, events, imgDivInfo, errorMessage } = props;
 
     const {
         // categoryId,
@@ -338,17 +360,16 @@ const ProductDetailTemplate = (props) => {
     } = productData;
 
     const {colorRef, sizeRef} = refs;
-    const { onOptionConfirmation, onVolumeChange, onOptionDelete } = events;    
+    const { onOptionConfirmation, onVolumeChange, onOptionDelete, onClearMessage } = events;    
     const { imgRef, imgClientSize } = imgDivInfo;
 
     return (
-        <>
-            <button onClick={onOptionConfirmation}>s</button>
+        <>            
             <PaddingTB20 />
             {/* 상품 상세 :: 구매, 이미지, 가격 등 */}
             <PdDetailWrapper>
                 {/* 상품 이미지, 색상정보(사각형) */}
-                <ProductMultiWrapper>
+                <ProductMultiWrapper height="auto">
                     {/* 추후에 이미지 사이즈에 따라 조정하기 */}
                     <ProductImageWrapper
                         ref={imgRef}
@@ -368,7 +389,7 @@ const ProductDetailTemplate = (props) => {
                 </ProductMultiWrapper>
 
                 {/* 상품의 전반적인 정보 및 구매 & 장바구니 */}
-                <ProductMultiWrapper>
+                <ProductMultiWrapper height={"auto"}>
                     {/* 추후에 이미지 사이즈에 따라 조정하기 */}
                     <ProductInfoWrapper>
                         {/* 상품명, 사이즈정보, 부가설명 */}
@@ -490,7 +511,7 @@ const ProductDetailTemplate = (props) => {
                                                         {'[' + v.sizeinfo + ']'}
                                                     </p>
                                                 )}
-                                                <p>
+                                                <p id="colorsize">
                                                     - {v.color + '/' + v.size}
                                                 </p>
                                             </ProductSelOptCol>
@@ -532,7 +553,12 @@ const ProductDetailTemplate = (props) => {
                                         </Row>
                                     </Container>
                                 );
-                            })}                            
+                            })
+                        }                            
+                        <ProductErrorMessage onClick={onClearMessage}>
+                            {errorMessage}
+                        </ProductErrorMessage>
+
                         {/* 총상품금액(수량) */}
                         {productSelectItems &&
                             productSelectItems.items.length > 0 && (

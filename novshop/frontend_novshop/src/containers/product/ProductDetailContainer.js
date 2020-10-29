@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, } from "../../modules/product";
+import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, initializeProductForm } from "../../modules/product";
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
 
@@ -18,16 +18,21 @@ const ProductDetailContainer = (props) => {
     const colorRef = useRef();
     const sizeRef = useRef();
     
-    
+    const [errorMessage, setErrorMessage] = useState('');
     const [imgClientSize, setImgClientSize] = useState({width: 0, height: 0});
     const imgRef = useRef();    
 
-    useEffect( () => {
+    useEffect( () => {        
         setImgClientSize({
             width: imgRef.current.clientWidth,
             height: imgRef.current.clientHeight,
         });
+        
     }, []);
+
+    useEffect(() => {
+        dispatch(initializeProductForm({form: "productSelectItems"}));
+    }, [dispatch]);
 
     useEffect(()=> {    
         dispatch(getProduct({categoryId, categorySub, id}));        
@@ -48,6 +53,8 @@ const ProductDetailContainer = (props) => {
     // 색상, 사이즈 둘 다 정했을 시 현재 선택 목록에 IN
     const onOptionConfirmation = (e) => {
         // const {name: selName, selectedIndex} = e.target;     // ref 사용하기로
+        if (errorMessage) setErrorMessage('');
+
         if (!productStatus || !productSelectItems) return;        
         if (!colorRef.current || !sizeRef.current) return;
         if (colorRef.current.selectedIndex <= 0 || sizeRef.current.selectedIndex <= 0) return;        
@@ -58,6 +65,10 @@ const ProductDetailContainer = (props) => {
         const size = sizeRef.current.value;        
         
         e.preventDefault();
+        
+        if (items.filter((aObj) => (aObj.color === color) && (aObj.size === size)).length !== 0) {
+            return setErrorMessage('이미 선택되어 있는 옵션입니다.');
+        }
 
         let id = -1;
         if (items.length > 0) {
@@ -112,9 +123,17 @@ const ProductDetailContainer = (props) => {
         dispatch(delSelectProduct({id}));
     }
 
+    // + 번외 + 
+    // 에레메세지 구역 클릭시, 초기화
+    const onClearMessage = (e) => {
+        e.preventDefault();
+        if (errorMessage) setErrorMessage('')
+        else return;
+    }
+
 
     const refs = {colorRef, sizeRef};
-    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete};    
+    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onClearMessage};    
     const imgDivInfo = {imgRef, imgClientSize};
 
     // render
@@ -125,6 +144,8 @@ const ProductDetailContainer = (props) => {
             refs = {refs}
             events = {events}
             imgDivInfo = {imgDivInfo} 
+
+            errorMessage = {errorMessage}
         />
     )
 };

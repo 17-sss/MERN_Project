@@ -185,7 +185,7 @@ const CreateProductRelatedTemplate = (props) => {
                                     width: 5%;
                                 `}
                             />
-                            <ResultSpanWrapper>
+                            <ResultSpanWrapper id="p_sizes">
                                 {productForm.sizes &&
                                     productForm.sizes.map((v, i) => {
                                         return (
@@ -232,10 +232,10 @@ const CreateProductRelatedTemplate = (props) => {
                                     width: 5%;
                                 `}
                             />
-                            <ResultSpanWrapper>                                
+                            <ResultSpanWrapper id="c_items">                                
                                 {categoryForm.items && categoryForm.items.map((v) => {                                                              
                                     return (
-                                        <ResultSpan key = {v.id} randomColor>
+                                        <ResultSpan key = {v.id} randomColor onClick={onDelete}>
                                             {v.key} &amp; {v.value} 
                                         </ResultSpan>
                                     )
@@ -281,7 +281,7 @@ const CreateProductRelatedTemplate = (props) => {
                                         top: -10px;
                                     `}
                                 />
-                                <ResultSpanWrapper>
+                                <ResultSpanWrapper id="p_colors">
                                     {productForm.colors &&
                                         productForm.colors.map((v, i) => {
                                             return (

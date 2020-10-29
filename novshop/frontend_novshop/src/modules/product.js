@@ -10,6 +10,7 @@ const INITALIZE_PRODUCT_KEY = 'product/INITALIZE_PRODUCT_KEY';
 const INITALIZE_PRODUCT_FORM = 'product/INITALIZE_PRODUCT_FORM';
 
 const CHANGE_PRODUCT_FORMS = 'product/CHANGE_PRODUCT_FORMS';
+const DEL_ITEM_PRODUCT_FORM = 'product/DEL_ITEM_PRODUCT_FORM';
 const ADD_SELECT_PRODUCT = 'product/ADD_SELECT_PRODUCT';
 const DEL_SELECT_PRODUCT = 'product/DEL_SELECT_PRODUCT';
 
@@ -36,17 +37,22 @@ const [
 // 액션 생성 함수 작성
 export const changeProductForms = createAction(
     CHANGE_PRODUCT_FORMS,
-    ({ form, key, value, opt, }) => 
-    ({ form, key, value, opt, })
+    ({ form, key, value, opt }) => ({ form, key, value, opt }),
 );
+
+export const delItemProductForm = createAction(
+    DEL_ITEM_PRODUCT_FORM,
+    ({ key, vKey, vValue }) => ({ key, vKey, vValue }),
+);
+
 export const initializeProduct = createAction(INITALIZE_PRODUCT);
 export const initializeProductKey = createAction(
     INITALIZE_PRODUCT_KEY,
     ({ form, key }) => ({ form, key }),
 );
-export const initializeProducForm = createAction(
+export const initializeProductForm = createAction(
     INITALIZE_PRODUCT_FORM,
-    ({form}) => ({form}),
+    ({ form }) => ({ form }),
 );
 
 export const createProduct = createAction(
@@ -83,10 +89,20 @@ export const getProduct = createAction(
 );
 export const addSelectProduct = createAction(
     ADD_SELECT_PRODUCT,
-    ({ id, name, sizeinfo, size, color, volume, price, mileage }) => 
-    ({ id, name, sizeinfo, size, color, volume, price, mileage }),
+    ({ id, name, sizeinfo, size, color, volume, price, mileage }) => ({
+        id,
+        name,
+        sizeinfo,
+        size,
+        color,
+        volume,
+        price,
+        mileage,
+    }),
 );
-export const delSelectProduct = createAction(DEL_SELECT_PRODUCT, ({id}) => ({id}) );
+export const delSelectProduct = createAction(DEL_SELECT_PRODUCT, ({ id }) => ({
+    id,
+}));
 
 // =======================================================================
 
@@ -113,7 +129,7 @@ export function* productSaga() {
 // 리듀서 초기값
 const initialState = {
     // 상품 생성용 폼
-    productForm: {              
+    productForm: {
         name: '',
         image: '',
         size: '',
@@ -127,17 +143,17 @@ const initialState = {
         categorySub: 0,
         categoryId: 0,
     },
-    // 상품 생성 후, 서버에서 값 반환용 
-    product: null,              
+    // 상품 생성 후, 서버에서 값 반환용
+    product: null,
     // 상품 상세 페이지 - 옵션 선택한 상태 저장용
-    productSelectItems: {       
+    productSelectItems: {
         items: [],
         totalprice: 0,
     },
     // 상품 View (전체 or 개별)
-    productStatus: null,    
+    productStatus: null,
     // 에러 표시
-    productError: null,     
+    productError: null,
 };
 // =======================================================================
 
@@ -148,8 +164,8 @@ const product = handleActions(
         [INITALIZE_PRODUCT]: (state) => {
             return {
                 ...state,
-                productForm: initialState['productForm'],                
-                product: null,                
+                productForm: initialState['productForm'],
+                product: null,
                 productSelectItems: initialState['productSelectItems'],
                 productStatus: null,
                 productError: null,
@@ -163,7 +179,7 @@ const product = handleActions(
             return {
                 ...state,
                 [form]: {
-                    ...state[form], 
+                    ...state[form],
                     [key]: initialState[form][key],
                 },
             };
@@ -182,13 +198,13 @@ const product = handleActions(
         // 상품 폼 ONCHANGE (form: 'productForm' OR 'productSelectItems')
         [CHANGE_PRODUCT_FORMS]: (state, action) => {
             const { payload } = action;
-            const { productForm, productSelectItems, productStatus } = state;            
-            
+            const { productForm, productSelectItems, productStatus } = state;
+
             const { form } = payload;
             let { key, value, opt } = payload;
             let arrTmp = [];
 
-            if (form === "productForm") {
+            if (form === 'productForm') {
                 switch (key) {
                     case 'price':
                     case 'sale':
@@ -207,7 +223,7 @@ const product = handleActions(
                             colors,
                         } = productForm;
                         key = replaceAll(key, 'insert', '').toLowerCase();
-    
+
                         if (key === 'sizes') {
                             if (sizes.indexOf(size) > -1 || size === '')
                                 arrTmp = sizes;
@@ -227,72 +243,105 @@ const product = handleActions(
                     default:
                         break;
                 }
-            } else if (form === "productSelectItems") {                                
-                const {items} = productSelectItems;
-                const {inputName, id} = opt;   
-                 
+            } else if (form === 'productSelectItems') {
+                const { items } = productSelectItems;
+                const { inputName, id } = opt;
+
                 switch (key) {
-                    case "items": {
-                        if (!productStatus || items.length <= 0) return;     
-                        const index = items.findIndex((v) => v.id === Number(id));                        
+                    case 'items': {
+                        if (!productStatus || items.length <= 0) return;
+                        const index = items.findIndex(
+                            (v) => v.id === Number(id),
+                        );
                         let objTmp = items[index];
                         let mile = 0;
-                        
-                        const {price, sale} = productStatus.data;  // price는 productStatus에서 가져와야함!    productSelectItems에서 가져오면 꼬일듯.
-                        
-                        if (inputName === "volume") {                            
 
+                        const { price, sale } = productStatus.data; // price는 productStatus에서 가져와야함!    productSelectItems에서 가져오면 꼬일듯.
+
+                        if (inputName === 'volume') {
                             value = Number(value);
-                            mile = (sale > 0) ? 
-                                Math.floor((Number(price) - Number(price) / Number(sale)) * 0.01)
-                                : Math.floor(Number((price) * 0.01));   
+                            mile =
+                                sale > 0
+                                    ? Math.floor(
+                                          (Number(price) -
+                                              Number(price) / Number(sale)) *
+                                              0.01,
+                                      )
+                                    : Math.floor(Number(price * 0.01));
 
                             objTmp = {
                                 ...objTmp,
                                 [inputName]: value,
-                                price: (Number(price) * value),
+                                price: Number(price) * value,
                                 mileage: mile * value,
-                            };  
+                            };
 
-                            arrTmp = items;                        
+                            arrTmp = items;
                             arrTmp.splice(index, 1, objTmp);
-                        }                        
+                        }
                         break;
-                    }                    
+                    }
                     default:
                         break;
-                }            
+                }
             }
-            
+
             let returnObj = {
                 ...state[form],
-                [key]: (form === "productForm") ? 
-                    (key === 'sizes' || key === 'colors') ? arrTmp : value
-                    :
-                    (key === 'items') ? arrTmp : value,
+                [key]:
+                    form === 'productForm'
+                        ? key === 'sizes' || key === 'colors'
+                            ? arrTmp
+                            : value
+                        : key === 'items'
+                        ? arrTmp
+                        : value,
             };
 
-            if (form === "productSelectItems") {                 
-                // form이 productSelectItems 경우 totalprice 속성 계산                
-                let arrPrice = [];                
-                (arrTmp.length > 0) && arrTmp.map((v)=>{                    
-                    let price = v.price;
-                    return arrPrice.push(price);
-                });                
-                let totalprice = arrPrice.reduce( (acc, cur, i) => (acc + cur));
-                
+            if (form === 'productSelectItems') {
+                // form이 productSelectItems 경우 totalprice 속성 계산
+                let arrPrice = [];
+                arrTmp.length > 0 &&
+                    arrTmp.map((v) => {
+                        let price = v.price;
+                        return arrPrice.push(price);
+                    });
+                let totalprice = arrPrice.reduce((acc, cur, i) => acc + cur);
+
                 returnObj = {
                     ...returnObj,
                     totalprice,
-                }
-            } 
+                };
+            }
 
             return {
                 ...state,
                 [form]: returnObj,
             };
-    
         },
+
+        // 상품 생성 폼에서 이미 정의해놓은 색상, 사이즈 정보 선택적 제거
+        [DEL_ITEM_PRODUCT_FORM]: (state, action) => {
+            const { colors, sizes } = state.productForm;
+            const { payload } = action;
+            const { key, vKey, vValue } = payload;
+            
+            return {
+                ...state,
+                productForm: {
+                    ...state['productForm'],
+                    [key]:
+                        key === 'colors'
+                            ? colors.filter(
+                                  (aObj) =>
+                                      aObj.key !== vKey &&
+                                      aObj.value !== vValue,
+                              )
+                            : sizes.filter((aitem) => (aitem !== vKey) ),
+                },
+            };
+        },
+
         // 상품 생성
         [CREATE_PRODUCT_SUCCESS]: (state, action) => {
             const { payload: product } = action;
@@ -357,29 +406,47 @@ const product = handleActions(
         [ADD_SELECT_PRODUCT]: (state, action) => {
             const { items, totalprice } = state.productSelectItems;
             const { payload } = action;
-            const { id, name, sizeinfo, size, color, volume, price, mileage } = payload;
+            const {
+                id,
+                name,
+                sizeinfo,
+                size,
+                color,
+                volume,
+                price,
+                mileage,
+            } = payload;
 
-            let tmpTotalprice = (totalprice + price);
-            
+            let tmpTotalprice = totalprice + price;
+
             return {
                 ...state,
                 productSelectItems: {
-                    ...state["productSelectItems"],
-                    items: items.concat({ id, name, sizeinfo, size, color, volume, price, mileage }),
-                    totalprice: tmpTotalprice, 
+                    ...state['productSelectItems'],
+                    items: items.concat({
+                        id,
+                        name,
+                        sizeinfo,
+                        size,
+                        color,
+                        volume,
+                        price,
+                        mileage,
+                    }),
+                    totalprice: tmpTotalprice,
                 },
-            }
+            };
         },
 
         // 상품 상세 - 현재 선택 목록 중 제거버튼 누른 항목 제거
         [DEL_SELECT_PRODUCT]: (state, action) => {
             const { items, totalprice } = state.productSelectItems;
-            const { id } = action.payload;   
+            const { id } = action.payload;
             const index = items.findIndex((v) => v.id === Number(id));
-            
+
             let price = items[index].price;
-            let tmpTotalprice = (totalprice - price);
-            
+            let tmpTotalprice = totalprice - price;
+
             /*
                 let arrTmp = items;
                 arrTmp.splice(id, 1);
@@ -390,13 +457,12 @@ const product = handleActions(
             return {
                 ...state,
                 productSelectItems: {
-                    ...state["productSelectItems"],
-                    items: items.filter( (v) => v.id !== Number(id)),
+                    ...state['productSelectItems'],
+                    items: items.filter((v) => v.id !== Number(id)),
                     totalprice: tmpTotalprice,
-                }
-            }
+                },
+            };
         },
-
     },
     initialState,
 );

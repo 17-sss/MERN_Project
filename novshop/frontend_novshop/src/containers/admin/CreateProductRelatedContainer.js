@@ -5,13 +5,17 @@ import {
     createCategory,
     initializeCategory,
     initializeCategoryKey,
+    delItemCategoryForm,
 } from '../../modules/category';
 import {
     changeProductForms,
     createProduct,
     initializeProduct,
     initializeProductKey,
+    delItemProductForm,
 } from '../../modules/product';
+import {replaceAll} from '../../lib/utility/customFunc';
+
 import CreateProductRelatedTemplate from '../../components/admin/CreateProductRelatedTemplate';
 
 const CreateProductRelatedContainer = (props) => {
@@ -126,10 +130,42 @@ const CreateProductRelatedContainer = (props) => {
 
     // result(span) 배열적인 아이템 Delete(미완)
     const onDelete = (e) => {
-        const { innerHTML } = e.target;
+        const { innerHTML, parentNode } = e.target;
         const delItem = innerHTML;
+        let key = parentNode.id;
 
-        console.log(delItem);
+        if (ctrlpage === "createproduct")
+            key = replaceAll(key, "p_", "")
+        else
+            key = replaceAll(key, "c_", "")
+        
+        let arrTmp = [];
+        
+        if (delItem.indexOf("&amp;") !== -1) 
+            arrTmp = delItem.split(" &amp; ")
+        else    
+            arrTmp.push(delItem);    
+        if (arrTmp.length > 2 || arrTmp.length <= 0) return;
+
+        e.preventDefault();
+
+        switch (ctrlpage) {
+            case "createproduct":
+                return dispatch(delItemProductForm({
+                    key, 
+                    vKey: arrTmp[0],
+                    vValue: (key === "colors") ? arrTmp[1] : undefined,
+                }));
+            
+            case "createcategory":
+                return dispatch(delItemCategoryForm({
+                    key, 
+                    vKey: arrTmp[0],
+                    vValue: arrTmp[1],
+                }));
+            default:
+                break;
+        }
     };
 
     // 서버로 데이터 전송

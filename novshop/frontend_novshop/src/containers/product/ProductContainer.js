@@ -5,8 +5,7 @@ import ProductTemplate, {
     ProductItem,
 } from '../../components/product/ProductTemplate';
 
-const ProductContainer = (props) => {
-    // 전체목록이 아닌 상세분류 목록을 위한 것도 만들어야할듯. (201022_1102 MEMO)
+const ProductContainer = (props) => {    
     // [1] 데이터 관련 START ====
     const { query } = props;
     const dispatch = useDispatch();

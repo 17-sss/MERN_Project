@@ -37,7 +37,6 @@ const App = () => {
                 <Route component={AdminPage} path="/admin/:ctrlpage?" exact />
                 {/* // Test (테스트 페이지) */}
                 <Route component={TestPage} path="/test/:opt?" exact />
-
             </Switch>
 
             <Footer />
