@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
-import { cssStrike, cssTransparent } from '../common/StyleUtilCSS';
+import { cssStrike, cssTransparent, cssDisplayNone } from '../common/StyleUtilCSS';
 import { Container, Row, Col } from 'react-bootstrap';
 
 // ========================================================================================
@@ -12,6 +12,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 const PdDetailWrapper = styled.div`
     margin: 0 auto;
     
+
     ${(props) => {
         const { mode } = props;
         const caseMode = mode !== ('detail' && 'additional') ? 'detail' : mode;
@@ -323,11 +324,28 @@ const ProductInputBtns = styled.input`
 `;
 // ---------------------------------------------------/
 
+// ========================================================================================
+// [+] 기타 (에러메세지 등)
+// ========================================================================================
+const ProductErrorMessage = styled.div`
+    ${props => props.children || css`${cssDisplayNone}`};
+    color: red;
+    padding: 10px 0px;
+    font-weight: bold;
+
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    cursor: pointer;
+`;
+// ---------------------------------------------------/
+
 
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
 
 const ProductDetailTemplate = (props) => {
-    const { productData, productSelectItems, refs, events, imgDivInfo } = props;
+    const { productData, productSelectItems, refs, events, imgDivInfo, errorMessage } = props;
 
     const {
         // categoryId,
@@ -342,7 +360,7 @@ const ProductDetailTemplate = (props) => {
     } = productData;
 
     const {colorRef, sizeRef} = refs;
-    const { onOptionConfirmation, onVolumeChange, onOptionDelete } = events;    
+    const { onOptionConfirmation, onVolumeChange, onOptionDelete, onClearMessage } = events;    
     const { imgRef, imgClientSize } = imgDivInfo;
 
     return (
@@ -537,6 +555,9 @@ const ProductDetailTemplate = (props) => {
                                 );
                             })
                         }                            
+                        <ProductErrorMessage onClick={onClearMessage}>
+                            {errorMessage}
+                        </ProductErrorMessage>
 
                         {/* 총상품금액(수량) */}
                         {productSelectItems &&

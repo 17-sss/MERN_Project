@@ -17,7 +17,8 @@ const ProductDetailContainer = (props) => {
 
     const colorRef = useRef();
     const sizeRef = useRef();
-        
+    
+    const [errorMessage, setErrorMessage] = useState('');
     const [imgClientSize, setImgClientSize] = useState({width: 0, height: 0});
     const imgRef = useRef();    
 
@@ -51,7 +52,9 @@ const ProductDetailContainer = (props) => {
 
     // 색상, 사이즈 둘 다 정했을 시 현재 선택 목록에 IN
     const onOptionConfirmation = (e) => {
-        // const {name: selName, selectedIndex} = e.target;     // ref 사용하기로        
+        // const {name: selName, selectedIndex} = e.target;     // ref 사용하기로
+        if (errorMessage) setErrorMessage('');
+
         if (!productStatus || !productSelectItems) return;        
         if (!colorRef.current || !sizeRef.current) return;
         if (colorRef.current.selectedIndex <= 0 || sizeRef.current.selectedIndex <= 0) return;        
@@ -60,13 +63,11 @@ const ProductDetailContainer = (props) => {
         const {items} = productSelectItems;
         const color = colorRef.current.value;
         const size = sizeRef.current.value;        
-
+        
         e.preventDefault();
         
         if (items.filter((aObj) => (aObj.color === color) && (aObj.size === size)).length !== 0) {
-            colorRef.current.selectedIndex = 0;
-            sizeRef.current.selectedIndex = 0;
-            return alert('이미 선택되어 있는 옵션입니다.');            
+            return setErrorMessage('이미 선택되어 있는 옵션입니다.');
         }
 
         let id = -1;
@@ -95,8 +96,6 @@ const ProductDetailContainer = (props) => {
             price,
             mileage,
         }));
-
-        return (colorRef.current.selectedIndex = 0, sizeRef.current.selectedIndex = 0);
     };
 
     // 현재 선택 목록의 수량 onChange
@@ -124,8 +123,17 @@ const ProductDetailContainer = (props) => {
         dispatch(delSelectProduct({id}));
     }
 
+    // + 번외 + 
+    // 에레메세지 구역 클릭시, 초기화
+    const onClearMessage = (e) => {
+        e.preventDefault();
+        if (errorMessage) setErrorMessage('')
+        else return;
+    }
+
+
     const refs = {colorRef, sizeRef};
-    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete};    
+    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onClearMessage};    
     const imgDivInfo = {imgRef, imgClientSize};
 
     // render
@@ -135,7 +143,9 @@ const ProductDetailContainer = (props) => {
             productSelectItems = {productSelectItems}            
             refs = {refs}
             events = {events}
-            imgDivInfo = {imgDivInfo}             
+            imgDivInfo = {imgDivInfo} 
+
+            errorMessage = {errorMessage}
         />
     )
 };
