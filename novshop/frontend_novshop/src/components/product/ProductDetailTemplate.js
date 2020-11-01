@@ -3,26 +3,28 @@ import styled, { css } from 'styled-components';
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
 import { cssStrike, cssTransparent } from '../common/StyleUtilCSS';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Navbar, Nav, NavLink } from 'react-bootstrap';
 
+// {0} 공통 ***************************************************************************************************************************
 // ========================================================================================
-// [1] 상품 공통
+// [1] 공통
 // ========================================================================================
-// 1) 상품 상세 -  Wrapper
+// 1) 상품 - 전체 Wrapper ('buy' or 'detail')
 const PdDetailWrapper = styled.div`
     margin: 0 auto;
     
     ${(props) => {
         const { mode } = props;
-        const caseMode = mode !== ('detail' && 'additional') ? 'detail' : mode;
+        const caseMode = mode !== 'detail' ? 'buy' : mode;
 
         switch (caseMode) {
-            case 'detail': {
+            case 'buy': {
                 return css`
-                    width: ${getSize(1.95)};
+                    /* width: ${getSize(1.95)}; */
+                    width: ${getSize(1.7)};
                 `;
             }
-            case 'additional': {
+            case 'detail': {
                 return css`
                     width: ${getSize(1.4)};
                 `;
@@ -40,10 +42,10 @@ const ProductMultiWrapper = styled.div`
     padding: ${(props) => props.padding || '0 30px'};
     ${(props) => {
         const { mode, height, width, margin } = props;
-        const caseMode = mode !== ('detail' && 'additional') ? 'detail' : mode;
+        const caseMode = mode !== ('buy' && 'detail') ? 'buy' : mode;
 
         switch (caseMode) {
-            case 'detail': {
+            case 'buy': {
                 return css`
                     height: ${ height || calcImageRatio(5, 'width')};                    
                     display: inline-block;
@@ -52,7 +54,7 @@ const ProductMultiWrapper = styled.div`
                     margin: ${margin && margin};
                 `;
             }
-            case 'additional': {
+            case 'detail': {
                 return css``;
             }
             default:
@@ -62,15 +64,30 @@ const ProductMultiWrapper = styled.div`
 `;
 // ---------------------------------------------------/
 
-// 3) 상품 상세 - DetailWrapper간의 여백
+// ========================================================================================
+// [2] 기타 (padding, hr 등)
+// ========================================================================================
+// 1) padding top, bottom 20 여백
 const PaddingTB20 = styled.div`
     width: 100%;
     padding: 20px 0;
 `;
 // ---------------------------------------------------/
 
+// 2) pdDetailWrapper 간의 구분선 ("detail" or "detail")
+const StyledHr = styled.hr`
+    width: ${getSize(1)};
+    margin: 0 auto;
+`;
+// ---------------------------------------------------/
+
+
+
+
+// {1} 상품 상세 Wraaper 관련 ***************************************************************************************************************************
+
 // ========================================================================================
-// [2] 상품 이미지
+// [1] 상품 이미지
 // ========================================================================================
 // 1) 상품 이미지 - Wrapper
 const ProductImageWrapper = styled.div`
@@ -120,7 +137,7 @@ const ProductImageWrapper = styled.div`
 // ---------------------------------------------------/
 
 // ========================================================================================
-// [3] 상품 색상 정보
+// [2] 상품 색상 정보
 // ========================================================================================
 // 1) 상품 색상 정보 - 사각형 Wrapper
 const ProductSquareColorWrapper = styled.div`
@@ -146,7 +163,7 @@ const ProductSquareColor = styled.span`
 // ---------------------------------------------------/
 
 // ========================================================================================
-// [4] 상품 일반 정보
+// [3] 상품 일반 정보
 // ========================================================================================
 // 1) 상품 일반 정보 - 상품명, 부가설명, 상품가, 마일리지 Wrapper
 const ProductInfoWrapper = styled.div`
@@ -243,7 +260,7 @@ const ProductInfoSelectP = styled.p`
 // ---------------------------------------------------/
 
 // ========================================================================================
-// [5] 선택한 상품 옵션 View (with Bootstrap)
+// [4] 선택한 상품 옵션 View (with Bootstrap)
 // ========================================================================================
 const ProductSelOptCol = styled(Col)`
     padding: 0;
@@ -294,7 +311,7 @@ const ProductSelOptCol = styled(Col)`
 // ---------------------------------------------------/
 
 // ========================================================================================
-// [6] 버튼 (구매, 장바구니)
+// [5] 버튼 (구매, 장바구니)
 // ========================================================================================
 const ProductInputBtns = styled.input`
     margin-top: 10px;
@@ -324,7 +341,60 @@ const ProductInputBtns = styled.input`
 // ---------------------------------------------------/
 
 
-// ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
+
+
+// {2} 상품 추가정보 Wraaper 관련 ***************************************************************************************************************************
+
+// ========================================================================================
+// [1] 추가 정보 관련 버튼 
+// ========================================================================================
+// 1.1) 추가정보용 버튼 Wrapper (with Bootstrap)
+const ProductAddInfoBtnsWrapper = styled(Navbar)`
+    width: ${getSize(1.7)};
+    margin: 0 auto;
+
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+`;
+
+// 1.2) 추가정보용 버튼 
+const ProductAddInfoLink = styled(NavLink)`
+    ${cssTransparent};
+    margin: 0 2.5rem;
+    width: 100px;
+    height: 20px;        
+    box-shadow: 0 0.3px 0 0;
+
+    &:hover{        
+        box-shadow: 0 0.5px 0 0;
+    }
+`;
+// ---------------------------------------------------/
+
+// ========================================================================================
+// [2] 추가 정보 - 분류를 구분하는 큰 글자 
+// ========================================================================================
+const ProductAddInfoBigName = styled.div`
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin: ${(props) =>
+        props.children === 'REVIEW'
+            ? '60px auto 40px'
+            : props.children === 'INFO'
+            ? '40px auto 60px'
+            : '40px auto 40px'};
+    font-size: 24px;
+    height: 44px;
+    line-height: 44px;
+    font-weight: 100;
+    text-align: center;
+    opacity: 0.9;
+`;
+// // ---------------------------------------------------/
+
+// ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● 
 
 const ProductDetailTemplate = (props) => {
     const { productData, productSelectItems, refs, events, imgDivInfo } = props;
@@ -348,7 +418,7 @@ const ProductDetailTemplate = (props) => {
     return (
         <>            
             <PaddingTB20 />
-            {/* 상품 상세 :: 구매, 이미지, 가격 등 */}
+            {/* 상품 상세 :: 구매, 이미지, 가격 등 ====================================================================================================== [## 1] */}
             <PdDetailWrapper>
                 {/* 상품 이미지, 색상정보(사각형) */}
                 <ProductMultiWrapper height="auto">
@@ -561,17 +631,73 @@ const ProductDetailTemplate = (props) => {
                     </ProductInfoWrapper>
                 </ProductMultiWrapper>
 
-                <ClearEx />
-                <PaddingTB20 />
+                <ClearEx />                
             </PdDetailWrapper>
 
-            {/* 미구현 ----------------------------------------------------------------------- */}
-            {/* <StyledHr /> */}
+            <PaddingTB20 />
+            <StyledHr />
+            <PaddingTB20 />
+                                
 
-            {/* 상품 상세 :: 추가정보(제품 상세정보) */}
-            {/* <PdDetailWrapper mode={'additional'}>
-                Test2
-            </PdDetailWrapper> */}
+            {/* 상품 상세 :: 추가정보(제품 상세정보) ====================================================================================================== [## 2] */}
+            <PdDetailWrapper mode={'detail'}>
+
+                <ProductAddInfoBtnsWrapper>
+                    <Nav className="mr-auto">
+                        <ProductAddInfoLink href="#review">REVIEW</ProductAddInfoLink>
+                        <ProductAddInfoLink href="#detail">DETAIL</ProductAddInfoLink>
+                        <ProductAddInfoLink href="#sizeinfo">SIZE INFO</ProductAddInfoLink>
+                        <ProductAddInfoLink href="#codi">CODI ITEM</ProductAddInfoLink>
+                        <ProductAddInfoLink href="#qa">{"Q & A"}</ProductAddInfoLink>
+                        <ProductAddInfoLink href="#info">INFO</ProductAddInfoLink>
+                    </Nav>
+                </ProductAddInfoBtnsWrapper>
+
+                <ProductAddInfoBigName>REVIEW</ProductAddInfoBigName>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>사진</th>
+                            <th>제목</th>
+                            <th>작성자</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>3</td>
+                            <td>O</td>
+                            <td>테스트3</td>
+                            <td>TEST3</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>X</td>
+                            <td>테스트2</td>
+                            <td>TEST2</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>O</td>
+                            <td>테스트1</td>
+                            <td>TEST1</td>
+                        </tr>                        
+                    </tbody>
+                </table>
+                    
+                <ProductAddInfoBigName>DETAIL</ProductAddInfoBigName>
+
+                <ProductAddInfoBigName>SIZE INFO</ProductAddInfoBigName>
+
+                <ProductAddInfoBigName>CODI ITEM</ProductAddInfoBigName>
+
+                <ProductAddInfoBigName>{"Q & A"}</ProductAddInfoBigName>
+
+                <ProductAddInfoBigName>INFO</ProductAddInfoBigName>
+                          
+            </PdDetailWrapper>
+
+            <PaddingTB20/>
         </>
     );
 };
