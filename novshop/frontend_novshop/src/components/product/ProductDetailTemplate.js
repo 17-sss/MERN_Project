@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import CustomTable from "../../components/table/CustomTable";
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
 import { cssStrike, cssTransparent } from '../common/StyleUtilCSS';
@@ -346,7 +347,7 @@ const ProductInputBtns = styled.input`
 // {2} 상품 추가정보 Wraaper 관련 ***************************************************************************************************************************
 
 // ========================================================================================
-// [1] 추가 정보 관련 버튼 
+// [1] 추가 정보 관련 버튼 (현 페이지 내 이동 관련)
 // ========================================================================================
 // 1.1) 추가정보용 버튼 Wrapper (with Bootstrap)
 const ProductAddInfoBtnsWrapper = styled(Navbar)`
@@ -358,7 +359,12 @@ const ProductAddInfoBtnsWrapper = styled(Navbar)`
     text-align: center;
 `;
 
-// 1.2) 추가정보용 버튼 
+// 1.2) Nav (with bootstrap)
+const StyledNav = styled(Nav)`
+    margin: 0 auto;
+`;
+
+// 1.3) 추가정보용 버튼 
 const ProductAddInfoLink = styled(NavLink)`
     ${cssTransparent};
     margin: 0 2.5rem;
@@ -382,8 +388,6 @@ const ProductAddInfoBigName = styled.div`
     margin: ${(props) =>
         props.children === 'REVIEW'
             ? '60px auto 40px'
-            : props.children === 'INFO'
-            ? '40px auto 60px'
             : '40px auto 40px'};
     font-size: 24px;
     height: 44px;
@@ -643,57 +647,42 @@ const ProductDetailTemplate = (props) => {
             <PdDetailWrapper mode={'detail'}>
 
                 <ProductAddInfoBtnsWrapper>
-                    <Nav className="mr-auto">
+                    <StyledNav>
                         <ProductAddInfoLink href="#review">REVIEW</ProductAddInfoLink>
                         <ProductAddInfoLink href="#detail">DETAIL</ProductAddInfoLink>
                         <ProductAddInfoLink href="#sizeinfo">SIZE INFO</ProductAddInfoLink>
-                        <ProductAddInfoLink href="#codi">CODI ITEM</ProductAddInfoLink>
+                        {/* <ProductAddInfoLink href="#codi">CODI ITEM</ProductAddInfoLink> */}
                         <ProductAddInfoLink href="#qa">{"Q & A"}</ProductAddInfoLink>
                         <ProductAddInfoLink href="#info">INFO</ProductAddInfoLink>
-                    </Nav>
+                    </StyledNav>
                 </ProductAddInfoBtnsWrapper>
 
-                <ProductAddInfoBigName>REVIEW</ProductAddInfoBigName>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>사진</th>
-                            <th>제목</th>
-                            <th>작성자</th>                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>3</td>
-                            <td>O</td>
-                            <td>테스트3</td>
-                            <td>TEST3</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>X</td>
-                            <td>테스트2</td>
-                            <td>TEST2</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>O</td>
-                            <td>테스트1</td>
-                            <td>TEST1</td>
-                        </tr>                        
-                    </tbody>
-                </table>
+                <ProductAddInfoBigName id="review">REVIEW</ProductAddInfoBigName>
+                <CustomTable type="review" subjects={["번호", "사진", "제목", "작성자", "평점"]}/>
                     
-                <ProductAddInfoBigName>DETAIL</ProductAddInfoBigName>
+                <ProductAddInfoBigName id="detail">DETAIL</ProductAddInfoBigName>
 
-                <ProductAddInfoBigName>SIZE INFO</ProductAddInfoBigName>
+                <ProductAddInfoBigName id="sizeinfo">SIZE INFO</ProductAddInfoBigName>
 
-                <ProductAddInfoBigName>CODI ITEM</ProductAddInfoBigName>
+                {/* <ProductAddInfoBigName>CODI ITEM</ProductAddInfoBigName> */}
+                {/* 코디: 비활성 */}
 
-                <ProductAddInfoBigName>{"Q & A"}</ProductAddInfoBigName>
+                <ProductAddInfoBigName id="qa">{"Q & A"}</ProductAddInfoBigName>
+                <CustomTable type="qa" subjects={["번호", "제목", "작성자", "날짜", "조회"]}/>
 
-                <ProductAddInfoBigName>INFO</ProductAddInfoBigName>
+                <ProductAddInfoBigName id="info">INFO</ProductAddInfoBigName>
+                <div style={{width: getSize(2), margin: "0 auto"}}>
+                    <h5>배송정보</h5>
+                    <br/>
+                    <h6>
+                        <p>nov Shop은 CJ대한통운(1588-1255)를 이용하여 상품을 발송해 드립니다.</p>
+                        <p>회원가입시 전지역 기본 배송비는 무료, 비회원 구매시 기본 2,500원 이며, 5만원 이상 구매시 배송비를 지원해 드립니다.</p>
+                        <p>고객님께서 주문하신 상품은 2일에서 7일정도 기간이 소요되며, 간혹 특정상품의 주문 폭주로 인해 배송이 다소 지연될 수 있습니다.</p>
+                        <p>사이트 상단의 order(주문조회)메뉴를 클릭한 후, 조회하고자 하는 주문상품명의 배송현황을 조회하면 현황을 확인하실 수 있습니다.</p>
+                        <p>또한 사이트 상단 배너를 통해서도 order(주문조회) 페이지에 접속하실 수 있습니다.</p>
+                    </h6>
+                </div>
+                {/* 텍스트 정보 */}
                           
             </PdDetailWrapper>
 
