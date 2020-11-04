@@ -25,7 +25,12 @@ db.Category.hasMany(db.Product);
 db.Product.belongsTo(db.Category);
 
 db.User.hasMany(db.Review);
-db.Review.belongsTo(db.User);
+db.Review.belongsTo(db.User); // 예) belongsTo: Review 모델에 userid 컬럼 추가.
+db.Category.hasMany(db.Review);
+db.Review.belongsTo(db.Category);
+db.Product.hasMany(db.Review);
+db.Review.belongsTo(db.Product);
+
 
 /*
 db.User.hasMany(db.Post);
