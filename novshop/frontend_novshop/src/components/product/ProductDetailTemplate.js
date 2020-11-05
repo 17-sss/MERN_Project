@@ -401,7 +401,7 @@ const ProductAddInfoBigName = styled.div`
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● 
 
 const ProductDetailTemplate = (props) => {
-    const { productData, productSelectItems, refs, events, imgDivInfo } = props;
+    const { productData, productSelectItems, refs, events, imgDivInfo, reviewStatus } = props;
 
     const {
         // categoryId,
@@ -416,7 +416,7 @@ const ProductDetailTemplate = (props) => {
     } = productData;
 
     const {colorRef, sizeRef} = refs;
-    const { onOptionConfirmation, onVolumeChange, onOptionDelete } = events;    
+    const { onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest } = events;    
     const { imgRef, imgClientSize } = imgDivInfo;
 
     return (
@@ -658,7 +658,7 @@ const ProductDetailTemplate = (props) => {
                 </ProductAddInfoBtnsWrapper>
 
                 <ProductAddInfoBigName id="review">REVIEW</ProductAddInfoBigName>
-                <CustomTable type="review" subjects={["번호", "사진", "제목", "작성자", "평점"]}/>
+                <CustomTable type="review" subjects={["번호", "사진", "제목", "작성자", "평점"]} data={reviewStatus && reviewStatus.data} />
                     
                 <ProductAddInfoBigName id="detail">DETAIL</ProductAddInfoBigName>
 
@@ -681,6 +681,7 @@ const ProductDetailTemplate = (props) => {
                         <p>사이트 상단의 order(주문조회)메뉴를 클릭한 후, 조회하고자 하는 주문상품명의 배송현황을 조회하면 현황을 확인하실 수 있습니다.</p>
                         <p>또한 사이트 상단 배너를 통해서도 order(주문조회) 페이지에 접속하실 수 있습니다.</p>
                     </h6>
+                    <button onClick={onAddReviewTest}>+</button>
                 </div>
                 {/* 텍스트 정보 */}
                           

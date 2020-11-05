@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, initializeProductForm } from "../../modules/product";
+import { createReview, getProductReview, initializeReview } from '../../modules/review';
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
 
@@ -8,10 +9,11 @@ const ProductDetailContainer = (props) => {
     const {query} = props;
     const {main: categoryId, sub: categorySub, itemId: id} = query;    
     const dispatch = useDispatch();
-    const {productStatus, productSelectItems } = useSelector(({product}) => {
+    const {productStatus, productSelectItems, reviewStatus } = useSelector(({product, review}) => {
         return {
             productStatus: product.productStatus,
             productSelectItems: product.productSelectItems,
+            reviewStatus: review.reviewStatus,
         }
     });
 
@@ -31,7 +33,15 @@ const ProductDetailContainer = (props) => {
 
     useEffect(() => {
         dispatch(initializeProductForm({form: "productSelectItems"}));
+        dispatch(initializeReview());
+    
+        window.scrollTo(0,0);   // 맨위로    
     }, [dispatch]);
+
+    useEffect(()=> {        
+        dispatch(getProductReview({productId: id}));        
+    }, [dispatch, id]);
+
 
     useEffect(()=> {    
         dispatch(getProduct({categoryId, categorySub, id}));        
@@ -124,14 +134,21 @@ const ProductDetailContainer = (props) => {
         dispatch(delSelectProduct({id}));
     }
 
+    // 리뷰 추가용 테스트
+    const onAddReviewTest = (e) => {
+        e.preventDefault();        
+        dispatch(createReview({userId: 1, productId: 1, subject: '테스트사진', content: '내용', picture: '있음', rate: 3}));        
+    }
+
     const refs = {colorRef, sizeRef};
-    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete};    
+    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest};    
     const imgDivInfo = {imgRef, imgClientSize};
 
     // render
     return (
         <ProductDetailTemplate 
             productData = {productData} 
+            reviewStatus = {reviewStatus}
             productSelectItems = {productSelectItems}            
             refs = {refs}
             events = {events}

@@ -21,13 +21,13 @@ db.Review = require('./review')(sequelize, Sequelize);
 
 
 // [1] 1대다 관계 정의 ---------------------------------
+// 1) Product
 db.Category.hasMany(db.Product);
 db.Product.belongsTo(db.Category);
 
+// 2) Review
 db.User.hasMany(db.Review);
 db.Review.belongsTo(db.User); // 예) belongsTo: Review 모델에 userid 컬럼 추가.
-db.Category.hasMany(db.Review);
-db.Review.belongsTo(db.Category);
 db.Product.hasMany(db.Review);
 db.Review.belongsTo(db.Product);
 

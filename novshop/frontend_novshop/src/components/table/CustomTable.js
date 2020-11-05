@@ -45,7 +45,35 @@ const StyeldTd = styled.td`
 `;
 
 const CustomTable = (props) => {
-    const {subjects, type} = props;
+    const {subjects, type, data} = props;
+    
+    let dataTmp = data || (
+        [
+            {
+                id: 1,                      
+                sub: '테스트1 QA',
+                author: 'TEST1',
+                date: Date.now(),
+                view: 13,
+            },
+            {
+                id: 2,                      
+                sub: '테스트2 QA',
+                author: 'TEST2',
+                date: Date.now(),
+                view: 14,
+            },
+            {
+                id: 3,                      
+                sub: '테스트3 QA',
+                author: 'TEST3',
+                date: Date.now(),
+                view: 15,
+            },
+        ]
+    );
+    
+    /*
     let items =
         type === 'review'
             ? [
@@ -94,6 +122,7 @@ const CustomTable = (props) => {
                       view: 15,
                   },
               ];
+    */
 
     return (
         <TableWrapper>
@@ -109,14 +138,14 @@ const CustomTable = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {items && 
-                        items.map((v, i) => {
+                    {dataTmp && 
+                        dataTmp.map((v, i) => {
                             return(
                                 <tr>
-                                    <StyeldTd>{v.num}</StyeldTd>                                    
+                                    <StyeldTd>{v.id}</StyeldTd>                                    
                                     {type === 'review' ? (
                                         <StyeldTd>
-                                            {v.pic ? (
+                                            {v.picture ? (
                                                 <FontAwesomeIcon
                                                     icon={faCamera}
                                                     size="sm"
@@ -132,13 +161,13 @@ const CustomTable = (props) => {
                                         </StyeldTd>
                                     )}
                                     <StyeldTd align={type === 'review' ? "left" : "center"}>
-                                        {type === 'review' ? v.sub : v.author}
+                                        {type === 'review' ? v.subject : v.author}
                                     </StyeldTd>      
                                     <StyeldTd>
-                                        {type === 'review' ? v.author : v.date}
+                                        {type === 'review' ? v.userId : v.date}
                                     </StyeldTd>       
                                     <StyeldTd>
-                                        {type === 'review' ? v.grade : v.view}
+                                        {type === 'review' ? v.rate : v.view}
                                     </StyeldTd>                                                                                                               
                                 </tr>
                             )
