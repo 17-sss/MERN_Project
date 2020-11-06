@@ -4,84 +4,19 @@ import { getSize } from '../../lib/utility/customFunc';
 // import { CustomLink } from '../../components/common/StyleUtilModels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';       // fas
-import { Accordion } from 'react-bootstrap';
 
-
-// ========================================================================================
-// [private] CollapseContent    START
-// ========================================================================================
-const StyledSubject = styled.div`
-    display: block;
-    padding: 0.5rem 1rem; 
-    cursor: pointer;
-    &:hover {
-        color: #666;
-    };
-`;
-
-const StyledContent = styled.div`
-    display: block;
-    padding: 0.5rem 1rem;    
-`;
-// ---------------------------------------------------/
-
-// [Component] CollapseContent, 제목을 눌렀을때 가려져있던 내용들이 나타남 (with Bootstrap)
-const CollapseContent = (props) => {
-    const {subject, content} = props;
-    return (
-        <Accordion>
-            <Accordion.Toggle as={StyledSubject} variant="link" eventKey="this">    {/* eventKey가 같은걸 보여줌 */}
-                {subject}
-            </Accordion.Toggle>            
-            <Accordion.Collapse eventKey="this">
-                <StyledContent>
-                    <div>
-                        {content} Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in
-                        voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum.                    
-                    </div>
-                    <div>
-                    <img
-                        alt="임시"                                        
-                        src={"/images/200720.jpg"}                    
-                        width="100%"
-                        // height={imageTagHeight()} // 비활성. 굳이..
-                    />
-                    </div>
-                </StyledContent>
-            </Accordion.Collapse>
-        </Accordion>
-    );
-};
-
-
-
-// ========================================================================================
-// [default] CustomTable    START
-// ========================================================================================
-// [1] TableWrapper
 const TableWrapper = styled.div`
     width: ${(props) => props.width || getSize(1.4)};
     margin: 0 auto;
 `;
-// ---------------------------------------------------/
 
-// [2] Styled된 테이블 관련 요소    
-// 1) Table
-const StyledTableDiv = styled.div`
+const StyledTable = styled.table`
     /* margin: 0 auto; */
     margin: 0 5%;
     width: 90%;
     border-top: 4px solid black;
 `;
-// ---------------------------------------------------/
 
-// 2) Th
 const StyeldTh = styled.th`
     width: ${(props) => props.width && props.width};
     border-bottom: 2px solid gray;
@@ -91,9 +26,7 @@ const StyeldTh = styled.th`
     align-items: center;
     justify-content: center;        
 `;
-// ---------------------------------------------------/
 
-// 3) Td
 const StyeldTd = styled.td`    
     width: ${(props) => props.width && props.width};
     border-bottom: 1px solid #575757;
@@ -110,10 +43,7 @@ const StyeldTd = styled.td`
         `;
     }};
 `;
-// ---------------------------------------------------/
 
-
-// [Component - default] CustomTable 
 const CustomTable = (props) => {
     const {subjects, type, data} = props;
     
@@ -142,17 +72,60 @@ const CustomTable = (props) => {
             },
         ]
     );
+    
+    /*
+    let items =
+        type === 'review'
+            ? [
+                  {
+                      num: 1,
+                      pic: false,
+                      sub: '테스트1',
+                      author: 'TEST1',
+                      grade: 3,
+                  },
+                  {
+                      num: 2,
+                      pic: true,
+                      sub: '테스트2',
+                      author: 'TEST2',
+                      grade: 4,
+                  },
+                  {
+                      num: 3,
+                      pic: false,
+                      sub: '테스트3',
+                      author: 'TEST3',
+                      grade: 5,
+                  },
+              ]
+            : [
+                  {
+                      num: 1,                      
+                      sub: '테스트1 QA',
+                      author: 'TEST1',
+                      date: Date.now(),
+                      view: 13,
+                  },
+                  {
+                      num: 2,                      
+                      sub: '테스트2 QA',
+                      author: 'TEST2',
+                      date: Date.now(),
+                      view: 14,
+                  },
+                  {
+                      num: 3,                      
+                      sub: '테스트3 QA',
+                      author: 'TEST3',
+                      date: Date.now(),
+                      view: 15,
+                  },
+              ];
+    */
 
     return (
-        <TableWrapper> 
-            <StyledTableDiv>
-            {/* div table 테스트중.. 다시돌리려면 백업본참고*/}
-            <div style={{borderTop: "1px solid black", borderBottom: "1px solid black", width: "100%", margin: "0 auto",}}>
-                테스트
-            </div>
-            <br/>
-            </StyledTableDiv>
-{/* 
+        <TableWrapper>
             <StyledTable>
                 <thead>
                     <tr>
@@ -163,7 +136,7 @@ const CustomTable = (props) => {
                             })  
                         }
                     </tr>
-                </thead>               
+                </thead>
                 <tbody>
                     {dataTmp && 
                         dataTmp.map((v, i) => {
@@ -187,18 +160,8 @@ const CustomTable = (props) => {
                                             {v.sub}
                                         </StyeldTd>
                                     )}
-                                    <StyeldTd
-                                        align={
-                                            type === 'review'
-                                                ? 'left'
-                                                : 'center'
-                                        }
-                                    >
-                                        {type === 'review' ? (
-                                            <CollapseContent subject={v.subject} content={v.content}/>
-                                        ) : (
-                                            v.author
-                                        )}
+                                    <StyeldTd align={type === 'review' ? "left" : "center"}>
+                                        {type === 'review' ? v.subject : v.author}
                                     </StyeldTd>      
                                     <StyeldTd>
                                         {type === 'review' ? v.userId : v.date}
@@ -210,8 +173,8 @@ const CustomTable = (props) => {
                             )
                         })
                     }                    
-                </tbody>                
-            </StyledTable> */}
+                </tbody>
+            </StyledTable>
         </TableWrapper>
     );
 };
