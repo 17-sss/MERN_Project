@@ -73,7 +73,7 @@ const TableWrapper = styled.div`
 
 // [2] Styled된 테이블 관련 요소    
 // 1) Table
-const StyledTableDiv = styled.div`
+const StyledTable = styled.table`
     /* margin: 0 auto; */
     margin: 0 5%;
     width: 90%;
@@ -145,20 +145,12 @@ const CustomTable = (props) => {
 
     return (
         <TableWrapper> 
-            <StyledTableDiv>
-            {/* div table 테스트중.. 다시돌리려면 백업본참고*/}
-            <div style={{borderTop: "1px solid black", borderBottom: "1px solid black", width: "100%", margin: "0 auto",}}>
-                테스트
-            </div>
-            <br/>
-            </StyledTableDiv>
-{/* 
             <StyledTable>
                 <thead>
                     <tr>
                         {subjects && 
                             subjects.map((v, i) => {
-                                let width = v === "제목" ? "50%" : ((50/subjects.length-1).toString + "%");
+                                let width = v === "제목" ? "50%" : ( (50/(subjects.length-1) ) + "%");
                                 return <StyeldTh width={width}>{v}</StyeldTh>
                             })  
                         }
@@ -211,7 +203,7 @@ const CustomTable = (props) => {
                         })
                     }                    
                 </tbody>                
-            </StyledTable> */}
+            </StyledTable>
         </TableWrapper>
     );
 };
