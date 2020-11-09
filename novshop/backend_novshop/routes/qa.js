@@ -1,22 +1,22 @@
-// REVIEW ******************************************************
+// qa ******************************************************
 import express from "express";
-import {Review} from "../models";
+import {QA, User} from "../models";
 
 const router = express.Router();
 
-// 리뷰 생성 (POST /api/review/create)
+// Q&A 생성 (POST /api/qa/create)
 router.post('/create', async(req, res) => {
-    const { userId, productId, subject, content, picture, rate } = req.body;
+    const { userId, productId, subject, content, picture } = req.body;
 
     try {
-        const createReview = await Review.create({
-            userId, productId, subject, content, picture, rate
+        const createQA = await QA.create({
+            userId, productId, subject, content, picture
         });
 
         return res.status(200).json({
             error: null,
             success: true,
-            data: createReview,
+            data: createQA,
         });
 
     } catch (error) {        
@@ -30,23 +30,25 @@ router.post('/create', async(req, res) => {
 });
 
 
-// 특정 상품 리뷰 가져오기 (POST /api/review/getProductReview)
-router.post("/getProductReview", async(req, res) => {
+// 상품 Q&A 가져오기 (POST /api/qa/getProductQA)
+router.post("/getProductQA", async(req, res) => {
     const {productId} = req.body;
-    try {
-        const getProductReview = await Review.findAll({where: {productId}});
 
+    try {
+        const getProductQA = await QA.findAll({where: {productId}});
+                
         return res.status(200).json({
             error: null,
             success: true,
-            data: getProductReview,
-        })
+            data: getProductQA,
+        });
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({
             error,
             code: -1,
-            message: '서버에 오류가 있습니다.',
+            message: "서버에 오류가 있습니다.",
         });
     }
 });

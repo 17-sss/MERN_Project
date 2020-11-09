@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => (
     sequelize.define(
-        'review',
+        'qa',
         {
             subject: {
                 type: DataTypes.STRING(200),
@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => (
                 allowNull: false,     
                 defaultValue: DataTypes.NOW,
             },
-            rate: {
+            view: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                defaultValue: 3,
+                defaultValue: 0,
             },
             
         }, {

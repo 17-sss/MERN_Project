@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, initializeProductForm } from "../../modules/product";
 import { createReview, getProductReview, initializeReview } from '../../modules/review';
+import { createQA, getProductQA, initializeQA } from '../../modules/qa';
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
 
@@ -9,11 +10,12 @@ const ProductDetailContainer = (props) => {
     const {query} = props;
     const {main: categoryId, sub: categorySub, itemId: id} = query;    
     const dispatch = useDispatch();
-    const {productStatus, productSelectItems, reviewStatus } = useSelector(({product, review}) => {
+    const {productStatus, productSelectItems, reviewStatus, qaStatus } = useSelector(({product, review, qa}) => {
         return {
             productStatus: product.productStatus,
             productSelectItems: product.productSelectItems,
             reviewStatus: review.reviewStatus,
+            qaStatus: qa.qaStatus,
         }
     });
 
@@ -34,12 +36,14 @@ const ProductDetailContainer = (props) => {
     useEffect(() => {
         dispatch(initializeProductForm({form: "productSelectItems"}));
         dispatch(initializeReview());
+        dispatch(initializeQA());
     
         window.scrollTo(0,0);   // 맨위로    
     }, [dispatch]);
 
     useEffect(()=> {        
         dispatch(getProductReview({productId: id}));        
+        dispatch(getProductQA({productId: id}));        
     }, [dispatch, id]);
 
 
@@ -90,9 +94,10 @@ const ProductDetailContainer = (props) => {
         }   
 
         let sizeinfo = sizes && JSON.parse(sizes).join(', ');
+        let priceTmp = (sale === 0 || sale === 1) ?  price : Math.floor((price - (price * sale) ));
         let mileage = 
             (sale > 0) ? 
-                Math.floor((price - price / sale) * 0.01)
+                Math.floor((price - (price * sale)) * 0.01)
                 : Math.floor(price * 0.01);        
         
         dispatch(addSelectProduct({
@@ -102,7 +107,7 @@ const ProductDetailContainer = (props) => {
             size,
             color,
             volume: 1,
-            price,
+            price: priceTmp,
             mileage,
         }));
 
@@ -134,14 +139,20 @@ const ProductDetailContainer = (props) => {
         dispatch(delSelectProduct({id}));
     }
 
-    // 리뷰 추가용 테스트
+    // 리뷰, Q&A 추가용 테스트
     const onAddReviewTest = (e) => {
         e.preventDefault();        
         dispatch(createReview({userId: 1, productId: 1, subject: '테스트사진', content: '내용', picture: '있음', rate: 3}));        
     }
 
+    const onAddQATest = (e) => {
+        e.preventDefault();                
+        dispatch(createQA({userId: 1, productId: 1, subject: '테스트QA', content: '내용QA', picture: '?', rate: 3}));        
+    }
+    // -----
+
     const refs = {colorRef, sizeRef};
-    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest};    
+    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest, onAddQATest};    
     const imgDivInfo = {imgRef, imgClientSize};
 
     // render
@@ -149,6 +160,7 @@ const ProductDetailContainer = (props) => {
         <ProductDetailTemplate 
             productData = {productData} 
             reviewStatus = {reviewStatus}
+            qaStatus = {qaStatus}
             productSelectItems = {productSelectItems}            
             refs = {refs}
             events = {events}

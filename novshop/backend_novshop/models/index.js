@@ -17,6 +17,7 @@ db.User = require('./user')(sequelize, Sequelize);
 db.Category = require('./category')(sequelize, Sequelize);
 db.Product = require('./product')(sequelize, Sequelize);
 db.Review = require('./review')(sequelize, Sequelize);
+db.QA = require('./qa')(sequelize, Sequelize);
 // 추후 model 더 생성하면 여기에 적기. (맨 앞글자는 대문자로)
 
 
@@ -30,6 +31,12 @@ db.User.hasMany(db.Review);
 db.Review.belongsTo(db.User); // 예) belongsTo: Review 모델에 userid 컬럼 추가.
 db.Product.hasMany(db.Review);
 db.Review.belongsTo(db.Product);
+
+// 3) Q & A
+db.User.hasMany(db.QA);
+db.QA.belongsTo(db.User); 
+db.Product.hasMany(db.QA);
+db.QA.belongsTo(db.Product);
 
 
 /*

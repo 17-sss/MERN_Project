@@ -73,7 +73,7 @@ export const createProduct = createAction(
         sizes,
         colors,
         price,
-        sale,
+        sale: (sale * 0.01),
         description,
         categorySub,
         categoryId,
@@ -210,7 +210,7 @@ const product = handleActions(
                     case 'sale':
                     case 'categorySub':
                     case 'categoryId': {
-                        value = Number(value);
+                        value = Number(value);                        
                         break;
                     }
                     case 'insertColors':
@@ -261,10 +261,10 @@ const product = handleActions(
                         if (inputName === 'volume') {
                             value = Number(value);
                             mile =
-                                sale > 0
+                                sale > 0 && sale < 1
                                     ? Math.floor(
                                           (Number(price) -
-                                              Number(price) / Number(sale)) *
+                                              Number(price) * Number(sale)) *
                                               0.01,
                                       )
                                     : Math.floor(Number(price * 0.01));
@@ -272,10 +272,14 @@ const product = handleActions(
                             objTmp = {
                                 ...objTmp,
                                 [inputName]: value,
-                                price: Number(price) * value,
+                                price:
+                                    sale > 0 && sale < 1
+                                        ? (Number(price) -
+                                              Number(price) * Number(sale)) * value
+                                        : Number(price) * value,
                                 mileage: mile * value,
                             };
-
+                            
                             arrTmp = items;
                             arrTmp.splice(index, 1, objTmp);
                         }

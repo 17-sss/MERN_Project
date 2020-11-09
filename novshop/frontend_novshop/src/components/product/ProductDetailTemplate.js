@@ -398,10 +398,23 @@ const ProductAddInfoBigName = styled.div`
 `;
 // // ---------------------------------------------------/
 
+// ========================================================================================
+// [3] INFO 전용 DIV
+// ========================================================================================
+const ProductAddInfoTextWrapper = styled.div`
+    width: ${getSize(2)};
+    margin: 0 auto;    
+    padding-left: 6rem;
+
+    h6{
+        font-weight: bold;
+    }
+`;
+
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● 
 
 const ProductDetailTemplate = (props) => {
-    const { productData, productSelectItems, refs, events, imgDivInfo, reviewStatus } = props;
+    const { productData, productSelectItems, refs, events, imgDivInfo, reviewStatus, qaStatus } = props;
 
     const {
         // categoryId,
@@ -416,7 +429,7 @@ const ProductDetailTemplate = (props) => {
     } = productData;
 
     const {colorRef, sizeRef} = refs;
-    const { onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest } = events;    
+    const { onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest, onAddQATest } = events;    
     const { imgRef, imgClientSize } = imgDivInfo;
 
     return (
@@ -471,7 +484,7 @@ const ProductDetailTemplate = (props) => {
                             </ProductPriceViewSpan>
                             {sale > 0 && (
                                 <ProductPriceViewSpan>
-                                    <b>{price - price / sale}원</b>
+                                    <b>{price - (price * sale)}원</b>
                                 </ProductPriceViewSpan>
                             )}
                         </p>
@@ -479,7 +492,7 @@ const ProductDetailTemplate = (props) => {
                             <span className="mile_caption">Mileage</span>
                             <ProductPriceViewSpan>
                                 {sale > 0
-                                    ? Math.floor((price - price / sale) * 0.01)
+                                    ? Math.floor((price - (price * sale)) * 0.01)
                                     : Math.floor(price * 0.01)}
                                 원
                             </ProductPriceViewSpan>
@@ -668,21 +681,79 @@ const ProductDetailTemplate = (props) => {
                 {/* 코디: 비활성 */}
 
                 <ProductAddInfoBigName id="qa">{"Q & A"}</ProductAddInfoBigName>
-                <CustomTable type="qa" subjects={["번호", "제목", "작성자", "날짜", "조회"]}/>
+                <CustomTable type="qa" subjects={["번호", "제목", "작성자", "날짜", "조회"]} data={qaStatus && qaStatus.data}/>
 
                 <ProductAddInfoBigName id="info">INFO</ProductAddInfoBigName>
-                <div style={{width: getSize(2), margin: "0 auto"}}>
-                    <h5>배송정보</h5>
-                    <br/>
-                    <h6>
-                        <p>nov Shop은 CJ대한통운(1588-1255)를 이용하여 상품을 발송해 드립니다.</p>
-                        <p>회원가입시 전지역 기본 배송비는 무료, 비회원 구매시 기본 2,500원 이며, 5만원 이상 구매시 배송비를 지원해 드립니다.</p>
-                        <p>고객님께서 주문하신 상품은 2일에서 7일정도 기간이 소요되며, 간혹 특정상품의 주문 폭주로 인해 배송이 다소 지연될 수 있습니다.</p>
-                        <p>사이트 상단의 order(주문조회)메뉴를 클릭한 후, 조회하고자 하는 주문상품명의 배송현황을 조회하면 현황을 확인하실 수 있습니다.</p>
-                        <p>또한 사이트 상단 배너를 통해서도 order(주문조회) 페이지에 접속하실 수 있습니다.</p>
-                    </h6>
-                    <button onClick={onAddReviewTest}>+</button>
-                </div>
+                <ProductAddInfoTextWrapper>                
+                    <h6>배송정보</h6>
+                    <br />
+                    <p>
+                        nov Shop은 CJ대한통운(1588-1255)를 이용하여 상품을 발송해 드립니다.<br />
+                        회원가입시 전지역 기본 배송비는 무료, 비회원 구매시 기본 2,500원 이며,
+                        5만원 이상 구매시 배송비를 지원해 드립니다.<br />
+                        고객님께서 주문하신 상품은 2일에서 7일정도 기간이 소요되며, 간혹
+                        특정상품의 주문 폭주로 인해 배송이 다소 지연될 수 있습니다.<br />
+                        사이트 상단의 order(주문조회)메뉴를 클릭한 후, 조회하고자 하는
+                        주문상품명의 배송현황을 조회하면 현황을 확인 하 실 수있습니다.<br />
+                        또한 사이트 상단 배너를 통해서도 order(주문조회) 페이지에 접속하실 수
+                        있습니다.<br />
+                    </p>
+                    <br /><br />
+
+                    <h6>교환/반품정보</h6>
+                    <br />
+                    <p>
+                        상품 수령 후 7일 이내에 noveShop에 상품이 도착한 경우만 교환/반품이
+                        가능합니다.<br />
+                        고객센터 : 1599-2785 (AM 10:00-PM5:00) / 점심시간 12:30-1:30<br /><br />
+
+                        오배송 및 상품 불량일 경우 동일 상품으로만 교환 가능하며, noveShop에서
+                        왕복 배송료를 부담해 드립니다.<br />
+                        그 외 사이즈 및 색상 교환 시 구매자께서 왕복 배송비 5,000원을 부담해
+                        주셔야 하며,<br />
+                        불량 상품으로 인한 전체 반품 시에는 구매자께서 편도 배송비 2,500원을
+                        동봉해 주셔야 합니다.<br />
+                        반품시에는 CJ대한통운(1588-1255)을 이용하여 반품주소에 착불로 적어
+                        보내주셔야 교환이 가능합니다.<br />
+                        (다른 택배업체를 이용하실 경우 구매자께서 선지불)<br /><br />
+
+                        교환/반품주소 : 서울특별시 강남구 역삼동 CJ대한통운 D터미널 직영 양태영
+                        담당자 (꼭 "CJ대한통운" 으로 접수부탁드립니다)<br /><br /><br />
+                    </p>
+
+                    
+                    <h6>환불안내</h6>
+                    <br />
+                    <p>
+                        상품출고 전 환불요청시 처리는 1-3일(평일 기준)정도 소요되며, 배송이
+                        진행중이거나 완료된 후에는 상품 도착 후 4-5일(평일기준) 이내에 처리
+                        <br />
+                        무통장/실시간 계좌이체의 경우 고객님의 은행계좌로 이체되며, 신용카드의
+                        경우 승인취소처리 됩니다.<br />
+                        카드환불의 경우 카드사의 업무처리상 7-15일 가량 소요됩니다.<br /><br /><br />
+                    </p>
+
+                    <h6>교환/반품이 불가한 경우</h6>
+                    <br />
+                    <p>
+                        - 주문제작되는 고객맞춤형 상품일 경우<br />
+                        - 의류를 제외한 모든 악세사리 및 언더웨어, 세일상품은 반품 불가<br />
+                        - 니트류나 쉽게 오염되는 화이트, 아이보리같은 계열의 상품인 경우<br />
+                        - 고객님의 부주의로 인해 상품이 훼손이된 경우(착용흔적, 냄새포함)로 판매
+                        가치가 떨어진 경우<br />
+                        - 총 구매액을 적립금으로 결제한 경우<br />
+                        - 상품 상세페이지에 반품불가라고 기재되어 있는 경우<br />
+                        - 구입하신 제품의 교환은 1회에 한하여 가능합니다.
+                    </p>
+
+
+
+
+                    <button onClick={onAddReviewTest}>RE</button> 
+                    &nbsp;
+                    <button onClick={onAddQATest}>QA</button> 
+                    
+                </ProductAddInfoTextWrapper>
                 {/* 텍스트 정보 */}
                           
             </PdDetailWrapper>
