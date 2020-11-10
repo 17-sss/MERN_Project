@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => (
                 type: DataTypes.DATE,
                 allowNull: false,     
                 defaultValue: DataTypes.NOW,
+                get() {
+                    return new Date(this.getDataValue('dateinfo')).toLocaleString();                    
+                },                
             },
             view: {
                 type: DataTypes.INTEGER,

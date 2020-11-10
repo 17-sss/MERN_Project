@@ -1,6 +1,6 @@
 // qa ******************************************************
 import express from "express";
-import {QA, User, Sequelize, sequelize} from "../models";
+import {QA, User} from "../models";
 
 const router = express.Router();
 
@@ -35,27 +35,30 @@ router.post("/getProductQA", async(req, res) => {
     const {productId} = req.body;
 
     try {
-        // RAW QUERY VER, 일반은 백업본 참고 (201110_1503_qa)
-            // ROWNUM 사용하기위해 RAW QUERY 연구함. 
-        const query = `
-            SELECT @ROWNUM := @ROWNUM + 1 AS RN, 
-            qa.id, qa.subject, qa.content, qa.picture, qa.dateinfo, qa.view, qa.createdAt, qa.updatedAt, qa.deletedAt, qa.userId, qa.productId, 
-            user.userid AS userDisplayId
-            FROM qas AS qa
-            LEFT OUTER JOIN users AS user ON qa.userId = user.id AND (user.deletedAt IS NULL), 
-            (SELECT @ROWNUM := 0) TMP
-            WHERE (qa.deletedAt IS NULL AND qa.productId = :productId) ORDER BY RN DESC;
-        `;
-
-        const getProductQA = await sequelize.query(
-            query, 
-            {
-                replacements: {productId}, 
-                type: Sequelize.QueryTypes.SELECT, 
-                raw: true
-            }
-        );
-         
+        const getProductQA = await QA.findAll({
+            include: [  // JOIN 함, 연관된 테이블만 넣을 수 있는 듯! (관계 지정해놓은 테이블들.)
+                {                    
+                    model: User,
+                    attributes: ['userid'],
+                },
+            ],
+            order: [
+                ['id', 'DESC'],
+            ],
+            where: {
+                productId,
+            },
+            logging: function (query) {
+                console.log(
+                    '=============================================\n',
+                    'getProductQA\n',
+                    '=============================================\n',
+                    query,
+                    '\n =============================================||',
+                );
+            },
+        });        
+                
         return res.status(200).json({
             error: null,
             success: true,

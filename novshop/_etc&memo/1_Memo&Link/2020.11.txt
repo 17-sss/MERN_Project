@@ -1,0 +1,18 @@
+@@ 201110
+    1. Sequelize 
+        1) JOIN
+            https://flyingsquirrel.medium.com/sequelize-table-join하는-방법-34dc1ce4e86f
+        2) SQL문 생성 추적 (logging)
+            https://qastack.kr/programming/21427501/how-can-i-see-the-sql-generated-by-sequelize-js
+            https://stackoverrun.com/ko/q/8632451
+        3) Raw Query 사용법 (날쿼리) 
+            https://ithub.tistory.com/276     
+            https://sequelize.org/master/manual/raw-queries.html
+    2. My SQL
+        1) MySQL MUL, UKI, PKI KEY 
+            https://m.blog.naver.com/kshkyc/220366433383
+        2) ROWNUM 관련
+            https://baessi.tistory.com/104          (이거보고 해결함, qa & review 테이블)
+            https://exposemyself.tistory.com/646    (시퀄라이즈+)
+    3. Sequelize..? Raw Query..?
+        링크: https://velog.io/@eojin/ORM이냐-날쿼리냐-그것이-문제로다

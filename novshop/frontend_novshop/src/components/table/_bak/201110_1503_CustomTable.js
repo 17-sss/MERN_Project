@@ -1,3 +1,6 @@
+// 201110_1503 메모
+// DB (review, qa) sequelize raw query를 쓰지 않고 사용할 때, 이 파일 사용.
+
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { getSize } from '../../lib/utility/customFunc';
@@ -93,7 +96,7 @@ const StyledContent = styled.div`
 
 // [Component - default] CustomTable 
 const CustomTable = (props) => {
-    const {subjects, type, data} = props;    
+    const {subjects, type, data} = props;
 
     return (
         <TableWrapper> 
@@ -121,7 +124,6 @@ const CustomTable = (props) => {
 
                             return (
                                 <ItemDiv
-                                    key = {i}
                                     stype={'name'}
                                     width={width}                          
                                 >
@@ -130,13 +132,13 @@ const CustomTable = (props) => {
                             );
                         })}
                 </LineDiv>
-            
+
                 {data &&
                     data.map((v, i) => {
                         return (              
-                            <Accordion key = {v.id}>
+                            <Accordion>
                                 <LineDiv stype="line">
-                                    <ItemDiv width={"12.5%"}>{v.RN}</ItemDiv>    
+                                    <ItemDiv width={"12.5%"}>{v.id}</ItemDiv>    
                                     {type === 'review' ? (
                                         <ItemDiv width={"12.5%"}>
                                             {v.picture ? (
@@ -173,11 +175,11 @@ const CustomTable = (props) => {
                                         </ItemDiv>
                                         
                                     ) : (                                                                
-                                        <ItemDiv align="center" width={"12.5%"}>{v.userDisplayId}</ItemDiv>                                        
+                                        <ItemDiv align="center" width={"12.5%"}>{v.userId}</ItemDiv>
                                     )}
 
                                     <ItemDiv align="center" width={type === 'review' ? "12.5%" : "17.5%"}>
-                                        {type === 'review' ? v.userDisplayId : new Date(v.dateinfo).toLocaleString()}
+                                        {type === 'review' ? v.userId : v.dateinfo}
                                     </ItemDiv>
                                     <ItemDiv align="center" width={"12.5%"}>
                                         {type === 'review' ? v.rate : v.view}

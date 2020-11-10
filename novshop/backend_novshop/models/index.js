@@ -1,4 +1,5 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+// const Sequelize = require('sequelize');
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config.json')[env]; // 여기서 env는 config의 ["development"] 가져옴
 const db = {};

@@ -1,6 +1,6 @@
 // REVIEW ******************************************************
 import express from "express";
-import {Review, sequelize, Sequelize} from "../models";
+import {Review, User} from "../models";
 
 const router = express.Router();
 
@@ -34,23 +34,26 @@ router.post('/create', async(req, res) => {
 router.post("/getProductReview", async(req, res) => {
     const {productId} = req.body;
     try {
-        // RAW QUERY VER, 일반은 백업본 참고 (201110_1503_review)
-        const query = `            
-            SELECT @ROWNUM := @ROWNUM + 1 AS RN, 
-            review.id, review.subject, review.content, review.picture, review.dateinfo, review.rate, review.createdAt, 
-            review.updatedAt, review.deletedAt, review.userId, review.productId, 
-            user.userid AS userDisplayId 
-            FROM reviews AS review 
-            LEFT OUTER JOIN users AS user ON review.userId = user.id AND (user.deletedAt IS NULL),
-            (SELECT @ROWNUM := 0) TMP
-            WHERE (review.deletedAt IS NULL AND review.productId = :productId) ORDER BY RN DESC;
-        `;
-
-        const getProductReview = await sequelize.query(query, {
-            replacements: { productId },
-            type: Sequelize.QueryTypes.SELECT,
-            raw: true,
-        });
+        const getProductReview = await Review.findAll({
+            include: [  
+                {                    
+                    model: User,
+                    attributes: ['userid'],
+                },
+            ],
+            where: {
+                productId,
+            },
+            logging: function (query) {
+                console.log(
+                    '=============================================\n',
+                    'getProductReview\n',
+                    '=============================================\n',
+                    query,
+                    '\n =============================================||',
+                );
+            },            
+        });   
 
         return res.status(200).json({
             error: null,
