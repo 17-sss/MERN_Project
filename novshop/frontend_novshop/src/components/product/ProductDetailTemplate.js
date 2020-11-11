@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import CustomTable from "../../components/table/CustomTable";
+import CustomTableContainer from "../../containers/table/CustomTableContainer";
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
 import { cssStrike, cssTransparent } from '../common/StyleUtilCSS';
@@ -671,7 +671,7 @@ const ProductDetailTemplate = (props) => {
                 </ProductAddInfoBtnsWrapper>
 
                 <ProductAddInfoBigName id="review">REVIEW</ProductAddInfoBigName>
-                <CustomTable type="review" subjects={["번호", "사진", "제목", "작성자", "평점"]} data={reviewStatus && reviewStatus.data} />
+                <CustomTableContainer type="review" subjects={["번호", "사진", "제목", "작성자", "평점"]} data={reviewStatus && reviewStatus.data} />
                     
                 <ProductAddInfoBigName id="detail">DETAIL</ProductAddInfoBigName>
 
@@ -681,7 +681,7 @@ const ProductDetailTemplate = (props) => {
                 {/* 코디: 비활성 */}
 
                 <ProductAddInfoBigName id="qa">{"Q & A"}</ProductAddInfoBigName>
-                <CustomTable type="qa" subjects={["번호", "제목", "작성자", "날짜", "조회"]} data={qaStatus && qaStatus.data}/>
+                <CustomTableContainer type="qa" subjects={["번호", "제목", "작성자", "날짜", "조회"]} data={qaStatus && qaStatus.data}/>
 
                 <ProductAddInfoBigName id="info">INFO</ProductAddInfoBigName>
                 <ProductAddInfoTextWrapper>                
