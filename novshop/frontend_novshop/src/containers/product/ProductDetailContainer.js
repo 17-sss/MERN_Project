@@ -37,13 +37,13 @@ const ProductDetailContainer = (props) => {
         dispatch(initializeProductForm({form: "productSelectItems"}));
         dispatch(initializeReview());
         dispatch(initializeQA());
-    
+        
         window.scrollTo(0,0);   // 맨위로    
     }, [dispatch]);
 
     useEffect(()=> {        
         dispatch(getProductReview({productId: id}));        
-        dispatch(getProductQA({productId: id}));        
+        dispatch(getProductQA({productId: id}));          
     }, [dispatch, id]);
 
 

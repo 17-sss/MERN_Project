@@ -211,7 +211,7 @@ const Header = (props) => {
                         const childItems = v.items;
                         // const childItems = Object.values(v.items);
                         const isDropdown = (childItems.length <= 0 ? false : true);                                              
-                        const parentLink = "/shopping?main=" + v.id; 
+                        const parentLink = (v.key === "community") ? ("/community") : ("/shopping?main=" + v.id); 
                                                                     
                         return (
                             <HeadLi 
@@ -228,8 +228,8 @@ const Header = (props) => {
                                     isDropdown &&
                                         <DropdownContent>
                                             {childItems.map( (vItem, i) => {                                                
-                                                const {id, value} = vItem;                                                 
-                                                const childLink = parentLink + "&sub=" + id;
+                                                const {id, value, key} = vItem;                                                 
+                                                const childLink = (v.key === "community") ? (parentLink + "/" + key) : (parentLink + "&sub=" + id);
 
                                                 return (
                                                     <CustomLink 

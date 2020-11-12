@@ -317,8 +317,9 @@ const CreateProductRelatedContainer = (props) => {
                                     String(value.key).toUpperCase(),
                                 items,
                             });
-                        });
-                        setCategories(arrTmp);
+                        });                        
+
+                        setCategories(arrTmp.filter((v) => (v.displayValue.toLowerCase() !== "community")));
                     }
                 }
                 break;
