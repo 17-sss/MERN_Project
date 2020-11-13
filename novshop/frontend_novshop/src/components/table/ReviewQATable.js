@@ -7,9 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';       // fas
 import { Accordion } from 'react-bootstrap';
 
-// ========================================================================================
-// [default] ReviewQATable    START
-// ========================================================================================
 // [1] TableWrapper
 const TableWrapper = styled.div`
     width: ${(props) => props.width || getSize(1.4)};
@@ -141,7 +138,9 @@ const QAWriteLink = styled(CustomLink)`
 `;
 // ---------------------------------------------------/
 
-// [Component - default] ReviewQATable 
+// ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+
+// [Component] ReviewQATable 
 const ReviewQATable = (props) => {
     const {subjects, type, data, currentPage, pageCount, events} = props;        
     const {pagingBtnClick} = events;

@@ -7,6 +7,7 @@ import Footer from './components/base/Footer';
 
 import MainPage from './pages/MainPage';
 import ShoppingPage from './pages/ShoppingPage';
+import CommunityPage from './pages/CommunityPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MemberPage from './pages/MemberPage';
@@ -25,8 +26,11 @@ const App = () => {
                         2. querystring ▷ 
                             + 라우트 내부 (ShoppingPage 파일)에서 query-string 미들웨어 사용하여 해결하기.
                 */}
-                <Route component={ShoppingPage} path="/shopping" exact /> 
                 {/* <Route component={ShoppingPage} path="/shopping/:category/:subcategory?" /> */}
+                <Route component={ShoppingPage} path="/shopping" exact /> 
+                {/* // Community (커뮤니티 (공지, CS)) */}
+                <Route component={CommunityPage} path="/community/:page?" exact /> 
+
                 {/* // Register (회원가입) */}
                 <Route component={RegisterPage} path="/auth/register" />
                 {/* // Login (로그인) */}
