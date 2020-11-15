@@ -8,6 +8,7 @@ import Footer from './components/base/Footer';
 import MainPage from './pages/MainPage';
 import ShoppingPage from './pages/ShoppingPage';
 import CommunityPage from './pages/CommunityPage';
+import WritePage from './pages/WritePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MemberPage from './pages/MemberPage';
@@ -30,6 +31,8 @@ const App = () => {
                 <Route component={ShoppingPage} path="/shopping" exact /> 
                 {/* // Community (커뮤니티 (공지, CS)) */}
                 <Route component={CommunityPage} path="/community/:page?" exact /> 
+                {/* // Write (글쓰기(QA, 공지사항 등)) */}
+                <Route component={WritePage} path="/write/:opt?" exact /> 
 
                 {/* // Register (회원가입) */}
                 <Route component={RegisterPage} path="/auth/register" />

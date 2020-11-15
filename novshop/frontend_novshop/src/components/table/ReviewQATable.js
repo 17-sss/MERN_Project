@@ -273,7 +273,7 @@ const ReviewQATable = (props) => {
                     
             {type === "qa" && (
                 <QAWriteWrapper>
-                    <QAWriteLink to="/123">{"Q&A 작성"}</QAWriteLink>  
+                    <QAWriteLink to="/write/qa">{"Q&A 작성"}</QAWriteLink>  
                 </QAWriteWrapper>
             )}
 

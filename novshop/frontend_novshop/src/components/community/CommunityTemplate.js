@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { getSize } from '../../lib/utility/customFunc';
 import { CustomLink } from '../../components/common/StyleUtilModels';
+import { cssTransparent } from "../../components/common/StyleUtilCSS";
 
 // [1] CommunityWrapper: 전체 Wrapper
 const CommunityWrapper = styled.div`
@@ -82,6 +83,35 @@ const StyeldTd = styled.td`
 `;
 // ---------------------------------------------------/
 
+// [4] 작성 폼
+// 1) WriteWrapper
+const WriteWrapper = styled.div`            
+    width: 100%;
+    margin-top: 10px;
+    text-align: right;
+    align-items: right;
+    justify-content: right;
+`;
+// ---------------------------------------------------/
+
+// 2) WriteLink, 분류에 따른 작성 폼으로 이동
+const WriteLink = styled(CustomLink)`
+    ${cssTransparent}
+    padding: 2.5px;
+    width: auto;
+    height: 25px;
+    box-shadow: 0 0 0 0.2px;
+    border-radius: 1.4px;
+    margin-right: 68px;
+    
+    &:hover {
+        background-color: #c0c0c0;
+        color: white;
+    }
+`;
+// ---------------------------------------------------/
+
+
 const CommunityTemplate = (props) => {
     const { data, etcData, events } = props;
     const {onCreateNotice} = events;
@@ -142,6 +172,11 @@ const CommunityTemplate = (props) => {
                             })}
                     </tbody>
                 </StyledTable>
+                <WriteWrapper>
+                    <WriteLink>
+                        글 작성
+                    </WriteLink>
+                </WriteWrapper>
             </CommunityMultiWrapper>
             <button onClick={onCreateNotice}>1</button>
         </CommunityWrapper>
