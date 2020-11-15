@@ -147,7 +147,7 @@ const ProductDetailContainer = (props) => {
 
     const onAddQATest = (e) => {
         e.preventDefault();                
-        dispatch(createQA({userId: 2, productId: 1, subject: '테스트QA2', content: '내용QA2', picture: '?'}));        
+        dispatch(createQA({userId:1, productId: 1, subject: '테스트Q11', content: '내용QA21122', picture: '?'}));        
     }
     // -----
 

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => (
     sequelize.define(
-        'review',
+        'notice',
         {
             subject: {
                 type: DataTypes.STRING(200),
@@ -11,16 +11,11 @@ module.exports = (sequelize, DataTypes) => (
                 type: DataTypes.STRING(5000),
                 allowNull: false,
                 defaultValue: "내용없음"
-            },
-            picture: {
-                type: DataTypes.STRING(100),
-                allowNull: false,     
-                defaultValue: "",                          
-            },
-            rate: {
+            },       
+            view: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                defaultValue: 3,
+                defaultValue: 0,
             },
             
         }, {

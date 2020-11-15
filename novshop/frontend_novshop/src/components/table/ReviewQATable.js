@@ -18,7 +18,7 @@ const TableWrapper = styled.div`
 // 1) TableFrame 
 const TableFrame = styled.div`    
     margin: 0 5%;
-    width: 90%;
+    width: 90%;    
     ${props => props.visible || cssDisplayNone};    
 `;
 // ---------------------------------------------------/
@@ -147,7 +147,7 @@ const ReviewQATable = (props) => {
 
     return (
         <TableWrapper>             
-            <TableFrame visible = {data && !data.length > 0}>
+            <TableFrame visible = {!data && (typeof data.length === "undefined" || data.length <= 0)}>
                 <LineDiv stype="TBline" empty>
                     <h5>{type === "review" ? "작성된 리뷰가 없습니다." : "작성된 Q&A가 없습니다."}</h5>
                 </LineDiv>
@@ -226,7 +226,7 @@ const ReviewQATable = (props) => {
                                     )}
 
                                     <ItemDiv align="center" width={type === 'review' ? "12.5%" : "17.5%"}>
-                                        {type === 'review' ? v.userDisplayId : new Date(v.dateinfo).toLocaleString()}
+                                        {type === 'review' ? v.userDisplayId : new Date(v.createdAt).toLocaleString()}
                                     </ItemDiv>
                                     <ItemDiv align="center" width={"12.5%"}>
                                         {type === 'review' ? v.rate : v.view}

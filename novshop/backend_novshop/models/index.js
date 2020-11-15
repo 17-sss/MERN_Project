@@ -19,6 +19,7 @@ db.Category = require('./category')(sequelize, Sequelize);
 db.Product = require('./product')(sequelize, Sequelize);
 db.Review = require('./review')(sequelize, Sequelize);
 db.QA = require('./qa')(sequelize, Sequelize);
+db.Notice = require('./notice')(sequelize, Sequelize);
 // 추후 model 더 생성하면 여기에 적기. (맨 앞글자는 대문자로)
 
 
@@ -39,6 +40,9 @@ db.QA.belongsTo(db.User);
 db.Product.hasMany(db.QA);
 db.QA.belongsTo(db.Product);
 
+// 4) Notice
+db.User.hasMany(db.Notice);
+db.Notice.belongsTo(db.User); 
 
 /*
 db.User.hasMany(db.Post);

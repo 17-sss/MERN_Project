@@ -4,7 +4,7 @@ import { Product } from '../models';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
-import category from '../models/category';
+
 
 const router = Router();
 

@@ -6,6 +6,7 @@ import category, { categorySaga } from './category';
 import product, { productSaga } from './product';
 import review, { reviewSaga } from './review';
 import qa, { qaSaga } from './qa';
+import notice, { noticeSaga } from './notice';
 import loading from './loading';
 
 const rootReducer = combineReducers({
@@ -15,11 +16,12 @@ const rootReducer = combineReducers({
     product,
     review,
     qa,
+    notice,
     loading,
 });
 
 export function* rootSaga() {
-    yield all([authSaga(), userSaga(), categorySaga(), productSaga(), reviewSaga(), qaSaga()]);
+    yield all([authSaga(), userSaga(), categorySaga(), productSaga(), reviewSaga(), qaSaga(), noticeSaga()]);
 }
 
 export default rootReducer;

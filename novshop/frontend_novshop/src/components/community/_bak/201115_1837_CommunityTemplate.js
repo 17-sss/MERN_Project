@@ -87,6 +87,30 @@ const CommunityTemplate = (props) => {
     const {onCreateNotice} = events;
     const { subjectData, pageName } = etcData;
 
+    let dataTmp = data || [
+        {
+            id: 1,
+            sub: '테스트1 QA',
+            author: 'TEST1',
+            date: new Date().toLocaleString(),
+            view: 13,
+        },
+        {
+            id: 2,
+            sub: '테스트2 QA',
+            author: 'TEST2',
+            date: Date.now(),
+            view: 14,
+        },
+        {
+            id: 3,
+            sub: '테스트3 QA',
+            author: 'TEST3',
+            date: Date.now(),
+            view: 15,
+        },
+    ];
+
     return (
         <CommunityWrapper>
             <CommunityMultiWrapper stype="pagename">
@@ -108,8 +132,8 @@ const CommunityTemplate = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {data &&
-                            data.map((v, i) => {
+                        {dataTmp &&
+                            dataTmp.map((v, i) => {
                                 return (
                                     <tr key={i}>
                                         <StyeldTd>{v.RN || v.id}</StyeldTd>

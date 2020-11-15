@@ -37,7 +37,7 @@ router.post("/getProductReview", async(req, res) => {
         // RAW QUERY VER, 일반은 백업본 참고 (201110_1503_review)
         const query = `            
             SELECT @ROWNUM := @ROWNUM + 1 AS RN, 
-            review.id, review.subject, review.content, review.picture, review.dateinfo, review.rate, review.createdAt, 
+            review.id, review.subject, review.content, review.picture, review.rate, review.createdAt, 
             review.updatedAt, review.deletedAt, review.userId, review.productId, 
             user.userid AS userDisplayId 
             FROM reviews AS review 
