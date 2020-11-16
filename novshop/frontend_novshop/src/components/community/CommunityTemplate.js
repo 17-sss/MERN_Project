@@ -6,7 +6,7 @@ import { cssTransparent } from "../../components/common/StyleUtilCSS";
 
 // [1] CommunityWrapper: 전체 Wrapper
 const CommunityWrapper = styled.div`
-    width: ${(props) => props.width || getSize(1.4)};
+    width: ${(props) => props.width || getSize(1.45)};
     margin: 0 auto;
 `;
 // ---------------------------------------------------/
@@ -83,14 +83,47 @@ const StyeldTd = styled.td`
 `;
 // ---------------------------------------------------/
 
-// [4] 작성 폼
+// 4) Link Custom
+const SubjectLink = styled(CustomLink)`
+    &:hover {
+        color: #666;
+    }
+`;
+
+// [4] 페이징
+// 1) PagingWrapper: 페이징관련 개체들 Wrapper
+const PagingWrapper = styled.div`
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+`;
+// ---------------------------------------------------/
+
+// 2) PagingBtn: 페이지 번호용 btn
+const PagingBtn = styled.input`
+    ${cssTransparent};
+    font-size: 8pt;
+    width: 20px;
+    height: 20px;
+    margin-left: 4px;    
+    box-shadow: 0 0 0 0.2px;
+    background-color: ${props => props.selectbtn ? "#c0c0c0" : "ffffff"};
+`;
+// ---------------------------------------------------/
+
+// [5] 작성 폼
 // 1) WriteWrapper
 const WriteWrapper = styled.div`            
-    width: 100%;
-    margin-top: 10px;
-    text-align: right;
-    align-items: right;
-    justify-content: right;
+    display: inline-block;                
+    position: absolute;
+    right: 60px;
+    width: auto;
 `;
 // ---------------------------------------------------/
 
@@ -102,7 +135,6 @@ const WriteLink = styled(CustomLink)`
     height: 25px;
     box-shadow: 0 0 0 0.2px;
     border-radius: 1.4px;
-    margin-right: 68px;
     
     &:hover {
         background-color: #c0c0c0;
@@ -114,8 +146,8 @@ const WriteLink = styled(CustomLink)`
 
 const CommunityTemplate = (props) => {
     const { data, etcData, events } = props;
-    const {onCreateNotice} = events;
-    const { subjectData, pageName } = etcData;
+    const { pagingBtnClick, onCreateNotice } = events;
+    const { subjectData, pageName, page, pageCount, currentPage } = etcData;
 
     return (
         <CommunityWrapper>
@@ -144,9 +176,9 @@ const CommunityTemplate = (props) => {
                                     <tr key={i}>
                                         <StyeldTd>{v.RN || v.id}</StyeldTd>
                                         <StyeldTd align="left">
-                                            <CustomLink to="#">
+                                            <SubjectLink to={"?num="+v.id}>
                                                 {v.subject || v.sub}
-                                            </CustomLink>
+                                            </SubjectLink>
                                         </StyeldTd>
                                         <StyeldTd align="center">
                                             {v.userDisplayId}
@@ -172,11 +204,30 @@ const CommunityTemplate = (props) => {
                             })}
                     </tbody>
                 </StyledTable>
-                <WriteWrapper>
-                    <WriteLink>
-                        글 작성
-                    </WriteLink>
-                </WriteWrapper>
+
+                <PagingWrapper>
+                {(pageCount > 0) &&                    
+                    [...Array(pageCount)].map((v, i) => {   // map대신 for문 쓰고 싶을 때
+                        let index = (i+1);
+                        let selectbtn = (index === Number(currentPage));
+                        return (
+                            <PagingBtn
+                                key={i}
+                                type="button"
+                                onClick={pagingBtnClick}
+                                selectbtn={selectbtn}
+                                value={index}
+                            />
+                        );
+                    })}                
+
+                    <WriteWrapper>
+                        <WriteLink to = {'/write/' + page }>
+                            글 작성
+                        </WriteLink>
+                    </WriteWrapper>
+                </PagingWrapper>   
+
             </CommunityMultiWrapper>
             <button onClick={onCreateNotice}>1</button>
         </CommunityWrapper>

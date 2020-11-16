@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled/*, { css }*/ from 'styled-components';
 import { getSize } from '../../lib/utility/customFunc';
 
 const WriteWrapper = styled.div`
