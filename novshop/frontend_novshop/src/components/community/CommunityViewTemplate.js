@@ -1,6 +1,8 @@
-import React from "react";
-import styled, {css} from "styled-components";
-import { getSize } from "../../lib/utility/customFunc";
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { getSize } from '../../lib/utility/customFunc';
+import { cssTransparent } from '../../components/common/StyleUtilCSS';
+import { StyledHr, CustomLink } from '../../components/common/StyleUtilModels';
 
 // [1] CommunityViewWrapper: 전체 Wrapper
 const CommunityViewWrapper = styled.div`
@@ -31,7 +33,12 @@ const CommunityMultiWrapper = styled.div`
                 `;
             case 'table': // 테이블
                 return css`
-                    margin: 0 auto 20px;
+                    margin: 30px auto;
+                `;
+            case 'content': // 내용
+                return css`
+                    margin: 10px auto;
+                    padding: 5px;
                 `;
             default:
                 break;
@@ -48,9 +55,16 @@ const StyledTable = styled.table`
 
 // 2) Td
 const StyeldTd = styled.td`
-    width: ${(props) => props.width && props.width};
-    height: 30px;
-    border: 0.2px solid black;
+    height: 40px;
+    padding: 0 10px;
+
+    ${(props) => {
+        let { width } = props;
+        return css`
+            width: ${width};
+            background-color: ${width === '10%' ? '#e0e0e0' : '#ffffff'};
+        `;
+    }}
 
     ${(props) => {
         let { align } = props;
@@ -62,38 +76,139 @@ const StyeldTd = styled.td`
             justify-content: ${align};
         `;
     }};
+
+    ${(props) => {
+        let { border } = props;
+        let cssTmp = '';
+        switch (border) {
+            case 'bot_right':
+                cssTmp = css`
+                    border-right: 0.3px solid #9e9e9e;
+                    border-bottom: 0.3px solid #9e9e9e;
+                `;
+                break;
+            case 'bot':
+                cssTmp = css`
+                    border-bottom: 0.3px solid #9e9e9e;
+                `;
+                break;
+            default:
+                break;
+        }
+
+        return cssTmp;
+    }}
 `;
 // ---------------------------------------------------/
 
+// [4] input 태그 & a 태그
+// 1) input
+const CommunityInput = styled.input`
+    ${cssTransparent};
+    ${(props) => {
+        const { type } = props;
+        switch (type) {
+            case 'button':
+            case 'submit':
+                return css`
+                    padding: 2px 8px;
+                    border: 1px solid #d1d1d1;
+                    border-radius: 2px;
+                    font-size: 12px;
+                    font-weight: normal;
+                    color: #222;
+                    background-color: #fff;
+                `;
+            default:
+                break;
+        }
+    }}
+`;
+
+// 2) Link (a)
+const CommunityLink = styled(CustomLink)`
+    ${cssTransparent};
+    ${(props) =>
+        props.type === 'button'
+            ? css`
+                  padding: 2px 8px;
+                  border: 1px solid #d1d1d1;
+                  border-radius: 2px;
+                  font-size: 12px;
+                  font-weight: normal;
+                  color: #222;
+                  background-color: #fff;
+              `
+            : css``};
+`;
+// ---------------------------------------------------/
+
+// [5] CommunityHr
+const CommunityHr = styled(StyledHr)`
+    width: 100%;
+    margin: 10px auto;
+`;
+
 const CommunityViewTemplate = (props) => {
-    const {etcDatas} = props;
-    const {pageName} = etcDatas;
+    const { etcDatas, data } = props;
+    const { pageName, listurl } = etcDatas;
+
     return (
         <CommunityViewWrapper>
             <CommunityMultiWrapper stype="pagename">
                 <p id="pageType">{pageName}</p>
             </CommunityMultiWrapper>
             <CommunityMultiWrapper stype="table">
-                <form onSubmit={()=>alert("1")}>
-                    <StyledTable>
-                        <tbody>
-                            <tr>
-                                <StyeldTd width="10%">제목</StyeldTd>
-                                <StyeldTd width="90%" align="left">b2</StyeldTd>
-                            </tr>
-                            <tr>
-                                <StyeldTd width="10%">작성자</StyeldTd>
-                                <StyeldTd width="90%" align="left">c2</StyeldTd>
-                            </tr>
-                        </tbody>
+                <form onSubmit={() => alert('1')}>
+                    
+                        {data && data.map((v, i) => {
+                            if (i > 0) return null; // 하나만 가져와야하니까 혹시 모르니..
 
-                    </StyledTable>
+                            return (
+                                <div key ={i}>
+                                    <StyledTable>
+                                        <tbody>
+                                            <tr>
+                                                <StyeldTd width="10%" border="bot_right">
+                                                    제목
+                                                </StyeldTd>
+                                                <StyeldTd width="90%" border="bot" align="left">
+                                                    {v.subject}
+                                                </StyeldTd>
+                                            </tr>
+                                            <tr>
+                                                <StyeldTd width="10%" border="bot_right">
+                                                    작성자
+                                                </StyeldTd>
+                                                <StyeldTd width="90%" border="bot" align="left">
+                                                    {v.userDisplayId}
+                                                </StyeldTd>
+                                            </tr>
+                                        </tbody>
+                                    </StyledTable>
+                                    <CommunityMultiWrapper stype="content">
+                                        {v.content}
+                                    </CommunityMultiWrapper>
+                                </div>
+                            )
+                        })}
 
-                    <button type="submit">1</button>
+                    <CommunityHr />    
+                    <CommunityLink 
+                        type = "button"
+                        // to = {"/community/" + page}                                            
+                        to = {listurl}
+                    >   
+                        목록
+                    </CommunityLink>
+                    <br/>
+                    <br/>
+                    <br/>                
+                    <CommunityInput type="submit" />
                 </form>
             </CommunityMultiWrapper>
         </CommunityViewWrapper>
-    )
+    );
 };
 
 export default CommunityViewTemplate;

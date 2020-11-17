@@ -6,6 +6,6 @@ export const createNotice = ({userId, subject, content}) => {
 };
 
 // 공지 전부 가져오기
-export const getAllNotice = () => {    
-    return client.post('/api/notice/getall');
+export const getNotice = ({id}) => {    
+    return client.post('/api/notice/getnotice', {id});
 };

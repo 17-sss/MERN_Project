@@ -31,22 +31,29 @@ router.post('/create', async (req, res) => {
     }
 });
 
-// notice 전부 불러옴
-router.post('/getall', async (req, res) => {
+// notice 불러옴
+router.post('/getnotice', async (req, res) => {
+    const {id} = req.body;
+
     try {
         // RAW QUERY
-        const query = `            
+        let query = `            
             SELECT @ROWNUM := @ROWNUM + 1 AS RN, 
             notice.id, notice.subject, notice.content, notice.view, notice.createdAt, notice.updatedAt, notice.deletedAt,
             user.userid AS userDisplayId 
             FROM notices AS notice  
             LEFT OUTER JOIN users AS user ON notice.userId = user.id AND (user.deletedAt IS NULL),
             (SELECT @ROWNUM := 0) TMP
-            WHERE (notice.deletedAt IS NULL) ORDER BY RN DESC;
         `;
 
-        const getAllNotice = await sequelize.query(query, {
-            replacements:  {},
+        if (!id) {
+            query = query + `WHERE (notice.deletedAt IS NULL) ORDER BY RN DESC;`
+        } else {
+            query = query + `WHERE (notice.deletedAt IS NULL AND notice.id = :id ) ORDER BY RN DESC;`            
+        }
+
+        const getNotice = await sequelize.query(query, {
+            replacements:  {id: id && id},
             type: Sequelize.QueryTypes.SELECT,
             raw: true,
         });
@@ -54,7 +61,7 @@ router.post('/getall', async (req, res) => {
         return res.status(200).json({
             error: null,
             success: true,
-            data: getAllNotice,
+            data: getNotice,
         });
     } catch (error) {
         console.error(error);
@@ -65,5 +72,6 @@ router.post('/getall', async (req, res) => {
         });
     }
 });
+
 
 export default router;

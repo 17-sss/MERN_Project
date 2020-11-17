@@ -15,10 +15,10 @@ const [
 ] = createRequestActionTypes('notice/CREATE_NOTICE');
 
 const [
-    GET_ALL_NOTICE,
-    GET_ALL_NOTICE_SUCCESS,
-    GET_ALL_NOTICE_FAILURE,
-] = createRequestActionTypes('notice/GET_ALL_NOTICE');
+    GET_NOTICE,
+    GET_NOTICE_SUCCESS,
+    GET_NOTICE_FAILURE,
+] = createRequestActionTypes('notice/GET_NOTICE');
 
 // :: 액션 생성 함수 작성
 export const initializeNotice = createAction(INITALIZE_NOTICE);
@@ -37,18 +37,20 @@ export const createNotice = createAction(
     }),
 );
 
-export const getAllNotice = createAction(
-    GET_ALL_NOTICE
+export const getNotice = createAction(
+    // id 없을 경우 전부 불러옴
+    GET_NOTICE,
+    ({id} = {id: 0}) => ({id})
 );
 
 // :: 사가 생성
 const createNoticeSaga = createRequestSaga(CREATE_NOTICE, noticeAPI.createNotice);
 
-const getAllNoticeSaga = createRequestSaga(GET_ALL_NOTICE, noticeAPI.getAllNotice);
+const getNoticeSaga = createRequestSaga(GET_NOTICE, noticeAPI.getNotice);
 
 export function* noticeSaga() {
     yield takeLatest(CREATE_NOTICE, createNoticeSaga);
-    yield takeLatest(GET_ALL_NOTICE, getAllNoticeSaga);
+    yield takeLatest(GET_NOTICE, getNoticeSaga);
 }
 
 // :: 리듀서 초기값
@@ -124,7 +126,7 @@ const notice = handleActions(
         },
 
         // NOTICE 전부 가져옴
-        [GET_ALL_NOTICE_SUCCESS]: (state, action) => {
+        [GET_NOTICE_SUCCESS]: (state, action) => {
             const { payload: noticeStatus } = action;
 
             return {
@@ -134,7 +136,7 @@ const notice = handleActions(
             };
         },
 
-        [GET_ALL_NOTICE_FAILURE]: (state, action) => {
+        [GET_NOTICE_FAILURE]: (state, action) => {
             const { payload: noticeError } = action;
 
             return {

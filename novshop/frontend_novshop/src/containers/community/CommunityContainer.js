@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { initializeQA, getProductQA } from '../../modules/qa';
 import {
     initializeNotice,
-    getAllNotice,
+    getNotice,
     createNotice,
 } from '../../modules/notice';
 
@@ -15,10 +15,12 @@ const CommunityContainer = (props) => {
     const { page } = match && match.params;
 
     const dispatch = useDispatch();
-    const { qaStatus, noticeStatus } = useSelector(({ qa, notice }) => {
+    const { qaStatus, noticeStatus, qaLoading, noticeLoading } = useSelector(({ qa, notice, loading }) => {
         return {
             qaStatus: qa.qaStatus,
             noticeStatus: notice.noticeStatus,
+            qaLoading: loading['qa/GET_PRODUCT_QA'],
+            noticeLoading: loading['notice/GET_NOTICE'],
         };
     });
 
@@ -40,7 +42,7 @@ const CommunityContainer = (props) => {
         if (page === 'cs') {            
             dispatch(getProductQA({ productId: 0 /* 0일 경우 전부 불러옴 */ }));
         } else {            
-            dispatch(getAllNotice());
+            dispatch(getNotice());
         }
     }, [dispatch, page]);
 
@@ -125,6 +127,8 @@ const CommunityContainer = (props) => {
     };    
 
     return (
+        (!qaLoading && !noticeLoading)
+        &&
         <CommunityTemplate
             etcData={etcData}
             data={currentDatas && currentDatas}
