@@ -29,6 +29,7 @@ const cssCustomInput = css`
                 break;
             }
 
+            case 'submit':
             case 'button': {
                 defaultcss = css`
                     border: none;

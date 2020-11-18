@@ -41,6 +41,7 @@ export const getNotice = createAction(
     // id 없을 경우 전부 불러옴
     GET_NOTICE,
     ({id} = {id: 0}) => ({id})
+    // ({id = 0}) => ({id})     // 이렇게하면 기본값지정이 안댐.. 이상
 );
 
 // :: 사가 생성

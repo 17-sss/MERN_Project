@@ -6,11 +6,12 @@ const router = express.Router();
 
 // notice 생성 (POST /api/notice/create)
 router.post('/create', async (req, res) => {
-    const { userId, subject, content, view } = req.body;
-
+    const { id } = req.user;
+    const { subject, content, view } = req.body;
+    
     try {
         const createNotice = await Notice.create({
-            userId,
+            userid: id,
             subject,
             content,
             view,
@@ -34,7 +35,7 @@ router.post('/create', async (req, res) => {
 // notice 불러옴
 router.post('/getnotice', async (req, res) => {
     const {id} = req.body;
-
+    
     try {
         // RAW QUERY
         let query = `            

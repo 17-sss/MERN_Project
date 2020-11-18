@@ -39,7 +39,7 @@ const CommunityContainer = (props) => {
         setCurrentDatas([]);
         setPageCount(0);
 
-        if (page === 'cs') {            
+        if (page === 'qa') {            
             dispatch(getProductQA({ productId: 0 /* 0일 경우 전부 불러옴 */ }));
         } else {            
             dispatch(getNotice());
@@ -101,7 +101,7 @@ const CommunityContainer = (props) => {
     
     const etcData = {
         subjectData:
-            page === 'cs'
+            page === 'qa'
                 ? [
                       { name: '번호', width: '12.5%' },
                       { name: '제목', width: '50%' },
@@ -115,7 +115,7 @@ const CommunityContainer = (props) => {
                       { name: '제목', width: '70%' },
                       { name: '작성자', width: '15%' },
                   ],
-        pageName: page === 'cs' ? '고객센터' : '공지사항',
+        pageName: page === 'qa' ? '고객센터' : '공지사항',
         page,
         currentPage,
         pageCount,

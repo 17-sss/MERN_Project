@@ -138,7 +138,7 @@
         "value": "",
         "items": [
             { "id": 1, "key": "notice", "value": "공지사항" },
-            { "id": 2, "key": "cs", "value": "고객센터" }
+            { "id": 2, "key": "qa", "value": "고객센터" }
         ]
     }
 ]

@@ -69,29 +69,28 @@ const StyledOpt = styled.option`
 
 const WriteTemplate = (props) => {
     // editorState & onEditorStateChange는 Editor용
-    const { datas, events } = props;
-    const { writeForm, editorState } = datas;
-    const { onChange, onEditorStateChange } = events;
+    const { datas, etcDatas, events } = props;
+    const { editorState } = datas;
+    const { page } = etcDatas;
+    const { onSelectBoxChange, onEditorStateChange } = events;
+
+    
 
     return (
         <WriteForm onSubmit={() => alert('1')} encType="multipart/form-data">
-            <WirteInput
-                type="text"
-                name="subject"
-                placeholder="제목"
-                value={writeForm.subject}
-                onChange={onChange}
-            />
+            <WirteInput type="text" name="subject" placeholder="제목" />
             <WriteSelectBox
-                name="boardType"
-                onChange={onChange}
-                value={writeForm.boardType || ''}
+                name="boardname"
+                onChange={onSelectBoxChange}
+                value={page || ''}
+                // onChange={onChange}
+                // value={productForm.categoryId || 0}
             >
                 <StyledOpt value={''} noblack disabled>
                     게시판 선택
                 </StyledOpt>
-                <StyledOpt value={'notice'}>공지사항</StyledOpt>
-                <StyledOpt value={'qa'}>고객지원</StyledOpt>
+                <StyledOpt value={'yes'}>테스트yes</StyledOpt>
+                <StyledOpt value={'no'}>테스트no</StyledOpt>
                 {/*                 
                 {categories && 
                     categories.map((v)=>{
