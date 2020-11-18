@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { createRequestActionTypes  } from "../../lib/reduxUtil";
+import { createRequestActionTypes  } from "../../../lib/reduxUtil";
 
 // [1] 액션 생성
 const INITALIZE_FORM = 'auth/INITALIZE_FORM';   

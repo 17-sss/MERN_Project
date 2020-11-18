@@ -11,6 +11,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const WriteForm = styled.form`
     width: ${getSize(1.45)};
     margin: 0 auto;
+    font-size: 11pt;
 `;
 
 // 2) 다용도 Wrapper
@@ -45,6 +46,7 @@ const WriteMultiWrapper = styled.div`
 // 1) input
 const WirteInput = styled.input`
     ${cssCustomInput};
+    font-size: 11pt;
 
     ${(props) =>
         (props.type === 'button' || props.type === 'submit') &&
@@ -59,11 +61,23 @@ const WirteInput = styled.input`
 // 2) select
 const WriteSelectBox = styled.select`
     ${cssCustomInput};
+    font-size: 11pt;
+    display: inline-block;
 `;
 
-// 2-1) StyledOpt: select 태그의 option 태그
+// 2-1) option: select 태그의 option 태그
 const StyledOpt = styled.option`
     color: ${(props) => props.noblack || 'black'};
+`;
+
+// 3) span: 작성자 정보(아이디) View
+const WriteUserSpan = styled.span`
+    ${cssCustomInput};
+    font-size: 11pt;
+    width: 20%;    
+
+    display: block;
+    float: right;
 `;
 // ---------------------------------------------------/
 
@@ -86,24 +100,21 @@ const WriteTemplate = (props) => {
                 name="boardType"
                 onChange={onChange}
                 value={writeForm.boardType || ''}
+                addcss={css`
+                    width: 30%;
+                `}
             >
                 <StyledOpt value={''} noblack disabled>
                     게시판 선택
                 </StyledOpt>
                 <StyledOpt value={'notice'}>공지사항</StyledOpt>
                 <StyledOpt value={'qa'}>고객지원</StyledOpt>
-                {/*                 
-                {categories && 
-                    categories.map((v)=>{
-                        return (
-                            <StyledOpt key={v.id} value={v.id}>
-                                {v.displayValue}
-                            </StyledOpt>
-                        );
-                    } 
-                )} 
-*/}
             </WriteSelectBox>
+            <WriteUserSpan>
+                <b>작성자: </b> &nbsp;
+                {writeForm.userViewId}
+            </WriteUserSpan>
+
             <WriteMultiWrapper stype="editor">
                 <Editor
                     // 에디터와 툴바 모두에 적용되는 클래스

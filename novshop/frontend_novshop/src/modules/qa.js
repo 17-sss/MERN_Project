@@ -1,3 +1,8 @@
+/* 
+    - QA 생성과 onChange는 Write 모듈에서 처리
+    - 여기선 QA 불러오는것만 담당.
+*/
+
 import { createRequestActionTypes, createRequestSaga } from '../lib/reduxUtil';
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
@@ -6,13 +11,6 @@ import * as qaAPI from '../lib/api/qa';
 // :: 액션 이름 설정
 const INITALIZE_QA = 'qa/INITALIZE_QA';
 const INITALIZE_QA_FORM = 'qa/INITALIZE_QA_FORM';
-const CHANGE_QA = 'qa/CHANGE_QA';
-
-const [
-    CREATE_QA,
-    CREATE_QA_SUCCESS,
-    CREATE_QA_FAILURE,
-] = createRequestActionTypes('qa/CREATE_QA');
 
 const [
     GET_PRODUCT_QA,
@@ -20,64 +18,29 @@ const [
     GET_PRODUCT_QA_FAILURE,
 ] = createRequestActionTypes('qa/GET_PRODUCT_QA');
 
-
 // :: 액션 생성 함수 작성
-export const initializeQA = createAction(
-    INITALIZE_QA
- );
+export const initializeQA = createAction(INITALIZE_QA);
 
-export const initializeQAForm = createAction(
-    INITALIZE_QA_FORM,
-    ({form}) => ({form}),
-);
+export const initializeQAForm = createAction(INITALIZE_QA_FORM, ({ form }) => ({
+    form,
+}));
 
-export const createQA = createAction(
-    CREATE_QA,
-    ({userId, productId, subject, content, picture}) => ({            
-        userId,
-        productId,
-        subject,
-        content,
-        picture,        
-    }),
-);
-
-export const getProductQA = createAction(
-    GET_PRODUCT_QA, 
-    ({productId}) => ({productId})
-);
+export const getProductQA = createAction(GET_PRODUCT_QA, ({ productId }) => ({
+    productId,
+}));
 
 // :: 사가 생성
-const createQASaga = createRequestSaga(
-    CREATE_QA,
-    qaAPI.createQA,
-);
-
-const getProductQASaga = createRequestSaga(
-    GET_PRODUCT_QA,
-    qaAPI.getProductQA,
-);
+const getProductQASaga = createRequestSaga(GET_PRODUCT_QA, qaAPI.getProductQA);
 
 export function* qaSaga() {
-    yield takeLatest(CREATE_QA, createQASaga);    
-    yield takeLatest(GET_PRODUCT_QA, getProductQASaga);    
+    yield takeLatest(GET_PRODUCT_QA, getProductQASaga);
 }
-
 
 // :: 리듀서 초기값
 const initialState = {
-    qaForm: {
-        userId: 0,        
-        productId: 0,
-        subject: '',
-        content: '',
-        picture: '',        
-    },
-    qa: null,
-    qaError: null,
     qaStatus: null,
+    qaError: null,
 };
-
 
 // :: 리듀서
 const qa = handleActions(
@@ -86,56 +49,19 @@ const qa = handleActions(
         [INITALIZE_QA]: (state) => {
             return {
                 ...state,
-                qaForm: initialState['qaForm'],                
-                qa: null,
+                qaStatus: null,
                 qaError: null,
-                qaStatus: null,                
             };
         },
 
         // QA (선택적) 초기화
-        [INITALIZE_QA_FORM]: (state, action) => {            
+        [INITALIZE_QA_FORM]: (state, action) => {
             const { payload } = action;
             const { form } = payload;
 
             return {
                 ...state,
                 [form]: initialState[form],
-            };
-        },
-
-        // onChange (qaForm)
-        [CHANGE_QA]: (state, action) => {
-            const { payload } = action;
-            const { key, value } = payload;
-
-            return {
-                ...state,
-                qaForm: {
-                    ...state["qaForm"],
-                    [key]: value,
-                },
-            };
-        },
-
-        // QA 생성
-        [CREATE_QA_SUCCESS]: (state, action) => {
-            const { payload: qa } = action;
-
-            return {
-                ...state,
-                qa,
-                qaError: null,
-            };
-        },
-
-        [CREATE_QA_FAILURE]: (state, action) => {
-            const { payload: qaError } = action;
-
-            return {
-                ...state,
-                qa: null,
-                qaError,
             };
         },
 
@@ -159,10 +85,8 @@ const qa = handleActions(
                 qaError,
             };
         },
-
-
-
-    }, initialState
+    },
+    initialState,
 );
 
 export default qa;

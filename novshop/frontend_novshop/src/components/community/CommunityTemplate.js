@@ -146,7 +146,7 @@ const WriteLink = styled(CustomLink)`
 
 const CommunityTemplate = (props) => {
     const { data, etcData, events } = props;
-    const { pagingBtnClick, onCreateNotice } = events;
+    const { pagingBtnClick } = events;
     const { subjectData, pageName, page, pageCount, currentPage } = etcData;
 
     return (
@@ -228,8 +228,7 @@ const CommunityTemplate = (props) => {
                     </WriteWrapper>
                 </PagingWrapper>   
 
-            </CommunityMultiWrapper>
-            <button onClick={onCreateNotice}>1</button>
+            </CommunityMultiWrapper>            
         </CommunityWrapper>
     );
 };

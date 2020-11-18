@@ -5,7 +5,6 @@ import { initializeQA, getProductQA } from '../../modules/qa';
 import {
     initializeNotice,
     getNotice,
-    createNotice,
 } from '../../modules/notice';
 
 import CommunityTemplate from '../../components/community/CommunityTemplate';
@@ -83,18 +82,7 @@ const CommunityContainer = (props) => {
         const { value } = e.target;
         if (!value || value <= 0) return;
         setCurrentPage(value);
-    };
-
-    // 데이터 생성 (공지 테스트용)
-    const onCreateNotice = () => {
-        dispatch(
-            createNotice({
-                userId: 1,
-                subject: '공지테스트',
-                content: '테스트좀해여',
-            }),
-        );
-    };
+    };    
     // ==========
 
 
@@ -123,7 +111,6 @@ const CommunityContainer = (props) => {
 
     const events = {
         pagingBtnClick,
-        onCreateNotice,
     };    
 
     return (

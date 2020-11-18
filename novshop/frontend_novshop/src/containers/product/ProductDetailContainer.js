@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, initializeProductForm } from "../../modules/product";
 import { createReview, getProductReview, initializeReview } from '../../modules/review';
-import { createQA, getProductQA, initializeQA } from '../../modules/qa';
+import { getProductQA, initializeQA } from '../../modules/qa';
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
 
@@ -144,15 +144,10 @@ const ProductDetailContainer = (props) => {
         e.preventDefault();        
         dispatch(createReview({userId: 1, productId: 1, subject: '테스트사진', content: '내용', picture: '있음', rate: 3}));        
     }
-
-    const onAddQATest = (e) => {
-        e.preventDefault();                
-        dispatch(createQA({userId:1, productId: 1, subject: '테스트Q11', content: '내용QA21122', picture: '?'}));        
-    }
     // -----
 
     const refs = {colorRef, sizeRef};
-    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest, onAddQATest};    
+    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest};    
     const imgDivInfo = {imgRef, imgClientSize};
 
     // render
