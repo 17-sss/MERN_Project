@@ -1,6 +1,6 @@
 // notice ******************************************************
 import express from 'express';
-import { Notice, User, sequelize, Sequelize } from '../models';
+import { Notice, sequelize, Sequelize } from '../models';
 
 const router = express.Router();
 
@@ -30,39 +30,10 @@ router.post('/create', async (req, res) => {
     }
 });
 
-
-// 특정 notice 불러옴 (POST /api/notice/getNotice)
-router.post('/getNotice', async (req, res) => { 
-    const { id } = req.body;
-    try {
-        const getNotice = await Notice.findOne({
-            include: [  
-                {                    
-                    model: User,
-                    attributes: ['userid'],
-                },
-            ],
-            where: {id}
-        });
-        return res.status(200).json({
-            error: null,
-            success: true,
-            data: getNotice,
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            error,
-            code: -1,
-            message: '서버에 오류가 있습니다.',
-        });
-    }
-});
-
-
-
-// notice 전부 불러옴 (POST /api/notice/getAll)
-router.post('/getAll', async (req, res) => {
+// notice 불러옴
+router.post('/getnotice', async (req, res) => {
+    const {id} = req.body;
+    
     try {
         // RAW QUERY
         let query = `            
@@ -72,11 +43,16 @@ router.post('/getAll', async (req, res) => {
             FROM notices AS notice  
             LEFT OUTER JOIN users AS user ON notice.userId = user.id AND (user.deletedAt IS NULL),
             (SELECT @ROWNUM := 0) TMP
-            WHERE (notice.deletedAt IS NULL) ORDER BY RN DESC;
-        `;        
+        `;
 
-        const getAllNotice = await sequelize.query(query, {
-            replacements: {},
+        if (!id) {
+            query = query + `WHERE (notice.deletedAt IS NULL) ORDER BY RN DESC;`
+        } else {
+            query = query + `WHERE (notice.deletedAt IS NULL AND notice.id = :id ) ORDER BY RN DESC;`            
+        }
+
+        const getNotice = await sequelize.query(query, {
+            replacements:  {id: id && id},
             type: Sequelize.QueryTypes.SELECT,
             raw: true,
         });
@@ -84,9 +60,8 @@ router.post('/getAll', async (req, res) => {
         return res.status(200).json({
             error: null,
             success: true,
-            data: getAllNotice,
+            data: getNotice,
         });
-
     } catch (error) {
         console.error(error);
         return res.status(500).json({

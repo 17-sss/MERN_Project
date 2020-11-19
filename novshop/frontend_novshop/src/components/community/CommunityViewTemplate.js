@@ -151,7 +151,7 @@ const CommunityHr = styled(StyledHr)`
 
 const CommunityViewTemplate = (props) => {
     const { etcDatas, data } = props;
-    const { pageName, listurl } = etcDatas;
+    const { pageName, pathname } = etcDatas;
 
     return (
         <CommunityViewWrapper>
@@ -160,50 +160,46 @@ const CommunityViewTemplate = (props) => {
             </CommunityMultiWrapper>
             <CommunityMultiWrapper stype="table">
                 <form onSubmit={() => alert('1')}>
+                    {data && (
+                        <> 
+                            <StyledTable>
+                                <tbody>
+                                    <tr>
+                                        <StyeldTd width="10%" border="bot_right">
+                                            제목
+                                        </StyeldTd>
+                                        <StyeldTd width="90%" border="bot" align="left">
+                                            {data.subject}
+                                        </StyeldTd>
+                                    </tr>
+                                    <tr>
+                                        <StyeldTd width="10%" border="bot_right">
+                                            작성자
+                                        </StyeldTd>
+                                        <StyeldTd width="90%" border="bot" align="left">
+                                            {data.user && data.user.userid}
+                                        </StyeldTd>
+                                    </tr>
+                                </tbody>
+                            </StyledTable>
+                            <CommunityMultiWrapper stype="content">
+                                {data.content}
+                            </CommunityMultiWrapper>
+                        </>
+                    )}
                     
-                        {data && data.map((v, i) => {
-                            if (i > 0) return null; // 하나만 가져와야하니까 혹시 모르니..
-
-                            return (
-                                <div key ={i}>
-                                    <StyledTable>
-                                        <tbody>
-                                            <tr>
-                                                <StyeldTd width="10%" border="bot_right">
-                                                    제목
-                                                </StyeldTd>
-                                                <StyeldTd width="90%" border="bot" align="left">
-                                                    {v.subject}
-                                                </StyeldTd>
-                                            </tr>
-                                            <tr>
-                                                <StyeldTd width="10%" border="bot_right">
-                                                    작성자
-                                                </StyeldTd>
-                                                <StyeldTd width="90%" border="bot" align="left">
-                                                    {v.userDisplayId}
-                                                </StyeldTd>
-                                            </tr>
-                                        </tbody>
-                                    </StyledTable>
-                                    <CommunityMultiWrapper stype="content">
-                                        {v.content}
-                                    </CommunityMultiWrapper>
-                                </div>
-                            )
-                        })}
-
-                    <CommunityHr />    
-                    <CommunityLink 
-                        type = "button"
-                        // to = {"/community/" + page}                                            
-                        to = {listurl}
-                    >   
+                    
+                    <CommunityHr />
+                    <CommunityLink
+                        type="button"
+                        // to = {"/community/" + page}
+                        to={pathname}
+                    >
                         목록
                     </CommunityLink>
-                    <br/>
-                    <br/>
-                    <br/>                
+                    <br />
+                    <br />
+                    <br />
                     <CommunityInput type="submit" />
                 </form>
             </CommunityMultiWrapper>

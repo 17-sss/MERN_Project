@@ -17,6 +17,12 @@ const [
     GET_NOTICE_FAILURE,
 ] = createRequestActionTypes('notice/GET_NOTICE');
 
+const [
+    GET_ALL_NOTICE,
+    GET_ALL_NOTICE_SUCCESS,
+    GET_ALL_NOTICE_FAILURE,
+] = createRequestActionTypes('notice/GET_ALL_NOTICE');
+
 // :: 액션 생성 함수 작성
 export const initializeNotice = createAction(INITALIZE_NOTICE);
 
@@ -25,18 +31,16 @@ export const initializeNoticeForm = createAction(
     ({ form }) => ({ form }),
 );
 
-export const getNotice = createAction(
-    // id 없을 경우 전부 불러옴
-    GET_NOTICE,
-    ({id} = {id: 0}) => ({id})
-    // ({id = 0}) => ({id})     // 이렇게하면 기본값지정이 안댐.. 이상
-);
+export const getNotice = createAction(GET_NOTICE, ({id}) => ({id}));
+export const getAllNotice = createAction(GET_ALL_NOTICE);
 
 // :: 사가 생성
 const getNoticeSaga = createRequestSaga(GET_NOTICE, noticeAPI.getNotice);
+const getAllNoticeSaga = createRequestSaga(GET_ALL_NOTICE, noticeAPI.getAllNotice);
 
 export function* noticeSaga() {    
     yield takeLatest(GET_NOTICE, getNoticeSaga);
+    yield takeLatest(GET_ALL_NOTICE, getAllNoticeSaga);
 }
 
 // :: 리듀서 초기값
@@ -68,7 +72,7 @@ const notice = handleActions(
             };
         },
 
-        // NOTICE 전부 가져옴
+        // 특정 NOTICE 가져옴
         [GET_NOTICE_SUCCESS]: (state, action) => {
             const { payload: noticeStatus } = action;
 
@@ -80,6 +84,27 @@ const notice = handleActions(
         },
 
         [GET_NOTICE_FAILURE]: (state, action) => {
+            const { payload: noticeError } = action;
+
+            return {
+                ...state,
+                noticeStatus: null,
+                noticeError,
+            };
+        },
+
+        // NOTICE 전부 가져옴
+        [GET_ALL_NOTICE_SUCCESS]: (state, action) => {
+            const { payload: noticeStatus } = action;
+
+            return {
+                ...state,
+                noticeStatus,
+                noticeError: null,
+            };
+        },
+
+        [GET_ALL_NOTICE_FAILURE]: (state, action) => {
             const { payload: noticeError } = action;
 
             return {

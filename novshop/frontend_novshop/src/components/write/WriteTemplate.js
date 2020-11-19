@@ -81,14 +81,28 @@ const WriteUserSpan = styled.span`
 `;
 // ---------------------------------------------------/
 
+
+const IntroduceContent = styled.div`
+  position: relative;
+  border: 0.0625rem solid #d7e2eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  padding: 1.5rem;
+  width: 50%;
+  margin: 0 auto;
+  margin-bottom: 4rem;
+`;
+
+
+
 const WriteTemplate = (props) => {
     // editorState & onEditorStateChange는 Editor용
     const { datas, events } = props;
     const { writeForm, editorState } = datas;
-    const { onChange, onEditorStateChange } = events;
+    const { onChange, onSubmit, onEditorStateChange, editorToHtml } = events;
 
     return (
-        <WriteForm onSubmit={() => alert('1')} encType="multipart/form-data">
+        <WriteForm onSubmit={onSubmit} encType="multipart/form-data">
             <WirteInput
                 type="text"
                 name="subject"
@@ -110,11 +124,12 @@ const WriteTemplate = (props) => {
                 <StyledOpt value={'notice'}>공지사항</StyledOpt>
                 <StyledOpt value={'qa'}>고객지원</StyledOpt>
             </WriteSelectBox>
-            <WriteUserSpan>
-                <b>작성자: </b> &nbsp;
-                {writeForm.userViewId}
-            </WriteUserSpan>
-
+            {writeForm.userViewId && (
+                <WriteUserSpan>
+                    <b>작성자: </b> &nbsp;
+                    {writeForm.userViewId}
+                </WriteUserSpan>
+            )}        
             <WriteMultiWrapper stype="editor">
                 <Editor
                     // 에디터와 툴바 모두에 적용되는 클래스
@@ -147,6 +162,9 @@ const WriteTemplate = (props) => {
                 <WirteInput type="button" value="취소" />
             </WriteMultiWrapper>
             <ClearEx />
+
+            <IntroduceContent dangerouslySetInnerHTML={{ __html: editorToHtml(editorState) }} />
+            
         </WriteForm>
     );
 };

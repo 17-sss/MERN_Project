@@ -46,8 +46,8 @@ const CommunityMultiWrapper = styled.div`
 // 1) Table
 const StyledTable = styled.table`
     /* margin: 0 auto; */
-    margin: 0 5%;
-    width: 90%;
+    /* margin: 0 5%; */
+    width: 100%;
     border-top: 4px solid black;
 `;
 // ---------------------------------------------------/
@@ -122,7 +122,7 @@ const PagingBtn = styled.input`
 const WriteWrapper = styled.div`            
     display: inline-block;                
     position: absolute;
-    right: 60px;
+    right: 0px;    
     width: auto;
 `;
 // ---------------------------------------------------/
@@ -147,7 +147,7 @@ const WriteLink = styled(CustomLink)`
 const CommunityTemplate = (props) => {
     const { data, etcData, events } = props;
     const { pagingBtnClick } = events;
-    const { subjectData, pageName, page, pageCount, currentPage } = etcData;
+    const { subjectData, pageName, page, pageCount, currentPage, userData } = etcData;
 
     return (
         <CommunityWrapper>
@@ -221,11 +221,11 @@ const CommunityTemplate = (props) => {
                         );
                     })}                
 
-                    <WriteWrapper>
+                    {userData && (<WriteWrapper>
                         <WriteLink to = {'/write/' + page }>
                             글 작성
                         </WriteLink>
-                    </WriteWrapper>
+                    </WriteWrapper>)}
                 </PagingWrapper>   
 
             </CommunityMultiWrapper>            

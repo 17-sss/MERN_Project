@@ -29,8 +29,28 @@ router.post('/create', async(req, res) => {
     }
 });
 
+// 특정 Q&A 가져옴 (POST /api/qa/getQA)
+router.post('/getQA', async(req, res) => {
+    const {id} = req.body;    
+    try {
+        const getQA = await QA.findOne({where: {id}});        
+        return res.status(200).json({
+            error: null,
+            success: true,
+            data: getQA,
+        });
+    } catch (error) {
+        console.error(error);        
+        return res.status(500).json({
+            error,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    }
+});
 
-// 상품 Q&A 가져오기 (POST /api/qa/getProductQA)
+
+// 상품 Q&A 가져오거나 전부 가져옴 (POST /api/qa/getProductQA)
 router.post("/getProductQA", async(req, res) => {
     let {productId} = req.body;
     productId = productId || 0;     // 0 일 경우 전부 불러옴   

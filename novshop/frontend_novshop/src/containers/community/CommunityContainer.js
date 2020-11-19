@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { initializeQA, getProductQA } from '../../modules/qa';
 import {
     initializeNotice,
-    getNotice,
+    getAllNotice,
 } from '../../modules/notice';
 
 import CommunityTemplate from '../../components/community/CommunityTemplate';
@@ -14,12 +14,13 @@ const CommunityContainer = (props) => {
     const { page } = match && match.params;
 
     const dispatch = useDispatch();
-    const { qaStatus, noticeStatus, qaLoading, noticeLoading } = useSelector(({ qa, notice, loading }) => {
+    const { qaStatus, noticeStatus, qaLoading, noticeLoading, userData } = useSelector(({ qa, notice, loading, user }) => {
         return {
             qaStatus: qa.qaStatus,
             noticeStatus: notice.noticeStatus,
             qaLoading: loading['qa/GET_PRODUCT_QA'],
             noticeLoading: loading['notice/GET_NOTICE'],
+            userData: user.user
         };
     });
 
@@ -41,7 +42,7 @@ const CommunityContainer = (props) => {
         if (page === 'qa') {            
             dispatch(getProductQA({ productId: 0 /* 0일 경우 전부 불러옴 */ }));
         } else {            
-            dispatch(getNotice());
+            dispatch(getAllNotice());
         }
     }, [dispatch, page]);
 
@@ -59,6 +60,7 @@ const CommunityContainer = (props) => {
                     ? qaStatus.data
                     : null;
             if (!dataTmp) return;
+            if (!dataTmp instanceof Array) return;
 
             setPageCount(Math.ceil(dataTmp.length / onePageCnt));
 
@@ -66,6 +68,7 @@ const CommunityContainer = (props) => {
             const indexOfFirst = indexOfLast - onePageCnt;
 
             const createTmpData = () => {
+                if (typeof dataTmp.slice !== 'function') return;
                 let tmpData =
                     dataTmp && dataTmp.slice(indexOfFirst, indexOfLast);
                 tmpData && tmpData.length > 0 && setCurrentDatas(tmpData);
@@ -85,8 +88,6 @@ const CommunityContainer = (props) => {
     };    
     // ==========
 
-
-    
     const etcData = {
         subjectData:
             page === 'qa'
@@ -107,6 +108,7 @@ const CommunityContainer = (props) => {
         page,
         currentPage,
         pageCount,
+        userData,
     };
 
     const events = {
