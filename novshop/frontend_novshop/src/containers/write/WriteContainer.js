@@ -87,6 +87,11 @@ const WriteContainer = (props) => {
         onChangeWriteForm({ key, value });
     };
 
+    const onClickFocusControl = (e) => {
+        e.preventDefault();
+        e.target.focus();
+    }
+
     const onSubmit = useCallback((e) => {
         e.preventDefault();
         if (!writeForm) return;
@@ -103,7 +108,7 @@ const WriteContainer = (props) => {
                 break;
         }
     }, [dispatch, writeForm]);
-
+    
     const onEditorStateChange = (editorState) => {        
         setEditorState(editorState);
         onChangeWriteForm({ key: 'content', value: editorToHtml(editorState) });
@@ -111,7 +116,7 @@ const WriteContainer = (props) => {
 
     return (
         <WriteTemplate
-            events={{ onChange, onSubmit, onEditorStateChange, editorToHtml }}
+            events={{ onChange, onSubmit, onEditorStateChange, editorToHtml, onClickFocusControl }}
             datas={{ writeForm, editorState }}
         />
     );

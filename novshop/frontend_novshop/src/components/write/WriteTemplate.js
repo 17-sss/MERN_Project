@@ -99,7 +99,7 @@ const WriteTemplate = (props) => {
     // editorState & onEditorStateChange는 Editor용
     const { datas, events } = props;
     const { writeForm, editorState } = datas;
-    const { onChange, onSubmit, onEditorStateChange, editorToHtml } = events;
+    const { onChange, onSubmit, onEditorStateChange, editorToHtml, onClickFocusControl } = events;
 
     return (
         <WriteForm onSubmit={onSubmit} encType="multipart/form-data">
@@ -109,6 +109,7 @@ const WriteTemplate = (props) => {
                 placeholder="제목"
                 value={writeForm.subject}
                 onChange={onChange}
+                onClick={onClickFocusControl}                
             />
             <WriteSelectBox
                 name="boardType"
