@@ -8,7 +8,7 @@ import CommunityViewTemplate from '../../components/community/CommunityViewTempl
 
 const CommunityViewContainer = (props) => {
     const { num, match, location } = props;
-    const { pathname, search } = location;
+    const { pathname, /* search */ } = location;
     const { page } = match.params;
     const pageName = page === 'qa' ? '고객센터' : '공지사항';
 

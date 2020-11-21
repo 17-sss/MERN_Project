@@ -90,8 +90,9 @@ const WriteContainer = (props) => {
     const onSubmit = useCallback((e) => {
         e.preventDefault();
         if (!writeForm) return;
-        if (!page) return;
+        
         const { userId, subject, content, boardType } = writeForm;
+        if (!boardType) return;
         
         switch (boardType) {
             case 'notice':
@@ -101,7 +102,7 @@ const WriteContainer = (props) => {
             default:
                 break;
         }
-    }, [dispatch, page, writeForm]);
+    }, [dispatch, writeForm]);
 
     const onEditorStateChange = (editorState) => {        
         setEditorState(editorState);
