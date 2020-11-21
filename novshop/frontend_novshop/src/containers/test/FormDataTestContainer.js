@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TestTemplate from '../../components/test/TestTemplate';
+import FormDataTestTemplate from '../../components/test/FormDataTestTemplate';
 import axios from 'axios';
 
 const TestContainer = () => {
@@ -32,7 +32,7 @@ const TestContainer = () => {
             });
     };
 
-    return <TestTemplate onSubmit={onSubmit} onChange={onChange} />;
+    return <FormDataTestTemplate onSubmit={onSubmit} onChange={onChange} />;
 };
 
 export default TestContainer;

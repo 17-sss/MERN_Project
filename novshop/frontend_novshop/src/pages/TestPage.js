@@ -1,10 +1,20 @@
 import React from 'react';
-import TestContainer from '../containers/test/TestContainer';
+import { withRouter } from 'react-router-dom';
+import FormDataTestContainer from '../containers/test/FormDataTestContainer';
+import EditorTestContainer from '../containers/test/EditorTestContainer';
 
-const TestPage = () => {    
-    return (
-        <TestContainer />
+const TestPage = ({ match }) => {
+    const {
+        params: { opt },
+    } = match;    
+
+    return opt === 'formdata' ? (
+        <FormDataTestContainer />
+    ) : opt === 'editor' ? (
+        <EditorTestContainer/>
+    ) : (
+        <div>없음</div>
     );
 };
 
-export default TestPage;
+export default withRouter(TestPage);

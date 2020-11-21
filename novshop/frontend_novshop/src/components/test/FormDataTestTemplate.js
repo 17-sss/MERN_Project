@@ -7,7 +7,7 @@ const TestWrapper = styled.div`
     margin: 0 auto;
 `;
 
-const TestTemplate = (props) => {
+const FormDataTestTemplate = (props) => {
     const {onChange, onSubmit} = props;
     return (
         <TestWrapper>
@@ -23,4 +23,4 @@ const TestTemplate = (props) => {
     )
 };
 
-export default TestTemplate; 
+export default FormDataTestTemplate; 
