@@ -7,8 +7,6 @@ import {
     changeWriteForm,
     createWriteNotice,
     createWriteQA,
-    imageUpload,
-    initializeWriteForm,
 } from '../../modules/write';
 
 import WriteTemplate from '../../components/write/WriteTemplate';
@@ -20,22 +18,20 @@ const WriteContainer = (props) => {
 
     // redux 초기설정
     const dispatch = useDispatch();
-    const { writeForm, writeImgName, userData } = useSelector(({ write, user }) => {
+    const { writeForm, userData } = useSelector(({ write, user }) => {
         return {
             writeForm: write.writeForm,
-            writeImgName: write.writeImgName,
             userData: user.user,
         };
     });
 
     // state & ref @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     const [user, setUser] = useState(null);
-    const [file, setFile] = useState(null);
 
     // 1. 에디터 (quill) 관련
-    const quillElement = useRef(null);  // Quill을 적용할 Div틀 전용
+    const quillElement = useRef(null); // Quill을 적용할 Div틀 전용
     const quillInstance = useRef(null); // Quill 인스턴스 설정
-    const imageRef = useRef(null);      // Quill 이미지 전용 (input hidden)
+    const quillMounted = useRef(null); // Quill 기존 내용을 가져오기 위한 Ref
 
     // hooks & events @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // 1. useCallback & event ----------------------------------------------------------
@@ -50,13 +46,9 @@ const WriteContainer = (props) => {
     // 1-1) writeForm Change
     const onChange = (e) => {
         e.preventDefault();
-        const { name: key, value, type, files } = e.target;
+        const { name: key, value } = e.target;
 
-        if (type === "file") {
-            setFile(files[0])
-        } else {
-            onChangeWriteForm({ key, value });
-        }
+        onChangeWriteForm({ key, value });
     };
 
     // 2) Submit
@@ -90,10 +82,37 @@ const WriteContainer = (props) => {
         [dispatch, writeForm],
     );
 
-    // 3) onClickImageBtn (quill 이미지 핸들링을 위한 이벤트) (useCallback)
-    const onClickImageBtn = useCallback(() => {
-        imageRef.current.click();
-    }, []);
+    // 3) onClickImageBtn (quill 이미지 핸들링을 위한 이벤트)
+    const onClickImageBtn = () => {
+        const input = document.createElement('input');
+
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+        /*
+        input.onchange = () => {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const range = quillInstance.current.getSelection(true);
+            console.log(range);
+            axios.post('/api/image/upload', formData).then((res) => {
+                if (res.data.uploaded) {
+                    console.log(res.data.transforms[2].location);
+                    quillInstance.current.insertEmbed(
+                        range.index,
+                        'image',
+                        res.data.transforms[2].location,
+                    );
+
+                    // Move cursor to right side of image (easier to continue typing)
+                    quillInstance.current.setSelection(range.index + 1);
+                }
+            });
+        };
+        */
+    };
 
     // 2. useEffect ----------------------------------------------------------
     // 1) 현재 유저 GET
@@ -163,25 +182,14 @@ const WriteContainer = (props) => {
         // 이미지 핸들링을 위한 커스텀 핸들러
         const toolbar = quill.getModule('toolbar');
         toolbar.addHandler('image', onClickImageBtn);
-    }, [onChangeWriteForm, onClickImageBtn]);
-    
-    // 3-1-1) Editor 이미지 전용 State(file)이 변경될 시.
+    }, [onChangeWriteForm]);
+
+    // 3-1) Editor 기존 내용을 가져오기 위한 Ref 설정 (mounted)
     useEffect(() => {
-        if (!file) return;
-        dispatch(imageUpload({ imgData: file }));
-    }, [dispatch, file])
-
-    // 3-1-2) Editor 이미지 전용 writeImgName 상태가 변경될 시
-    useEffect(() => {
-        if (!writeImgName || !writeImgName.data) return;
-
-        quillInstance.current.root.innerHTML =
-            quillInstance.current.root.innerHTML +
-            `<img src="http://localhost:3000/uploads/${writeImgName.data}"/>`;
-
-        dispatch(initializeWriteForm({form: 'writeImgName'}));
-    }, [writeImgName, dispatch]);
-
+        if (writeForm.content === '' || quillMounted.current) return;
+        quillMounted.current = true;
+        quillInstance.current.root.innerHTML = writeForm.content;
+    }, [writeForm.content]);
 
     // ==============================================================================
     // ==============================================================================
@@ -189,8 +197,8 @@ const WriteContainer = (props) => {
     return (
         <WriteTemplate
             events={{ onChange, onSubmit }}
-            refs={{ quillElement, imageRef }}
-            datas={{ writeForm }}
+            refs={{ quillElement }}
+            datas={{ writeForm, quillElement }}
         />
     );
 };

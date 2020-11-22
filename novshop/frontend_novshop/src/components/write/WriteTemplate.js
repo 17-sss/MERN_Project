@@ -90,7 +90,7 @@ const WriteTemplate = (props) => {
     // editorState & onEditorStateChange는 Editor용
     const {
         events: { onChange, onSubmit },
-        refs: { quillElement },
+        refs: { quillElement, imageRef },
         datas: { writeForm },
     } = props;
 
@@ -129,6 +129,9 @@ const WriteTemplate = (props) => {
             <WriteMultiWrapper stype="editor">
                 <div ref={quillElement} />
             </WriteMultiWrapper>
+
+            {/* 이미지 input :: hidden */}
+            <input hidden name="image" type="file" onChange={onChange} ref={imageRef} />
 
             <WriteMultiWrapper stype="buttons">
                 <WirteInput type="submit" value="확인" />

@@ -8,6 +8,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
 import * as noticeAPI from '../lib/api/notice';
 import * as qaAPI from '../lib/api/qa';
+import * as uploadAPI from '../lib/api/upload';
 
 // :: 액션 이름 설정
 const INITALIZE_WRITE = 'write/INITALIZE_WRITE';
@@ -25,6 +26,13 @@ const [
     CREATE_WRITE_QA_SUCCESS,
     CREATE_WRITE_QA_FAILURE,
 ] = createRequestActionTypes('write/CREATE_WRITE_QA'); // 고객센터 (qa) create
+
+const [
+    IMAGE_UPLOAD,
+    IMAGE_UPLOAD_SUCCESS,
+    IMAGE_UPLOAD_FAILURE,
+] = createRequestActionTypes('write/IMAGE_UPLOAD'); // 작성 중 이미지 업로드
+
 
 // :: 액션 생성 함수 작성
 export const initializeWrite = createAction(
@@ -57,6 +65,10 @@ export const createWriteQA = createAction(
         picture,
     }),
 );
+export const imageUpload = createAction(
+    IMAGE_UPLOAD,
+    ({ imgData }) => ({ imgData }),
+);
 
 // :: 사가 생성
 const createWriteNoticeSaga = createRequestSaga(
@@ -64,10 +76,13 @@ const createWriteNoticeSaga = createRequestSaga(
     noticeAPI.createNotice,
 );
 const createWriteQASaga = createRequestSaga(CREATE_WRITE_QA, qaAPI.createQA);
+const imageUploadSaga = createRequestSaga(IMAGE_UPLOAD, uploadAPI.imageUpload);
+
 
 export function* writeSaga() {
     yield takeLatest(CREATE_WRITE_NOTICE, createWriteNoticeSaga);
     yield takeLatest(CREATE_WRITE_QA, createWriteQASaga);
+    yield takeLatest(IMAGE_UPLOAD, imageUploadSaga);
 }
 
 // :: 리듀서 초기값
@@ -85,6 +100,7 @@ const initialState = {
         userViewId: '',
     },
     write: null,
+    writeImgName: null,
     writeError: null,
 };
 
@@ -103,6 +119,7 @@ const write = handleActions(
                     boardType: page ? page : '',
                 },
                 write: null,
+                writeImgName: null,
                 writeError: null,
             };
         },
@@ -170,6 +187,27 @@ const write = handleActions(
             return {
                 ...state,
                 write: null,
+                writeError,
+            };
+        },
+
+        // 이미지 업로드 (quill 에디터에서 작성 중 이미지 1개 업로드)
+        [IMAGE_UPLOAD_SUCCESS]: (state, action) => {
+            const { payload: writeImgName } = action;
+
+            return {
+                ...state,
+                writeImgName,
+                writeError: null,
+            };
+        },
+
+        [IMAGE_UPLOAD_FAILURE]: (state, action) => {
+            const { payload: writeError } = action;
+
+            return {
+                ...state,
+                writeImgName: null,
                 writeError,
             };
         },
