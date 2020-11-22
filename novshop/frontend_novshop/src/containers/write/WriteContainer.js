@@ -29,7 +29,7 @@ const WriteContainer = (props) => {
     // state @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     const [user, setUser] = useState(null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
-    const rendered = useRef(false);     // Editor 쓰기 상태 (useState쓰면 useEffect 의존성 주의 알림 뜸)
+    const editorRef = useRef(null);   
 
     // hooks @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // 1. useCallback --
@@ -61,12 +61,9 @@ const WriteContainer = (props) => {
     }, [dispatch, page]);
 
     // 3) Editor 제어 (wirteForm.content)
-    useEffect(() => {
-        // rendered 제어안하면 에디터 포커스 이상한데로 감
-        if (rendered.current) return;        
+    useEffect(() => {        
         if (!writeForm.content) return;
-        rendered.current = true;        
-        
+                
         const blocksFromHtml = htmlToDraft(writeForm.content);
         if (blocksFromHtml) {
             const { contentBlocks, entityMap } = blocksFromHtml;
@@ -90,6 +87,10 @@ const WriteContainer = (props) => {
     const onClickFocusControl = (e) => {
         e.preventDefault();
         e.target.focus();
+    }
+
+    const onClickEditorFocus = () => {
+        editorRef.current.editor.focus();                        
     }
 
     const onSubmit = useCallback((e) => {
@@ -116,8 +117,9 @@ const WriteContainer = (props) => {
 
     return (
         <WriteTemplate
-            events={{ onChange, onSubmit, onEditorStateChange, editorToHtml, onClickFocusControl }}
-            datas={{ writeForm, editorState }}
+            events={{ onChange, onSubmit, onEditorStateChange, onClickFocusControl, onClickEditorFocus }}
+            func = {{ editorToHtml }}
+            datas={{ writeForm, editorState, editorRef }}
         />
     );
 };

@@ -74,32 +74,37 @@ const StyledOpt = styled.option`
 const WriteUserSpan = styled.span`
     ${cssCustomInput};
     font-size: 11pt;
-    width: 20%;    
+    width: 20%;
 
     display: block;
     float: right;
 `;
 // ---------------------------------------------------/
 
-
 const IntroduceContent = styled.div`
-  position: relative;
-  border: 0.0625rem solid #d7e2eb;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  padding: 1.5rem;
-  width: 50%;
-  margin: 0 auto;
-  margin-bottom: 4rem;
+    position: relative;
+    border: 0.0625rem solid #d7e2eb;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    padding: 1.5rem;
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 4rem;
 `;
-
-
 
 const WriteTemplate = (props) => {
     // editorState & onEditorStateChange는 Editor용
-    const { datas, events } = props;
-    const { writeForm, editorState } = datas;
-    const { onChange, onSubmit, onEditorStateChange, editorToHtml, onClickFocusControl } = events;
+    const {
+        datas: { writeForm, editorState, editorRef },
+        events: {
+            onChange,
+            onSubmit,
+            onEditorStateChange,
+            onClickFocusControl,
+            onClickEditorFocus,
+        },
+        func: { editorToHtml },
+    } = props;
 
     return (
         <WriteForm onSubmit={onSubmit} encType="multipart/form-data">
@@ -109,7 +114,7 @@ const WriteTemplate = (props) => {
                 placeholder="제목"
                 value={writeForm.subject}
                 onChange={onChange}
-                onClick={onClickFocusControl}                
+                onClick={onClickFocusControl}
             />
             <WriteSelectBox
                 name="boardType"
@@ -130,8 +135,8 @@ const WriteTemplate = (props) => {
                     <b>작성자: </b> &nbsp;
                     {writeForm.userViewId}
                 </WriteUserSpan>
-            )}        
-            <WriteMultiWrapper stype="editor">
+            )}
+            <WriteMultiWrapper stype="editor" onClick={onClickEditorFocus}>
                 <Editor
                     // 에디터와 툴바 모두에 적용되는 클래스
                     wrapperClassName="wrapper-class"
@@ -156,6 +161,7 @@ const WriteTemplate = (props) => {
                     editorState={editorState}
                     // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
                     onEditorStateChange={onEditorStateChange}
+                    ref={editorRef}
                 />
             </WriteMultiWrapper>
             <WriteMultiWrapper stype="buttons">
@@ -164,8 +170,9 @@ const WriteTemplate = (props) => {
             </WriteMultiWrapper>
             <ClearEx />
 
-            <IntroduceContent dangerouslySetInnerHTML={{ __html: editorToHtml(editorState) }} />
-            
+            <IntroduceContent
+                dangerouslySetInnerHTML={{ __html: editorToHtml(editorState) }}
+            />
         </WriteForm>
     );
 };
