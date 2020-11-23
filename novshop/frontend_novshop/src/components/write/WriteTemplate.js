@@ -22,17 +22,20 @@ const WriteMultiWrapper = styled.div`
               css`
                   margin: 10px 0;
                   border: 1px solid rgb(233, 233, 233);
-                  
+
                   .ql-editor {
                       padding: 0;
 
-                      /* 최소 크기 지정 */                      
+                      /* 최소 크기 지정 */
                       min-height: 500px;
                       font-size: 1.125rem;
                       line-height: 1.5;
                   }
                   .ql-editor.ql-blank::before {
                       left: 0;
+                  }
+                  .ql-editor iframe {
+                      pointer-events: none;
                   }
               `
             : stype === 'buttons'
@@ -131,7 +134,13 @@ const WriteTemplate = (props) => {
             </WriteMultiWrapper>
 
             {/* 이미지 input :: hidden */}
-            <input hidden name="image" type="file" onChange={onChange} ref={imageRef} />
+            <input
+                hidden
+                name="image"
+                type="file"
+                onChange={onChange}
+                ref={imageRef}
+            />
 
             <WriteMultiWrapper stype="buttons">
                 <WirteInput type="submit" value="확인" />

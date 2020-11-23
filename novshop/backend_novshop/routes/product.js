@@ -1,7 +1,7 @@
 // PRODUCT ******************************************************
 import { Router } from 'express';
 import { Product } from '../models';
-import upload from '../module/imageupload';
+import upload from '../module/upload';
 
 const router = Router();
 

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import Quill from 'quill';
 import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
@@ -11,7 +10,15 @@ import {
     initializeWriteForm,
 } from '../../modules/write';
 
+import Quill from 'quill';
+import {ImageDrop} from 'quill-image-drop-module';
+import QuillResize from 'quill-resize-module';
 import WriteTemplate from '../../components/write/WriteTemplate';
+
+// Quill 에디터 확장
+Quill.register('modules/imageDrop', ImageDrop);         // 1# image-drop
+Quill.register('modules/resize', QuillResize);          // 2# resize (image)
+
 
 const WriteContainer = (props) => {
     const { match } = props;
@@ -143,7 +150,12 @@ const WriteContainer = (props) => {
             placeholder: '내용을 입력해주세요.',
             modules: {
                 toolbar: toolbarOptions,
+                resize: {           // 확장: quill-resize-module   
+                    modules: [ 'Resize', 'DisplaySize', /* 'Toolbar' */ ],     
+                }, 
             },
+            imageDrop: true,    // 확장: quill-image-drop-module
+            
         });
 
         // quill에 text-change 이벤트 핸들러 등록
@@ -174,6 +186,7 @@ const WriteContainer = (props) => {
     // 3-1-2) Editor 이미지 전용 writeImgName 상태가 변경될 시
     useEffect(() => {
         if (!writeImgName || !writeImgName.data) return;
+        if (typeof writeImgName.data !== "string")  return;
 
         quillInstance.current.root.innerHTML =
             quillInstance.current.root.innerHTML +

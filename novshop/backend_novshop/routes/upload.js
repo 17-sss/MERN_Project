@@ -1,6 +1,6 @@
 // UPLOAD ******************************************************
 import { Router } from 'express';
-import upload from '../module/imageupload';
+import upload from '../module/upload';
 
 const router = Router();
 

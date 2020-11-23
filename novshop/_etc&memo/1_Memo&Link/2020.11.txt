@@ -32,7 +32,7 @@
             https://from2020.tistory.com/10
 
 
-@@ 201117 ~ 201122 
+@@ 201117 ~ 201123 
     1. React 에디터
         1) react-draft-wysiwyg  (사용안함: 포커스 안맞음 계속)
             https://haranglog.tistory.com/12
@@ -43,4 +43,16 @@
             https://quilljs.com/docs/modules/toolbar/
             https://velog.io/@jwisgenius/Quill에-올린-이미지를-서버로-옮기기
             - 리액트 개정판 목차 25 참고
+        2-1) quill 확장 모듈
+            - ImageDrop
+                https://github.com/kensnyder/quill-image-drop-module         
+            - Resize (이미지 Resize)
+                https://www.npmjs.com/package/quill-resize-module
+            - Image Resize  (사용안함)
+                https://www.npmjs.com/package/quill-image-resize-module
+            - Video Resize  (사용안함)
+                https://www.npmjs.com/package/quill-video-resize-module   
+            
+                
+            
     

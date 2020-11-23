@@ -35,7 +35,7 @@ const CommunityMultiWrapper = styled.div`
                 return css`
                     margin: 30px auto;
                 `;
-            case 'content': // 내용
+            case 'content': // 내용 (in HTML)
                 return css`
                     margin: 10px auto;
                     padding: 5px;
@@ -148,6 +148,7 @@ const CommunityHr = styled(StyledHr)`
     width: 100%;
     margin: 10px auto;
 `;
+// ---------------------------------------------------/
 
 const CommunityViewTemplate = (props) => {
     const { etcDatas, data } = props;
@@ -161,34 +162,50 @@ const CommunityViewTemplate = (props) => {
             <CommunityMultiWrapper stype="table">
                 <form onSubmit={() => alert('1')}>
                     {data && (
-                        <> 
+                        <>
                             <StyledTable>
                                 <tbody>
                                     <tr>
-                                        <StyeldTd width="10%" border="bot_right">
+                                        <StyeldTd
+                                            width="10%"
+                                            border="bot_right"
+                                        >
                                             제목
                                         </StyeldTd>
-                                        <StyeldTd width="90%" border="bot" align="left">
+                                        <StyeldTd
+                                            width="90%"
+                                            border="bot"
+                                            align="left"
+                                        >
                                             {data.subject}
                                         </StyeldTd>
                                     </tr>
                                     <tr>
-                                        <StyeldTd width="10%" border="bot_right">
+                                        <StyeldTd
+                                            width="10%"
+                                            border="bot_right"
+                                        >
                                             작성자
                                         </StyeldTd>
-                                        <StyeldTd width="90%" border="bot" align="left">
+                                        <StyeldTd
+                                            width="90%"
+                                            border="bot"
+                                            align="left"
+                                        >
                                             {data.user && data.user.userid}
                                         </StyeldTd>
                                     </tr>
                                 </tbody>
                             </StyledTable>
-                            <CommunityMultiWrapper stype="content">
-                                {data.content}
-                            </CommunityMultiWrapper>
+                            <CommunityMultiWrapper
+                                stype="content"
+                                dangerouslySetInnerHTML={{
+                                    __html: data.content,
+                                }}
+                            />
                         </>
                     )}
-                    
-                    
+
                     <CommunityHr />
                     <CommunityLink
                         type="button"
