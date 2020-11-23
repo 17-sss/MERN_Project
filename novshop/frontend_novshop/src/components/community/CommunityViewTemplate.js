@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components';
 import { getSize } from '../../lib/utility/customFunc';
 import { cssTransparent } from '../../components/common/StyleUtilCSS';
 import { StyledHr, CustomLink } from '../../components/common/StyleUtilModels';
+import QuillContentView from '../../components/common/QuillContentView';
+
 
 // [1] CommunityViewWrapper: 전체 Wrapper
 const CommunityViewWrapper = styled.div`
@@ -197,12 +199,9 @@ const CommunityViewTemplate = (props) => {
                                     </tr>
                                 </tbody>
                             </StyledTable>
-                            <CommunityMultiWrapper
-                                stype="content"
-                                dangerouslySetInnerHTML={{
-                                    __html: data.content,
-                                }}
-                            />
+                            <CommunityMultiWrapper stype="content">
+                                <QuillContentView content={data.content} />                      
+                            </CommunityMultiWrapper>
                         </>
                     )}
 

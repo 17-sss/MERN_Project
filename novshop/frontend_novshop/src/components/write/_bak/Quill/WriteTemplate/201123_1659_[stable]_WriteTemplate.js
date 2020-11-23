@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { getSize } from '../../lib/utility/customFunc';
 import { cssCustomInput } from '../../components/common/StyleUtilCSS';
 import { ClearEx } from '../../components/common/StyleUtilModels';
-import QuillContainer from "../../containers/write/QuillContainer";
+import 'quill/dist/quill.snow.css';
 
 // [1] Write 템플릿 Wrapper
 // 1) 최상위 Form
@@ -17,7 +17,28 @@ const WriteForm = styled.form`
 const WriteMultiWrapper = styled.div`
     ${(props) => {
         const { stype } = props;
-        return stype === 'buttons'
+        return stype === 'editor'
+            ? // Editor (quill)
+              css`
+                  margin: 10px 0;
+                  border: 1px solid rgb(233, 233, 233);
+
+                  .ql-editor {
+                      padding: 0;
+
+                      /* 최소 크기 지정 */
+                      min-height: 500px;
+                      font-size: 1.125rem;
+                      line-height: 1.5;
+                  }
+                  .ql-editor.ql-blank::before {
+                      left: 0;
+                  }
+                  .ql-editor iframe {
+                      pointer-events: none;
+                  }
+              `
+            : stype === 'buttons'
             ? css`
                   float: right;
                   margin: 8px 0 12px;
@@ -71,7 +92,8 @@ const WriteUserSpan = styled.span`
 const WriteTemplate = (props) => {
     // editorState & onEditorStateChange는 Editor용
     const {
-        events: { onChange, onSubmit },        
+        events: { onChange, onSubmit },
+        refs: { quillElement, imageRef },
         datas: { writeForm },
     } = props;
 
@@ -106,9 +128,19 @@ const WriteTemplate = (props) => {
                     </WriteUserSpan>
                 )}
             </WriteMultiWrapper>
-            
-            {/* 에디터 통합 - QuillContainer  */}
-            <QuillContainer />
+
+            <WriteMultiWrapper stype="editor">
+                <div ref={quillElement} />
+            </WriteMultiWrapper>
+
+            {/* 이미지 input :: hidden */}
+            <input
+                hidden
+                name="image"
+                type="file"
+                onChange={onChange}
+                ref={imageRef}
+            />
 
             <WriteMultiWrapper stype="buttons">
                 <WirteInput type="submit" value="확인" />

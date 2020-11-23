@@ -39,19 +39,27 @@
             https://github.com/saseungmin/kcnet-coding-challenge
             https://openbase.io/js/draft-js
         2) quill 
-            https://darrengwon.tistory.com/747        
-            https://quilljs.com/docs/modules/toolbar/
-            https://velog.io/@jwisgenius/Quill에-올린-이미지를-서버로-옮기기
-            - 리액트 개정판 목차 25 참고
+            - 공식
+                https://quilljs.com/    
+                https://quilljs.com/docs/modules/toolbar/   
+            - 일반
+                https://darrengwon.tistory.com/747                    
+                https://velog.io/@jwisgenius/Quill에-올린-이미지를-서버로-옮기기
+            - 참고: 리액트 개정판 목차 25 참고하기.
         2-1) quill 확장 모듈
-            - ImageDrop
-                https://github.com/kensnyder/quill-image-drop-module         
-            - Resize (이미지 Resize)
-                https://www.npmjs.com/package/quill-resize-module
-            - Image Resize  (사용안함)
-                https://www.npmjs.com/package/quill-image-resize-module
-            - Video Resize  (사용안함)
-                https://www.npmjs.com/package/quill-video-resize-module   
+            * 현재 사용한 모듈
+                - ImageDrop
+                    https://github.com/kensnyder/quill-image-drop-module         
+                - Resize (이미지 Resize)
+                    https://www.npmjs.com/package/quill-resize-module
+            
+            * 추후 교체하거나 사용
+                [!] eject 하여 내부 설정 가져와서 수정이 필요한 모듈들..
+                    - 이슈: https://hokeydokey.tistory.com/101
+                - Image Resize 
+                    https://www.npmjs.com/package/quill-image-resize-module
+                - Video Resize 
+                    https://www.npmjs.com/package/quill-video-resize-module   
             
                 
             
