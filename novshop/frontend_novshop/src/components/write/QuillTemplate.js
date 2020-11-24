@@ -17,9 +17,11 @@ const EditorWrapper = styled.div`
     .ql-editor.ql-blank::before {
         left: 0;
     }
+    /*  // 추후 quill video resize 모듈 사용시 활성
     .ql-editor iframe {
         pointer-events: none;
     }
+    */
 `;
 // ---------------------------------------------------/
 

@@ -6,11 +6,11 @@ const router = express.Router();
 
 // Q&A 생성 (POST /api/qa/create)
 router.post('/create', async(req, res) => {
-    const { userId, productId, subject, content, picture } = req.body;
-
+    const { subject, content, userId, productId } = req.body;
+    
     try {
         const createQA = await QA.create({
-            userId, productId, subject, content, picture
+            subject, content, userId, productId
         });
 
         return res.status(200).json({

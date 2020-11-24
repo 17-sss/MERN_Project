@@ -1,8 +1,8 @@
 import client from './client';
 
 // QA 생성
-export const createQA = ({userId, productId, subject, content, picture}) => {        
-    return client.post('/api/qa/create', {userId, productId, subject, content, picture});
+export const createQA = ({ subject, content, userId, productId }) => {        
+    return client.post('/api/qa/create', { subject, content, userId, productId });
 };
 
 // QA 가져오기 (id 기준)

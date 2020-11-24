@@ -18,9 +18,8 @@ Quill.register('modules/resize', QuillResize);          // 2# resize (image)
 
 
 const QuillContainer = () => {
-    const {writeForm, writeImgName} = useSelector(({write}) => {
+    const {writeImgName} = useSelector(({write}) => {
         return {
-            writeForm: write.writeForm,
             writeImgName: write.writeImgName,
         }
     });
@@ -33,9 +32,7 @@ const QuillContainer = () => {
     const quillElement = useRef(null);  // Quill을 적용할 Div틀 전용
     const quillInstance = useRef(null); // Quill 인스턴스 설정
     const imageRef = useRef(null);      // Quill 이미지 전용 (input hidden)
-    const writeFormRef = useRef(null);     // writeForm상태 Ref로 가져옴. useEffect 의존성에서 벗어나기 위해 Ref로 뺌
-    writeFormRef.current = writeForm;
-    
+
     // hooks & events @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // 1. useCallback & event ----------------------------------------------------------
     // 1) onClickImageBtn (quill 이미지 핸들링을 위한 이벤트) (useCallback)
@@ -55,11 +52,10 @@ const QuillContainer = () => {
         }
     };
 
-    // 2) onChangeWriteContent (redux - write.writeform[boardType].content 값 change용) (useCallback)
-    const onChangeWriteContent = useCallback(
-        ({ value }) => {
-            const boardType = writeFormRef.current.boardType; 
-            dispatch(changeWriteForm({ key: boardType, subkey: 'content', value }));
+    // 2) 
+    const onChangeWriteForm = useCallback(
+        ({ key, value }) => {
+            dispatch(changeWriteForm({ key, value }));
         },
         [dispatch],
     );
@@ -108,8 +104,8 @@ const QuillContainer = () => {
         // 텍스트 입력시
         quill.on('text-change', (delta, oldDelta, source) => {
             if (source === 'user') {
-                onChangeWriteContent({                            
-                    // key, subkey (onChangeWriteContent에서 정의)            
+                onChangeWriteForm({
+                    key: 'content',
                     value: quill.root.innerHTML,
                 });
             }
@@ -118,7 +114,7 @@ const QuillContainer = () => {
         // 이미지 핸들링을 위한 커스텀 핸들러
         const toolbar = quill.getModule('toolbar');
         toolbar.addHandler('image', onClickImageBtn);
-    }, [onChangeWriteContent, onClickImageBtn]);
+    }, [onChangeWriteForm, onClickImageBtn]);
     
     // 3-1-1) Editor 이미지 전용 State(file)이 변경될 시.
     useEffect(() => {

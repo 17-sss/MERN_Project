@@ -30,20 +30,18 @@ const WriteContainer = (props) => {
     // 1. useCallback & event ----------------------------------------------------------
     // 1) writeForm Change (useCallback)
     const onChangeWriteForm = useCallback(
-        ({ key, subkey, value } = { subkey: ''}) => {
-            dispatch(changeWriteForm({ key, subkey, value }));
+        ({ key, value }) => {
+            dispatch(changeWriteForm({ key, value }));
         },
         [dispatch],
     );
 
     // 1-1) writeForm Change
     const onChange = (e) => {
-        e.preventDefault();        
-        const { name, value } = e.target;
+        e.preventDefault();
+        const { name: key, value } = e.target;
 
-        name === 'boardType' ? 
-            onChangeWriteForm({ key: name, value }) 
-            : onChangeWriteForm({ key: writeForm.boardType, subkey: name, value });
+        onChangeWriteForm({ key, value });
     };
 
     // 2) Submit
@@ -52,27 +50,24 @@ const WriteContainer = (props) => {
             e.preventDefault();
             if (!writeForm) return;
 
-            const { notice, qa, boardType } = writeForm;
+            const { userId, subject, content, boardType } = writeForm;
             if (!boardType) return;
 
             switch (boardType) {
-                case 'notice': {
-                    const {subject, content, userId} = notice;
+                case 'notice':
                     return dispatch(
-                        createWriteNotice({subject, content, userId}),
+                        createWriteNotice({ userId, subject, content }),
                     );
-                }
-                case 'qa': {
-                    const {subject, content, userId, /* productId*/} = qa;
+                case 'qa':
                     return dispatch(
                         createWriteQA({
+                            userId,
+                            productId: 1,
                             subject,
                             content,
-                            userId,
-                            productId: 2,
+                            picture: '',
                         }),
                     );
-                }
                 default:
                     break;
             }
@@ -86,14 +81,14 @@ const WriteContainer = (props) => {
         if (!userData) return;
         if (typeof userData === 'object') {
             setUser(userData.user);
-            writeForm.boardType && user &&
-                dispatch(changeWriteForm({ key: writeForm.boardType, subkey: 'userId', value: user.id }));                
+            user &&
+                dispatch(changeWriteForm({ key: 'userId', value: user.id }));
             user &&
                 dispatch(
                     changeWriteForm({ key: 'userViewId', value: user.userid }),
                 );
         }
-    }, [userData, user, dispatch, writeForm.boardType]);
+    }, [userData, user, dispatch]);
 
     // 2) 페이지 초기화
     useEffect(() => {

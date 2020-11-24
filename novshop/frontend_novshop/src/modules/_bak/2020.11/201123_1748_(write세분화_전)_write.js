@@ -39,45 +39,42 @@ export const initializeWrite = createAction(
     INITALIZE_WRITE,
     // user 실제 id를 이용하여 닉넴가져오는건 따로? 그냥 유저아이디도 가져와도되지않나
     // ({ userNumID, page } = { userNumID: -1, page: '' }) => ({ userNumID, page }),
-    ({ page } = { page: '' }) => ({ page }),    
+    ({ page } = { page: '' }) => ({ page }),
 );
 export const initializeWriteForm = createAction(
     INITALIZE_WRITE_FORM,
-    ({ form, subform } = { subform: '' }) => ({ form, subform }),
+    ({ form }) => ({ form }),
 );
-
-export const changeWriteForm = createAction(
-    CHANGE_WRITE,
-    ({ key, subkey, value } = { subkey: '' }) => ({ key, subkey, value }),
-);
+export const changeWriteForm = createAction(CHANGE_WRITE, ({ key, value }) => ({ key, value }));
 
 export const createWriteNotice = createAction(
     CREATE_WRITE_NOTICE,
-    ({ subject, content, userId }) => ({
+    ({ userId, subject, content }) => ({
+        userId,
         subject,
         content,
-        // view
-        userId,
     }),
 );
 export const createWriteQA = createAction(
     CREATE_WRITE_QA,
-    ({ subject, content, userId, productId }) => ({
+    ({ userId, productId, subject, content, picture }) => ({
+        userId,
+        productId,
         subject,
         content,
-        // view
-        userId,
-        productId,                        
+        picture,
     }),
 );
-
 export const imageUpload = createAction(
     IMAGE_UPLOAD,
     ({ imgData }) => ({ imgData }),
 );
 
 // :: 사가 생성
-const createWriteNoticeSaga = createRequestSaga(CREATE_WRITE_NOTICE, noticeAPI.createNotice);
+const createWriteNoticeSaga = createRequestSaga(
+    CREATE_WRITE_NOTICE,
+    noticeAPI.createNotice,
+);
 const createWriteQASaga = createRequestSaga(CREATE_WRITE_QA, qaAPI.createQA);
 const imageUploadSaga = createRequestSaga(IMAGE_UPLOAD, uploadAPI.imageUpload);
 
@@ -90,67 +87,36 @@ export function* writeSaga() {
 
 // :: 리듀서 초기값
 const initialState = {
-    writeForm: {        
-        // 각 분류마다 content가 있는 이유는 게시판을 변경했을때 해당 내용이 저장되게 하기 위함.         
-        notice: {
-            subject: '',
-            content: '',
-            view: 0,
-            userId: 0,
-        },
-        qa: {
-            subject: '',
-            content: '',
-            view: 0,
-            userId: 0,
-            productId: 0,
-        },
-        
-        // 서버에 전달 X        
+    writeForm: {
+        // 1. 서버에 전달 O (userId, subject, content ==> notice, 전부쓰는건 ==> qa)        
+        userId: 0,
+        productId: 0,
+        subject: '',
+        content: null,
+        picture: '',
+
+        // 2. 서버에 전달 X
         boardType: '',
         userViewId: '',
     },
-    
     write: null,
-    writeImgName: null,     // Quill 에디터에서 이미지 불러올 시, 서버에 이미지를 저장하고 업로드 된 이미지 이름을 불러옴
+    writeImgName: null,
     writeError: null,
 };
 
 // :: 리듀서
-
-// write 리듀서용 함수 (SUCCESS or FAILURE)
-const successFunc = (state, action) => {
-    const { payload: write } = action;
-
-    return {
-        ...state,
-        write,
-        writeError: null,
-    };
-};
-
-const failureFunc = (state, action) => {
-    const { payload: writeError } = action;
-
-    return {
-        ...state,
-        write: null,
-        writeError,
-    };
-};
-
 const write = handleActions(
     {
         // WRITE 전체 초기화
         [INITALIZE_WRITE]: (state, action) => {
-            const { payload: {page} } = action;            
+            const { payload } = action;
+            const { page } = payload;
 
             return {
                 ...state,
                 writeForm: {
-                    ...initialState['writeForm'],                    
-                    boardType: page ? page : '',                    
-                    userViewId: '',
+                    ...initialState['writeForm'],
+                    boardType: page ? page : '',
                 },
                 write: null,
                 writeImgName: null,
@@ -160,42 +126,70 @@ const write = handleActions(
 
         // WRITE 선택적 초기화
         [INITALIZE_WRITE_FORM]: (state, action) => {
-            const {
-                payload: { form, subform },
-            } = action;
-            const isSubOK = form === 'writeForm' && form && subform;
+            const { payload } = action;
+            const { form } = payload;
+
             return {
                 ...state,
-                [form]: isSubOK
-                    ? { ...state[form], [subform]: initialState[form][subform] }
-                    : initialState[form],                
+                [form]: initialState[form],
             };
         },
-        
+
         // onChange (writeform)
         [CHANGE_WRITE]: (state, action) => {
-            const {
-                payload: { key, subkey, value },
-            } = action;
+            const { payload } = action;
+            const { key, value } = payload;
 
             return {
                 ...state,
                 writeForm: {
                     ...state['writeForm'],
-                    [key]: subkey
-                        ? { ...state['writeForm'][key], [subkey]: value }
-                        : value,
+                    [key]: value,
                 },
             };
         },
 
         // WRITE :: NOTICE 생성
-        [CREATE_WRITE_NOTICE_SUCCESS]: successFunc,
-        [CREATE_WRITE_NOTICE_FAILURE]: failureFunc,
+        [CREATE_WRITE_NOTICE_SUCCESS]: (state, action) => {
+            const { payload: write } = action;
+
+            return {
+                ...state,
+                write,
+                writeError: null,
+            };
+        },
+
+        [CREATE_WRITE_NOTICE_FAILURE]: (state, action) => {
+            const { payload: writeError } = action;
+
+            return {
+                ...state,
+                write: null,
+                writeError,
+            };
+        },
 
         // WRITE :: QA 생성
-        [CREATE_WRITE_QA_SUCCESS]: successFunc,
-        [CREATE_WRITE_QA_FAILURE]: failureFunc,
+        [CREATE_WRITE_QA_SUCCESS]: (state, action) => {
+            const { payload: write } = action;
+
+            return {
+                ...state,
+                write,
+                writeError: null,
+            };
+        },
+
+        [CREATE_WRITE_QA_FAILURE]: (state, action) => {
+            const { payload: writeError } = action;
+
+            return {
+                ...state,
+                write: null,
+                writeError,
+            };
+        },
 
         // 이미지 업로드 (quill 에디터에서 작성 중 이미지 1개 업로드)
         [IMAGE_UPLOAD_SUCCESS]: (state, action) => {

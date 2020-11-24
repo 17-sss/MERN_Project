@@ -6,13 +6,13 @@ const router = express.Router();
 
 // notice 생성 (POST /api/notice/create)
 router.post('/create', async (req, res) => {
-    const { userId, subject, content, } = req.body;
+    const{ subject, content, userId } = req.body;
     
     try {
         const createNotice = await Notice.create({
-            userId,
             subject,
-            content,            
+            content,
+            userId,            
         });
 
         return res.status(200).json({

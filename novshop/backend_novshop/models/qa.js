@@ -12,11 +12,13 @@ module.exports = (sequelize, DataTypes) => (
                 allowNull: false,
                 defaultValue: "내용없음"
             },
+            /*
             picture: {
                 type: DataTypes.STRING(100),
                 allowNull: false,     
                 defaultValue: "",                          
             },
+            */
             view: {
                 type: DataTypes.INTEGER,
                 allowNull: false,

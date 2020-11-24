@@ -82,7 +82,7 @@ const WriteTemplate = (props) => {
                     type="text"
                     name="subject"
                     placeholder="제목"
-                    value={writeForm.boardType && writeForm[writeForm.boardType].subject}
+                    value={writeForm.subject}
                     onChange={onChange}
                 />
                 <WriteSelectBox
