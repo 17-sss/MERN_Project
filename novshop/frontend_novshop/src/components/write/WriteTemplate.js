@@ -31,7 +31,7 @@ const WriteMultiWrapper = styled.div`
 
 // [2] Input & SelectBox
 // 1) input
-const WirteInput = styled.input`
+const WriteInput = styled.input`
     ${cssCustomInput};
     font-size: 11pt;
 
@@ -50,6 +50,8 @@ const WriteSelectBox = styled.select`
     ${cssCustomInput};
     font-size: 11pt;
     display: inline-block;
+    margin-left: 10px;
+    width: 10%;
 `;
 
 // 2-1) option: select 태그의 option 태그
@@ -57,14 +59,21 @@ const StyledOpt = styled.option`
     color: ${(props) => props.noblack || 'black'};
 `;
 
-// 3) span: 작성자 정보(아이디) View
-const WriteUserSpan = styled.span`
+// 3) span
+const WriteSpan = styled.span`
     ${cssCustomInput};
     font-size: 11pt;
-    width: 20%;
 
-    display: block;
-    float: right;
+    ${(props) => {
+        const { stype } = props;
+        return stype === 'user'
+            ? css`                  
+                  display: block;
+                  float: right;
+                  width: 20%;
+              `
+            : css`padding-bottom: 9px;`;
+    }}
 `;
 // ---------------------------------------------------/
 
@@ -77,42 +86,57 @@ const WriteTemplate = (props) => {
 
     return (
         <WriteForm onSubmit={onSubmit} encType="multipart/form-data">
+            {/* 1) 내용을 제외한 옵션들 */}
             <WriteMultiWrapper>
-                <WirteInput
+                {/* 게시판 선택 및 유저 표시 */}                
+                <WriteSpan>
+                    <b>게시판 선택: </b>
+                    <WriteSelectBox
+                        name="boardType"
+                        onChange={onChange}
+                        value={writeForm.boardType || ''}
+                    >
+                        <StyledOpt value={''} noblack disabled>
+                            게시판 선택
+                        </StyledOpt>
+                        <StyledOpt value={'notice'}>공지사항</StyledOpt>
+                        <StyledOpt value={'qa'}>고객지원</StyledOpt>
+                    </WriteSelectBox>
+                </WriteSpan>                
+                {writeForm.userViewId && (
+                    <WriteSpan stype="user">
+                        <b>작성자: </b> &nbsp;
+                        {writeForm.userViewId}
+                    </WriteSpan>
+                )}
+
+                {/* 공지사항 & 고객지원 */}
+                <WriteInput
                     type="text"
                     name="subject"
                     placeholder="제목"
                     value={writeForm.boardType && writeForm[writeForm.boardType].subject}
                     onChange={onChange}
                 />
-                <WriteSelectBox
-                    name="boardType"
-                    onChange={onChange}
-                    value={writeForm.boardType || ''}
-                    addcss={css`
-                        width: 30%;
-                    `}
-                >
-                    <StyledOpt value={''} noblack disabled>
-                        게시판 선택
-                    </StyledOpt>
-                    <StyledOpt value={'notice'}>공지사항</StyledOpt>
-                    <StyledOpt value={'qa'}>고객지원</StyledOpt>
-                </WriteSelectBox>
-                {writeForm.userViewId && (
-                    <WriteUserSpan>
-                        <b>작성자: </b> &nbsp;
-                        {writeForm.userViewId}
-                    </WriteUserSpan>
+                {writeForm.boardType === 'qa' && (
+                    <>
+                        <WriteInput
+                            type="text"
+                            name="product"
+                            placeholder="상품 선택"
+                        />
+                        <input hidden name="productId" type="text" />
+                    </>
                 )}
             </WriteMultiWrapper>
             
-            {/* 에디터 통합 - QuillContainer  */}
+            {/* 2) 에디터 통합 - QuillContainer  */}
             <QuillContainer />
-
+            
+            {/* 3) 확인 & 취소 버튼 */}
             <WriteMultiWrapper stype="buttons">
-                <WirteInput type="submit" value="확인" />
-                <WirteInput type="button" value="취소" />
+                <WriteInput type="submit" value="확인" />
+                <WriteInput type="button" value="취소" />
             </WriteMultiWrapper>
             <ClearEx />
         </WriteForm>

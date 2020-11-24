@@ -32,7 +32,7 @@
             https://from2020.tistory.com/10
 
 
-@@ 201117 ~ 201123 
+@@ 201117 ~ 201124
     1. React 에디터
         1) react-draft-wysiwyg  (사용안함: 포커스 안맞음 계속)
             https://haranglog.tistory.com/12
@@ -60,6 +60,13 @@
                     https://www.npmjs.com/package/quill-image-resize-module
                 - Video Resize 
                     https://www.npmjs.com/package/quill-video-resize-module   
+        2-2) quill 모듈 오류 사항
+            - Version (1.3.7)   ::  20201124
+                ** Message (Chrome)
+                    Added synchronous DOM mutation listener to a 'DOMNodeInserted' event. 
+                    Consider using MutationObserver to make the page more responsive.        
+                    > 참고링크: https://github.com/quilljs/quill/issues/1768 
+
             
                 
             

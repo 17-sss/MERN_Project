@@ -11,8 +11,6 @@ const EditorWrapper = styled.div`
 
         /* 최소 크기 지정 */
         min-height: 500px;
-        font-size: 1.125rem;
-        line-height: 1.5;
     }
     .ql-editor.ql-blank::before {
         left: 0;

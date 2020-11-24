@@ -118,6 +118,14 @@ const QuillContainer = () => {
         // 이미지 핸들링을 위한 커스텀 핸들러
         const toolbar = quill.getModule('toolbar');
         toolbar.addHandler('image', onClickImageBtn);
+
+        // DOM mutation 오류 관련
+        /* 
+            ** Message (Chrome)
+            Added synchronous DOM mutation listener to a 'DOMNodeInserted' event. 
+            Consider using MutationObserver to make the page more responsive.        
+            - 참고링크: https://github.com/quilljs/quill/issues/1768 
+        */
     }, [onChangeWriteContent, onClickImageBtn]);
     
     // 3-1-1) Editor 이미지 전용 State(file)이 변경될 시.

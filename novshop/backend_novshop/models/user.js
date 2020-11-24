@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => (
             type: DataTypes.STRING(50),
             allowNull: false,            
         },
+        authority: {    // 유저 권한 (0: 일반, 1: 운영진, 2: 최고관리자)
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,    
+        },
     // SNS 로그인 관련 START
         // 1. 제공자 (기본값: local)
         provider: {
