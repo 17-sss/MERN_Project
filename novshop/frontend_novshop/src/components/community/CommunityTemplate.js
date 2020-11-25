@@ -165,6 +165,12 @@ const CommunityTemplate = (props) => {
     const { data, etcData, events } = props;
     const { pagingBtnClick } = events;
     const { subjectData, pageName, page, pageCount, currentPage, userData } = etcData;    
+
+    const WriteLinkJSX = (
+        <WriteWrapper>
+            <WriteLink to={'/write/' + page}>글 작성</WriteLink>
+        </WriteWrapper>
+    );
         
     return (
         <CommunityWrapper>
@@ -242,13 +248,16 @@ const CommunityTemplate = (props) => {
                             />
                         );
                     })}                
-
-                    {userData && (userData.authority && userData.authority !== 0) && (
-                    <WriteWrapper>
-                        <WriteLink to = {'/write/' + page }>
-                            글 작성
-                        </WriteLink>
-                    </WriteWrapper>)}
+                    
+                    {userData && (
+                        userData.authority !== 0 ? (
+                            WriteLinkJSX
+                        ) : userData.authority === 0 && page === 'qa' ? (
+                            WriteLinkJSX
+                        ) : (
+                            <></>
+                        )
+                    )}
                 </PagingWrapper>   
 
             </CommunityMultiWrapper>            

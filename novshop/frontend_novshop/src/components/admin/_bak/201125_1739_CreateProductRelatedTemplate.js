@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import { TransparentBtn } from '../common/StyleUtilModels';
 import { cssCustomInput, cssCustomSpan } from '../common/StyleUtilCSS';
 import { getSize, randomColor } from '../../lib/utility/customFunc';
-import QuillContainer from '../../containers/write/QuillContainer';
 
 // 1) CreateProductRelatedWrapper: 전체 Wrapper
 const CreateProductRelatedWrapper = styled.div`
@@ -11,19 +10,19 @@ const CreateProductRelatedWrapper = styled.div`
     margin: 0 auto;
 `;
 
-// 2) ProductRelatedMultiWrapper: 다용도 Wrapper
-const ProductRelatedMultiWrapper = styled.div`
-    width: 100%;
+// 2) InputWrapper: 입력 폼 Wrapper
+const InputWrapper = styled.div`
+    width: ${getSize(3)};
+    padding: ${(props) => props.padding || '4% 0 4%'};
+    margin: 0 auto;
 
-    ${(props) => {
-        const { stype } = props;
-        return stype === 'buttons'
-            && css`
-                text-align: center;
-                align-items: center;
-                justify-content: center;                     
-            `;
-    }}
+    ${(props) =>
+        props.alignCenter &&
+        css`
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        `};
 `;
 
 // 2-1) Input: 현재 폼 Input
@@ -88,9 +87,9 @@ const ResultSpan = styled.span`
 
 // 4) SubmitBtn: 전송버튼
 const SubmitBtn = styled(TransparentBtn)`
-    width: 70px;            
-    height: 40px;
-    margin: 14px 0;
+    width: 70%;
+    height: 30px;
+    margin-top: 14px;
     color: #212121;
 
     background-color: #cccfd1;
@@ -99,7 +98,7 @@ const SubmitBtn = styled(TransparentBtn)`
 
     &:hover {
         background-color: #ededed;
-    }            
+    }
 `;
 
 // -------------------------------------------------------------------------/
@@ -119,7 +118,7 @@ const CreateProductRelatedTemplate = (props) => {
 
     return (
         <CreateProductRelatedWrapper>
-            <ProductRelatedMultiWrapper>
+            <InputWrapper>
                 <form onSubmit={onSubmit} encType='multipart/form-data'>
                     <Input
                         type="text"
@@ -360,19 +359,17 @@ const CreateProductRelatedTemplate = (props) => {
                                     })
                                 }
                             </SelectBox>
-                            
-                            <QuillContainer />
                         </>
                     )}
 
-                    <ProductRelatedMultiWrapper stype="buttons">
+                    <InputWrapper alignCenter padding={'0px'}>
                         {errorMessage && (
                             <p style={{color: 'red'}}>{errorMessage}</p>
                         )}
                         <SubmitBtn type="submit">전송</SubmitBtn>
-                    </ProductRelatedMultiWrapper>
+                    </InputWrapper>
                 </form>
-            </ProductRelatedMultiWrapper>
+            </InputWrapper>
         </CreateProductRelatedWrapper>
     );
 };
