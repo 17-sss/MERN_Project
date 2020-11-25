@@ -115,8 +115,7 @@ const CreateProductRelatedTemplate = (props) => {
         ctrlpage,
         onChange,
         onDelete,
-        onSubmit,
-        onContentDispatch,
+        onSubmit,        
         errorMessage,
         categoryForm,
         productForm,
@@ -377,9 +376,7 @@ const CreateProductRelatedTemplate = (props) => {
                             </SelectBox>
 
                             <QuillContainer
-                                reduxCustomform={productForm}
-                                customContentDispatch={onContentDispatch}
-                                formname="product"
+                                reduxCustomform={{formdata: productForm, formname: "productForm"}}                                
                             />
                         </>
                     )}

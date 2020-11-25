@@ -5,6 +5,11 @@ import {
     initializeWriteForm,
     changeWriteForm,
 } from '../../modules/write';
+import {
+    changeProductForms,    
+} from '../../modules/product';
+
+
 import QuillTemplate from "../../components/write/QuillTemplate";
 
 import Quill from 'quill';
@@ -18,10 +23,10 @@ Quill.register('modules/resize', QuillResize);          // 2# resize (image)
 
 
 const QuillContainer = (props) => {
-    const { reduxCustomform, customContentDispatch, formname } = props;
+    const { reduxCustomform: {formdata, formname} } = props;
     const {writeForm, writeImgName} = useSelector(({write}) => {
         return {
-            writeForm: reduxCustomform || write.writeForm,
+            writeForm: formdata || write.writeForm,
             writeImgName: write.writeImgName,
         }
     });
@@ -59,20 +64,25 @@ const QuillContainer = (props) => {
     // 2) onChangeWriteContent (redux - write.writeform[boardType].content 값 change용) (useCallback)
     const onChangeWriteContent = useCallback(
         ({ value }) => {
-            console.log(customContentDispatch)
-            // [@!!!!]계속 product 폼 초기화함.. 차라리 리덕스에서 이벤트 가져오는게 나을듯
-            if (customContentDispatch) {                
-                dispatch(customContentDispatch({
-                    form: formname,
-                    key: "content",
-                    value,
-                }));
-            } else {
-                const boardType = writeFormRef.current.boardType; 
-                dispatch(changeWriteForm({ key: boardType, subkey: 'content', value }));
-            }            
+            switch (formname) {
+                case 'productForm': {                    
+                    dispatch(
+                        changeProductForms({
+                            form: formname,
+                            key: "content",
+                            value,
+                        }),
+                    );                    
+                    break;
+                }            
+                default: {
+                    const boardType = writeFormRef.current.boardType; 
+                    dispatch(changeWriteForm({ key: boardType, subkey: 'content', value }));    
+                    break;
+                }
+            }          
         },
-        [dispatch, customContentDispatch, formname],
+        [dispatch, formname],
     );
 
     // 2. useEffect ----------------------------------------------------------    
