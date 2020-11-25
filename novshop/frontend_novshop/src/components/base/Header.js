@@ -126,9 +126,7 @@ const HeadIconSection = styled.div`
 // 헤더 :: [아이콘, 로고] END ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 
 const Header = (props) => {    
-    const {onLogout, userData, categoryData} = props;      
-    const {user} = userData ? userData : '';
-    
+    const {onLogout, userData: user, categoryData} = props;      
 
     return (
         <>

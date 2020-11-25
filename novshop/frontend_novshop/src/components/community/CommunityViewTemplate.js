@@ -193,7 +193,7 @@ const CommunityViewTemplate = (props) => {
                                             width="90%"
                                             border="bot"
                                             align="left"
-                                        >
+                                        >                                            
                                             {data.user && data.user.userid}
                                         </StyeldTd>
                                     </tr>

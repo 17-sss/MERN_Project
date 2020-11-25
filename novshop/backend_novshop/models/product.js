@@ -34,12 +34,12 @@ module.exports = (sequelize, DataTypes) => (
                 },
             },
             price: {
-                type: DataTypes.INTEGER(20),
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 1000,
             },
             sale: {
-                type: DataTypes.FLOAT(20),
+                type: DataTypes.FLOAT,
                 allowNull: false,
                 defaultValue: 0,
             },
@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => (
             },
             // 카테고리_소분류 (id)     ++ 카테고리_대분류는 categoryId로 정의되어있음 (관계정의 해놓음)
             categorySub: {
-                type: DataTypes.INTEGER(10),
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 1,
             }

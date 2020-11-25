@@ -52,7 +52,7 @@ const HeaderContainer = () => {
 
     return (
         <Header
-            userData = {userData && userData}
+            userData = {userData && userData.data}
             onLogout = {onLogout}
             categoryData = {categoryData && categoryData}
         />

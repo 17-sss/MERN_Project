@@ -105,10 +105,10 @@ const CommunityContainer = (props) => {
                       { name: '작성자', width: '15%' },
                   ],
         pageName: page === 'qa' ? '고객센터' : '공지사항',
-        page,
+        page: page ? page : '',
         currentPage,
         pageCount,
-        userData,
+        userData: userData ? userData.data : null,
     };
 
     const events = {

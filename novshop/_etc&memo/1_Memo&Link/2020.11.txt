@@ -66,7 +66,6 @@
                     Added synchronous DOM mutation listener to a 'DOMNodeInserted' event. 
                     Consider using MutationObserver to make the page more responsive.        
                     > 참고링크: https://github.com/quilljs/quill/issues/1768 
-
             
                 
             

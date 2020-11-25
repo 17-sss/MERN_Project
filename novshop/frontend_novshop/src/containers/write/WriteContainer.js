@@ -69,7 +69,7 @@ const WriteContainer = (props) => {
                             subject,
                             content,
                             userId,
-                            productId: 2,
+                            productId: 1,
                         }),
                     );
                 }
@@ -85,7 +85,7 @@ const WriteContainer = (props) => {
     useEffect(() => {
         if (!userData) return;
         if (typeof userData === 'object') {
-            setUser(userData.user);
+            setUser(userData.data);
             writeForm.boardType && user &&
                 dispatch(changeWriteForm({ key: writeForm.boardType, subkey: 'userId', value: user.id }));                
             user &&

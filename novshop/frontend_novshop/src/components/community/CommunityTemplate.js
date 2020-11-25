@@ -89,6 +89,24 @@ const SubjectLink = styled(CustomLink)`
         color: #666;
     }
 `;
+// ---------------------------------------------------/
+
+// 5) EmptyWrapper
+const EmptyWrapper = styled.div`
+    width: 100%;
+    height: 40px;
+    border-top: 4px solid black;
+    border-bottom: 1px solid #575757;
+    text-align: center;
+    
+    span {
+        line-height: 30px;
+        font-size: 12pt;
+        font-weight: bold;
+    }
+`;
+// ---------------------------------------------------/
+
 
 // [4] 페이징
 // 1) PagingWrapper: 페이징관련 개체들 Wrapper
@@ -96,8 +114,7 @@ const PagingWrapper = styled.div`
     display: inline-block;
     position: relative;
     width: 100%;
-    margin: 0 auto;
-    margin-top: 10px;
+    margin: 10px auto;    
 
     text-align: center;
     justify-content: center;
@@ -147,8 +164,8 @@ const WriteLink = styled(CustomLink)`
 const CommunityTemplate = (props) => {
     const { data, etcData, events } = props;
     const { pagingBtnClick } = events;
-    const { subjectData, pageName, page, pageCount, currentPage, userData } = etcData;
-
+    const { subjectData, pageName, page, pageCount, currentPage, userData } = etcData;    
+        
     return (
         <CommunityWrapper>
             <CommunityMultiWrapper stype="pagename">
@@ -156,54 +173,59 @@ const CommunityTemplate = (props) => {
             </CommunityMultiWrapper>
 
             <CommunityMultiWrapper stype="table">
-                <StyledTable>
-                    <thead>
-                        <tr>
-                            {subjectData &&
-                                subjectData.map((v, i) => {
-                                    return (
-                                        <StyeldTh key={i} width={v.width}>
-                                            {v.name}
-                                        </StyeldTh>
-                                    );
-                                })}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data &&
-                            data.map((v, i) => {
-                                return (
-                                    <tr key={i}>
-                                        <StyeldTd>{v.RN || v.id}</StyeldTd>
-                                        <StyeldTd align="left">
-                                            <SubjectLink to={"?num="+v.id}>
-                                                {v.subject || v.sub}
-                                            </SubjectLink>
-                                        </StyeldTd>
-                                        <StyeldTd align="center">
-                                            {v.userDisplayId}
-                                        </StyeldTd>
-                                        {pageName === '고객센터' && (
-                                            <>                                                 
-                                                <StyeldTd align="center">
-                                                    {new Date(v.createdAt)
-                                                        .toLocaleString()
-                                                        .toLowerCase() !==
-                                                        'invalid date' &&
-                                                        new Date(
-                                                            v.createdAt,
-                                                        ).toLocaleString()}
+                
+                    {(data && data.length > 0) ? (
+                        <StyledTable>
+                            <thead>
+                                <tr>
+                                    {subjectData &&
+                                        subjectData.map((v, i) => {
+                                            return (
+                                                <StyeldTh key={i} width={v.width}>
+                                                    {v.name}
+                                                </StyeldTh>
+                                            );
+                                        })}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data &&
+                                    data.map((v, i) => {
+                                        return (
+                                            <tr key={i}>
+                                                <StyeldTd>{v.RN || v.id}</StyeldTd>
+                                                <StyeldTd align="left">
+                                                    <SubjectLink to={"?num="+v.id}>
+                                                        {v.subject}
+                                                    </SubjectLink>
                                                 </StyeldTd>
                                                 <StyeldTd align="center">
-                                                    {v.view}
+                                                    {v.userDisplayId}
                                                 </StyeldTd>
-                                            </>
-                                        )}
-                                    </tr>
-                                );
-                            })}
-                    </tbody>
-                </StyledTable>
+                                                {pageName === '고객센터' && (
+                                                    <>                                                 
+                                                        <StyeldTd align="center">
+                                                            {new Date(v.createdAt)
+                                                                .toLocaleString()
+                                                                .toLowerCase() !==
+                                                                'invalid date' &&
+                                                                new Date(
+                                                                    v.createdAt,
+                                                                ).toLocaleString()}
+                                                        </StyeldTd>
+                                                        <StyeldTd align="center">
+                                                            {v.view}
+                                                        </StyeldTd>
+                                                    </>
+                                                )}
+                                            </tr>
+                                        );
+                                    })}
+                            </tbody>
+                        </StyledTable>
+                    ): (<EmptyWrapper><span>게시글이 없습니다.</span></EmptyWrapper>)}
+                    
+                
 
                 <PagingWrapper>
                 {(pageCount > 0) &&                    
@@ -221,7 +243,8 @@ const CommunityTemplate = (props) => {
                         );
                     })}                
 
-                    {userData && (<WriteWrapper>
+                    {userData && (userData.authority && userData.authority !== 0) && (
+                    <WriteWrapper>
                         <WriteLink to = {'/write/' + page }>
                             글 작성
                         </WriteLink>

@@ -86,7 +86,7 @@ router.get('/usercheck', (req, res /* next */) => {
             return res.status(200).json({
                 error: null,
                 success: true,
-                user, 
+                data: user, 
             });
         }
 

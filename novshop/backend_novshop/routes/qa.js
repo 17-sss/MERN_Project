@@ -1,6 +1,6 @@
 // qa ******************************************************
 import express from "express";
-import {QA, Sequelize, sequelize} from "../models";
+import {User, QA, Sequelize, sequelize} from "../models";
 
 const router = express.Router();
 
@@ -33,7 +33,16 @@ router.post('/create', async(req, res) => {
 router.post('/getQA', async(req, res) => {
     const {id} = req.body;    
     try {
-        const getQA = await QA.findOne({where: {id}});        
+        const getQA = await QA.findOne({
+            where: { id },
+            include: [  
+                {                    
+                    model: User,
+                    attributes: ['userid'],
+                },
+            ],
+        
+        });        
         return res.status(200).json({
             error: null,
             success: true,
@@ -60,7 +69,7 @@ router.post("/getProductQA", async(req, res) => {
             // ROWNUM 사용하기위해 RAW QUERY 연구함. 
         let query = `
             SELECT @ROWNUM := @ROWNUM + 1 AS RN, 
-            qa.id, qa.subject, qa.content, qa.picture, qa.view, qa.createdAt, qa.updatedAt, qa.deletedAt, qa.userId, qa.productId, 
+            qa.id, qa.subject, qa.content, qa.view, qa.createdAt, qa.updatedAt, qa.deletedAt, qa.userId, qa.productId, 
             user.userid AS userDisplayId
             FROM qas AS qa
             LEFT OUTER JOIN users AS user ON qa.userId = user.id AND (user.deletedAt IS NULL), 
