@@ -99,10 +99,14 @@ const WriteTemplate = (props) => {
                         <StyledOpt value={''} noblack disabled>
                             게시판 선택
                         </StyledOpt>
-                        {userData && userData.authority !== 0 && (
-                            <StyledOpt value={'notice'}>공지사항</StyledOpt>
-                        )}
+                        <StyledOpt value={'notice'}>공지사항</StyledOpt>
                         <StyledOpt value={'qa'}>고객지원</StyledOpt>
+                        {userData && userData.authority !== 0 && (
+                            <> 
+                                <StyledOpt value={'category'}>카테고리 생성</StyledOpt>
+                                <StyledOpt value={'product'}>물품 생성</StyledOpt>    
+                            </>
+                        )}                        
                     </WriteSelectBox>
                 </WriteSpan>                
                 {writeForm.userViewId && (
@@ -112,15 +116,34 @@ const WriteTemplate = (props) => {
                     </WriteSpan>
                 )}
 
-                {/* 공지사항 & 고객지원 */}
+                {/* 공지사항, 고객지원, 물품생성, 카테고리 생성 */}
                 <WriteInput
                     type="text"
-                    name="subject"
-                    placeholder="제목"
-                    value={writeForm.boardType && writeForm[writeForm.boardType].subject}
+                    name={
+                        writeForm.boardType === 'category'
+                            ? 'key'
+                            : writeForm.boardType === 'product'
+                            ? 'name'
+                            : 'subject'
+                    }
+                    placeholder={
+                        writeForm.boardType === 'category'
+                            ? '카테고리 Key (영문, 숫자)'
+                            : writeForm.boardType === 'product'
+                            ? '상품명'
+                            : '제목'
+                    }
+                    value={
+                        writeForm.boardType && writeForm.boardType === 'category'
+                            ? writeForm[writeForm.boardType].key
+                            : writeForm.boardType === 'product'
+                            ? writeForm[writeForm.boardType].name
+                            : writeForm[writeForm.boardType].subject
+                    }
                     onChange={onChange}
                 />
-                {writeForm.boardType === 'qa' && (
+                
+                {writeForm.boardType === 'qa' ? (
                     <>
                         <WriteInput
                             type="text"
@@ -130,7 +153,11 @@ const WriteTemplate = (props) => {
                         />
                         <input hidden name="productId" type="text" />
                     </>
-                )}
+                ) : writeForm.boardType === 'category' ? (
+                    <>  
+
+                    </>
+                ) : (<></>)}
             </WriteMultiWrapper>
             
             {/* 2) 에디터 통합 - QuillContainer  */}

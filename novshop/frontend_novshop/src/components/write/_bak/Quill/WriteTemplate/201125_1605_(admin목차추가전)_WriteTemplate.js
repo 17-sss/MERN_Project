@@ -81,7 +81,7 @@ const WriteTemplate = (props) => {
     // editorState & onEditorStateChange는 Editor용
     const {
         events: { onChange, onSubmit },        
-        datas: { writeForm, userData },
+        datas: { writeForm },
     } = props;
 
     return (
@@ -99,9 +99,7 @@ const WriteTemplate = (props) => {
                         <StyledOpt value={''} noblack disabled>
                             게시판 선택
                         </StyledOpt>
-                        {userData && userData.authority !== 0 && (
-                            <StyledOpt value={'notice'}>공지사항</StyledOpt>
-                        )}
+                        <StyledOpt value={'notice'}>공지사항</StyledOpt>
                         <StyledOpt value={'qa'}>고객지원</StyledOpt>
                     </WriteSelectBox>
                 </WriteSpan>                
@@ -124,9 +122,8 @@ const WriteTemplate = (props) => {
                     <>
                         <WriteInput
                             type="text"
-                            name="selproduct"
+                            name="product"
                             placeholder="상품 선택"
-                            // onclick -> popup - select - GET productId
                         />
                         <input hidden name="productId" type="text" />
                     </>
