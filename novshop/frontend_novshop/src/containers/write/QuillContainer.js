@@ -17,10 +17,11 @@ Quill.register('modules/resize', QuillResize);          // 2# resize (image)
 // [FIX PLZ] 3# resize (video) :: 추후 추가하길. eject 사용해서 옵션 수정해야하기에.. 
 
 
-const QuillContainer = () => {
+const QuillContainer = (props) => {
+    const { reduxCustomform, customContentDispatch, formname } = props;
     const {writeForm, writeImgName} = useSelector(({write}) => {
         return {
-            writeForm: write.writeForm,
+            writeForm: reduxCustomform || write.writeForm,
             writeImgName: write.writeImgName,
         }
     });
@@ -58,10 +59,20 @@ const QuillContainer = () => {
     // 2) onChangeWriteContent (redux - write.writeform[boardType].content 값 change용) (useCallback)
     const onChangeWriteContent = useCallback(
         ({ value }) => {
-            const boardType = writeFormRef.current.boardType; 
-            dispatch(changeWriteForm({ key: boardType, subkey: 'content', value }));
+            console.log(customContentDispatch)
+            // [@!!!!]계속 product 폼 초기화함.. 차라리 리덕스에서 이벤트 가져오는게 나을듯
+            if (customContentDispatch) {                
+                dispatch(customContentDispatch({
+                    form: formname,
+                    key: "content",
+                    value,
+                }));
+            } else {
+                const boardType = writeFormRef.current.boardType; 
+                dispatch(changeWriteForm({ key: boardType, subkey: 'content', value }));
+            }            
         },
-        [dispatch],
+        [dispatch, customContentDispatch, formname],
     );
 
     // 2. useEffect ----------------------------------------------------------    

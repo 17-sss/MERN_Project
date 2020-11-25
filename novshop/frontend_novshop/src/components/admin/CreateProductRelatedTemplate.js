@@ -17,12 +17,14 @@ const ProductRelatedMultiWrapper = styled.div`
 
     ${(props) => {
         const { stype } = props;
-        return stype === 'buttons'
-            && css`
+        return (
+            stype === 'buttons' &&
+            css`
                 text-align: center;
                 align-items: center;
-                justify-content: center;                     
-            `;
+                justify-content: center;
+            `
+        );
     }}
 `;
 
@@ -70,11 +72,16 @@ const ResultSpanWrapper = styled.div`
 
 // 3-1) ResultSpan: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 Span
 // randomcolor 사용하기에 attrs 사용.
-const ResultSpan = styled.span.attrs(props => props.randomColor && ({
-    style: {
-        color: randomColor(),
-    }
-}))`${cssCustomSpan}`;
+const ResultSpan = styled.span.attrs(
+    (props) =>
+        props.randomColor && {
+            style: {
+                color: randomColor(),
+            },
+        },
+)`
+    ${cssCustomSpan}
+`;
 /*
 // 일반 styled
 const ResultSpan = styled.span`
@@ -85,10 +92,9 @@ const ResultSpan = styled.span`
 `;
 */
 
-
 // 4) SubmitBtn: 전송버튼
 const SubmitBtn = styled(TransparentBtn)`
-    width: 70px;            
+    width: 70px;
     height: 40px;
     margin: 14px 0;
     color: #212121;
@@ -99,7 +105,7 @@ const SubmitBtn = styled(TransparentBtn)`
 
     &:hover {
         background-color: #ededed;
-    }            
+    }
 `;
 
 // -------------------------------------------------------------------------/
@@ -110,6 +116,7 @@ const CreateProductRelatedTemplate = (props) => {
         onChange,
         onDelete,
         onSubmit,
+        onContentDispatch,
         errorMessage,
         categoryForm,
         productForm,
@@ -120,7 +127,7 @@ const CreateProductRelatedTemplate = (props) => {
     return (
         <CreateProductRelatedWrapper>
             <ProductRelatedMultiWrapper>
-                <form onSubmit={onSubmit} encType='multipart/form-data'>
+                <form onSubmit={onSubmit} encType="multipart/form-data">
                     <Input
                         type="text"
                         name={ctrlpage === 'createproduct' ? 'name' : 'key'}
@@ -138,13 +145,9 @@ const CreateProductRelatedTemplate = (props) => {
                     />
 
                     <Input
-                        type={
-                            ctrlpage === 'createproduct'
-                            ? 'file'
-                            : 'text'
-                        }
+                        type={ctrlpage === 'createproduct' ? 'file' : 'text'}
                         accept={
-                            (ctrlpage === 'createproduct') ? "image/*" : undefined
+                            ctrlpage === 'createproduct' ? 'image/*' : undefined
                         }
                         name={
                             ctrlpage === 'createproduct'
@@ -233,14 +236,19 @@ const CreateProductRelatedTemplate = (props) => {
                                     width: 5%;
                                 `}
                             />
-                            <ResultSpanWrapper id="c_items">                                
-                                {categoryForm.items && categoryForm.items.map((v) => {                                                              
-                                    return (
-                                        <ResultSpan key = {v.id} randomColor onClick={onDelete}>
-                                            {v.key} &amp; {v.value} 
-                                        </ResultSpan>
-                                    )
-                                })}                                
+                            <ResultSpanWrapper id="c_items">
+                                {categoryForm.items &&
+                                    categoryForm.items.map((v) => {
+                                        return (
+                                            <ResultSpan
+                                                key={v.id}
+                                                randomColor
+                                                onClick={onDelete}
+                                            >
+                                                {v.key} &amp; {v.value}
+                                            </ResultSpan>
+                                        );
+                                    })}
                             </ResultSpanWrapper>
                         </>
                     )}
@@ -254,7 +262,7 @@ const CreateProductRelatedTemplate = (props) => {
                                     name="color"
                                     onChange={onChange}
                                     value={productForm.color}
-                                    addcss={css`                                        
+                                    addcss={css`
                                         width: 44.5%;
                                         margin-right: 3%;
                                     `}
@@ -265,8 +273,8 @@ const CreateProductRelatedTemplate = (props) => {
                                     placeholder="보여질 색상 이름"
                                     onChange={onChange}
                                     value={productForm.colorName}
-                                    addcss={css`                                                                                
-                                        width: 47.5%;   
+                                    addcss={css`
+                                        width: 47.5%;
                                         position: relative;
                                         top: -10px;
                                     `}
@@ -288,7 +296,7 @@ const CreateProductRelatedTemplate = (props) => {
                                             return (
                                                 <ResultSpan
                                                     key={i}
-                                                    color={v.key}                                                    
+                                                    color={v.key}
                                                     onClick={onDelete}
                                                 >
                                                     {`${v.key} & ${v.value}`}
@@ -307,7 +315,9 @@ const CreateProductRelatedTemplate = (props) => {
                                 onChange={onChange}
                                 value={productForm.price}
                             />
-                            <StyledP margin="8px 0 0 0">세일가 (할인율)</StyledP>
+                            <StyledP margin="8px 0 0 0">
+                                세일가 (할인율)
+                            </StyledP>
                             <Input
                                 type="number"
                                 name="sale"
@@ -325,49 +335,58 @@ const CreateProductRelatedTemplate = (props) => {
                                 value={productForm.description}
                                 style={{ width: '100%' }}
                             />
-                            <SelectBox name="categoryId" 
+                            <SelectBox
+                                name="categoryId"
                                 onChange={onChange}
                                 value={productForm.categoryId || 0}
                             >
                                 <StyledOpt value={0} noblack disabled>
                                     카테고리 대분류 선택
                                 </StyledOpt>
-                                {categories && 
-                                    categories.map((v)=>{
+                                {categories &&
+                                    categories.map((v) => {
                                         return (
                                             <StyledOpt key={v.id} value={v.id}>
                                                 {v.displayValue}
                                             </StyledOpt>
                                         );
-                                    } 
-                                )}
+                                    })}
                             </SelectBox>
-                            <SelectBox name="categorySub"                                 
-                                onChange={onChange} 
-                                disabled={!(subCategories && subCategories.items.length > 0)}                                
+                            <SelectBox
+                                name="categorySub"
+                                onChange={onChange}
+                                disabled={
+                                    !(
+                                        subCategories &&
+                                        subCategories.items.length > 0
+                                    )
+                                }
                                 value={productForm.categorySub || 0}
                             >
                                 <StyledOpt value={0} noblack disabled>
                                     카테고리 소분류 선택
-                                </StyledOpt>                                
-                                {subCategories &&                                     
-                                    subCategories.items.map((v) => {                                        
+                                </StyledOpt>
+                                {subCategories &&
+                                    subCategories.items.map((v) => {
                                         return (
                                             <StyledOpt key={v.id} value={v.id}>
                                                 {v.displayValue}
                                             </StyledOpt>
                                         );
-                                    })
-                                }
+                                    })}
                             </SelectBox>
-                            
-                            <QuillContainer />
+
+                            <QuillContainer
+                                reduxCustomform={productForm}
+                                customContentDispatch={onContentDispatch}
+                                formname="product"
+                            />
                         </>
                     )}
 
                     <ProductRelatedMultiWrapper stype="buttons">
                         {errorMessage && (
-                            <p style={{color: 'red'}}>{errorMessage}</p>
+                            <p style={{ color: 'red' }}>{errorMessage}</p>
                         )}
                         <SubmitBtn type="submit">전송</SubmitBtn>
                     </ProductRelatedMultiWrapper>

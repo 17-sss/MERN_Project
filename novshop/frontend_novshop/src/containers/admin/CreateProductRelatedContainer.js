@@ -352,6 +352,7 @@ const CreateProductRelatedContainer = (props) => {
             onChange={onChange}
             onDelete={onDelete}
             onSubmit={onSubmit}
+            onContentDispatch={changeProductForms}
             errorMessage={errorMessage}
             // 1) 카테고리
             categoryForm={categoryForm && categoryForm}
