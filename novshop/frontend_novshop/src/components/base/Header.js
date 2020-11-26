@@ -7,7 +7,7 @@ import {getSize} from '../../lib/utility/customFunc';
 // Font Awesome 관련 :: https://fontawesome.com/how-to-use/on-the-web/using-with/react
 // ****************************************************************************************
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faShoppingBasket, faBars, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';       // fas
+import { faSearch, faShoppingBasket, faBars, faSignOutAlt, faUsersCog } from '@fortawesome/free-solid-svg-icons';       // fas
 import { faUser } from '@fortawesome/free-regular-svg-icons';       // far
 
 // import { faUser } from '@fortawesome/free-brands-svg-icons';     // fab
@@ -165,8 +165,16 @@ const Header = (props) => {
                 {/* 헤더 유저 (Icon) 관련 START */}
                 <HeadIconSection>
                     <HeadUL>
+                        {user && user.authority > 0 &&
+                        (
+                            <HeadLi posrelative>                                
+                                <CustomLink hcolor={"#007bff"} color={"red"} to = {"/admin"}>
+                                    <FontAwesomeIcon icon = {faUsersCog} size = 'lg' />                            
+                                </CustomLink>
+                            </HeadLi>
+                        )}
                         <HeadLi >                                                     
-                            <CustomLink to = {user ? ("/member/@"+user.userid) : "/auth/login"}>                            
+                            <CustomLink  hcolor={"#007bff"} to = {user ? ("/member/@"+user.userid) : "/auth/login"}>                            
                                 <FontAwesomeIcon icon = {faUser} size = 'lg'/>        
                             </CustomLink> 
                         </HeadLi>
@@ -174,7 +182,7 @@ const Header = (props) => {
                         {user && 
                         <>
                             <HeadLi posrelative>                                
-                                <CustomLink to = {user ? ("/shoppingbasket/@" + user.userid) : "/" }>
+                                <CustomLink hcolor={"#007bff"} to = {user ? ("/shoppingbasket/@" + user.userid) : "/" }>
                                     <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
                                 </CustomLink>
                             </HeadLi>
@@ -187,7 +195,6 @@ const Header = (props) => {
                             </HeadLi>
                         </>
                         }
-
                         <HeadLi>             
                             <ModalBtn mode="search">
                                 <FontAwesomeIcon icon = {faSearch} size = 'lg' />                                            

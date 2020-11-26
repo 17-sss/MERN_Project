@@ -1,18 +1,18 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { TransparentBtn } from '../common/StyleUtilModels';
 import { cssCustomInput, cssCustomSpan } from '../common/StyleUtilCSS';
 import { getSize, randomColor } from '../../lib/utility/customFunc';
 import QuillContainer from '../../containers/write/QuillContainer';
 
-// 1) CreateProductRelatedWrapper: 전체 Wrapper
+// [1] Wrapper
+// 1) 최상위 Wrapper
 const CreateProductRelatedWrapper = styled.div`
-    width: ${getSize(1.45)};
+    width: ${getSize(1.8)};
     margin: 0 auto;
 `;
 
-// 2) ProductRelatedMultiWrapper: 다용도 Wrapper
-const ProductRelatedMultiWrapper = styled.div`
+// 2) 다용도 Wrapper
+const MultiWrapper = styled.div`
     width: 100%;
 
     ${(props) => {
@@ -28,7 +28,17 @@ const ProductRelatedMultiWrapper = styled.div`
     }}
 `;
 
-// 2-1) Input: 현재 폼 Input
+// 3) 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 ResultSpan를 위한 Wrapper
+const ResultSpanWrapper = styled.div`
+    width: 100%;
+    height: auto;
+    word-break: break-all; /* 텍스트가 div영역을 나가버려서 추가. */
+    margin-bottom: 10px;
+`;
+// ---------------------------------------------------/
+
+// [2] 각종 Tag
+// 1) Input
 const Input = styled.input`
     /* 
         [!] 현재 폼에서 Input 태그 type이 button일 경우,
@@ -36,41 +46,45 @@ const Input = styled.input`
             (리덕스) colors, sizes 등에 전달하는 버튼으로 사용
     */
     ${cssCustomInput}
+    ${(props) =>
+        props.type === 'submit'
+            && css`
+                  width: 70px;
+                  height: 40px;
+                  margin: 14px 0;
+                  color: #212121;
+
+                  background-color: #cccfd1;
+                  border-radius: 2px;
+                  box-shadow: 0.2px 0.2px 0.2px 0.2px lightgray;
+              `};
 `;
 
-// 2-2) TextArea: 현재 폼 textarea
+// 2) TextArea
 const TextArea = styled.textarea`
     ${cssCustomInput}
 `;
 
-// 2-3) StyledP: Styled된 p 태그
+// 3) StyledP: Styled된 p 태그
 const StyledP = styled.p`
     font-size: 16px;
     color: rgb(163, 163, 163);
     margin: ${(props) => props.margin || '8px 0px 4px 0px'};
 `;
 
-// 2-4) SelectBox: 분류 선택용 콤보박스 (select)
+// 4-1) SelectBox: 분류 선택용 콤보박스 (select)
 const SelectBox = styled.select`
     ${cssCustomInput};
     width: 50%;
     color: rgb(163, 163, 163);
 `;
 
-// 2-4-1) StyledOpt: select 태그의 option 태그
+// 4-2) StyledOpt: select 태그의 option 태그
 const StyledOpt = styled.option`
     color: ${(props) => props.noblack || 'black'};
 `;
 
-// 3) ResultSpanWrapper: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 ResultSpan를 위한 Wrapper
-const ResultSpanWrapper = styled.div`
-    width: 100%;
-    height: auto;
-    word-break: break-all; /* 텍스트가 div영역을 나가버려서 추가. */
-    margin-bottom: 10px;
-`;
-
-// 3-1) ResultSpan: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 Span
+// 5) ResultSpan: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 Span
 // randomcolor 사용하기에 attrs 사용.
 const ResultSpan = styled.span.attrs(
     (props) =>
@@ -91,31 +105,15 @@ const ResultSpan = styled.span`
     `}
 `;
 */
+// ---------------------------------------------------/
 
-// 4) SubmitBtn: 전송버튼
-const SubmitBtn = styled(TransparentBtn)`
-    width: 70px;
-    height: 40px;
-    margin: 14px 0;
-    color: #212121;
-
-    background-color: #cccfd1;
-    border-radius: 2px;
-    box-shadow: 0.2px 0.2px 0.2px 0.2px lightgray;
-
-    &:hover {
-        background-color: #ededed;
-    }
-`;
-
-// -------------------------------------------------------------------------/
 
 const CreateProductRelatedTemplate = (props) => {
     const {
         ctrlpage,
         onChange,
         onDelete,
-        onSubmit,        
+        onSubmit,
         errorMessage,
         categoryForm,
         productForm,
@@ -125,7 +123,7 @@ const CreateProductRelatedTemplate = (props) => {
 
     return (
         <CreateProductRelatedWrapper>
-            <ProductRelatedMultiWrapper>
+            <MultiWrapper>
                 <form onSubmit={onSubmit} encType="multipart/form-data">
                     <Input
                         type="text"
@@ -376,19 +374,22 @@ const CreateProductRelatedTemplate = (props) => {
                             </SelectBox>
 
                             <QuillContainer
-                                reduxCustomform={{formdata: productForm, formname: "productForm"}}                                
+                                reduxCustomform={{
+                                    formdata: productForm,
+                                    formname: 'productForm',
+                                }}
                             />
                         </>
                     )}
 
-                    <ProductRelatedMultiWrapper stype="buttons">
+                    <MultiWrapper stype="buttons">
                         {errorMessage && (
                             <p style={{ color: 'red' }}>{errorMessage}</p>
                         )}
-                        <SubmitBtn type="submit">전송</SubmitBtn>
-                    </ProductRelatedMultiWrapper>
+                        <Input type="submit" value="전송" />
+                    </MultiWrapper>
                 </form>
-            </ProductRelatedMultiWrapper>
+            </MultiWrapper>
         </CreateProductRelatedWrapper>
     );
 };

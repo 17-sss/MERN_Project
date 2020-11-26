@@ -78,16 +78,21 @@ export const CustomLink = styled(Link)`
     margin: ${(props) => props.margin || '0 5px'};
     color: ${(props) => (props.color ? props.color : 'rgb(0, 0, 0)')};
     font-size: ${(props) => props.fontSize && props.fontSize};
-
     text-decoration: ${(props) => (props.textdeco ? 'underline' : 'none')};
-    &:focus,
-    &:hover,
-    &:visited,
-    &:link,
-    &:active {
+    &:hover {
         text-decoration: ${(props) => (props.textdeco ? 'underline' : 'none')};
         color: ${(props) => (props.hcolor ? props.hcolor : 'rgb(0, 0, 0)')};
     }
+    /*
+    &:focus,
+    &:visited,
+    &:link,
+    &:active
+    &:hover {
+        text-decoration: ${(props) => (props.textdeco ? 'underline' : 'none')};
+        color: ${(props) => (props.hcolor ? props.hcolor : 'rgb(0, 0, 0)')};
+    }
+    */
 `;
 
 // **********************************************************************************
