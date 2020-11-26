@@ -354,14 +354,20 @@ const ProductInputBtns = styled.input`
 // ========================================================================================
 // 1.1) 추가정보용 버튼 Wrapper (with Bootstrap)
 const ProductAddInfoBtnsWrapper = styled(Navbar)`
-    width: ${getSize(1.7)};    
+    width: ${getSize(1.7)};
     margin: 0 auto;
+
     align-items: center;
     justify-content: center;
     text-align: center;
 `;
 
-// 1.2) 추가정보용 버튼 
+// 1.2) Nav (with bootstrap)
+const StyledNav = styled(Nav)`
+    margin: 0 auto;
+`;
+
+// 1.3) 추가정보용 버튼 
 const ProductAddInfoLink = styled(NavLink)`
     ${cssTransparent};
     margin: 0 2.5rem;
@@ -658,29 +664,31 @@ const ProductDetailTemplate = (props) => {
             <PdDetailWrapper mode={'detail'}>
 
                 <ProductAddInfoBtnsWrapper>
-                    <Nav>
+                    <StyledNav>
                         <ProductAddInfoLink href="#review">REVIEW</ProductAddInfoLink>
-                        <ProductAddInfoLink href="#detail">DETAIL</ProductAddInfoLink>                        
+                        <ProductAddInfoLink href="#detail">DETAIL</ProductAddInfoLink>
+                        <ProductAddInfoLink href="#sizeinfo">SIZE INFO</ProductAddInfoLink>
+                        {/* <ProductAddInfoLink href="#codi">CODI ITEM</ProductAddInfoLink> */}
                         <ProductAddInfoLink href="#qa">{"Q & A"}</ProductAddInfoLink>
                         <ProductAddInfoLink href="#info">INFO</ProductAddInfoLink>
-                    </Nav>
+                    </StyledNav>
                 </ProductAddInfoBtnsWrapper>
 
-                {/* 리뷰 */}
                 <ProductAddInfoBigName id="review">REVIEW</ProductAddInfoBigName>
                 <ReviewQATableContainer type="review" subjects={["번호", "사진", "제목", "작성자", "평점"]} data={reviewStatus && reviewStatus.data} />
-
-                {/* Detail */}    
+                    
                 <ProductAddInfoBigName id="detail">DETAIL</ProductAddInfoBigName>
-                <ContentView content={detailinfo} style={{width: "90%", margin: "0 5%", boxShadow: "0 0 0 0.1px"}}  />
-                
+                <ContentView content={detailinfo} />
 
-                {/* Q & A */}
+                {/* 사이즈 정보, 코디: 비활성 */}
+                {/* <ProductAddInfoBigName id="sizeinfo">SIZE INFO</ProductAddInfoBigName>
+                <ProductAddInfoBigName>CODI ITEM</ProductAddInfoBigName> */}
+
                 <ProductAddInfoBigName id="qa">{"Q & A"}</ProductAddInfoBigName>
                 <ReviewQATableContainer type="qa" subjects={["번호", "제목", "작성자", "날짜", "조회"]} data={qaStatus && qaStatus.data}/>
 
                 
-                {/* 추가 정보 */}
+                {/* 텍스트 추가 정보 */}
                 <ProductAddInfoBigName id="info">INFO</ProductAddInfoBigName>                            
                 <ProductAddInfoTextWrapper>                
                     <ProductDetailAddInfo/>

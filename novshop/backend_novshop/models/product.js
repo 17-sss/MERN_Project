@@ -3,16 +3,16 @@ module.exports = (sequelize, DataTypes) => (
         'product',
         {
             name: {
-                type: DataTypes.STRING(50),
+                type: DataTypes.STRING(100),
                 allowNull: false,                               
             },
             image: {
-                type: DataTypes.STRING(100),
+                type: DataTypes.STRING(150),
                 allowNull: false,            
                 defaultValue: "",
             },             
             sizes: {
-                type: DataTypes.STRING(200),
+                type: DataTypes.STRING(700),
                 allowNull: false,
                 defaultValue: "",
                 get() { 
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => (
                 },
             },
             colors: {
-                type: DataTypes.STRING(200),
+                type: DataTypes.STRING(700),
                 allowNull: false,
                 defaultValue: "",
                 get() {                     
@@ -44,9 +44,14 @@ module.exports = (sequelize, DataTypes) => (
                 defaultValue: 0,
             },
             description: {
-                type: DataTypes.STRING(10000),
+                type: DataTypes.STRING(1000),
                 allowNull: false,  
                 defaultValue: "",    
+            },
+            detailinfo: {
+                type: DataTypes.STRING(8000),
+                allowNull: false,
+                defaultValue: "내용없음"
             },
             // 카테고리_소분류 (id)     ++ 카테고리_대분류는 categoryId로 정의되어있음 (관계정의 해놓음)
             categorySub: {

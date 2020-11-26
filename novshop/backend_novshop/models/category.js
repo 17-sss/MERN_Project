@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => (
                 defaultValue: "",                         
             },             
             items: {
-                type: DataTypes.STRING(10000),
+                type: DataTypes.STRING(3000),
                 allowNull: false,
                 defaultValue: "",
                 

@@ -69,7 +69,7 @@ const QuillContainer = (props) => {
                     dispatch(
                         changeProductForms({
                             form: formname,
-                            key: "content",
+                            key: "detailinfo",
                             value,
                         }),
                     );                    

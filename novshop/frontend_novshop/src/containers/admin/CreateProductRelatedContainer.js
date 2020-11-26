@@ -182,6 +182,7 @@ const CreateProductRelatedContainer = (props) => {
                     price,
                     sale,
                     description,
+                    detailinfo,
                     categorySub,
                     categoryId,
                 } = productForm;
@@ -255,6 +256,7 @@ const CreateProductRelatedContainer = (props) => {
                         price,
                         sale,
                         description,
+                        detailinfo,
                         categorySub,
                         categoryId,
                     }),

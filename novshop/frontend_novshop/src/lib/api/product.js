@@ -8,6 +8,7 @@ export const createProduct = ({
     price,
     sale,
     description,
+    detailinfo,
     categorySub,
     categoryId,
 }) => {    
@@ -19,6 +20,7 @@ export const createProduct = ({
     formData.append('price', price);
     formData.append('sale', sale);
     formData.append('description', description);
+    formData.append('detailinfo', detailinfo);
     formData.append('categorySub', categorySub);
     formData.append('categoryId', categoryId);
     

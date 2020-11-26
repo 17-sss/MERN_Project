@@ -65,6 +65,7 @@ export const createProduct = createAction(
         price,
         sale,
         description,
+        detailinfo,
         categorySub,
         categoryId,
     }) => ({
@@ -75,6 +76,7 @@ export const createProduct = createAction(
         price,
         sale: (sale * 0.01),
         description,
+        detailinfo,
         categorySub,
         categoryId,
     }),
@@ -140,6 +142,7 @@ const initialState = {
         price: 1000,
         sale: 0,
         description: '',
+        detailinfo: null,
         categorySub: 0,
         categoryId: 0,
     },
@@ -316,7 +319,7 @@ const product = handleActions(
                     ...returnObj,
                     totalprice,
                 };
-            }
+            }            
 
             return {
                 ...state,

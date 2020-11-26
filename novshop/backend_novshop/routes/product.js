@@ -15,6 +15,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
         price,
         sale,
         description,
+        detailinfo,
         categorySub,
         categoryId,
     } = req.body;   // formData로 받아옴. 일부 JSON.stringify해서 옴
@@ -38,6 +39,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
             price,
             sale,
             description,
+            detailinfo,
             categorySub,
             categoryId,
         });
