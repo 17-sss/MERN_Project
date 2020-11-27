@@ -17,35 +17,17 @@ const MultiWrapper = styled.div`
 
     ${(props) => {
         const { stype } = props;
-        return stype === 'buttons'
-            ? css`
+        return (
+            stype === 'buttons' &&
+            css`
                 text-align: center;
                 align-items: center;
                 justify-content: center;
-              `
-            : stype === 'inputs'
-            ? css`
-                width: 100%;
-                padding: 2% 10%;
-                box-shadow: 0 0 0 0.2px;
-                margin: 2% 0;
             `
-            : stype === 'pagename' 
-            ? css`
-                min-height: 30px;
-                margin: 50px 0 20px;
-                border-bottom: 0;
-                text-align: center;
-
-                p#pageType {
-                    font-weight: 100;
-                    color: #222;
-                    font-size: 20px;
-                }                
-            `
-            : css`` ;
+        );
     }}
 `;
+
 // 3) 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 ResultSpan를 위한 Wrapper
 const ResultSpanWrapper = styled.div`
     width: 100%;
@@ -141,15 +123,8 @@ const CreateProductRelatedTemplate = (props) => {
 
     return (
         <CreateProductRelatedWrapper>
-            
-            <MultiWrapper stype="pagename">
-                <p id="pageType">
-                    {ctrlpage === "createproduct" ? "상품 등록" : "카테고리 등록"}
-                </p>
-            </MultiWrapper>
-
-            <form onSubmit={onSubmit} encType="multipart/form-data">
-                <MultiWrapper stype="inputs">
+            <MultiWrapper>
+                <form onSubmit={onSubmit} encType="multipart/form-data">
                     <Input
                         type="text"
                         name={ctrlpage === 'createproduct' ? 'name' : 'key'}
@@ -397,28 +372,24 @@ const CreateProductRelatedTemplate = (props) => {
                                         );
                                     })}
                             </SelectBox>
-                                               
-                    </>
-                )}
-                </MultiWrapper>
 
-                {ctrlpage === "createproduct" &&
-                    <QuillContainer
-                        reduxCustomform={{
-                            formdata: productForm,
-                            formname: 'productForm',
-                        }}
-                    />
-                }               
-
-                <MultiWrapper stype="buttons">
-                    {errorMessage && (
-                        <p style={{ color: 'red' }}>{errorMessage}</p>
+                            <QuillContainer
+                                reduxCustomform={{
+                                    formdata: productForm,
+                                    formname: 'productForm',
+                                }}
+                            />
+                        </>
                     )}
-                    <Input type="submit" value="전송" />
-                </MultiWrapper>
 
-            </form>
+                    <MultiWrapper stype="buttons">
+                        {errorMessage && (
+                            <p style={{ color: 'red' }}>{errorMessage}</p>
+                        )}
+                        <Input type="submit" value="전송" />
+                    </MultiWrapper>
+                </form>
+            </MultiWrapper>
         </CreateProductRelatedWrapper>
     );
 };
