@@ -415,7 +415,7 @@ const ProductDetailTemplate = (props) => {
 
     const {
         // categoryId,
-        // categorySub,
+        // categorySub, 
         name,
         colors,
         sizes,
@@ -426,7 +426,7 @@ const ProductDetailTemplate = (props) => {
         detailinfo,
     } = productData;
 
-    const {colorRef, sizeRef} = refs;
+    const { colorRef, sizeRef } = refs;
     const { onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest, onAddQATest } = events;    
     const { imgRef, imgClientSize } = imgDivInfo;
 
@@ -660,7 +660,7 @@ const ProductDetailTemplate = (props) => {
                 <ProductAddInfoBtnsWrapper>
                     <Nav>
                         <ProductAddInfoLink href="#review">REVIEW</ProductAddInfoLink>
-                        <ProductAddInfoLink href="#detail">DETAIL</ProductAddInfoLink>                        
+                        {detailinfo && (<ProductAddInfoLink href="#detail">DETAIL</ProductAddInfoLink>)}
                         <ProductAddInfoLink href="#qa">{"Q & A"}</ProductAddInfoLink>
                         <ProductAddInfoLink href="#info">INFO</ProductAddInfoLink>
                     </Nav>
@@ -670,9 +670,22 @@ const ProductDetailTemplate = (props) => {
                 <ProductAddInfoBigName id="review">REVIEW</ProductAddInfoBigName>
                 <ReviewQATableContainer type="review" subjects={["번호", "사진", "제목", "작성자", "평점"]} data={reviewStatus && reviewStatus.data} />
 
-                {/* Detail */}    
-                <ProductAddInfoBigName id="detail">DETAIL</ProductAddInfoBigName>
-                <ContentView content={detailinfo} style={{width: "90%", margin: "0 5%", boxShadow: "0 0 0 0.1px"}}  />
+                {/* Detail */}                    
+                {detailinfo && (
+                    <>
+                        <ProductAddInfoBigName id="detail">
+                            DETAIL
+                        </ProductAddInfoBigName>
+                        <ContentView
+                            content={detailinfo}
+                            style={{
+                                width: '90%',
+                                margin: '0 5%',
+                                boxShadow: '0 0 0 0.1px',
+                            }}
+                        />
+                    </>
+                )}
                 
 
                 {/* Q & A */}

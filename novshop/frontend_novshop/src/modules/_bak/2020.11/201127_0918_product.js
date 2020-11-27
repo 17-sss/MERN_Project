@@ -142,7 +142,7 @@ const initialState = {
         price: 1000,
         sale: 0,
         description: '',
-        detailinfo: '',
+        detailinfo: null,
         categorySub: 0,
         categoryId: 0,
     },
@@ -377,16 +377,69 @@ const product = handleActions(
         },
 
         // 상품 생성
-        [CREATE_PRODUCT_SUCCESS]: okNotokFunc("product", "success"),
-        [CREATE_PRODUCT_FAILURE]: okNotokFunc("product", "failure"),
+        [CREATE_PRODUCT_SUCCESS]: (state, action) => {
+            const { payload: product } = action;
 
-        // 상품 전체 불러오기
+            return {
+                ...state,
+                product,
+                productError: null,
+            };
+        },
+        [CREATE_PRODUCT_FAILURE]: (state, action) => {
+            const { payload: productError } = action;
+
+            return {
+                ...state,
+                product: null,
+                productError,
+            };
+        },
+        // 상품 전체
         [GET_ALL_PRODUCT_SUCCESS]: okNotokFunc("productStatus", "success"),
+        // (state, action) => {
+        //     const { payload: productStatus } = action;
+
+        //     return {
+        //         ...state,
+        //         productStatus,
+        //         productError: null,
+        //     };
+        // },
+
         [GET_ALL_PRODUCT_FAILURE]: okNotokFunc("productStatus", "failure"),
-        
-        // 특정 상품 상세정보 불러오기
+        // (state, action) => {
+        //     const { payload: productError } = action;
+
+        //     return {
+        //         ...state,
+        //         productStatus: null,
+        //         productError,
+        //     };
+        // },
+
+        // 상품 상세        
         [GET_PRODUCT_SUCCESS]: okNotokFunc("productStatus", "success"),
+        // (state, action) => {
+        //     const { payload: productStatus } = action;            
+        //     return {
+        //         ...state,
+        //         productStatus,
+        //         productError: null,
+        //     };
+        // },
+
         [GET_PRODUCT_FAILURE]: okNotokFunc("productStatus", "failure"),
+
+        // (state, action) => {
+        //     const { payload: productError } = action;
+
+        //     return {
+        //         ...state,
+        //         productStatus: null,
+        //         productError,
+        //     };
+        // },
 
         // 상품 상세 - 옵션 선택한 상태 저장
         [ADD_SELECT_PRODUCT]: (state, action) => {

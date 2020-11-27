@@ -27,7 +27,7 @@ const ProductContainer = (props) => {
             }),
         );
     }, [dispatch, query]);
-    // [1] 데이터 관련 END ====
+    // ---------------------------------------|
 
     // [2] useHooks & event & function START ====
     const [colHeight, setColHeight] = useState(0);
@@ -53,75 +53,87 @@ const ProductContainer = (props) => {
         if (colHeight * 0.7 < imgHeight) return 'auto';
         else return colHeight * 0.7;
     };
-    // [2] useHooks & event & function END ====
+    // ---------------------------------------|
 
+    // [3] ProductItem에 들어가는 props 미리 정의
     const refs = { colRef, imgRef };
     const events = { imageOnLoad };
     const funcs = { imageTagHeight };
+    // ---------------------------------------|
 
-    return (
-        !productLoading && (
-            <ProductTemplate>
-                {productStatus &&
-                    productStatus.data.length > 0 &&
-                    productStatus.data.map((v) => {
-                        const {
-                            id,
-                            name,
-                            image,
-                            sizes,
-                            colors,
-                            price,
-                            sale,
-                            description,
-                            categorySub,
-                            categoryId,
-                        } = v;
+    // [4] ProductItem 생성 [ [], [] 형식으로 생성 ]
+    const createItems = (arrData = []) => {
+        if (!arrData || (arrData.length <= 0)) return null;
 
-                        let aLink = '/shopping';
-                        if (id) {
-                            if (!categoryId && !categorySub) {
-                                aLink = aLink + `?itemId=${id}`;
-                            } else if (categoryId && !categorySub) {
-                                aLink =
-                                    aLink + `?main=${categoryId}&itemId=${id}`;
-                            } else if (categoryId && categorySub) {
-                                aLink =
-                                    aLink +
-                                    `?main=${categoryId}&sub=${categorySub}&itemId=${id}`;
-                            }
-                        } else {
-                            return <div>Error: id가 없을 수가?</div>;
-                        }
+        const productItems = [];
+        arrData.map((v, i) => {
+            const {
+                id, name, image, sizes, colors, price,
+                sale, description, categorySub, categoryId,
+            } = v;
+    
+            let aLink = '/shopping';
+            if (id) {
+                if (!categoryId && !categorySub) {
+                    aLink = aLink + `?itemId=${id}`;
+                } else if (categoryId && !categorySub) {
+                    aLink =
+                        aLink + `?main=${categoryId}&itemId=${id}`;
+                } else if (categoryId && categorySub) {
+                    aLink =
+                        aLink +
+                        `?main=${categoryId}&sub=${categorySub}&itemId=${id}`;
+                }
+            } else {
+                return <div>Error: id가 없을 수가?</div>;
+            }
+    
+            let encSizes,
+                encColors = [];
+            sizes && (encSizes = JSON.parse(sizes));
+            colors && (encColors = JSON.parse(colors));
+    
+            const jsx = (
+                <ProductItem
+                    key={id}
+                    itemName={name}
+                    itemImage={
+                        '/uploads/' + image || '/images/bymono_test1.webp'
+                    }
+                    itemLink={aLink}
+                    itemSize={encSizes}
+                    itemColors={encColors}
+                    price={price}
+                    sale={sale}
+                    description={description}
+                    refs={refs}
+                    events={events}
+                    funcs={funcs}
+                />
+            );
+    
+            return productItems.push(jsx);       
+        })   
 
-                        let encSizes,
-                            encColors = [];
-                        sizes && (encSizes = JSON.parse(sizes));
-                        colors && (encColors = JSON.parse(colors));
+        const childArrayCnt = Math.round(productItems.length / 4);
+        const result = [];
 
-                        return (
-                            <ProductItem
-                                key={id}
-                                itemName={name}
-                                itemImage={
-                                    '/uploads/' + image ||
-                                    '/images/bymono_test1.webp'
-                                }
-                                itemLink={aLink}
-                                itemSize={encSizes}
-                                itemColors={encColors}
-                                price={price}
-                                sale={sale}
-                                description={description}
-                                refs={refs}
-                                events={events}
-                                funcs={funcs}
-                            />
-                        );
-                    })}
-            </ProductTemplate>
-        )
-    );
+        [...Array(childArrayCnt)].map((v, i) => {
+            let start = (i * 4);
+            let end = start + 4;            
+            // 0, 4
+            // 4, 8
+            // 8, 12
+            return result.push(productItems.slice(start, end));
+        });
+        
+        return result;
+    }    
+    // ---------------------------------------|
+    
+
+    return !productLoading && productStatus 
+        ? createItems(productStatus.data).map((v) => <ProductTemplate>{v}</ProductTemplate>) : (<></>)            
 };
 
 export default ProductContainer;

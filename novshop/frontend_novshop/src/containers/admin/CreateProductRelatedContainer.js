@@ -198,6 +198,7 @@ const CreateProductRelatedContainer = (props) => {
                         case 'sale':
                         case 'description':
                         case 'categorySub':
+                        case 'detailinfo':
                             continue;
 
                         default: {
@@ -230,6 +231,7 @@ const CreateProductRelatedContainer = (props) => {
                                         break;
                                 }
                                 bBreak = true;
+                                
                             } else if (key === 'sizes' && value.length <= 0) {
                                 setErrorMesssage('사이즈 정보를 등록해주세요.');
                                 bBreak = true;
@@ -239,13 +241,14 @@ const CreateProductRelatedContainer = (props) => {
                                 bBreak = true;
                                 break;
                             } else {
-                                continue;
+                                continue
                             }
                         }
                     }
                 }
-                // errormessage 정의 end..
-                if (bBreak) return;
+                // errormessage 정의 end..  
+                console.log(bBreak);
+                if (bBreak) return;                
 
                 dispatch(
                     createProduct({

@@ -8,8 +8,8 @@ import { ClearEx, CustomLink } from '../common/StyleUtilModels';
 import { cssDisplayNone, cssStrike } from '../common/StyleUtilCSS';
 
 // [1 START] ProductForm ====================== 
-// 1) ProductFormContainer: 상품 폼 Wrapper (전체 틀)
-const ProductFormContainer = styled(Container)`
+// 1) ProductFormWrapper: 상품 폼 Wrapper (전체 틀)
+const ProductFormWrapper = styled(Container)`
     width: ${getSize(1.2)};
     max-width: none !important;
     padding: 1% 0;
@@ -18,15 +18,16 @@ const ProductFormContainer = styled(Container)`
 
 // 1-1) ProductFormRow
 const ProductFormRow = styled(Row)`
-    margin: 0 5%;
+    margin: 0 5% 0%;
 `;
 // [END] ProductForm ====================== 
 
 
 // [2 START] ProductItem ======================
-// 1) ProductItemContainer: 상품 최상위 Wrapper 
-const ProductItemContainer = styled(Col)`
-    height: ${getSize(1.6, 'height')};
+// 1) ProductItemCol: 상품 최상위 (Col) Wrapper
+const ProductItemCol = styled(Col)`
+    // height: ${getSize(1.6, 'height')};
+    height: auto;
     /* border: 1px solid black; */
     padding: 15px;
 `;
@@ -203,7 +204,7 @@ export const ProductItem = (props) => {
     // const {imageTagHeight} = funcs;
 
     return (
-        <ProductItemContainer ref = {colRef}>
+        <ProductItemCol ref = {colRef}>
             {/* [1] 이미지 START */}
             <ProductItemImageWrapper>
                 <CustomLink to = {itemLink}>
@@ -281,7 +282,7 @@ export const ProductItem = (props) => {
             {/* 상품 END */}
 
             <ClearEx />
-        </ProductItemContainer>
+        </ProductItemCol>
     );
 };
 
@@ -321,11 +322,11 @@ ProductItem.propTypes = {
 const ProductTemplate = (props) => {    
     const {children} = props;
     return (
-        <ProductFormContainer>
+        <ProductFormWrapper>
             <ProductFormRow className="row-cols-4">
                 {children}
             </ProductFormRow>
-        </ProductFormContainer>
+        </ProductFormWrapper>
     );
 };
 // =======================================================================

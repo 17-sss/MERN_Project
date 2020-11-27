@@ -25,7 +25,7 @@ Quill.register('modules/resize', QuillResize);          // 2# resize (image)
 const QuillContainer = (props) => {
     const { reduxCustomform } = props;
     let formdata = reduxCustomform && reduxCustomform.formdata ? reduxCustomform.formdata : null;
-    let formname = reduxCustomform && reduxCustomform.formname ? reduxCustomform.formname : '';
+    let formname = reduxCustomform && reduxCustomform.formname ? reduxCustomform.formname : '';    
 
     const {writeForm, writeImgName} = useSelector(({write}) => {
         return {
@@ -72,7 +72,7 @@ const QuillContainer = (props) => {
                     dispatch(
                         changeProductForms({
                             form: formname,
-                            key: "content",
+                            key: "detailinfo",
                             value,
                         }),
                     );                    
