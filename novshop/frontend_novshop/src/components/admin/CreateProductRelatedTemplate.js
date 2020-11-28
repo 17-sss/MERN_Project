@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { cssCustomInput, cssCustomSpan } from '../common/StyleUtilCSS';
+import { ClearEx } from '../common/StyleUtilModels';
 import { getSize, randomColor } from '../../lib/utility/customFunc';
 import QuillContainer from '../../containers/write/QuillContainer';
 
@@ -19,33 +20,61 @@ const MultiWrapper = styled.div`
         const { stype } = props;
         return stype === 'buttons'
             ? css`
-                text-align: center;
-                align-items: center;
-                justify-content: center;
+                  text-align: center;
+                  align-items: center;
+                  justify-content: center;
               `
             : stype === 'inputs'
             ? css`
-                width: 100%;
-                padding: 2% 10%;
-                box-shadow: 0 0 0 0.2px;
-                margin: 2% 0;
-            `
-            : stype === 'pagename' 
+                  width: 100%;
+                  padding: 2% 10%;
+                  box-shadow: 0 0 0 0.2px;
+                  margin: 2% 0;
+              `
+            : stype === 'pagename'
             ? css`
-                min-height: 30px;
-                margin: 50px 0 20px;
-                border-bottom: 0;
-                text-align: center;
+                  min-height: 30px;
+                  margin: 50px 0 20px;
+                  border-bottom: 0;
+                  text-align: center;
 
-                p#pageType {
-                    font-weight: 100;
-                    color: #222;
-                    font-size: 20px;
-                }                
-            `
-            : css`` ;
+                  p#pageType {
+                      font-weight: 100;
+                      color: #222;
+                      font-size: 20px;
+                  }
+              `
+            : stype === 'input_row'
+            ? css`
+                  width: 100%;
+
+                  .fr_w50 {
+                      float: right;
+                      width: 50%;
+                  }
+
+                  .fr_w70 {
+                      float: right;
+                      width: 70%;
+                  }
+
+                  .fl_w50 {
+                      float: left;
+                      width: 50%;
+                  }
+
+                  .label {
+                      font-weight: 100;
+                      color: #222;
+                      font-size: 15px;
+                      /* margin: 0 10px 0 0; */
+                      display: inline-block;
+                  }
+              `
+            : css``;
     }}
 `;
+
 // 3) 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 ResultSpan를 위한 Wrapper
 const ResultSpanWrapper = styled.div`
     width: 100%;
@@ -65,17 +94,17 @@ const Input = styled.input`
     */
     ${cssCustomInput}
     ${(props) =>
-        props.type === 'submit'
-            && css`
-                  width: 70px;
-                  height: 40px;
-                  margin: 14px 0;
-                  color: #212121;
+        props.type === 'submit' &&
+        css`
+            width: 8%;
+            height: 40px;
+            margin: 14px 0;
+            color: #212121;
 
-                  background-color: #cccfd1;
-                  border-radius: 2px;
-                  box-shadow: 0.2px 0.2px 0.2px 0.2px lightgray;
-              `};
+            background-color: #cccfd1;
+            border-radius: 2px;
+            box-shadow: 0.2px 0.2px 0.2px 0.2px lightgray;
+        `};
 `;
 
 // 2) TextArea
@@ -83,26 +112,19 @@ const TextArea = styled.textarea`
     ${cssCustomInput}
 `;
 
-// 3) StyledP: Styled된 p 태그
-const StyledP = styled.p`
-    font-size: 16px;
-    color: rgb(163, 163, 163);
-    margin: ${(props) => props.margin || '8px 0px 4px 0px'};
-`;
-
-// 4-1) SelectBox: 분류 선택용 콤보박스 (select)
+// 3-1) SelectBox: 분류 선택용 콤보박스 (select)
 const SelectBox = styled.select`
     ${cssCustomInput};
     width: 50%;
     color: rgb(163, 163, 163);
 `;
 
-// 4-2) StyledOpt: select 태그의 option 태그
+// 3-2) StyledOpt: select 태그의 option 태그
 const StyledOpt = styled.option`
     color: ${(props) => props.noblack || 'black'};
 `;
 
-// 5) ResultSpan: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 Span
+// 4) ResultSpan: 상품 - 색상, 사이즈 || 카테고리-소분류 정보 등 추가한 결과물들을 보여주는 Span
 // randomcolor 사용하기에 attrs 사용.
 const ResultSpan = styled.span.attrs(
     (props) =>
@@ -125,7 +147,6 @@ const ResultSpan = styled.span`
 */
 // ---------------------------------------------------/
 
-
 const CreateProductRelatedTemplate = (props) => {
     const {
         ctrlpage,
@@ -141,92 +162,214 @@ const CreateProductRelatedTemplate = (props) => {
 
     return (
         <CreateProductRelatedWrapper>
-            
             <MultiWrapper stype="pagename">
                 <p id="pageType">
-                    {ctrlpage === "createproduct" ? "상품 등록" : "카테고리 등록"}
+                    {ctrlpage === 'createproduct'
+                        ? '상품 등록'
+                        : '카테고리 등록'}
                 </p>
             </MultiWrapper>
 
             <form onSubmit={onSubmit} encType="multipart/form-data">
                 <MultiWrapper stype="inputs">
-                    <Input
-                        type="text"
-                        name={ctrlpage === 'createproduct' ? 'name' : 'key'}
-                        placeholder={
-                            ctrlpage === 'createproduct'
-                                ? '상품명'
-                                : '카테고리 Key (영문, 숫자)'
-                        }
-                        onChange={onChange}
-                        value={
-                            ctrlpage === 'createproduct'
-                                ? productForm.name
-                                : categoryForm.key
-                        }
-                    />
-
-                    <Input
-                        type={ctrlpage === 'createproduct' ? 'file' : 'text'}
-                        accept={
-                            ctrlpage === 'createproduct' ? 'image/*' : undefined
-                        }
-                        name={
-                            ctrlpage === 'createproduct'
-                                ? 'image'
-                                : 'displayValue'
-                        }
-                        placeholder={
-                            ctrlpage === 'createproduct'
-                                ? '상품 이미지 경로 (불러오기)'
-                                : '페이지에 보일 값'
-                        }
-                        onChange={onChange}
-                        value={
-                            ctrlpage === 'createproduct'
-                                ? productForm.image
-                                : categoryForm.displayValue
-                        }
-                    />
-
-                    {ctrlpage === 'createproduct' ? (
-                        <>
+                    <MultiWrapper stype="input_row">
+                        <div className="fl_w50">
+                            <div
+                                className="label"
+                                style={
+                                    ctrlpage === 'createproduct'
+                                        ? { width: '10%' }
+                                        : { width: '35%' }
+                                }
+                            >
+                                {ctrlpage === 'createproduct'
+                                    ? '상품명'
+                                    : '카테고리 Key (영문, 숫자)'}
+                            </div>
                             <Input
                                 type="text"
-                                name="size"
-                                placeholder="상품 사이즈"
+                                name={
+                                    ctrlpage === 'createproduct'
+                                        ? 'name'
+                                        : 'key'
+                                }
                                 onChange={onChange}
-                                value={productForm.size}
-                                addcss={css`
-                                    width: 95%;
-                                    margin-top: 16px;
-                                `}
+                                value={
+                                    ctrlpage === 'createproduct'
+                                        ? productForm.name
+                                        : categoryForm.key
+                                }
+                                addcss={
+                                    ctrlpage === 'createproduct'
+                                        ? css`
+                                              padding-bottom: 11px;
+                                              width: 85%;
+                                          `
+                                        : css`
+                                              padding-bottom: 11px;
+                                              width: 60%;
+                                          `
+                                }
                             />
+                        </div>
+
+                        <div className="fr_w50">
+                            <div
+                                className="label"
+                                style={
+                                    ctrlpage === 'createproduct'
+                                        ? { width: '38%' }
+                                        : { width: '23%' }
+                                }
+                            >
+                                {ctrlpage === 'createproduct'
+                                    ? '상품 이미지 경로 (불러오기)'
+                                    : '페이지에 보일 값'}
+                            </div>
                             <Input
-                                type="button" // button
-                                name="insertSizes"
-                                value="+"
-                                onClick={onChange}
-                                addcss={css`
-                                    width: 5%;
-                                `}
+                                type={
+                                    ctrlpage === 'createproduct'
+                                        ? 'file'
+                                        : 'text'
+                                }
+                                accept={
+                                    ctrlpage === 'createproduct'
+                                        ? 'image/*'
+                                        : undefined
+                                }
+                                name={
+                                    ctrlpage === 'createproduct'
+                                        ? 'image'
+                                        : 'displayValue'
+                                }
+                                onChange={onChange}
+                                value={
+                                    ctrlpage === 'createproduct'
+                                        ? productForm.image
+                                        : categoryForm.displayValue
+                                }
+                                addcss={
+                                    ctrlpage === 'createproduct'
+                                        ? css`
+                                              width: 57%;
+                                              margin-left: 5%;
+                                          `
+                                        : css`
+                                              width: 72%;
+                                              margin-left: 5%;
+                                          `
+                                }
                             />
-                            <ResultSpanWrapper id="p_sizes">
-                                {productForm.sizes &&
-                                    productForm.sizes.map((v, i) => {
-                                        return (
-                                            <ResultSpan
-                                                key={i}
-                                                onClick={onDelete}
-                                            >
-                                                {v}
-                                            </ResultSpan>
-                                        );
-                                    })}
-                            </ResultSpanWrapper>
-                        </>
+                        </div>
+                    </MultiWrapper>
+
+                    <ClearEx />
+
+                    {ctrlpage === 'createproduct' ? (
+                        <MultiWrapper
+                            stype="input_row"
+                            style={{ marginTop: '15px' }}
+                        >
+                            <div className="fl_w50">
+                                <div className="label" style={{ width: '25%' }}>
+                                    상품 사이즈 등록
+                                </div>
+                                <Input
+                                    type="text"
+                                    name="size"
+                                    onChange={onChange}
+                                    value={productForm.size}
+                                    addcss={css`
+                                        width: 65%;
+                                    `}
+                                />
+                                <Input
+                                    type="button" // button
+                                    name="insertSizes"
+                                    value="+"
+                                    onClick={onChange}
+                                    addcss={css`
+                                        width: 5%;
+                                    `}
+                                />
+                                <ResultSpanWrapper id="p_sizes">
+                                    {productForm.sizes &&
+                                        productForm.sizes.map((v, i) => {
+                                            return (
+                                                <ResultSpan
+                                                    key={i}
+                                                    onClick={onDelete}
+                                                >
+                                                    {v}
+                                                </ResultSpan>
+                                            );
+                                        })}
+                                </ResultSpanWrapper>
+                            </div>
+                            <div className="fr_w50">
+                                <div className="label" style={{ width: '15%' }}>
+                                    색상 설정
+                                </div>
+                                <Input
+                                    type="color"
+                                    name="color"
+                                    onChange={onChange}
+                                    value={productForm.color}
+                                    addcss={css`
+                                        width: 30px;
+                                        height: 30px;
+                                        position: relative;
+                                        top: 5px;
+                                    `}
+                                />
+                                <div
+                                    className="label"
+                                    style={{ width: '25%', marginLeft: '5%' }}
+                                >
+                                    표시될 이름 설정
+                                </div>
+                                <Input
+                                    type="text"
+                                    name="colorName"
+                                    onChange={onChange}
+                                    value={productForm.colorName}
+                                    addcss={css`
+                                        width: 44%;
+                                    `}
+                                />
+                                <Input
+                                    type="button" // button
+                                    name="insertColors"
+                                    value="+"
+                                    onClick={onChange}
+                                    addcss={css`
+                                        width: 5%;
+                                    `}
+                                />
+                                <ResultSpanWrapper id="p_colors">
+                                    {productForm.colors &&
+                                        productForm.colors.map((v, i) => {
+                                            return (
+                                                <ResultSpan
+                                                    key={i}
+                                                    color={v.key}
+                                                    onClick={onDelete}
+                                                >
+                                                    {`${v.key} & ${v.value}`}
+                                                </ResultSpan>
+                                            );
+                                        })}
+                                </ResultSpanWrapper>
+                            </div>
+                        </MultiWrapper>
                     ) : (
-                        <>
+                        <MultiWrapper
+                            stype="input_row"
+                            style={{ marginTop: '15px' }}
+                        >
+                            <div className="label" style={{ width: '15%' }}>
+                                소분류 생성
+                            </div>
                             <Input
                                 type="text"
                                 name="itemKey"
@@ -234,8 +377,7 @@ const CreateProductRelatedTemplate = (props) => {
                                 onChange={onChange}
                                 value={categoryForm.itemKey}
                                 addcss={css`
-                                    width: 47.5%;
-                                    margin-top: 16px;
+                                    width: 40%;
                                 `}
                             />
                             <Input
@@ -245,8 +387,7 @@ const CreateProductRelatedTemplate = (props) => {
                                 onChange={onChange}
                                 value={categoryForm.itemValue}
                                 addcss={css`
-                                    width: 47.5%;
-                                    margin-top: 16px;
+                                    width: 40%;
                                 `}
                             />
                             <Input
@@ -272,144 +413,147 @@ const CreateProductRelatedTemplate = (props) => {
                                         );
                                     })}
                             </ResultSpanWrapper>
-                        </>
+                        </MultiWrapper>
                     )}
+
+                    <ClearEx />
 
                     {ctrlpage === 'createproduct' && (
                         <>
-                            <>
-                                <StyledP posTop>색상</StyledP>
-                                <Input
-                                    type="color"
-                                    name="color"
-                                    onChange={onChange}
-                                    value={productForm.color}
-                                    addcss={css`
-                                        width: 44.5%;
-                                        margin-right: 3%;
-                                    `}
-                                />
-                                <Input
-                                    type="text"
-                                    name="colorName"
-                                    placeholder="보여질 색상 이름"
-                                    onChange={onChange}
-                                    value={productForm.colorName}
-                                    addcss={css`
-                                        width: 47.5%;
-                                        position: relative;
-                                        top: -10px;
-                                    `}
-                                />
-                                <Input
-                                    type="button" // button
-                                    name="insertColors"
-                                    value="+"
-                                    onClick={onChange}
-                                    addcss={css`
-                                        width: 5%;
-                                        position: relative;
-                                        top: -10px;
-                                    `}
-                                />
-                                <ResultSpanWrapper id="p_colors">
-                                    {productForm.colors &&
-                                        productForm.colors.map((v, i) => {
-                                            return (
-                                                <ResultSpan
-                                                    key={i}
-                                                    color={v.key}
-                                                    onClick={onDelete}
-                                                >
-                                                    {`${v.key} & ${v.value}`}
-                                                </ResultSpan>
-                                            );
-                                        })}
-                                </ResultSpanWrapper>
-                            </>
+                            <MultiWrapper
+                                stype="input_row"
+                                style={{ marginTop: '15px' }}
+                            >
+                                <div className="fl_w50">
+                                    <div
+                                        className="label"
+                                        style={{ width: '10%' }}
+                                    >
+                                        가격
+                                    </div>
+                                    <Input
+                                        type="number"
+                                        name="price"
+                                        min="1000"
+                                        max="9999999"
+                                        onChange={onChange}
+                                        value={productForm.price}
+                                        addcss={css`
+                                            width: 80%;
+                                        `}
+                                    />
+                                </div>
+                                <div className="fr_w50">
+                                    <div
+                                        className="label"
+                                        style={{ width: '15%' }}
+                                    >
+                                        세일 (%)
+                                    </div>
+                                    <Input
+                                        type="number"
+                                        name="sale"
+                                        min="0"
+                                        max="100"
+                                        onChange={onChange}
+                                        value={productForm.sale}
+                                        addcss={css`
+                                            width: 85%;
+                                        `}
+                                    />
+                                </div>
+                            </MultiWrapper>
 
-                            <StyledP margin="8px 0 0 0">가격</StyledP>
-                            <Input
-                                type="number"
-                                name="price"
-                                min="1000"
-                                max="9999999"
-                                onChange={onChange}
-                                value={productForm.price}
-                            />
-                            <StyledP margin="8px 0 0 0">
-                                세일가 (할인율)
-                            </StyledP>
-                            <Input
-                                type="number"
-                                name="sale"
-                                min="0"
-                                max="100"
-                                onChange={onChange}
-                                value={productForm.sale}
-                            />
-                            <TextArea
-                                name="description"
-                                rows="2"
-                                /* cols="50" */
-                                placeholder="부가설명"
-                                onChange={onChange}
-                                value={productForm.description}
-                                style={{ width: '100%' }}
-                            />
-                            <SelectBox
-                                name="categoryId"
-                                onChange={onChange}
-                                value={productForm.categoryId || 0}
+                            <ClearEx />
+
+                            <MultiWrapper
+                                stype="input_row"
+                                style={{ marginTop: '15px' }}
                             >
-                                <StyledOpt value={0} noblack disabled>
-                                    카테고리 대분류 선택
-                                </StyledOpt>
-                                {categories &&
-                                    categories.map((v) => {
-                                        return (
-                                            <StyledOpt key={v.id} value={v.id}>
-                                                {v.displayValue}
-                                            </StyledOpt>
-                                        );
-                                    })}
-                            </SelectBox>
-                            <SelectBox
-                                name="categorySub"
-                                onChange={onChange}
-                                disabled={
-                                    !(
-                                        subCategories &&
-                                        subCategories.items.length > 0
-                                    )
-                                }
-                                value={productForm.categorySub || 0}
-                            >
-                                <StyledOpt value={0} noblack disabled>
-                                    카테고리 소분류 선택
-                                </StyledOpt>
-                                {subCategories &&
-                                    subCategories.items.map((v) => {
-                                        return (
-                                            <StyledOpt key={v.id} value={v.id}>
-                                                {v.displayValue}
-                                            </StyledOpt>
-                                        );
-                                    })}
-                            </SelectBox>
-                                               
-                    </>
-                )}
+                                <div
+                                    className="fl_w50"
+                                    style={{ width: '45%' }}
+                                >
+                                    <TextArea
+                                        name="description"
+                                        rows="1"
+                                        /* cols="50" */
+                                        placeholder="부가설명"
+                                        onChange={onChange}
+                                        value={productForm.description}
+                                        style={{ width: '100%' }}
+                                    />
+                                </div>
+                                <div className="fr_w50">
+                                    <SelectBox
+                                        name="categoryId"
+                                        onChange={onChange}
+                                        value={productForm.categoryId || 0}
+                                    >
+                                        <StyledOpt value={0} noblack disabled>
+                                            카테고리 대분류 선택
+                                        </StyledOpt>
+                                        {categories &&
+                                            categories.map((v) => {
+                                                return (
+                                                    <StyledOpt
+                                                        key={v.id}
+                                                        value={v.id}
+                                                    >
+                                                        {v.displayValue}
+                                                    </StyledOpt>
+                                                );
+                                            })}
+                                    </SelectBox>
+                                    <SelectBox
+                                        name="categorySub"
+                                        onChange={onChange}
+                                        disabled={
+                                            !(
+                                                subCategories &&
+                                                subCategories.items.length > 0
+                                            )
+                                        }
+                                        value={productForm.categorySub || 0}
+                                    >
+                                        <StyledOpt value={0} noblack disabled>
+                                            카테고리 소분류 선택
+                                        </StyledOpt>
+                                        {subCategories &&
+                                            subCategories.items.map((v) => {
+                                                return (
+                                                    <StyledOpt
+                                                        key={v.id}
+                                                        value={v.id}
+                                                    >
+                                                        {v.displayValue}
+                                                    </StyledOpt>
+                                                );
+                                            })}
+                                    </SelectBox>
+                                </div>
+                            </MultiWrapper>
+
+                            <ClearEx />
+                        </>
+                    )}
                 </MultiWrapper>
 
-                {ctrlpage === "createproduct" &&
-                    <QuillContainer
-                        reduxCustomform={{
-                            formdata: productForm,
-                            formname: 'productForm',
-                        }}
-                    />
-                }               
+                {ctrlpage === 'createproduct' && (
+                    <>
+                        <MultiWrapper stype="pagename">
+                            <p id="pageType">
+                                상품 상세 정보
+                            </p>
+                        </MultiWrapper>
+                        <QuillContainer
+                            reduxCustomform={{
+                                formdata: productForm,
+                                formname: 'productForm',
+                            }}
+                        />
+                    </>
+                )}
 
                 <MultiWrapper stype="buttons">
                     {errorMessage && (
@@ -417,7 +561,6 @@ const CreateProductRelatedTemplate = (props) => {
                     )}
                     <Input type="submit" value="전송" />
                 </MultiWrapper>
-
             </form>
         </CreateProductRelatedWrapper>
     );
