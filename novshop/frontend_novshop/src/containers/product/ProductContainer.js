@@ -139,7 +139,7 @@ const ProductContainer = (props) => {
     
 
     return !productLoading && productStatus && productStatus.data && productStatus.data.length > 0 
-        ? createItems(productStatus.data).map((v) => <ProductTemplate>{v}</ProductTemplate>) : (<></>)            
+        ? createItems(productStatus.data).map((v, i) => <ProductTemplate key={i}>{v}</ProductTemplate>) : (<></>)            
 };
 
 export default ProductContainer;

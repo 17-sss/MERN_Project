@@ -5,9 +5,7 @@ import upload from '../module/upload';
 const router = Router();
 
 // 이미지 업로드 :: write(quill에디터)폼에서 쓰임   (POST /api/upload/imgone)
-router.post("/imgone", upload.single('image'), async (req, res) => {
-    const {image} = req.body;
-        
+router.post("/imgone", upload.single('image'), async (req, res) => {        
     if (!req.file) {
         res.statusMessage = 'IMAGE UPLOAD ERROR';
         return res.status(512).json({
@@ -17,7 +15,7 @@ router.post("/imgone", upload.single('image'), async (req, res) => {
             message: '이미지 파일 업로드 오류',
         });
     }
-    
+
     try {
         return res.status(200).json({
             error: null,

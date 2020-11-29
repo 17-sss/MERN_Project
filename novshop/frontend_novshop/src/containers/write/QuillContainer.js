@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {    
     imageUpload,
-    initializeWriteForm,
+    // initializeWriteForm,
     changeWriteForm,
 } from '../../modules/write';
 import {
@@ -58,6 +58,7 @@ const QuillContainer = (props) => {
         const { type, files } = e.target;
 
         if (type === "file") {
+            if (!files[0]) return;
             setFile(files[0])
         } else {
             return;
@@ -167,8 +168,8 @@ const QuillContainer = (props) => {
             quillInstance.current.root.innerHTML +
             `<img src="http://localhost:3000/uploads/${writeImgName.data}"/>`;
 
-        dispatch(initializeWriteForm({form: 'writeImgName'}));
-    }, [writeImgName, dispatch]);
+        // dispatch(initializeWriteForm({form: 'writeImgName'}));
+    }, [writeImgName]);
 
 
     // ==============================================================================
