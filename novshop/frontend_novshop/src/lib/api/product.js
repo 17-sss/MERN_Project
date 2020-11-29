@@ -47,3 +47,7 @@ export const getProduct = ({ categoryId, categorySub, id })  => {
         }
     });  
 };
+
+export const delProduct = ({ id })  => {        
+    return client.post('/api/product/del', {id});
+};

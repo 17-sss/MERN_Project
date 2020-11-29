@@ -22,7 +22,7 @@ const ShoppingPage = (props) => {
             if (main) {
                 // 1) main 값이 있으면 해당 대분류의 상품목록 페이지            (컨테이너에서 해결)
                 // 2) sub 값도 있으면 해당 대분류, 소분류의 상품목록 페이지      (컨테이너에서 해결)
-                return <ProductContainer {...propTmp} /> 
+                return <ProductContainer query={query} /> 
             } else {
                 // +) main 없으면 돌아가면 안댐.
                 return <div>query is null</div>

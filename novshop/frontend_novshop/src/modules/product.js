@@ -32,6 +32,12 @@ const [
     GET_PRODUCT_FAILURE,
 ] = createRequestActionTypes('product/GET_PRODUCT');
 
+const [
+    DEL_PRODUCT,
+    DEL_PRODUCT_SUCCESS,
+    DEL_PRODUCT_FAILURE,
+] = createRequestActionTypes('product/DEL_PRODUCT');
+
 // =======================================================================
 
 // 액션 생성 함수 작성
@@ -89,6 +95,11 @@ export const getProduct = createAction(
     GET_PRODUCT,
     ({ categoryId, categorySub, id }) => ({ categoryId, categorySub, id }),
 );
+export const delProduct = createAction(
+    DEL_PRODUCT,
+    ({id}) => ({id}),
+);
+// 상품 상세 페이지에서 구매하려는 상품을 선택했을 시, 리스트 IN
 export const addSelectProduct = createAction(
     ADD_SELECT_PRODUCT,
     ({ id, name, sizeinfo, size, color, volume, price, mileage }) => ({
@@ -102,6 +113,7 @@ export const addSelectProduct = createAction(
         mileage,
     }),
 );
+// 상품 상세 페이지에서 구매하려했던 리스트에서 X버튼을 누르면, 리스트 OUT
 export const delSelectProduct = createAction(DEL_SELECT_PRODUCT, ({ id }) => ({
     id,
 }));
@@ -120,11 +132,13 @@ const getAllProductSaga = createRequestSaga(
 );
 
 const getProductSaga = createRequestSaga(GET_PRODUCT, productAPI.getProduct);
+const delProductSaga = createRequestSaga(DEL_PRODUCT, productAPI.delProduct);
 
 export function* productSaga() {
     yield takeLatest(CREATE_PRODUCT, createProductSaga);
     yield takeLatest(GET_ALL_PRODUCT, getAllProductSaga);
     yield takeLatest(GET_PRODUCT, getProductSaga);
+    yield takeLatest(DEL_PRODUCT, delProductSaga);
 }
 // =======================================================================
 
@@ -146,7 +160,7 @@ const initialState = {
         categorySub: 0,
         categoryId: 0,
     },
-    // 상품 생성 후, 서버에서 값 반환용
+    // 상품 (생성, 수정, 삭제) 서버에서 값 반환용
     product: null,
     // 상품 상세 페이지 - 옵션 선택한 상태 저장용
     productSelectItems: {
@@ -387,6 +401,26 @@ const product = handleActions(
         // 특정 상품 상세정보 불러오기
         [GET_PRODUCT_SUCCESS]: okNotokFunc("productStatus", "success"),
         [GET_PRODUCT_FAILURE]: okNotokFunc("productStatus", "failure"),
+
+        // 상품 삭제 (Admin)
+        [DEL_PRODUCT_SUCCESS]: (state, action) => {
+            const { payload: product } = action;
+
+            return {
+                ...state,
+                product,
+                productError: null,
+            }
+        },
+        [DEL_PRODUCT_FAILURE]: (state, action) => {
+            const { payload: productError } = action;
+
+            return {
+                ...state,
+                product: null,
+                productError,
+            }
+        },
 
         // 상품 상세 - 옵션 선택한 상태 저장
         [ADD_SELECT_PRODUCT]: (state, action) => {
