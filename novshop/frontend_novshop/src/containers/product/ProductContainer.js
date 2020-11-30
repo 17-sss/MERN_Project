@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProduct, initializeProductForm, delProduct } from '../../modules/product';
+import {
+    getAllProduct,
+    initializeProductForm,
+    delProduct,
+} from '../../modules/product';
 import ProductTemplate, {
     ProductItem,
     ProductItemUpdate,
+    ProductManament,
 } from '../../components/product/ProductTemplate';
-
 
 const ProductContainer = (props) => {
     // [1] 데이터 관련 START ====
-    const { query } = props;
-    
+    const { query, history } = props;
+
     const dispatch = useDispatch();
     const { productStatus, productLoading, userData } = useSelector(
         ({ product, loading, user }) => {
@@ -29,13 +33,16 @@ const ProductContainer = (props) => {
     const [colHeight, setColHeight] = useState(0);
     const [imgHeight, setImgHeight] = useState(0);
     const [isDelete, setIsDelete] = useState(false);
+    const [visibleOption, setVisibleOption] = useState(false);
 
     const colRef = useRef(null);
     const imgRef = useRef(null);
-    
+
+    const userAuthority = userData && userData.data && userData.data.authority;
+
     // 상품 데이터 불러옴
     useEffect(() => {
-        console.log('chl')
+        console.log('chl');
         dispatch(initializeProductForm({ form: 'productStatus' }));
         dispatch(
             getAllProduct({
@@ -45,7 +52,6 @@ const ProductContainer = (props) => {
         );
         if (isDelete) setIsDelete(false);
     }, [dispatch, query, isDelete]);
-
 
     useEffect(() => {
         // 이미지 못 불러왔을 경우 여기서 에러먹기에 조건 줌.
@@ -66,21 +72,28 @@ const ProductContainer = (props) => {
     };
 
     // 2) Admin용 Events
+    // 상품 수정 폼으로 이동
     const onProductUpdate = useCallback((e) => {
         e.preventDefault();
         const { value } = e.target;
-        alert('수정' + value);  // a만들어야함
-    }, []);
+        history.push(`/test/${value}`); // 수정해야함
+    }, [history]);
 
+    // 상품 삭제
     const onProductDelete = (e) => {
         e.preventDefault();
         const { value: id } = e.target;
         if (!id) return;
-        
-        if(window.confirm("해당 상품을 삭제하시겠습니까?")) {
-            dispatch(delProduct({id}));            
-            setIsDelete(true);  // 다시 상품 리스트 불러오기위해 isDelete 상태 변경
+
+        if (window.confirm('해당 상품을 삭제하시겠습니까?')) {
+            dispatch(delProduct({ id }));
+            setIsDelete(true); // 다시 상품 리스트 불러오기위해 isDelete 상태 변경
         } else return;
+    };
+
+    // 상품 관리 (수정 / 삭제) 버튼 Visible 제어
+    const onProductManageBtnVisible = () => {
+        setVisibleOption(!visibleOption);
     };
 
     // ---------------------------------------|
@@ -130,12 +143,10 @@ const ProductContainer = (props) => {
             sizes && (encSizes = JSON.parse(sizes));
             colors && (encColors = JSON.parse(colors));
 
-            const userAuthority =
-                userData && userData.data && userData.data.authority;
             const jsx = (
                 <div key={id}>
                     <ProductItemUpdate
-                        isAdmin={userAuthority > 0}
+                        isAdmin={userAuthority > 0 && visibleOption}
                         id={id}
                         events={{
                             onUpdate: onProductUpdate,
@@ -189,9 +200,15 @@ const ProductContainer = (props) => {
         productStatus &&
         productStatus.data &&
         productStatus.data.length > 0 ? (
-        createItems(productStatus.data).map((v, i) => (
-            <ProductTemplate key={i}>{v}</ProductTemplate>
-        ))
+        <>
+            <ProductManament
+                events={{ onVisible: onProductManageBtnVisible }}
+                isAdmin={userAuthority > 0}
+            />
+            {createItems(productStatus.data).map((v, i) => (
+                <ProductTemplate key={i}>{v}</ProductTemplate>
+            ))}
+        </>
     ) : (
         <></>
     );

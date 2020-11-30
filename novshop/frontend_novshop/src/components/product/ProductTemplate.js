@@ -5,10 +5,7 @@ import styled, { css } from 'styled-components';
 
 import { getSize } from '../../lib/utility/customFunc';
 import { ClearEx, CustomLink } from '../common/StyleUtilModels';
-import {    
-    cssDisplayNone,
-    cssStrike,
-} from '../common/StyleUtilCSS';
+import { cssDisplayNone, cssStrike } from '../common/StyleUtilCSS';
 
 // [1 START] ProductItem ====================== [export]
 // 1) ProductItemCol: 상품 최상위 (Col) Wrapper
@@ -168,36 +165,54 @@ const ItemPriceLi = styled.li`
 `;
 // [END] ProductItem ======================
 
-// [2 START] ProductItemUpdate ====================== [export]
-// (user - authority > 0의 경우에만 사용가능)
-// 1) ProductItemUpdateWrapper
-const ProductItemUpdateWrapper = styled.div`
-    ${(props) => props.isAdmin || cssDisplayNone}
-    width: 100%;
+// [2 START] ProductItemUpdate & ProductManagement ====================== [export]
 
-    text-align: right;
-    justify-content: right;
+// 1) ProductManagementWrapper
+const ProductManagementWrapper = styled.div`
+    ${(props) => props.isAdmin || cssDisplayNone};
+    ${(props) =>
+        props.operation === 'admin'
+            ? css`
+                  width: ${getSize(1.2)};
+                  margin: 10px auto 0;          
+                  text-align: center;        
+              `
+            : // (user - authority > 0의 경우에만 사용가능)
+              css`
+                  width: 100%;
+                  text-align: right;
+                  justify-content: right;
+              `}
 `;
 
-// 2) ProductItemUpdateBtn
-const ProductItemUpdateBtn = styled.button`
+// 2) ProductManagementBtn
+const ProductManagementBtn = styled.button`
     border: none;
     font: inherit;
     outline: inherit;
     padding: 0.5rem;
-    color: white;    
+    color: white;
     border-radius: 2px;
     font-size: 13px;
 
     background-color: ${(props) =>
-        props.stype === 'update' ? '#2079ee' : '#ff1414'};
+        props.stype === 'update'
+            ? '#2079ee'
+            : props.stype === 'delete'
+            ? '#ff1414'
+            : '#ccc'};
 
     &:hover {
         background-color: ${(props) =>
-            props.stype === 'update' ? '#5d9cee' : '#ff1f78'};
+            props.stype === 'update'
+                ? '#5d9cee'
+                : props.stype === 'delete'
+                ? '#ff1f78'
+                : ''};
+        color: ${props => props.stype || '#f0f0f0'};
     }
 `;
-// [END] ProductItemUpdateWrapper ======================
+// [END] ProductManagementWrapper ======================
 
 // [3 START] ProductForm ====================== [export default]
 // 1) ProductFormWrapper: 상품 폼 Wrapper (전체 틀)
@@ -340,25 +355,38 @@ ProductItem.propTypes = {
 // =======================================================================
 
 // =======================================================================
-// [START] ProductItemUpdate 템플릿 :: export
+// [START] ProductItemUpdate / ProductManament 템플릿 :: export
 // =======================================================================
 export const ProductItemUpdate = (props) => {
     const { events, isAdmin, id } = props;
     const { onUpdate, onDelete } = events;
 
     return (
-        <ProductItemUpdateWrapper isAdmin={isAdmin}>
-            <ProductItemUpdateBtn value={id} onClick={onUpdate} stype="update">
+        <ProductManagementWrapper isAdmin={isAdmin}>
+            <ProductManagementBtn value={id} onClick={onUpdate} stype="update">
                 수정
-            </ProductItemUpdateBtn>
-            <ProductItemUpdateBtn value={id} onClick={onDelete} stype="delete">
+            </ProductManagementBtn>
+            <ProductManagementBtn value={id} onClick={onDelete} stype="delete">
                 삭제
-            </ProductItemUpdateBtn>
-        </ProductItemUpdateWrapper>
+            </ProductManagementBtn>
+        </ProductManagementWrapper>
+    );
+};
+
+export const ProductManament = (props) => {
+    const { events, isAdmin } = props;
+    const { onVisible } = events;
+
+    return (
+        <ProductManagementWrapper isAdmin={isAdmin} operation="admin">
+            <ProductManagementBtn onClick={onVisible}>
+                상품 관리 버튼 제어
+            </ProductManagementBtn>
+        </ProductManagementWrapper>
     );
 };
 // =======================================================================
-// [END] ProductItemUpdate 템플릿 :: export
+// [END] ProductItemUpdate / ProductManament 템플릿 :: export
 // =======================================================================
 
 // =======================================================================
