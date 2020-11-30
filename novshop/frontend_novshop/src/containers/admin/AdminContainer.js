@@ -6,7 +6,7 @@ import { createCategory } from '../../modules/category';
 import categoryList from '../../lib/data/categoryList.json';
 
 import AdminTemplate from '../../components/admin/AdminTemplate';
-import CreateProductRelatedContainer from '../../containers/admin/CreateProductRelatedContainer';
+import ManageForProductContainer from './ManageForProductContainer';
 
 const AdminContainer = (props) => {
     const { match } = props;
@@ -39,9 +39,9 @@ const AdminContainer = (props) => {
     switch (ctrlpage) {
         case undefined:
             return <AdminTemplate onClickEvents={onClickEvents} />;
-        case 'createcategory':
-        case 'createproduct':
-            return <CreateProductRelatedContainer ctrlpage = {ctrlpage} />;
+        case 'managecategory':
+        case 'manageproduct':
+            return <ManageForProductContainer ctrlpage = {ctrlpage} />;
         /*
         // 예) 같은 조건이 두개라면 아래와 같이 case쓰기
         case "createcategory":

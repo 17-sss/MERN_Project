@@ -48,6 +48,18 @@ export const getProduct = ({ categoryId, categorySub, id })  => {
     });  
 };
 
-export const delProduct = ({ id })  => {        
-    return client.post('/api/product/del', {id});
+export const adminGetProduct = ({ id })  => {        
+    return client.get('/api/product/adminGet', {
+        params: {
+            id,
+        }
+    });
+};
+
+export const adminUpdProduct = ({ id })  => {        
+    return client.post('/api/product/adminUpd', { id });
+};
+
+export const adminDelProduct = ({ id })  => {        
+    return client.post('/api/product/adminDel', { id });
 };

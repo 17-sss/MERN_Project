@@ -181,8 +181,53 @@ router.get('/get', async (req, res) => {
     }
 });
 
-// 상품 삭제 (POST /api/product/del)
-router.post("/del", async (req, res) => {
+// 상품 가져오기 for Admin (GET /api/product/adminGet)
+router.get("/adminGet", async(req, res) => {
+    const { id } = req.query;
+    
+    try {
+        const getAdminProduct = await Product.findOne({ where: {id} });
+    
+        return res.status(200).json({
+            error: null,
+            success: true,       
+            data: getAdminProduct,     
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    }
+});
+
+// 상품 수정 for Admin (POST /api/product/adminUpd)
+router.post("/adminUpd", async(req, res) => {
+    const { id } = req.body;
+
+    try {
+        const updateAdminProduct = await Product.update({/* 무엇을.. */}, {where: {id}});
+
+        return res.status(200).json({
+            error: null,
+            success: true,      
+            data: updateAdminProduct,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    }
+});
+
+// 상품 삭제 for Admin (POST /api/product/adminDel)
+router.post("/adminDel", async (req, res) => {
     const { id } = req.body;
     
     try {

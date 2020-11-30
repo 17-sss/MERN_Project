@@ -7,7 +7,7 @@ import QuillContainer from '../../containers/write/QuillContainer';
 
 // [1] Wrapper
 // 1) 최상위 Wrapper
-const CreateProductRelatedWrapper = styled.div`
+const ManageForProductWrapper = styled.div`
     width: ${getSize(1.45)};
     margin: 0 auto;
 `;
@@ -147,7 +147,7 @@ const ResultSpan = styled.span`
 */
 // ---------------------------------------------------/
 
-const CreateProductRelatedTemplate = (props) => {
+const ManageForProductTemplate = (props) => {
     const {
         ctrlpage,
         onChange,
@@ -161,10 +161,10 @@ const CreateProductRelatedTemplate = (props) => {
     } = props;
 
     return (
-        <CreateProductRelatedWrapper>
+        <ManageForProductWrapper>
             <MultiWrapper stype="pagename">
                 <p id="pageType">
-                    {ctrlpage === 'createproduct'
+                    {ctrlpage === 'manageproduct'
                         ? '상품 등록'
                         : '카테고리 등록'}
                 </p>
@@ -177,30 +177,30 @@ const CreateProductRelatedTemplate = (props) => {
                             <div
                                 className="label"
                                 style={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? { width: '10%' }
                                         : { width: '35%' }
                                 }
                             >
-                                {ctrlpage === 'createproduct'
+                                {ctrlpage === 'manageproduct'
                                     ? '상품명'
                                     : '카테고리 Key (영문, 숫자)'}
                             </div>
                             <Input
                                 type="text"
                                 name={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? 'name'
                                         : 'key'
                                 }
                                 onChange={onChange}
                                 value={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? productForm.name
                                         : categoryForm.key
                                 }
                                 addcss={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? css`
                                               padding-bottom: 11px;
                                               width: 85%;
@@ -217,39 +217,39 @@ const CreateProductRelatedTemplate = (props) => {
                             <div
                                 className="label"
                                 style={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? { width: '38%' }
                                         : { width: '23%' }
                                 }
                             >
-                                {ctrlpage === 'createproduct'
+                                {ctrlpage === 'manageproduct'
                                     ? '상품 이미지 경로 (불러오기)'
                                     : '페이지에 보일 값'}
                             </div>
                             <Input
                                 type={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? 'file'
                                         : 'text'
                                 }
                                 accept={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? 'image/*'
                                         : undefined
                                 }
                                 name={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? 'image'
                                         : 'displayValue'
                                 }
                                 onChange={onChange}
                                 value={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? productForm.image
                                         : categoryForm.displayValue
                                 }
                                 addcss={
-                                    ctrlpage === 'createproduct'
+                                    ctrlpage === 'manageproduct'
                                         ? css`
                                               width: 57%;
                                               margin-left: 5%;
@@ -265,7 +265,7 @@ const CreateProductRelatedTemplate = (props) => {
 
                     <ClearEx />
 
-                    {ctrlpage === 'createproduct' ? (
+                    {ctrlpage === 'manageproduct' ? (
                         <MultiWrapper
                             stype="input_row"
                             style={{ marginTop: '15px' }}
@@ -418,7 +418,7 @@ const CreateProductRelatedTemplate = (props) => {
 
                     <ClearEx />
 
-                    {ctrlpage === 'createproduct' && (
+                    {ctrlpage === 'manageproduct' && (
                         <>
                             <MultiWrapper
                                 stype="input_row"
@@ -539,7 +539,7 @@ const CreateProductRelatedTemplate = (props) => {
                     )}
                 </MultiWrapper>
 
-                {ctrlpage === 'createproduct' && (
+                {ctrlpage === 'manageproduct' && (
                     <>
                         <MultiWrapper stype="pagename">
                             <p id="pageType">
@@ -562,8 +562,8 @@ const CreateProductRelatedTemplate = (props) => {
                     <Input type="submit" value="전송" />
                 </MultiWrapper>
             </form>
-        </CreateProductRelatedWrapper>
+        </ManageForProductWrapper>
     );
 };
 
-export default CreateProductRelatedTemplate;
+export default ManageForProductTemplate;

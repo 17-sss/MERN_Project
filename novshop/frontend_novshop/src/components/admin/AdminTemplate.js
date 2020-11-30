@@ -63,10 +63,10 @@ const AdminTemplate = (props) => {
             <AdminWrapper>
 
                 <CreateLinkWrapper>
-                    <CreateLink to = '/admin/createcategory'>
+                    <CreateLink to = '/admin/managecategory'>
                         카테고리 생성 폼
                     </CreateLink>                                        
-                    <CreateLink to = '/admin/createproduct'>
+                    <CreateLink to = '/admin/manageproduct'>
                         물품 생성 폼
                     </CreateLink>
                     <br/>

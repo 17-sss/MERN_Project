@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     getAllProduct,
     initializeProductForm,
-    delProduct,
+    adminDelProduct,
 } from '../../modules/product';
 import ProductTemplate, {
     ProductItem,
@@ -41,8 +41,7 @@ const ProductContainer = (props) => {
     const userAuthority = userData && userData.data && userData.data.authority;
 
     // 상품 데이터 불러옴
-    useEffect(() => {
-        console.log('chl');
+    useEffect(() => {        
         dispatch(initializeProductForm({ form: 'productStatus' }));
         dispatch(
             getAllProduct({
@@ -76,7 +75,7 @@ const ProductContainer = (props) => {
     const onProductUpdate = useCallback((e) => {
         e.preventDefault();
         const { value } = e.target;
-        history.push(`/test/${value}`); // 수정해야함
+        history.push(`/admin/manageproduct?itemId=${value}`);
     }, [history]);
 
     // 상품 삭제
@@ -86,7 +85,7 @@ const ProductContainer = (props) => {
         if (!id) return;
 
         if (window.confirm('해당 상품을 삭제하시겠습니까?')) {
-            dispatch(delProduct({ id }));
+            dispatch(adminDelProduct({ id }));
             setIsDelete(true); // 다시 상품 리스트 불러오기위해 isDelete 상태 변경
         } else return;
     };

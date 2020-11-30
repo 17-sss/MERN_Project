@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import queryString from 'query-string';
 import {
     changeCategoryForm,
     createCategory,
@@ -13,16 +15,19 @@ import {
     initializeProduct,
     initializeProductKey,
     delItemProductForm,
+    adminGetProduct,    
 } from '../../modules/product';
 import {replaceAll} from '../../lib/utility/customFunc';
 
-import CreateProductRelatedTemplate from '../../components/admin/CreateProductRelatedTemplate';
+import ManageForProductTemplate from '../../components/admin/ManageForProductTemplate';
 
-const CreateProductRelatedContainer = (props) => {
-    const { ctrlpage } = props;
+const ManageForProductContainer = (props) => {
+    const { ctrlpage, location } = props;
+    const query = location && location.search ? queryString.parse(location.search) : '';
+    const { itemId } = query;    
 
     const {
-        category, // ~: 전송이 완료된 경우
+        // category, // ~: 전송이 완료된 경우
         categoryForm, // ~Form: 현재 작성하고 있는 값들
         categoryStatus, // 현재 데이터베이스에 있는 카테고리 정보들
         categoryError,
@@ -31,7 +36,7 @@ const CreateProductRelatedContainer = (props) => {
         productError,
     } = useSelector(({ category, product }) => {
         return {
-            category: category.category,
+            // category: category.category,
             categoryForm: category.categoryForm,
             categoryStatus: category.categoryStatus,
             categoryError: category.categoryError,
@@ -53,7 +58,7 @@ const CreateProductRelatedContainer = (props) => {
         if (!name) return; // 버튼에서 계속 name이 사라짐. (input type = 'button'로 하니까 해결됨)
 
         switch (ctrlpage) {
-            case 'createproduct': {
+            case 'manageproduct': {
                 switch (name) {
                     case 'image': {
                         // productForm.image는 그냥 보여지는 값일 뿐임. 서버엔 들어가지 않음.
@@ -91,7 +96,7 @@ const CreateProductRelatedContainer = (props) => {
                 return [
                     dispatch(
                         changeProductForms({
-                            form: "productForm",
+                            form: 'productForm',
                             key: name,
                             value,
                         }),
@@ -100,7 +105,7 @@ const CreateProductRelatedContainer = (props) => {
                         dispatch(initializeProductKey({ form: 'productForm', key: 'size' })),
                 ];
             }
-            case 'createcategory': {
+            case 'managecategory': {
                 if (name === 'key' || name === 'itemKey') {
                     // 영문(대, 소문자), 숫자만 허용
                     let regType = /^[A-Za-z0-9+]*$/;
@@ -114,7 +119,7 @@ const CreateProductRelatedContainer = (props) => {
                     dispatch(
                         changeCategoryForm({
                             key: name,
-                            value, //: name === "insertItems" ?  : value,
+                            value, //: name === 'insertItems' ?  : value,
                         }),
                     ),
                     name === 'insertItems' && [
@@ -134,15 +139,15 @@ const CreateProductRelatedContainer = (props) => {
         const delItem = innerHTML;
         let key = parentNode.id;
 
-        if (ctrlpage === "createproduct")
-            key = replaceAll(key, "p_", "")
+        if (ctrlpage === 'manageproduct')
+            key = replaceAll(key, 'p_', '')
         else
-            key = replaceAll(key, "c_", "")
+            key = replaceAll(key, 'c_', '')
         
         let arrTmp = [];
         
-        if (delItem.indexOf("&amp;") !== -1) 
-            arrTmp = delItem.split(" &amp; ")
+        if (delItem.indexOf('&amp;') !== -1) 
+            arrTmp = delItem.split(' &amp; ')
         else    
             arrTmp.push(delItem);    
         if (arrTmp.length > 2 || arrTmp.length <= 0) return;
@@ -150,14 +155,14 @@ const CreateProductRelatedContainer = (props) => {
         e.preventDefault();
 
         switch (ctrlpage) {
-            case "createproduct":
+            case 'manageproduct':
                 return dispatch(delItemProductForm({
                     key, 
                     vKey: arrTmp[0],
-                    vValue: (key === "colors") ? arrTmp[1] : undefined,
+                    vValue: (key === 'colors') ? arrTmp[1] : undefined,
                 }));
             
-            case "createcategory":
+            case 'managecategory':
                 return dispatch(delItemCategoryForm({
                     key, 
                     vKey: arrTmp[0],
@@ -173,7 +178,7 @@ const CreateProductRelatedContainer = (props) => {
         e.preventDefault();
 
         switch (ctrlpage) {
-            case 'createproduct': {
+            case 'manageproduct': {
                 const {
                     name,
                     // image,
@@ -266,7 +271,7 @@ const CreateProductRelatedContainer = (props) => {
                 break;
             }
 
-            case 'createcategory': {
+            case 'managecategory': {
                 const { key, displayValue, items } = categoryForm;
 
                 if (!key)
@@ -286,12 +291,18 @@ const CreateProductRelatedContainer = (props) => {
         }
     };
 
+    const onSubmitUpdate = (e) => { // upd 관련 작업 필요 =================================
+        alert('chk');
+    };
+
+
+
     // 페이지 초기화 (데이터가 전송됬을때도 초기화)
     // 1) product & category 생성
     useEffect(() => {
         switch (ctrlpage) {
-            case 'createproduct': {
-                dispatch(initializeProduct());
+            case 'manageproduct': {
+                dispatch(initializeProduct());                
                 setErrorMesssage('');
 
                 // 대분류, 소분류 select box 생성하기 위해 categoryStatus 기반으로 재정의.
@@ -323,13 +334,13 @@ const CreateProductRelatedContainer = (props) => {
                             });
                         });                        
 
-                        setCategories(arrTmp.filter((v) => (v.displayValue.toLowerCase() !== "community")));
+                        setCategories(arrTmp.filter((v) => (v.displayValue.toLowerCase() !== 'community')));
                     }
                 }
                 break;
             }
 
-            case 'createcategory': {
+            case 'managecategory': {
                 dispatch(initializeCategory());
                 setErrorMesssage('');
                 break;
@@ -338,24 +349,84 @@ const CreateProductRelatedContainer = (props) => {
             default:
                 break;
         }
-    }, [dispatch, ctrlpage, product, category, categoryStatus]);
 
-    // 2) category or product 생성 중 에러 메시지
+        window.scrollTo(0,0);   // 맨위로    
+    }, [dispatch, ctrlpage, categoryStatus/* , category, product */]);
+
+    // 2) 상품 수정시 데이터 불러옴
     useEffect(() => {
-        if (ctrlpage === 'createproduct' && productError) {
+        if (itemId > 0) {
+            dispatch(adminGetProduct({id: itemId}));                    
+        }
+    }, [dispatch, itemId]);
+
+    useEffect(() => {
+        if (!itemId) return;
+        if (product && product.data) {
+            if (product.data.sizes && product.data.colors) {
+                const {categoryId, categorySub, sizes,
+                    colors, description, detailinfo,
+                    name, price, sale, /* image,*/
+                } = product.data;
+                const loadData = {
+                    categoryId,
+                    categorySub,
+                    description,
+                    detailinfo,
+                    // image: `C:\\fakepath\\${image}`,
+                    name,
+                    price,
+                    sale: (sale * 100),
+                    size: "",
+                    color: "#000000",
+                    colorName: "",
+                };    
+
+                dispatch(
+                    initializeProductKey({
+                        form: 'productForm',
+                        key: 'sizes',
+                        updValue: JSON.parse(sizes),
+                    })
+                );
+
+                dispatch(
+                    initializeProductKey({
+                        form: 'productForm',
+                        key: 'colors',
+                        updValue: JSON.parse(colors),
+                    })
+                );
+
+                for (const key in loadData) {                    
+                    dispatch(
+                        changeProductForms({
+                            form: 'productForm',
+                            key,
+                            value: loadData[key],
+                        }),
+                    )
+                }                      
+            }
+        } else return;
+    }, [dispatch, product, itemId]);
+
+    // 3) category or product 생성 중 에러 메시지
+    useEffect(() => {
+        if (ctrlpage === 'manageproduct' && productError) {
             setErrorMesssage(productError.data.message);
-        } else if (ctrlpage === 'createcategory' && categoryError) {
+        } else if (ctrlpage === 'managecategory' && categoryError) {
             setErrorMesssage(categoryError.data.message);
         }
     }, [ctrlpage, productError, categoryError]);
     // ---
 
     return (
-        <CreateProductRelatedTemplate
+        <ManageForProductTemplate
             ctrlpage={ctrlpage}
             onChange={onChange}
             onDelete={onDelete}
-            onSubmit={onSubmit}            
+            onSubmit={(itemId > 0) ? onSubmitUpdate : onSubmit}            
             errorMessage={errorMessage}
             // 1) 카테고리
             categoryForm={categoryForm && categoryForm}
@@ -369,4 +440,4 @@ const CreateProductRelatedContainer = (props) => {
     );
 };
 
-export default CreateProductRelatedContainer;
+export default withRouter(ManageForProductContainer);

@@ -32,6 +32,7 @@
             https://from2020.tistory.com/10
 
 
+
 @@ 201117 ~ 201124
     1. React 에디터
         1) react-draft-wysiwyg  (사용안함: 포커스 안맞음 계속)
@@ -68,10 +69,16 @@
                     > 참고링크: https://github.com/quilljs/quill/issues/1768 
 
 
+
 @@ 201129
     1. Chrome 디버깅 (react)
         https://thxwelchs.github.io/react-debug/
-            
+
+
+
+@@ 201130
+    1. Sequelize (CRUD 관련)
+        https://jetalog.net/83
                 
             
     

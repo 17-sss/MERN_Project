@@ -2,7 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
 import { createRequestActionTypes, createRequestSaga } from '../lib/reduxUtil';
 import * as productAPI from '../lib/api/product';
-import { replaceAll } from '../lib/utility/customFunc';
+import { replaceAll, isEmpty } from '../lib/utility/customFunc';
 
 // 액션 이름 정의
 const INITALIZE_PRODUCT = 'product/INITALIZE_PRODUCT';
@@ -32,11 +32,25 @@ const [
     GET_PRODUCT_FAILURE,
 ] = createRequestActionTypes('product/GET_PRODUCT');
 
+// Admin ---- START
 const [
-    DEL_PRODUCT,
-    DEL_PRODUCT_SUCCESS,
-    DEL_PRODUCT_FAILURE,
-] = createRequestActionTypes('product/DEL_PRODUCT');
+    ADMIN_GET_PRODUCT,
+    ADMIN_GET_PRODUCT_SUCCESS,
+    ADMIN_GET_PRODUCT_FAILURE,
+] = createRequestActionTypes('product/ADMIN_GET_PRODUCT');
+
+const [
+    ADMIN_UPD_PRODUCT,
+    ADMIN_UPD_PRODUCT_SUCCESS,
+    ADMIN_UPD_PRODUCT_FAILURE,
+] = createRequestActionTypes('product/ADMIN_UPD_PRODUCT');
+
+const [
+    ADMIN_DEL_PRODUCT,
+    ADMIN_DEL_PRODUCT_SUCCESS,
+    ADMIN_DEL_PRODUCT_FAILURE,
+] = createRequestActionTypes('product/ADMIN_DEL_PRODUCT');
+// Admin ---- END
 
 // =======================================================================
 
@@ -54,11 +68,11 @@ export const delItemProductForm = createAction(
 export const initializeProduct = createAction(INITALIZE_PRODUCT);
 export const initializeProductKey = createAction(
     INITALIZE_PRODUCT_KEY,
-    ({ form, key }) => ({ form, key }),
+    ({ form, key, updValue } = {updValue: null}) => ({ form, key, updValue }),
 );
 export const initializeProductForm = createAction(
     INITALIZE_PRODUCT_FORM,
-    ({ form }) => ({ form }),
+    ({ form, updForm } = { updForm: null }) => ({ form, updForm }),
 );
 
 export const createProduct = createAction(
@@ -95,10 +109,23 @@ export const getProduct = createAction(
     GET_PRODUCT,
     ({ categoryId, categorySub, id }) => ({ categoryId, categorySub, id }),
 );
-export const delProduct = createAction(
-    DEL_PRODUCT,
+// Admin ---- START
+export const adminGetProduct = createAction(
+    ADMIN_GET_PRODUCT,
     ({id}) => ({id}),
 );
+
+export const adminUpdProduct = createAction(
+    ADMIN_UPD_PRODUCT,
+    ({id}) => ({id}),
+);
+
+export const adminDelProduct = createAction(
+    ADMIN_DEL_PRODUCT,
+    ({id}) => ({id}),
+);
+// Admin ---- END
+
 // 상품 상세 페이지에서 구매하려는 상품을 선택했을 시, 리스트 IN
 export const addSelectProduct = createAction(
     ADD_SELECT_PRODUCT,
@@ -132,13 +159,18 @@ const getAllProductSaga = createRequestSaga(
 );
 
 const getProductSaga = createRequestSaga(GET_PRODUCT, productAPI.getProduct);
-const delProductSaga = createRequestSaga(DEL_PRODUCT, productAPI.delProduct);
+
+const adminGetProductSaga = createRequestSaga(ADMIN_GET_PRODUCT, productAPI.adminGetProduct);
+const adminUpdProductSaga = createRequestSaga(ADMIN_UPD_PRODUCT, productAPI.adminUpdProduct);
+const adminDelProductSaga = createRequestSaga(ADMIN_DEL_PRODUCT, productAPI.adminDelProduct);
 
 export function* productSaga() {
     yield takeLatest(CREATE_PRODUCT, createProductSaga);
     yield takeLatest(GET_ALL_PRODUCT, getAllProductSaga);
     yield takeLatest(GET_PRODUCT, getProductSaga);
-    yield takeLatest(DEL_PRODUCT, delProductSaga);
+    yield takeLatest(ADMIN_GET_PRODUCT, adminGetProductSaga);
+    yield takeLatest(ADMIN_UPD_PRODUCT, adminUpdProductSaga);
+    yield takeLatest(ADMIN_DEL_PRODUCT, adminDelProductSaga);
 }
 // =======================================================================
 
@@ -218,24 +250,22 @@ const product = handleActions(
         // 특정 키 초기화
         [INITALIZE_PRODUCT_KEY]: (state, action) => {
             const { payload } = action;
-            const { form, key } = payload;
-
+            const { form, key, updValue } = payload;            
             return {
                 ...state,
                 [form]: {
                     ...state[form],
-                    [key]: initialState[form][key],
+                    [key]: updValue ? updValue : initialState[form][key],
                 },
             };
         },
         // 특정 폼 초기화 (form: 'productForm' OR 'productSelectItems')
         [INITALIZE_PRODUCT_FORM]: (state, action) => {
             const { payload } = action;
-            const { form } = payload;
-
+            const { form, updForm } = payload;            
             return {
                 ...state,
-                [form]: initialState[form],
+                [form]: (updForm && !isEmpty(updForm)) ? updForm : initialState[form],
             };
         },
 
@@ -402,8 +432,17 @@ const product = handleActions(
         [GET_PRODUCT_SUCCESS]: okNotokFunc("productStatus", "success"),
         [GET_PRODUCT_FAILURE]: okNotokFunc("productStatus", "failure"),
 
+        // Admin ---- START
+        // 상품 정보 불러오기 (Admin) (product개체에 불러와서 productForm에 적용하기)
+        [ADMIN_GET_PRODUCT_SUCCESS]: okNotokFunc("product", "success"),
+        [ADMIN_GET_PRODUCT_FAILURE]: okNotokFunc("product", "failure"),
+        
+        // 상품 정보 수정
+        [ADMIN_UPD_PRODUCT_SUCCESS]: okNotokFunc("product", "success"),
+        [ADMIN_UPD_PRODUCT_FAILURE]: okNotokFunc("product", "failure"),
+        
         // 상품 삭제 (Admin)
-        [DEL_PRODUCT_SUCCESS]: (state, action) => {
+        [ADMIN_DEL_PRODUCT_SUCCESS]: (state, action) => {
             const { payload: product } = action;
 
             return {
@@ -412,7 +451,7 @@ const product = handleActions(
                 productError: null,
             }
         },
-        [DEL_PRODUCT_FAILURE]: (state, action) => {
+        [ADMIN_DEL_PRODUCT_FAILURE]: (state, action) => {
             const { payload: productError } = action;
 
             return {
@@ -421,6 +460,7 @@ const product = handleActions(
                 productError,
             }
         },
+        // Admin ---- END
 
         // 상품 상세 - 옵션 선택한 상태 저장
         [ADD_SELECT_PRODUCT]: (state, action) => {
