@@ -15,7 +15,8 @@ import {
     initializeProduct,
     initializeProductKey,
     delItemProductForm,
-    adminGetProduct,    
+    adminGetProduct, 
+    adminUpdProduct,   
 } from '../../modules/product';
 import {replaceAll} from '../../lib/utility/customFunc';
 
@@ -200,6 +201,7 @@ const ManageForProductContainer = (props) => {
                     switch (key) {
                         case 'size':
                         case 'color':
+                        case 'colorName':
                         case 'sale':
                         case 'description':
                         case 'categorySub':
@@ -215,11 +217,14 @@ const ManageForProductContainer = (props) => {
                                             '상품명을 입력해주세요.',
                                         );
                                         break;
-                                    case 'image':
-                                        setErrorMesssage(
-                                            '이미지를 등록해주세요.',
-                                        );
-                                        break;
+                                    case 'image': {
+                                        if (!itemId || itemId <= 0) {
+                                            setErrorMesssage(
+                                                '이미지를 등록해주세요.',
+                                            );
+                                        } else continue;  
+                                        break;                                                                 
+                                    }
                                     case 'price':
                                         setErrorMesssage(
                                             '가격을 입력해주세요.',
@@ -253,7 +258,26 @@ const ManageForProductContainer = (props) => {
                 }
                 // errormessage 정의 end..  
                 if (bBreak) return;                
-
+                if (itemId > 0) {
+                    console.log("updatechk")
+                    dispatch(
+                        adminUpdProduct({
+                            name,
+                            image: file ? file : null,
+                            sizes,
+                            colors,
+                            price,
+                            sale,
+                            description,
+                            detailinfo,
+                            categorySub,
+                            categoryId,
+                            id: itemId,
+                        }),
+                    );
+                    return;
+                }
+                
                 dispatch(
                     createProduct({
                         name,
@@ -290,12 +314,6 @@ const ManageForProductContainer = (props) => {
                 break;
         }
     };
-
-    const onSubmitUpdate = (e) => { // upd 관련 작업 필요 =================================
-        alert('chk');
-    };
-
-
 
     // 페이지 초기화 (데이터가 전송됬을때도 초기화)
     // 1) product & category 생성
@@ -425,8 +443,8 @@ const ManageForProductContainer = (props) => {
         <ManageForProductTemplate
             ctrlpage={ctrlpage}
             onChange={onChange}
-            onDelete={onDelete}
-            onSubmit={(itemId > 0) ? onSubmitUpdate : onSubmit}            
+            onDelete={onDelete} // colors나 sizes에 등록된 개체들 제거하는데 쓰이는 이벤.
+            onSubmit={onSubmit}            
             errorMessage={errorMessage}
             // 1) 카테고리
             categoryForm={categoryForm && categoryForm}

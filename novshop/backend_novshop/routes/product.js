@@ -204,18 +204,59 @@ router.get("/adminGet", async(req, res) => {
     }
 });
 
-// 상품 수정 for Admin (POST /api/product/adminUpd)
-router.post("/adminUpd", async(req, res) => {
-    const { id } = req.body;
+// 상품 수정 for Admin (PATCH /api/product/adminUpd)
+router.patch("/adminUpd", upload.single('image'), async(req, res) => {
+    const {
+        name,
+        // image,
+        sizes,
+        colors,
+        price,
+        sale,
+        description,
+        detailinfo,
+        categorySub,
+        categoryId,
+        id,
+    } = req.body;   // formData로 받아옴.
 
     try {
-        const updateAdminProduct = await Product.update({/* 무엇을.. */}, {where: {id}});
+        let updateFields = {};
+        if (req.file && req.file.filename) {
+            updateFields = {
+                name,
+                image: req.file.filename,
+                sizes,
+                colors,
+                price,
+                sale,
+                description,
+                detailinfo,
+                categorySub,
+                categoryId,
+            }
+        } else {
+            updateFields = {
+                name,                
+                sizes,
+                colors,
+                price,
+                sale,
+                description,
+                detailinfo,
+                categorySub,
+                categoryId,
+            }
+        }
+
+        const updateAdminProduct = await Product.update(updateFields, { where: { id } });
 
         return res.status(200).json({
             error: null,
             success: true,      
             data: updateAdminProduct,
         });
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({
@@ -226,10 +267,11 @@ router.post("/adminUpd", async(req, res) => {
     }
 });
 
+
 // 상품 삭제 for Admin (POST /api/product/adminDel)
 router.post("/adminDel", async (req, res) => {
     const { id } = req.body;
-    
+    console.log(id);
     try {
         await Product.destroy({ where: {id} });
     

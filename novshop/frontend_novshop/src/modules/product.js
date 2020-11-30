@@ -117,7 +117,33 @@ export const adminGetProduct = createAction(
 
 export const adminUpdProduct = createAction(
     ADMIN_UPD_PRODUCT,
-    ({id}) => ({id}),
+    ({
+        name,
+        image,
+        sizes,
+        colors,
+        price,
+        sale,
+        description,
+        detailinfo,
+        categorySub,
+        categoryId,
+
+        id,
+    }) => ({
+        name,
+        image,
+        sizes,
+        colors,
+        price,
+        sale: (sale * 0.01),
+        description,
+        detailinfo,
+        categorySub,
+        categoryId,
+        
+        id,
+    }),
 );
 
 export const adminDelProduct = createAction(
