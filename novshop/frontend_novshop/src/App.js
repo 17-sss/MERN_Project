@@ -8,6 +8,7 @@ import Footer from './components/base/Footer';
 import MainPage from './pages/MainPage';
 import ShoppingPage from './pages/ShoppingPage';
 import CommunityPage from './pages/CommunityPage';
+import PurchasePage from "./pages/PurchasePage";
 import WritePage from './pages/WritePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -31,6 +32,8 @@ const App = () => {
                 <Route component={ShoppingPage} path="/shopping" exact /> 
                 {/* // Community (커뮤니티 (공지, CS)) */}
                 <Route component={CommunityPage} path="/community/:page?" exact /> 
+                {/* // Purchase (구매관련 (구매, 장바구니)) */}
+                <Route component={PurchasePage} path="/purchase/:page" exact /> 
                 {/* // Write (글쓰기(QA, 공지사항 등)) */}
                 <Route component={WritePage} path="/write/:opt?" exact /> 
 
@@ -42,6 +45,7 @@ const App = () => {
                 <Route component={MemberPage} path="/member/@:username" />
                 {/* // Admin (관리자 페이지) */}
                 <Route component={AdminPage} path="/admin/:ctrlpage?" exact />
+
                 {/* // Test (테스트 페이지) */}
                 <Route component={TestPage} path="/test/:opt?" exact />
             </Switch>

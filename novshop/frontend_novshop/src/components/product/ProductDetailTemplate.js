@@ -46,7 +46,7 @@ const ProductMultiWrapper = styled.div`
     padding: ${(props) => props.padding || '0 30px'};
     ${(props) => {
         const { mode, height, width, margin } = props;
-        const caseMode = mode !== ('buy' && 'detail') ? 'buy' : mode;
+        const caseMode = mode !== ('buy' && 'detail' && 'purchase') ? 'buy' : mode;
 
         switch (caseMode) {
             case 'buy': {
@@ -60,6 +60,13 @@ const ProductMultiWrapper = styled.div`
             }
             case 'detail': {
                 return css``;
+            }
+            case 'purchase': {
+                return css`
+                    margin-top: 10px;
+                    width: 100%;
+                    padding: 0;
+                `;
             }
             default:
                 break;
@@ -317,30 +324,18 @@ const ProductSelOptCol = styled(Col)`
 // ========================================================================================
 // [5] 버튼 (구매, 장바구니)
 // ========================================================================================
-const ProductInputBtns = styled.input`
-    margin-top: 10px;
-
+const ProductInputBtns = styled.input`    
     ${cssTransparent};
+    margin-right: ${props => props.mode === "cart" ? "0" : "5%"};
+    display: inline-block;
+    height: 50px;    
+    width: ${props => props.mode === "cart" ? "40%" : "55%"};                 
+    background-color: #1c4fe9;
+    color: white;
 
-    ${(props) => {
-        const { mode } = props;
-        switch (mode) {
-            case 'buy': {
-                return css`
-                    width: 100%;
-                    height: 50px;
-                    background-color: #1c4fe9;
-                    color: white;
-                    &:hover {
-                        background-color: #3759be;
-                        color: white;
-                    }
-                `;
-            }
-            default:
-                break;
-        }
-    }}
+    &:hover {
+        background-color: #3759be;                        
+    }
 `;
 // ---------------------------------------------------/
 
@@ -637,12 +632,21 @@ const ProductDetailTemplate = (props) => {
                                     </div>
                                 </>
                             )}
+                        
                         {/* 구매 & 장바구니추가 btn */}
-                        <ProductInputBtns
-                            mode="buy"
-                            type="button"
-                            value={'BUY NOW'}
-                        />
+                        <ProductMultiWrapper mode="purchase">
+                            <ProductInputBtns
+                                mode="buy"
+                                type="button"
+                                value='BUY NOW'
+                            />
+                            <ProductInputBtns
+                                mode="cart"
+                                type="button"
+                                value='CART'
+                            />                                                        
+                        </ProductMultiWrapper>
+
                     </ProductInfoWrapper>
                 </ProductMultiWrapper>
 

@@ -1,9 +1,16 @@
 import React from 'react';
-import MainTemplate from '../components/main/MainTemplate';
+
+import SwipeTemplate from '../components/swipe/SwipeTemplate';
+import ProductContainer from '../containers/product/ProductContainer';
 
 const MainPage = () => {
     return (
-        <MainTemplate/>
+        <>
+            <SwipeTemplate />
+            <ProductContainer
+            // Items = {TestItem()}
+            />
+        </>
     );
 };
 
