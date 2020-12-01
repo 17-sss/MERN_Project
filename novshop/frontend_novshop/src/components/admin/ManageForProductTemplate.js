@@ -150,6 +150,7 @@ const ResultSpan = styled.span`
 const ManageForProductTemplate = (props) => {
     const {
         ctrlpage,
+        isUpdate,
         onChange,
         onDelete,
         onSubmit,
@@ -549,8 +550,9 @@ const ManageForProductTemplate = (props) => {
                         <QuillContainer
                             reduxCustomform={{
                                 formdata: productForm,
-                                formname: 'productForm',
+                                formname: 'productForm',                                
                             }}
+                            isUpdate={isUpdate}
                         />
                     </>
                 )}

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {    
     imageUpload,
-    // initializeWriteForm,
+    initializeWriteForm,
     changeWriteForm,
 } from '../../modules/write';
 import {
@@ -23,7 +23,7 @@ Quill.register('modules/resize', QuillResize);          // 2# resize (image)
 
 
 const QuillContainer = (props) => {
-    const { reduxCustomform } = props;
+    const { reduxCustomform, isUpdate } = props;
     let formdata = reduxCustomform && reduxCustomform.formdata ? reduxCustomform.formdata : null;
     let formname = reduxCustomform && reduxCustomform.formname ? reduxCustomform.formname : '';    
 
@@ -37,11 +37,12 @@ const QuillContainer = (props) => {
 
     // state & ref @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     const [file, setFile] = useState(null);
+    const [updateStatus, setUpdateStatus] = useState(!isUpdate);
 
     // 1. 에디터 (quill) 관련
     const quillElement = useRef(null);  // Quill을 적용할 Div틀 전용
     const quillInstance = useRef(null); // Quill 인스턴스 설정
-    const imageRef = useRef(null);      // Quill 이미지 전용 (input hidden)
+    const imageRef = useRef(null);      // Quill 이미지 전용 (input hidden)    
     const writeFormRef = useRef(null);     // writeForm상태 Ref로 가져옴. useEffect 의존성에서 벗어나기 위해 Ref로 뺌
     writeFormRef.current = writeForm;
     
@@ -165,11 +166,21 @@ const QuillContainer = (props) => {
         if (typeof writeImgName.data !== "string")  return;
 
         quillInstance.current.root.innerHTML =
-            quillInstance.current.root.innerHTML +
-            `<img src="http://localhost:3000/uploads/${writeImgName.data}"/>`;
+            quillInstance.current.root.innerHTML +  // 추후 해결, 아무리 인코딩해도 한글파일명은.. 후
+            `<img src="http://localhost:3000/uploads/${encodeURIComponent(writeImgName.data)}"/>`;
 
-        // dispatch(initializeWriteForm({form: 'writeImgName'}));
-    }, [writeImgName]);
+        dispatch(initializeWriteForm({form: 'writeImgName'}));
+    }, [writeImgName, dispatch]);
+
+    // 3-1-3) productForm 수정 시, Editor 관련 데이터가 있다면 해당 데이터 가져와서 Editor에 적용
+    useEffect(() => {
+        if (!writeForm || updateStatus) return;
+        if (formname === "productForm" && writeForm.detailinfo && (typeof writeForm.detailinfo === "string") ) {
+            quillInstance.current.root.innerHTML = writeForm.detailinfo;
+
+            setUpdateStatus(true);
+        }
+    }, [writeForm, formname, updateStatus]);
 
 
     // ==============================================================================

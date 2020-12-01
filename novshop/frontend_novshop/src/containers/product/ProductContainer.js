@@ -74,9 +74,13 @@ const ProductContainer = (props) => {
     // 상품 수정 폼으로 이동
     const onProductUpdate = useCallback((e) => {
         e.preventDefault();
-        const { value } = e.target;
+        const { value } = e.target;        
+        // 수정 폼으로 가기전에 해당 폼 초기화 (리덕스 저장소에서 productForm 초기화)
+        dispatch(initializeProductForm({form: "productForm"}) );    
+
+        // 수정 폼 이동. (수정 폼에서 itemId 기반으로 데이터 가져옴)
         history.push(`/admin/manageproduct?itemId=${value}`);
-    }, [history]);
+    }, [history, dispatch]);
 
     // 상품 삭제
     const onProductDelete = (e) => {

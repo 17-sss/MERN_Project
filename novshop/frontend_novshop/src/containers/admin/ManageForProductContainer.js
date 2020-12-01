@@ -258,8 +258,7 @@ const ManageForProductContainer = (props) => {
                 }
                 // errormessage 정의 end..  
                 if (bBreak) return;                
-                if (itemId > 0) {
-                    console.log("updatechk")
+                if (itemId > 0) {                    
                     dispatch(
                         adminUpdProduct({
                             name,
@@ -373,9 +372,10 @@ const ManageForProductContainer = (props) => {
 
     // 2) 상품 수정시 데이터 불러옴
     useEffect(() => {
-        if (itemId > 0) {
+        if (itemId > 0) 
             dispatch(adminGetProduct({id: itemId}));                    
-        }
+        else
+            return;        
     }, [dispatch, itemId]);
 
     useEffect(() => {
@@ -442,6 +442,7 @@ const ManageForProductContainer = (props) => {
     return (
         <ManageForProductTemplate
             ctrlpage={ctrlpage}
+            isUpdate={itemId > 0}
             onChange={onChange}
             onDelete={onDelete} // colors나 sizes에 등록된 개체들 제거하는데 쓰이는 이벤.
             onSubmit={onSubmit}            
