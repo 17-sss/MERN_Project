@@ -230,8 +230,10 @@ const ReviewQATable = (props) => {
                                         <ContentView
                                             content={v.content}
                                             style={{
-                                                display: "block",
-                                                padding: "0.5rem 1rem",
+                                                // display: "block",
+                                                margin: '10px 5%',
+                                                boxShadow: '0 0 0 0.1px',
+                                                padding: "1rem",
                                             }}
                                         />
                                     </Accordion.Collapse>

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { withRouter } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, initializeProductForm } from "../../modules/product";
 import { createReview, getProductReview, initializeReview } from '../../modules/review';
@@ -6,8 +7,9 @@ import { getProductQA, initializeQA } from '../../modules/qa';
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
 
+
 const ProductDetailContainer = (props) => {
-    const {query} = props;
+    const {query, history } = props;
     const {main: categoryId, sub: categorySub, itemId: id} = query;    
     const dispatch = useDispatch();
     const {productStatus, productSelectItems, reviewStatus, qaStatus } = useSelector(({product, review, qa}) => {
@@ -23,6 +25,7 @@ const ProductDetailContainer = (props) => {
     const sizeRef = useRef();
         
     const [imgClientSize, setImgClientSize] = useState({width: 0, height: 0});
+    const [errorMessage, setErrorMessage] = useState('');
     const imgRef = useRef();    
 
     useEffect( () => {        
@@ -40,16 +43,21 @@ const ProductDetailContainer = (props) => {
         
         window.scrollTo(0,0);   // 맨위로    
     }, [dispatch]);
-
+    
     useEffect(()=> {        
         dispatch(getProductReview({productId: id}));        
         dispatch(getProductQA({productId: id}));          
     }, [dispatch, id]);
 
-
     useEffect(()=> {    
         dispatch(getProduct({categoryId, categorySub, id}));        
     }, [dispatch, categoryId, categorySub, id]);
+
+    useEffect(() => {
+        errorMessage && setTimeout(() => {
+            setErrorMessage('');
+        }, 3000);
+    }, [errorMessage])
     
     let productData = {};
     if (productStatus && productStatus.data) {
@@ -139,7 +147,25 @@ const ProductDetailContainer = (props) => {
         dispatch(delSelectProduct({id}));
     }
 
-    // 리뷰, Q&A 추가용 테스트
+    // 구매 / 장바구니 버튼 OnClick
+    const onPurchaseClick = useCallback((e) => {        
+        if (!productSelectItems) return;
+        if (productSelectItems && productSelectItems.items && productSelectItems.items.length <= 0) {
+            return setErrorMessage("필수 옵션을 선택해주세요!");
+        }
+        const {value} = e.target;                    
+
+        if (value === "CART") {
+            //  Redux에서 값 업뎃 & 유저의 장바구니 테이블에 데이터 IN
+            if (window.confirm('장바구니에 상품이 정상적으로 담겼습니다. 장바구니로 이동하시겠습니까?')) {
+                history.push(`/purchase/shoppingcart`);
+            } else return;
+        } else {
+            history.push(`/purchase/buy`)            
+        }
+    }, [history, productSelectItems]);
+
+    // 리뷰, Q&A 추가용 테스트      ---------------- 추후 구매내역을 기반으로 리뷰를 작성하는 폼 만들기.
     const onAddReviewTest = (e) => {
         e.preventDefault();        
         dispatch(createReview({userId: 1, productId: 1, subject: '테스트사진', content: '내용', picture: '있음', rate: 3}));        
@@ -147,22 +173,23 @@ const ProductDetailContainer = (props) => {
     // -----
 
     const refs = {colorRef, sizeRef};
-    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest};    
+    const events = {onOptionConfirmation, onVolumeChange, onOptionDelete, onPurchaseClick, onAddReviewTest};    
     const imgDivInfo = {imgRef, imgClientSize};
 
     // render
     return (
         <ProductDetailTemplate 
-            productData = {productData} 
-            reviewStatus = {reviewStatus}
-            qaStatus = {qaStatus}
+            productData = {productData}     // productStatus 기반
             productSelectItems = {productSelectItems}            
+            reviewStatus = {reviewStatus}
+            qaStatus = {qaStatus}            
+
             refs = {refs}
             events = {events}
-            imgDivInfo = {imgDivInfo}             
+            etcs = {{imgDivInfo, errorMessage}}             
         />
     )
 };
 
 
-export default ProductDetailContainer;
+export default withRouter(ProductDetailContainer);

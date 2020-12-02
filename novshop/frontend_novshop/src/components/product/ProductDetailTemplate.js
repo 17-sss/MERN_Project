@@ -339,7 +339,17 @@ const ProductInputBtns = styled.input`
 `;
 // ---------------------------------------------------/
 
-
+// ========================================================================================
+// [+] 기타
+// ========================================================================================
+// 에러메세지
+const ErrorMessageP = styled.p`        
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    font-size: 11pt;
+    margin: 10px 0;
+`;
 
 
 // {2} 상품 추가정보 Wraaper 관련 ***************************************************************************************************************************
@@ -406,23 +416,18 @@ const ProductAddInfoTextWrapper = styled.div`
 // ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● 
 
 const ProductDetailTemplate = (props) => {
-    const { productData, productSelectItems, refs, events, imgDivInfo, reviewStatus, qaStatus } = props;
+    const { productData, productSelectItems, reviewStatus, qaStatus, refs, events, etcs } = props;
 
     const {
-        // categoryId,
-        // categorySub, 
-        name,
-        colors,
-        sizes,
-        description,
-        image,
-        price,
-        sale,
-        detailinfo,
+        // categoryId, categorySub,         
+        name, colors, sizes, description, 
+        image, price, sale, detailinfo,        
     } = productData;
 
     const { colorRef, sizeRef } = refs;
-    const { onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest, onAddQATest } = events;    
+    const { onOptionConfirmation, onVolumeChange, onOptionDelete, onPurchaseClick, onAddReviewTest } = events;    
+    const { imgDivInfo, errorMessage } = etcs;
+    
     const { imgRef, imgClientSize } = imgDivInfo;
 
     const isDetail = detailinfo && detailinfo !== "undefined" && detailinfo !== "null";
@@ -637,15 +642,18 @@ const ProductDetailTemplate = (props) => {
                         
                         {/* 구매 & 장바구니추가 btn */}
                         <ProductMultiWrapper mode="purchase">
+                            {errorMessage && <ErrorMessageP>{errorMessage}</ErrorMessageP>}
                             <ProductInputBtns
                                 mode="buy"
                                 type="button"
                                 value='BUY NOW'
+                                onClick={onPurchaseClick}
                             />
                             <ProductInputBtns
                                 mode="cart"
                                 type="button"
                                 value='CART'
+                                onClick={onPurchaseClick}
                             />                                                        
                         </ProductMultiWrapper>
 
@@ -707,9 +715,7 @@ const ProductDetailTemplate = (props) => {
                 
 
                 {/* --------------------------------------------------------------------------- */}
-                <button onClick={onAddReviewTest}>RE</button> 
-                    &nbsp;
-                <button onClick={onAddQATest}>QA</button>       
+                <button onClick={onAddReviewTest}>RE</button>                                     
             </PdDetailWrapper>
 
             <PaddingTB20/>

@@ -1,20 +1,8 @@
 import React from 'react';
-import BuyContainer from '../containers/buy/BuyContainer';
-import ShoppingCartContainer from '../containers/buy/ShoppingCartContainer';
+import PurchaseContainer from '../containers/purchase/PurchaseContainer';
 
-const PurchasePage = (props) => {
-    const {
-        match: { params },
-    } = props;
-    const { page } = params;
-
-    return page === 'buy' ? (
-        <BuyContainer />
-    ) : page === 'shoppingcart' ? (
-        <ShoppingCartContainer />
-    ) : (
-        <div>Error</div>
-    );
+const PurchasePage = () => {
+    return <PurchaseContainer />
 };
 
 export default PurchasePage;
