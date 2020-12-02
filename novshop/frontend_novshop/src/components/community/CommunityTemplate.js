@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { getSize } from '../../lib/utility/customFunc';
 import { CustomLink } from '../../components/common/StyleUtilModels';
-import { cssTransparent } from "../../components/common/StyleUtilCSS";
+import { cssTransparent } from '../../components/common/StyleUtilCSS';
 
 // [1] CommunityWrapper: 전체 Wrapper
 const CommunityWrapper = styled.div`
@@ -98,7 +98,7 @@ const EmptyWrapper = styled.div`
     border-top: 4px solid black;
     border-bottom: 1px solid #575757;
     text-align: center;
-    
+
     span {
         line-height: 30px;
         font-size: 12pt;
@@ -107,14 +107,13 @@ const EmptyWrapper = styled.div`
 `;
 // ---------------------------------------------------/
 
-
 // [4] 페이징
 // 1) PagingWrapper: 페이징관련 개체들 Wrapper
 const PagingWrapper = styled.div`
     display: inline-block;
     position: relative;
     width: 100%;
-    margin: 10px auto;    
+    margin: 10px auto;
 
     text-align: center;
     justify-content: center;
@@ -128,18 +127,18 @@ const PagingBtn = styled.input`
     font-size: 8pt;
     width: 20px;
     height: 20px;
-    margin-left: 4px;    
+    margin-left: 4px;
     box-shadow: 0 0 0 0.2px;
-    background-color: ${props => props.selectbtn ? "#c0c0c0" : "ffffff"};
+    background-color: ${(props) => (props.selectbtn ? '#c0c0c0' : 'ffffff')};
 `;
 // ---------------------------------------------------/
 
 // [5] 작성 폼
 // 1) WriteWrapper
-const WriteWrapper = styled.div`            
-    display: inline-block;                
+const WriteWrapper = styled.div`
+    display: inline-block;
     position: absolute;
-    right: 0px;    
+    right: 0px;
     width: auto;
 `;
 // ---------------------------------------------------/
@@ -152,7 +151,7 @@ const WriteLink = styled(CustomLink)`
     height: 25px;
     box-shadow: 0 0 0 0.2px;
     border-radius: 1.4px;
-    
+
     &:hover {
         background-color: #c0c0c0;
         color: white;
@@ -160,18 +159,24 @@ const WriteLink = styled(CustomLink)`
 `;
 // ---------------------------------------------------/
 
-
 const CommunityTemplate = (props) => {
     const { data, etcData, events } = props;
     const { pagingBtnClick } = events;
-    const { subjectData, pageName, page, pageCount, currentPage, userData } = etcData;    
+    const {
+        subjectData,
+        pageName,
+        page,
+        pageCount,
+        currentPage,
+        userData,
+    } = etcData;
 
     const WriteLinkJSX = (
         <WriteWrapper>
             <WriteLink to={'/write/' + page}>글 작성</WriteLink>
         </WriteWrapper>
     );
-        
+
     return (
         <CommunityWrapper>
             <CommunityMultiWrapper stype="pagename">
@@ -179,88 +184,92 @@ const CommunityTemplate = (props) => {
             </CommunityMultiWrapper>
 
             <CommunityMultiWrapper stype="table">
-                
-                    {(data && data.length > 0) ? (
-                        <StyledTable>
-                            <thead>
-                                <tr>
-                                    {subjectData &&
-                                        subjectData.map((v, i) => {
-                                            return (
-                                                <StyeldTh key={i} width={v.width}>
-                                                    {v.name}
-                                                </StyeldTh>
-                                            );
-                                        })}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data &&
-                                    data.map((v, i) => {
-                                        return (
-                                            <tr key={i}>
-                                                <StyeldTd>{v.RN || v.id}</StyeldTd>
-                                                <StyeldTd align="left">
-                                                    <SubjectLink to={"?num="+v.id}>
-                                                        {v.subject}
-                                                    </SubjectLink>
-                                                </StyeldTd>
-                                                <StyeldTd align="center">
-                                                    {v.userDisplayId}
-                                                </StyeldTd>
-                                                {pageName === '고객센터' && (
-                                                    <>                                                 
-                                                        <StyeldTd align="center">
-                                                            {new Date(v.createdAt)
-                                                                .toLocaleString()
-                                                                .toLowerCase() !==
-                                                                'invalid date' &&
-                                                                new Date(
-                                                                    v.createdAt,
-                                                                ).toLocaleString()}
-                                                        </StyeldTd>
-                                                        <StyeldTd align="center">
-                                                            {v.view}
-                                                        </StyeldTd>
-                                                    </>
-                                                )}
-                                            </tr>
-                                        );
-                                    })}
-                            </tbody>
-                        </StyledTable>
-                    ): (<EmptyWrapper><span>게시글이 없습니다.</span></EmptyWrapper>)}
-                    
-                
+                {data && data.length > 0 ? (
+                    <StyledTable>
+                        <colgroup>
+                            {subjectData &&
+                                subjectData.map((v, i) => (
+                                    <col key={i} style={{ width: v.width }} />
+                                ))}
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                {subjectData &&
+                                    subjectData.map((v, i) => (
+                                        <StyeldTh key={i}>{v.name}</StyeldTh>
+                                    ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data &&
+                                data.map((v, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <StyeldTd>{v.RN || v.id}</StyeldTd>
+                                            <StyeldTd align="left">
+                                                <SubjectLink
+                                                    to={'?num=' + v.id}
+                                                >
+                                                    {v.subject}
+                                                </SubjectLink>
+                                            </StyeldTd>
+                                            <StyeldTd align="center">
+                                                {v.userDisplayId}
+                                            </StyeldTd>
+                                            {pageName === '고객센터' && (
+                                                <>
+                                                    <StyeldTd align="center">
+                                                        {new Date(v.createdAt)
+                                                            .toLocaleString()
+                                                            .toLowerCase() !==
+                                                            'invalid date' &&
+                                                            new Date(
+                                                                v.createdAt,
+                                                            ).toLocaleString()}
+                                                    </StyeldTd>
+                                                    <StyeldTd align="center">
+                                                        {v.view}
+                                                    </StyeldTd>
+                                                </>
+                                            )}
+                                        </tr>
+                                    );
+                                })}
+                        </tbody>
+                    </StyledTable>
+                ) : (
+                    <EmptyWrapper>
+                        <span>게시글이 없습니다.</span>
+                    </EmptyWrapper>
+                )}
 
                 <PagingWrapper>
-                {(pageCount > 0) &&                    
-                    [...Array(pageCount)].map((v, i) => {   // map대신 for문 쓰고 싶을 때
-                        let index = (i+1);
-                        let selectbtn = (index === Number(currentPage));
-                        return (
-                            <PagingBtn
-                                key={i}
-                                type="button"
-                                onClick={pagingBtnClick}
-                                selectbtn={selectbtn}
-                                value={index}
-                            />
-                        );
-                    })}                
-                    
-                    {userData && (
-                        userData.authority !== 0 ? (
+                    {pageCount > 0 &&
+                        [...Array(pageCount)].map((v, i) => {
+                            // map대신 for문 쓰고 싶을 때
+                            let index = i + 1;
+                            let selectbtn = index === Number(currentPage);
+                            return (
+                                <PagingBtn
+                                    key={i}
+                                    type="button"
+                                    onClick={pagingBtnClick}
+                                    selectbtn={selectbtn}
+                                    value={index}
+                                />
+                            );
+                        })}
+
+                    {userData &&
+                        (userData.authority !== 0 ? (
                             WriteLinkJSX
                         ) : userData.authority === 0 && page === 'qa' ? (
                             WriteLinkJSX
                         ) : (
                             <></>
-                        )
-                    )}
-                </PagingWrapper>   
-
-            </CommunityMultiWrapper>            
+                        ))}
+                </PagingWrapper>
+            </CommunityMultiWrapper>
         </CommunityWrapper>
     );
 };

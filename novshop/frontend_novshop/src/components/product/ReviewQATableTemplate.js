@@ -231,7 +231,7 @@ const ReviewQATable = (props) => {
                                             content={v.content}
                                             style={{
                                                 // display: "block",
-                                                margin: '10px 5%',
+                                                margin: '10px 0',
                                                 boxShadow: '0 0 0 0.1px',
                                                 padding: "1rem",
                                             }}

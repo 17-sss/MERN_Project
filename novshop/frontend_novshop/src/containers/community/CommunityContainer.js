@@ -116,7 +116,7 @@ const CommunityContainer = (props) => {
     };    
 
     return (
-        (!qaLoading && !noticeLoading)
+        (page === 'qa' ? !qaLoading : !noticeLoading)
         &&
         <CommunityTemplate
             etcData={etcData}
