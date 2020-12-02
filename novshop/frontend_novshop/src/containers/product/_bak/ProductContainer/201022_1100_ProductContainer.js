@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProduct } from '../../../modules/product';
-import ProductTemplate, { ProductItem } from "../../../components/product/ProductTemplate";
+import { getAllProduct } from '../../../../modules/product';
+import ProductTemplate, { ProductItem } from "../../../../components/product/ProductTemplate";
 
 const ProductContainer = () => {    // 전체목록이 아닌 상세분류 목록을 위한 것도 만들어야할듯.
     // [1] 데이터 관련 START ====

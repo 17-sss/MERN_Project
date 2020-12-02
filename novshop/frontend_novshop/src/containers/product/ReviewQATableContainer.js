@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {useSelector} from 'react-redux';
-import ReviewQATable from "../../components/table/ReviewQATable";
+import ReviewQATableTemplate from "../../components/product/ReviewQATableTemplate";
 
 const ReviewQAContainer = (props) => {
     const { qaLoading, reviewLoading } = useSelector(({loading}) => {
@@ -50,7 +50,7 @@ const ReviewQAContainer = (props) => {
     const events = {pagingBtnClick};
 
     return (
-        <ReviewQATable
+        <ReviewQATableTemplate
             type={type}
             subjects={subjects}
             data={(currentDatas && currentDatas.length > 0) && currentDatas}

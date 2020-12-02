@@ -1,12 +1,12 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import ReviewQATableContainer from "../../containers/table/ReviewQATableContainer";
 import { getSize, calcImageRatio } from '../../lib/utility/customFunc';
 import { ClearEx, BorderBotLine } from '../common/StyleUtilModels';
 import { cssStrike, cssTransparent } from '../common/StyleUtilCSS';
 import { Container, Row, Col, Navbar, Nav, NavLink } from 'react-bootstrap';
 import ContentView from '../common/ContentView';
 
+import ReviewQATableContainer from "../../containers/product/ReviewQATableContainer";
 import ProductDetailAddInfo from './ProductDetailAddInfo';
 
 // {0} 공통 ***************************************************************************************************************************
@@ -425,6 +425,8 @@ const ProductDetailTemplate = (props) => {
     const { onOptionConfirmation, onVolumeChange, onOptionDelete, onAddReviewTest, onAddQATest } = events;    
     const { imgRef, imgClientSize } = imgDivInfo;
 
+    const isDetail = detailinfo && detailinfo !== "undefined" && detailinfo !== "null";
+
     return (
         <>            
             <PaddingTB20 />
@@ -664,7 +666,7 @@ const ProductDetailTemplate = (props) => {
                 <ProductAddInfoBtnsWrapper>
                     <Nav>
                         <ProductAddInfoLink href="#review">REVIEW</ProductAddInfoLink>
-                        {detailinfo && (<ProductAddInfoLink href="#detail">DETAIL</ProductAddInfoLink>)}
+                        {isDetail && (<ProductAddInfoLink href="#detail">DETAIL</ProductAddInfoLink>)}
                         <ProductAddInfoLink href="#qa">{"Q & A"}</ProductAddInfoLink>
                         <ProductAddInfoLink href="#info">INFO</ProductAddInfoLink>
                     </Nav>
@@ -675,11 +677,11 @@ const ProductDetailTemplate = (props) => {
                 <ReviewQATableContainer type="review" subjects={["번호", "사진", "제목", "작성자", "평점"]} data={reviewStatus && reviewStatus.data} />
 
                 {/* Detail */}                    
-                {detailinfo && (
+                {isDetail && (
                     <>
                         <ProductAddInfoBigName id="detail">
                             DETAIL
-                        </ProductAddInfoBigName>
+                        </ProductAddInfoBigName>                        
                         <ContentView
                             content={detailinfo}
                             style={{

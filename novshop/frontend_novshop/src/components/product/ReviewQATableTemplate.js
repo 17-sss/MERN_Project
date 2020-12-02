@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { getSize } from '../../lib/utility/customFunc';
 import { CustomLink } from '../common/StyleUtilModels';
 import { cssDisplayNone, cssTransparent } from '../common/StyleUtilCSS';
+import ContentView from '../common/ContentView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';       // fas
 import { Accordion } from 'react-bootstrap';
@@ -75,13 +76,6 @@ const StyledSubject = styled.div`
     &:hover {
         color: #666;
     };
-`;
-// ---------------------------------------------------/
-
-// 2) StyledContent: Accordion 내용
-const StyledContent = styled.div`
-    display: block;
-    padding: 0.5rem 1rem;    
 `;
 // ---------------------------------------------------/
 
@@ -233,18 +227,13 @@ const ReviewQATable = (props) => {
                                     </ItemDiv>    
                                      
                                     <Accordion.Collapse eventKey="this">
-                                        <StyledContent>
-                                            <div>
-                                                {v.content}                                                
-                                            </div>
-                                            <div>
-                                                <img
-                                                    alt="임시"
-                                                    src={'/images/200720.jpg'}
-                                                    width="100%"                                                    
-                                                />
-                                            </div>
-                                        </StyledContent>
+                                        <ContentView
+                                            content={v.content}
+                                            style={{
+                                                display: "block",
+                                                padding: "0.5rem 1rem",
+                                            }}
+                                        />
                                     </Accordion.Collapse>
                                 </LineDiv> 
                             </Accordion>                                                                           
