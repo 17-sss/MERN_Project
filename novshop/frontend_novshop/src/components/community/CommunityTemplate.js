@@ -21,7 +21,7 @@ const CommunityMultiWrapper = styled.div`
             case 'pagename': // 타입 (공지, CS)등을 이름을 표시하기 위한 틀 생성
                 return css`
                     min-height: 30px;
-                    margin: 50px 0 20px;
+                    margin: 20px 0;
                     border-bottom: 0;
                     text-align: center;
 

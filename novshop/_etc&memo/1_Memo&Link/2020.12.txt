@@ -1,0 +1,8 @@
+@@ 201203
+    * HTML
+        1. Table 태그에서 tr간의 간격 지정할 시
+            https://webisfree.com/2018-06-21/table-태그-tr-요소-사이에-간격-margin-적용하기
+            https://www.codingfactory.net/10618
+    * CSS
+        1. CSS 선택자 
+            https://lktprogrammer.tistory.com/98

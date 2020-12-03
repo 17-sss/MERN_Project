@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { CustomLink } from '../../../components/common/StyleUtilModels';
 import { getSize } from '../../../lib/utility/customFunc';
 
 // [1] CommonTableWrapper: 전체 Wrapper
@@ -10,14 +11,13 @@ const CommonTableWrapper = styled.div`
 
 // [2]  CommonTableMultiWrapper
 const CommonTableMultiWrapper = styled.div`
-    width: 100%;
-
     ${(props) => {
         const { stype } = props;
         return stype === 'pagename'
             ? css`
+                  width: 100%;
                   min-height: 30px;
-                  margin: 50px 0 20px;
+                  margin: 20px 0;
                   border-bottom: 0;
                   text-align: center;
 
@@ -27,17 +27,18 @@ const CommonTableMultiWrapper = styled.div`
                       font-size: 20px;
                   }
               `
-            : css`
-                  margin: 0 auto 20px;
-              `;
+            : stype === 'table' &&
+                  css`
+                      width: 100%;
+                      margin: 0 auto 20px;
+                  `;
     }}
 `;
 // ---------------------------------------------------/
 
-
 // [3] Styled된 테이블 관련 요소
 // 1-1) Table
-const StyledTable = styled.table`    
+const StyledTable = styled.table`
     width: 100%;
     border-top: 4px solid black;
 `;
@@ -54,14 +55,41 @@ const StyledTh = styled.th`
     justify-content: center;
 `;
 
-// 2) EmptyWrapper (빈 테이블 표시용)
+// 1-3) Td
+const StyeldTd = styled.td`
+    /* width: ${(props) => props.width && props.width}; */
+    border-bottom: 1px solid #575757;
+    height: 30px;
+
+    ${(props) => {
+        let { align } = props;
+        align = align || 'center';
+
+        return css`
+            text-align: ${align};
+            align-items: ${align};
+            justify-content: ${align};
+        `;
+    }};
+`;
+
+// 2) Link Custom
+const SubjectLink = styled(CustomLink)`
+    padding: 0;
+    margin: 0;
+    &:hover {
+        color: ${props => props.hovercolor || '#666'};
+    }
+`;
+
+// 3) EmptyWrapper (빈 테이블 표시용)
 const EmptyWrapper = styled.div`
     width: 100%;
     height: 40px;
     border-top: 4px solid black;
     border-bottom: 1px solid #575757;
     text-align: center;
-    
+
     span {
         line-height: 30px;
         font-size: 12pt;
@@ -70,5 +98,12 @@ const EmptyWrapper = styled.div`
 `;
 // ---------------------------------------------------/
 
-
-export { CommonTableWrapper, CommonTableMultiWrapper, StyledTable, StyledTh, EmptyWrapper };
+export {
+    CommonTableWrapper,
+    CommonTableMultiWrapper,
+    StyledTable,
+    StyledTh,
+    StyeldTd,
+    SubjectLink,
+    EmptyWrapper,
+};
