@@ -8,10 +8,10 @@ import {
     CommonTableMultiWrapper,
     StyledTable,
     StyledTh,
-    StyeldTd,
+    StyledTd,
     SubjectLink,
     // EmptyWrapper,
-} from './common/CommonTableComponents';
+} from '../common/CommonTableComponents';
 
 // [1 : import] Wrapper
 // 1) PurchaseWrapper (as로 CommonTableWrapper 자체를 가져옴)
@@ -57,7 +57,7 @@ const PurchaseTh = styled(StyledTh)`
 `;
 
 // 1-3) td
-const PurchaseTd = styled(StyeldTd)`
+const PurchaseTd = styled(StyledTd)`
     border-bottom: none;
 
     ul > li > span.lightgray {
@@ -162,7 +162,15 @@ const PurchaseTemplate = (props) => {
                             <PurchaseTd align="left">
                                 <ul>
                                     <li>
-                                        <SubjectLink to="/test">TEST SHIRT</SubjectLink>
+                                        <SubjectLink
+                                            to="/test"
+                                            style={{
+                                                margin: '0',
+                                                padding: '0',
+                                            }}
+                                        >
+                                            TEST SHIRT
+                                        </SubjectLink>
                                     </li>
                                     <li>
                                         <b>[XL, 2XL, 3XL]</b>

@@ -1,6 +1,7 @@
+// ** CommunityTemplate, PurchaseTemplate에서 쓰임
 import styled, { css } from 'styled-components';
-import { CustomLink } from '../../../components/common/StyleUtilModels';
-import { getSize } from '../../../lib/utility/customFunc';
+import { CustomLink } from './StyleUtilModels';
+import { getSize } from '../../lib/utility/customFunc';
 
 // [1] CommonTableWrapper: 전체 Wrapper
 const CommonTableWrapper = styled.div`
@@ -56,7 +57,7 @@ const StyledTh = styled.th`
 `;
 
 // 1-3) Td
-const StyeldTd = styled.td`
+const StyledTd = styled.td`
     /* width: ${(props) => props.width && props.width}; */
     border-bottom: 1px solid #575757;
     height: 30px;
@@ -74,9 +75,7 @@ const StyeldTd = styled.td`
 `;
 
 // 2) Link Custom
-const SubjectLink = styled(CustomLink)`
-    padding: 0;
-    margin: 0;
+const SubjectLink = styled(CustomLink)`    
     &:hover {
         color: ${props => props.hovercolor || '#666'};
     }
@@ -103,7 +102,7 @@ export {
     CommonTableMultiWrapper,
     StyledTable,
     StyledTh,
-    StyeldTd,
+    StyledTd,
     SubjectLink,
     EmptyWrapper,
 };

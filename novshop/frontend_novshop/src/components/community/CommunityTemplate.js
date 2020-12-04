@@ -1,110 +1,33 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { getSize } from '../../lib/utility/customFunc';
+import styled from 'styled-components';
 import { CustomLink } from '../../components/common/StyleUtilModels';
 import { cssTransparent } from '../../components/common/StyleUtilCSS';
+import {
+    CommonTableWrapper as CommunityWrapper,
+    CommonTableMultiWrapper as CommunityMultiWrapper,
+    StyledTable,
+    StyledTh,
+    StyledTd,
+    SubjectLink,
+    EmptyWrapper,
+} from '../common/CommonTableComponents';
 
-// [1] CommunityWrapper: 전체 Wrapper
-const CommunityWrapper = styled.div`
-    width: ${(props) => props.width || getSize(1.45)};
-    margin: 0 auto;
-`;
+
+// [1 : import (as)] Wrapper
+/*
+    1) CommunityWrapper: 전체 Wrapper 
+    2) CommunityMultiWrapper: Multi Wrapper
+*/
 // ---------------------------------------------------/
 
-// [2] CommunityMultiWrapper
-const CommunityMultiWrapper = styled.div`
-    width: 100%;
-
-    ${(props) => {
-        const { stype } = props;
-        switch (stype) {
-            case 'pagename': // 타입 (공지, CS)등을 이름을 표시하기 위한 틀 생성
-                return css`
-                    min-height: 30px;
-                    margin: 20px 0;
-                    border-bottom: 0;
-                    text-align: center;
-
-                    p#pageType {
-                        font-weight: 100;
-                        color: #222;
-                        font-size: 20px;
-                    }
-                `;
-            case 'table': // 테이블
-                return css`
-                    margin: 0 auto 20px;
-                `;
-            default:
-                break;
-        }
-    }}
-`;
-// ---------------------------------------------------/
-
-// [3] Styled된 테이블 관련 요소
-// 1) Table
-const StyledTable = styled.table`
-    /* margin: 0 auto; */
-    /* margin: 0 5%; */
-    width: 100%;
-    border-top: 4px solid black;
-`;
-// ---------------------------------------------------/
-
-// 2) Th
-const StyeldTh = styled.th`
-    width: ${(props) => props.width && props.width};
-    border-bottom: 2px solid gray;
-    height: 40px;
-
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-`;
-// ---------------------------------------------------/
-
-// 3) Td
-const StyeldTd = styled.td`
-    width: ${(props) => props.width && props.width};
-    border-bottom: 1px solid #575757;
-    height: 30px;
-
-    ${(props) => {
-        let { align } = props;
-        align = align || 'center';
-
-        return css`
-            text-align: ${align};
-            align-items: ${align};
-            justify-content: ${align};
-        `;
-    }};
-`;
-// ---------------------------------------------------/
-
-// 4) Link Custom
-const SubjectLink = styled(CustomLink)`
-    &:hover {
-        color: #666;
-    }
-`;
-// ---------------------------------------------------/
-
-// 5) EmptyWrapper
-const EmptyWrapper = styled.div`
-    width: 100%;
-    height: 40px;
-    border-top: 4px solid black;
-    border-bottom: 1px solid #575757;
-    text-align: center;
-
-    span {
-        line-height: 30px;
-        font-size: 12pt;
-        font-weight: bold;
-    }
-`;
+// [2 : import] Table 관련
+/*
+    1) StyledTable: table
+    2) StyledTh: th
+    3) StyledTd: td
+    4) SubjectLink: Link Custom
+    5) EmptyWrapper    
+*/
 // ---------------------------------------------------/
 
 // [4] 페이징
@@ -196,7 +119,7 @@ const CommunityTemplate = (props) => {
                             <tr>
                                 {subjectData &&
                                     subjectData.map((v, i) => (
-                                        <StyeldTh key={i}>{v.name}</StyeldTh>
+                                        <StyledTh key={i}>{v.name}</StyledTh>
                                     ))}
                             </tr>
                         </thead>
@@ -205,20 +128,20 @@ const CommunityTemplate = (props) => {
                                 data.map((v, i) => {
                                     return (
                                         <tr key={i}>
-                                            <StyeldTd>{v.RN || v.id}</StyeldTd>
-                                            <StyeldTd align="left">
+                                            <StyledTd>{v.RN || v.id}</StyledTd>
+                                            <StyledTd align="left">
                                                 <SubjectLink
                                                     to={'?num=' + v.id}
                                                 >
                                                     {v.subject}
                                                 </SubjectLink>
-                                            </StyeldTd>
-                                            <StyeldTd align="center">
+                                            </StyledTd>
+                                            <StyledTd align="center">
                                                 {v.userDisplayId}
-                                            </StyeldTd>
+                                            </StyledTd>
                                             {pageName === '고객센터' && (
                                                 <>
-                                                    <StyeldTd align="center">
+                                                    <StyledTd align="center">
                                                         {new Date(v.createdAt)
                                                             .toLocaleString()
                                                             .toLowerCase() !==
@@ -226,10 +149,10 @@ const CommunityTemplate = (props) => {
                                                             new Date(
                                                                 v.createdAt,
                                                             ).toLocaleString()}
-                                                    </StyeldTd>
-                                                    <StyeldTd align="center">
+                                                    </StyledTd>
+                                                    <StyledTd align="center">
                                                         {v.view}
-                                                    </StyeldTd>
+                                                    </StyledTd>
                                                 </>
                                             )}
                                         </tr>
