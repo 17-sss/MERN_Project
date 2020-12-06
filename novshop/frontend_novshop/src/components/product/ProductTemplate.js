@@ -306,7 +306,7 @@ export const ProductItem = (props) => {
 
                     {/* [2] 세일 */}
                     <ItemPriceLi className="sale" sale={sale}>
-                        {price - price * sale}원
+                        {Math.round(price - price * sale)}원                        
                     </ItemPriceLi>
                 </ItemPriceUl>
 

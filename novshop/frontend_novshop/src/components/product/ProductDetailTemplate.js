@@ -421,7 +421,7 @@ const ProductDetailTemplate = (props) => {
     const {
         // categoryId, categorySub,         
         name, colors, sizes, description, 
-        image, price, sale, detailinfo,        
+        image, price, mileage, sale, detailinfo,        
     } = productData;
 
     const { colorRef, sizeRef } = refs;
@@ -484,17 +484,14 @@ const ProductDetailTemplate = (props) => {
                             </ProductPriceViewSpan>
                             {sale > 0 && (
                                 <ProductPriceViewSpan>
-                                    <b>{price - (price * sale)}원</b>
+                                    <b>{Math.round(price - (price * sale))}원</b>
                                 </ProductPriceViewSpan>
                             )}
                         </p>
                         <p className="it_mileage">
                             <span className="mile_caption">Mileage</span>
                             <ProductPriceViewSpan>
-                                {sale > 0
-                                    ? Math.floor((price - (price * sale)) * 0.01)
-                                    : Math.floor(price * 0.01)}
-                                원
+                                {mileage}원
                             </ProductPriceViewSpan>
                         </p>
 

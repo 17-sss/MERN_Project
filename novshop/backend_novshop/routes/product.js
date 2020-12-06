@@ -3,7 +3,14 @@ import { Router } from 'express';
 import { Product } from '../models';
 import upload from '../module/upload';
 
-const router = Router();
+// function: mileage 계산용 
+const calcMileage = (price, sale) =>
+    (sale > 0 && sale < 1)
+        ? Number(Math.round((price - price * sale) * 0.01))
+        : Number(Math.round(price * 0.01));
+// -----/
+
+const router = Router();                                    
 
 // 상품 생성 (POST /api/product/create)
 router.post('/create', upload.single('image'), async (req, res) => {
@@ -19,6 +26,8 @@ router.post('/create', upload.single('image'), async (req, res) => {
         categorySub,
         categoryId,
     } = req.body;   // formData로 받아옴. 일부 JSON.stringify해서 옴
+
+    const mileage = calcMileage(Number(price), Number(sale));
 
     if (!req.file) {
         res.statusMessage = 'IMAGE UPLOAD ERROR';
@@ -38,6 +47,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
             colors,
             price,
             sale,
+            mileage,
             description,
             detailinfo,
             categorySub,
@@ -220,6 +230,8 @@ router.patch("/adminUpd", upload.single('image'), async(req, res) => {
         id,
     } = req.body;   // formData로 받아옴.
 
+    const mileage = calcMileage(Number(price), Number(sale));
+
     try {
         let updateFields = {};
         if (req.file && req.file.filename) {
@@ -230,6 +242,7 @@ router.patch("/adminUpd", upload.single('image'), async(req, res) => {
                 colors,
                 price,
                 sale,
+                mileage,
                 description,
                 detailinfo,
                 categorySub,
@@ -242,6 +255,7 @@ router.patch("/adminUpd", upload.single('image'), async(req, res) => {
                 colors,
                 price,
                 sale,
+                mileage,
                 description,
                 detailinfo,
                 categorySub,

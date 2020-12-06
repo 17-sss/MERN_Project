@@ -78,7 +78,7 @@ const ProductDetailContainer = (props) => {
         if (!colorRef.current || !sizeRef.current) return;
         if (colorRef.current.selectedIndex <= 0 || sizeRef.current.selectedIndex <= 0) return;        
 
-        const {name, sizes, price, sale} = productStatus.data;
+        const {name, sizes, price, sale, mileage} = productStatus.data;
         const {items} = productSelectItems;
         const color = colorRef.current.value;
         const size = sizeRef.current.value;        
@@ -101,12 +101,7 @@ const ProductDetailContainer = (props) => {
             id = 1;    
         }   
 
-        let sizeinfo = sizes && JSON.parse(sizes).join(', ');
-        let priceTmp = (sale === 0 || sale === 1) ?  price : Math.floor((price - (price * sale) ));
-        let mileage = 
-            (sale > 0) ? 
-                Math.floor((price - (price * sale)) * 0.01)
-                : Math.floor(price * 0.01);        
+        let sizeinfo = sizes && JSON.parse(sizes).join(', ');                
         
         dispatch(addSelectProduct({
             id,
@@ -115,7 +110,7 @@ const ProductDetailContainer = (props) => {
             size,
             color,
             volume: 1,
-            price: priceTmp,
+            price: (sale > 0 && sale < 1) ? Math.round((price - (price * sale))) : price,
             mileage,
         }));
 

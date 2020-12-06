@@ -345,6 +345,7 @@ const product = handleActions(
                 }
             } else if (form === 'productSelectItems') {
                 const { items } = productSelectItems;
+                const { mileage } = productStatus && productStatus.data;
                 const { inputName, id } = opt;
 
                 switch (key) {
@@ -354,30 +355,20 @@ const product = handleActions(
                             (v) => v.id === Number(id),
                         );
                         let objTmp = items[index];
-                        let mile = 0;
 
                         const { price, sale } = productStatus.data; // price는 productStatus에서 가져와야함!    productSelectItems에서 가져오면 꼬일듯.
 
                         if (inputName === 'volume') {
                             value = Number(value);
-                            mile =
-                                sale > 0 && sale < 1
-                                    ? Math.floor(
-                                          (Number(price) -
-                                              Number(price) * Number(sale)) *
-                                              0.01,
-                                      )
-                                    : Math.floor(Number(price * 0.01));
-
                             objTmp = {
                                 ...objTmp,
                                 [inputName]: value,
                                 price:
                                     sale > 0 && sale < 1
-                                        ? (Number(price) -
+                                        ? Math.round(Number(price) -
                                               Number(price) * Number(sale)) * value
-                                        : Number(price) * value,
-                                mileage: mile * value,
+                                        : Math.round(Number(price) * value),
+                                mileage: mileage * value,
                             };
                             
                             arrTmp = items;
