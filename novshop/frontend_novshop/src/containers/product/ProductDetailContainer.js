@@ -152,7 +152,7 @@ const ProductDetailContainer = (props) => {
 
         if (value === "CART") {
             //  Redux에서 값 업뎃 & 유저의 장바구니 테이블에 데이터 IN
-            if (window.confirm('장바구니에 상품이 정상적으로 담겼습니다. 장바구니로 이동하시겠습니까?')) {
+            if (window.confirm('장바구니에 상품이 정상적으로 담겼습니다. 장바구니로 이동하시겠습니까?')) {                
                 history.push(`/purchase/shoppingcart`);
             } else return;
         } else {

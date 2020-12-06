@@ -13,11 +13,8 @@
             - 만약 이미 있다면(상품아이디 같고 옵션까지 같다면) volume ++
         2) color, size (selcolor, selsize) (선택한 color, size)
             - [옵션: color / size] 이렇게 표시하기 위함
-        3) mileage  // 보류. 상품으로 이관?..흠.
-            - 상품값, 세일퍼센트를 활용하여 1개당 마일리지 값 측정하여 DB IN해놓고
-                보이는건 수량에 따라 변경되게.
 
-    3. normal        
+    3. normal (no db, 들어간다함은 buy 테이블에?)        
         1-1) itemtotalprice (상품 price * volume) 
         1-2) itemtotalmile  (장바구니 상품 (1행) 계산된 마일리지)
         
@@ -38,15 +35,16 @@ module.exports = (sequelize, DataTypes) => (
                 allowNull: false,
                 defaultValue: 1,
             }, 
-
             selcolor: {
-                type: DataTypes.STRING(100),
-                allowNull: false,                
+                type: DataTypes.STRING(50),
+                allowNull: false,
             },
             selsize: {
-                type: DataTypes.STRING(100),
-                allowNull: false,                
+                type: DataTypes.STRING(50),
+                allowNull: false,
             }, 
+
+            // -- productId, userId JOIN 설정함.
         }, {
             timestamps: true,   // createdAt, updatedAt 컬럼 추가. 
             paranoid: true,     // deletedAt 컬럼 추가
