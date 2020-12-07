@@ -12,6 +12,7 @@ import {
     SubjectLink,
     // EmptyWrapper,
 } from '../common/CommonTableComponents';
+import { threeDigitsComma } from "../../lib/utility/customFunc";
 
 // [1 : import] Wrapper
 // 1) PurchaseWrapper (as로 CommonTableWrapper 자체를 가져옴)
@@ -98,8 +99,8 @@ const PurchaseBtn = styled.button`
 // ---------------------------------------------------/
 
 const PurchaseTemplate = (props) => {
-    const { etcs } = props;
-    const { page, colInfo } = etcs;
+    const { etcs, data } = props;
+    const { page, colInfo } = etcs;    
 
     return (
         <PurchaseWrapper>
@@ -142,62 +143,90 @@ const PurchaseTemplate = (props) => {
                     </thead>
 
                     {/* 구매할 상품 리스트 (tbody) */}
-                    <tbody>
-                        <tr>
-                            {page === 'shoppingcart' && (
-                                <PurchaseTd>
-                                    <input type="checkbox" name="select" />
-                                </PurchaseTd>
-                            )}
+                    <tbody>                        
+                        {data && data.length > 0 && data.map((v, i) => {
+                            const {
+                                product: { image, name, price, sale, mileage, sizes, categoryId, categorySub },
+                                id, selcolor, selsize, volume, productId, /* userId */
+                            } = v;
 
-                            <PurchaseTd>
-                                <div style={{ margin: '10px' }}>
-                                    <img
-                                        style={{ maxWidth: '75px' }}
-                                        alt="test"
-                                        src="/images/bymono_test2.webp"
-                                    />
-                                </div>
-                            </PurchaseTd>
-                            <PurchaseTd align="left">
-                                <ul>
-                                    <li>
-                                        <SubjectLink
-                                            to="/test"
-                                            style={{
-                                                margin: '0',
-                                                padding: '0',
-                                            }}
-                                        >
-                                            TEST SHIRT
-                                        </SubjectLink>
-                                    </li>
-                                    <li>
-                                        <b>[XL, 2XL, 3XL]</b>
-                                    </li>
-                                    <li>
-                                        <span className="lightgray">
-                                            [옵션: 그레이 / 3XL]
-                                        </span>
-                                    </li>
-                                </ul>
-                            </PurchaseTd>
-                            <PurchaseTd>
-                                <b>20,000원</b>
-                            </PurchaseTd>
-                            <PurchaseTd>
-                                {page === "shoppingcart" ?
-                                    (<input type="number" min="1" max="20" name="volume" value={2} />)
-                                    :
-                                    ("2")
-                                }
-                            </PurchaseTd>
-                            <PurchaseTd>400</PurchaseTd>
-                            <PurchaseTd>2,500</PurchaseTd>
-                            <PurchaseTd>
-                                <b>40,000원</b>
-                            </PurchaseTd>                            
-                        </tr>
+
+                            let aLink = '/shopping';
+                            if (!categoryId && !categorySub) {
+                                aLink = aLink + `?itemId=${productId}`;
+                            } else if (categoryId && !categorySub) {
+                                aLink = aLink + `?main=${categoryId}&itemId=${id}`;
+                            } else if (categoryId && categorySub) {
+                                aLink = aLink + `?main=${categoryId}&sub=${categorySub}&itemId=${productId}`;
+                            }                            
+
+                            const calcPrice = Math.round(price - (price * sale));
+                            const fixMile = threeDigitsComma(Math.round(mileage * volume));
+                            
+                            return (
+                                <tr key = {i}>
+                                    {page === 'shoppingcart' && (
+                                        <PurchaseTd>
+                                            <input
+                                                type="checkbox"
+                                                name="select"
+                                            />
+                                        </PurchaseTd>
+                                    )}
+
+                                    <PurchaseTd>
+                                        <div style={{ margin: '10px' }}>
+                                            <img
+                                                style={{ maxWidth: '75px' }}
+                                                alt={name}
+                                                src={'/uploads/' + image || '/images/bymono_test1.webp'}
+                                            />
+                                        </div>
+                                    </PurchaseTd>
+                                    <PurchaseTd align="left">
+                                        <ul>
+                                            <li>
+                                                <SubjectLink
+                                                    to={aLink}
+                                                    style={{
+                                                        margin: '0',
+                                                        padding: '0',
+                                                    }}
+                                                >
+                                                    {name}
+                                                </SubjectLink>
+                                            </li>
+                                            <li>
+                                                <b>{"[" + JSON.parse(sizes).join(", ") + "]"}</b>
+                                            </li>
+                                            <li>
+                                                <span className="lightgray">
+                                                    [옵션: {selcolor} / {selsize}]
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </PurchaseTd>
+                                    <PurchaseTd>
+                                        <b>{threeDigitsComma(calcPrice)}원</b>
+                                    </PurchaseTd>
+                                    <PurchaseTd>
+                                        {page === "shoppingcart" ?
+                                            (<input type="number" min="1" max="20" name="volume" value={volume} />)
+                                            :
+                                            volume
+                                        }
+                                    </PurchaseTd>
+                                    
+                                    <PurchaseTd>{fixMile}</PurchaseTd>
+                                    <PurchaseTd>
+                                        {/* 배송비: 총 행을 계산했을 때 30000원 넘어가면 다 무료로 변경되게. 아니면 30000 */}
+                                    </PurchaseTd>                                
+                                    <PurchaseTd>
+                                        <b>{threeDigitsComma(calcPrice * volume)}원</b>
+                                    </PurchaseTd> 
+                                </tr>        
+                            );
+                        })}
                      </tbody>
                 </PurchaseTable>
 

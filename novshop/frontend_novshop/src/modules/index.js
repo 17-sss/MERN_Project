@@ -8,6 +8,7 @@ import review, { reviewSaga } from './review';
 import qa, { qaSaga } from './qa';
 import notice, { noticeSaga } from './notice';
 import write, { writeSaga } from './write';
+import purchase, { purchaseSaga } from './purchase';
 import loading from './loading';
 
 const rootReducer = combineReducers({
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     qa,
     notice,
     write,
+    purchase,
     loading,
 });
 
@@ -31,6 +33,7 @@ export function* rootSaga() {
         reviewSaga(),
         qaSaga(),
         noticeSaga(),
+        purchaseSaga(),
         writeSaga(),
     ]);
 }

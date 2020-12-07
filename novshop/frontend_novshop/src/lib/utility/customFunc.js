@@ -89,3 +89,10 @@ export const calcImageRatio = (AnNum, AstrType) => {
 export const isEmpty = (param) => {
     return Object.keys(param).length === 0;
 };
+
+// **********************************************************************************
+// 숫자 3자리마다 , 입력
+// **********************************************************************************
+export const threeDigitsComma = (Anumber) => (Anumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+

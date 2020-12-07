@@ -161,7 +161,7 @@ router.get('/get', async (req, res) => {
             where: where,
             attributes: {
                 // exclude는 제외할 필드 설정. exclude 안쓰고 그냥 딱! 배열만 놓을땐 표시할 필드 설정
-                exclude: ['createdAt', 'deletedAt', 'updatedAt', 'id'],
+                exclude: ['createdAt', 'deletedAt', 'updatedAt', /*'id'*/],
             },
         });
 

@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, initializeProductForm } from "../../modules/product";
 import { createReview, getProductReview, initializeReview } from '../../modules/review';
 import { getProductQA, initializeQA } from '../../modules/qa';
+import { cartIn } from "../../modules/purchase";
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
 
@@ -12,12 +13,13 @@ const ProductDetailContainer = (props) => {
     const {query, history } = props;
     const {main: categoryId, sub: categorySub, itemId: id} = query;    
     const dispatch = useDispatch();
-    const {productStatus, productSelectItems, reviewStatus, qaStatus } = useSelector(({product, review, qa}) => {
+    const {productStatus, productSelectItems, reviewStatus, qaStatus, userData } = useSelector(({product, review, qa, user}) => {
         return {
             productStatus: product.productStatus,
             productSelectItems: product.productSelectItems,
             reviewStatus: review.reviewStatus,
             qaStatus: qa.qaStatus,
+            userData: user.user,
         }
     });
 
@@ -26,7 +28,10 @@ const ProductDetailContainer = (props) => {
         
     const [imgClientSize, setImgClientSize] = useState({width: 0, height: 0});
     const [errorMessage, setErrorMessage] = useState('');
+    const userIdRef = useRef();
     const imgRef = useRef();    
+
+    userIdRef.current = (userData && userData.data) ? userData.data.id : -1;
 
     useEffect( () => {        
         setImgClientSize({
@@ -78,7 +83,7 @@ const ProductDetailContainer = (props) => {
         if (!colorRef.current || !sizeRef.current) return;
         if (colorRef.current.selectedIndex <= 0 || sizeRef.current.selectedIndex <= 0) return;        
 
-        const {name, sizes, price, sale, mileage} = productStatus.data;
+        const {name, sizes, price, sale, mileage, id: productId} = productStatus.data;
         const {items} = productSelectItems;
         const color = colorRef.current.value;
         const size = sizeRef.current.value;        
@@ -112,6 +117,7 @@ const ProductDetailContainer = (props) => {
             volume: 1,
             price: (sale > 0 && sale < 1) ? Math.round((price - (price * sale))) : price,
             mileage,
+            productId,
         }));
 
         return (colorRef.current.selectedIndex = 0, sizeRef.current.selectedIndex = 0);
@@ -144,21 +150,48 @@ const ProductDetailContainer = (props) => {
 
     // 구매 / 장바구니 버튼 OnClick
     const onPurchaseClick = useCallback((e) => {        
-        if (!productSelectItems) return;
-        if (productSelectItems && productSelectItems.items && productSelectItems.items.length <= 0) {
-            return setErrorMessage("필수 옵션을 선택해주세요!");
-        }
-        const {value} = e.target;                    
-
-        if (value === "CART") {
-            //  Redux에서 값 업뎃 & 유저의 장바구니 테이블에 데이터 IN
-            if (window.confirm('장바구니에 상품이 정상적으로 담겼습니다. 장바구니로 이동하시겠습니까?')) {                
-                history.push(`/purchase/shoppingcart`);
+        if (userIdRef.current <= -1) {
+            if(window.confirm('로그인이 되어있지 않습니다. 로그인 하시겠습니까?')) {
+                return history.push(`/auth/login`);
             } else return;
+        }
+
+        if (!productSelectItems) 
+            return setErrorMessage("서버에 오류가 있습니다.");
+        if (productSelectItems && productSelectItems.items && productSelectItems.items.length <= 0) 
+            return setErrorMessage("필수 옵션을 선택해주세요!");
+        
+        const {value} = e.target;                    
+        
+        // 1) 장바구니
+        if (value === "CART") {           
+            // 장바구니 담기 로직 START ---
+            let isNext = true;
+            
+            if (!productSelectItems || !productSelectItems.items || productSelectItems.items.length <= 0)
+                isNext = false;
+            if (productSelectItems.items.length <= 0)
+                isNext = false;                                    
+                                
+            if (!isNext) 
+                return setErrorMessage('서버에 오류가 있습니다. (상품 담기 실패)');
+                
+            productSelectItems.items.map((v, i) => {
+                const {volume, color: selcolor, size: selsize, productId} = v;
+                return dispatch(cartIn({volume, selcolor, selsize, productId, userId: userIdRef.current}));
+            });            
+            // 장바구니 담기 로직 END -----
+            
+            if (window.confirm('장바구니에 상품이 정상적으로 담겼습니다. 장바구니로 이동하시겠습니까?')) {                
+                history.push(`/purchase/shoppingcart`); 
+            } else {
+                return;
+            }
+        // 2) 구매창
         } else {
             history.push(`/purchase/buy`)            
         }
-    }, [history, productSelectItems]);
+    }, [dispatch, history, productSelectItems]);
 
     // 리뷰, Q&A 추가용 테스트      ---------------- 추후 구매내역을 기반으로 리뷰를 작성하는 폼 만들기.
     const onAddReviewTest = (e) => {

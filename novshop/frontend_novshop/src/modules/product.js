@@ -155,7 +155,7 @@ export const adminDelProduct = createAction(
 // 상품 상세 페이지에서 구매하려는 상품을 선택했을 시, 리스트 IN
 export const addSelectProduct = createAction(
     ADD_SELECT_PRODUCT,
-    ({ id, name, sizeinfo, size, color, volume, price, mileage }) => ({
+    ({ id, name, sizeinfo, size, color, volume, price, mileage, productId }) => ({
         id,
         name,
         sizeinfo,
@@ -164,6 +164,7 @@ export const addSelectProduct = createAction(
         volume,
         price,
         mileage,
+        productId,
     }),
 );
 // 상품 상세 페이지에서 구매하려했던 리스트에서 X버튼을 누르면, 리스트 OUT
@@ -492,6 +493,7 @@ const product = handleActions(
                 volume,
                 price,
                 mileage,
+                productId,
             } = payload;
 
             let tmpTotalprice = totalprice + price;
@@ -509,6 +511,7 @@ const product = handleActions(
                         volume,
                         price,
                         mileage,
+                        productId,
                     }),
                     totalprice: tmpTotalprice,
                 },
