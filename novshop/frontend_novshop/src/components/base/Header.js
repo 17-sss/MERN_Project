@@ -182,7 +182,7 @@ const Header = (props) => {
                         {user && 
                         <>
                             <HeadLi posrelative>                                
-                                <CustomLink hcolor={"#007bff"} to = {user ? ("/shoppingbasket/@" + user.userid) : "/" }>
+                                <CustomLink hcolor={"#007bff"} to = {user ? "/purchase/shoppingcart" : "/" }>
                                     <FontAwesomeIcon icon = {faShoppingBasket} size = 'lg' />                            
                                 </CustomLink>
                             </HeadLi>

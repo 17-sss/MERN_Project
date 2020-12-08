@@ -7,6 +7,7 @@ import * as purchaseAPI from '../lib/api/purchase';
 // 리덕스에 등록 안함, api 만들어야함.
 // 액션 이름 정의 ----
 const INITALIZE_PURCHASE = 'purchase/INITALIZE_PURCHASE';
+const CHANGE_PURCHASE = 'purchase/CHANGE_PURCHASE'; 
 
 const [CART_IN, CART_IN_SUCCESS, CART_IN_FAILURE] = createRequestActionTypes(
     'purchase/CART_IN',
@@ -20,6 +21,7 @@ const [GET_CART, GET_CART_SUCCESS, GET_CART_FAILURE] = createRequestActionTypes(
 
 // 액션 생성 함수 작성
 export const initialPurchase = createAction(INITALIZE_PURCHASE);
+export const changePurchase = createAction(CHANGE_PURCHASE, ({form, key, value}) => ({form, key, value}));
 export const cartIn = createAction(
     CART_IN,
     ({ volume, selcolor, selsize, productId, userId }) => ({
@@ -45,10 +47,24 @@ export function* purchaseSaga() {
 
 // 리듀서 초기값
 const initialState = {
+/* 
+    - 지금까지 내가 리덕스 모듈을 만들때 ~form + ~status 느낌)
+        1) buyFormStatus: 구매 상태를 담당 
+        2) cartFormStatus: 장바구니 상태를 담당
+*/
     buy: null,
-    buyStatus: null,
+    buyFormStatus: {
+        items: null,
+        // 추후 수정 (필요한 값 등록하기 cartFormStatus 처럼)
+    },
     cart: null,
-    cartStatus: null,
+    cartFormStatus: {
+        items: null,
+
+        allProductPrice: "",     // 상품구매금액
+        shippingFee: "",         // 배송비
+        totalPrice: "",          // 상품구매금액 + 배송비
+    },
     
     purchaseError: null,
 };
@@ -62,16 +78,30 @@ const purchase = handleActions(
             return {
                 ...state,
                 buy: null,
-                buyStatus: null,
+                buyFormStatus: initialState["buyFormStatus"],
                 cart: null,
-                cartStatus: null,                
+                cartFormStatus: initialState["cartFormStatus"],                
                 purchaseError: null,
             };
         },
 
+        // onChange (일반적인 onChange)
+        [CHANGE_PURCHASE]: (state, action) => {
+            const { payload } = action;
+            const { form, key, value } = payload;            
+
+            return {
+                ...state,
+                [form]: {
+                    ...state[form],
+                    [key]: value,
+                }
+            }
+        },
+
         // 장바구니 담기
-        [CART_IN_SUCCESS]: (state, payload) => {
-            const { payload: cart } = payload;
+        [CART_IN_SUCCESS]: (state, action) => {
+            const { payload: cart } = action;
 
             return {
                 ...state,
@@ -79,8 +109,8 @@ const purchase = handleActions(
                 purchaseError: null,
             };
         },
-        [CART_IN_FAILURE]: (state, payload) => {
-            const { payload: purchaseError } = payload;
+        [CART_IN_FAILURE]: (state, action) => {
+            const { payload: purchaseError } = action;
 
             return {
                 ...state,
@@ -90,21 +120,24 @@ const purchase = handleActions(
         },
 
         // 장바구니 정보 가져오기
-        [GET_CART_SUCCESS]: (state, payload) => {
-            const { payload: cartStatus } = payload;
+        [GET_CART_SUCCESS]: (state, action) => {
+            const { payload: {data: items} } = action;
 
             return {
                 ...state,
-                cartStatus,
+                cartFormStatus: {
+                    ...state["cartFormStatus"],
+                    items,
+                },
                 purchaseError: null,
             };
         },
-        [GET_CART_FAILURE]: (state, payload) => {
-            const { payload: purchaseError } = payload;
+        [GET_CART_FAILURE]: (state, action) => {
+            const { payload: purchaseError } = action;
 
             return {
                 ...state,
-                cartStatus: null,
+                cartFormStatus: initialState["cartFormStatus"],
                 purchaseError,
             };
         }

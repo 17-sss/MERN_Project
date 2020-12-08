@@ -1,7 +1,7 @@
 // 구매 / 장바구니 Template
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { cssTransparent } from '../common/StyleUtilCSS';
+import { cssDisplayNone, cssStrike, cssTransparent } from '../common/StyleUtilCSS';
 import { ClearEx } from '../common/StyleUtilModels';
 import {
     CommonTableWrapper as PurchaseWrapper,
@@ -31,6 +31,10 @@ const PurchaseMultiWrapper = styled(CommonTableMultiWrapper)`
                   span.totalprice {
                       font-size: 11.5pt;
                   }
+                  .shippingfeeInfo {
+                      margin-top: 10px;
+                      text-align: center;
+                  }                  
               `
             : stype === 'buy' &&
                   css`
@@ -43,21 +47,21 @@ const PurchaseMultiWrapper = styled(CommonTableMultiWrapper)`
 `;
 // ---------------------------------------------------/
 
-// [2 : import] Table 관련
-// 1-1) table
+// [2] Table 관련
+// 1-1) table (import)
 const PurchaseTable = styled(StyledTable)`
     border-top: 1px solid #e3e3e3;
     border-bottom: 1px solid #e3e3e3;
     font-size: 10pt;
 `;
 
-// 1-2) th
+// 1-2) th (import)
 const PurchaseTh = styled(StyledTh)`
     height: 35px;
     border-bottom: 1px solid #e3e3e3;
 `;
 
-// 1-3) td
+// 1-3) td (import)
 const PurchaseTd = styled(StyledTd)`
     border-bottom: none;
 
@@ -74,8 +78,18 @@ const PurchaseTd = styled(StyledTd)`
             opacity: 1;
         }
     }
-
 `;
+
+// 2) PurchaseIsSaleP: 세일 여부에 따른 원가격표시
+const PurchaseIsSaleP = styled.p`
+    ${props => {
+        const {sale} = props;
+        const flag = (sale && sale > 0 && sale < 1);
+        return flag ? cssStrike : cssDisplayNone;
+    }}
+`;
+
+
 // ---------------------------------------------------/
 
 // [3] 기타
@@ -99,8 +113,9 @@ const PurchaseBtn = styled.button`
 // ---------------------------------------------------/
 
 const PurchaseTemplate = (props) => {
-    const { etcs, data } = props;
+    const { etcs, data, events } = props;
     const { page, colInfo } = etcs;    
+    const { onChange } = events;
 
     return (
         <PurchaseWrapper>
@@ -144,7 +159,7 @@ const PurchaseTemplate = (props) => {
 
                     {/* 구매할 상품 리스트 (tbody) */}
                     <tbody>                        
-                        {data && data.length > 0 && data.map((v, i) => {
+                        {data && data.items && data.items.length > 0 && data.items.map((v, i) => {
                             const {
                                 product: { image, name, price, sale, mileage, sizes, categoryId, categorySub },
                                 id, selcolor, selsize, volume, productId, /* userId */
@@ -207,7 +222,24 @@ const PurchaseTemplate = (props) => {
                                         </ul>
                                     </PurchaseTd>
                                     <PurchaseTd>
-                                        <b>{threeDigitsComma(calcPrice)}원</b>
+                                        <PurchaseIsSaleP sale={sale}>
+                                            {threeDigitsComma(price)}원                                            
+                                        </PurchaseIsSaleP>
+                                        <b>
+                                            {sale && (sale > 0 && sale < 1) 
+                                                ? (threeDigitsComma(calcPrice))
+                                                : (threeDigitsComma(price))
+                                            }원
+                                        </b>
+                                        <div style={
+                                            sale && sale <= 0 
+                                                ? {textDecoration:"line-through"} 
+                                                : {display: "none !important"}
+                                            }
+                                        >
+                                           
+                                        </div>
+                                        
                                     </PurchaseTd>
                                     <PurchaseTd>
                                         {page === "shoppingcart" ?
@@ -217,10 +249,7 @@ const PurchaseTemplate = (props) => {
                                         }
                                     </PurchaseTd>
                                     
-                                    <PurchaseTd>{fixMile}</PurchaseTd>
-                                    <PurchaseTd>
-                                        {/* 배송비: 총 행을 계산했을 때 30000원 넘어가면 다 무료로 변경되게. 아니면 30000 */}
-                                    </PurchaseTd>                                
+                                    <PurchaseTd>{fixMile}</PurchaseTd>                                                             
                                     <PurchaseTd>
                                         <b>{threeDigitsComma(calcPrice * volume)}원</b>
                                     </PurchaseTd> 
@@ -252,13 +281,42 @@ const PurchaseTemplate = (props) => {
                         </div>
                     )}
                     {/* 2) 총 상품금액 */}
-                    <div style = {{float: "right"}}>
+                    <div style = {{float: "right"}}>                        
                         <span className="totalprice">
-                            상품구매금액 <b>40,000</b> + 배송비 <b>2,500</b> =
-                            합계 : <b>42,500</b>원
+                            상품구매금액{' '}
+                            <b>
+                                {data && data.allProductPrice
+                                    ? data.allProductPrice
+                                    : 'ERR!!'}
+                            </b>{' '}
+                            + 배송비{' '}
+                            <b>
+                                {data && data.shippingFee
+                                    ? data.shippingFee
+                                    : 'ERR!!'}
+                            </b>{' '}
+                            = 합계 :{' '}
+                            <b>
+                                {data && data.totalPrice
+                                    ? data.totalPrice
+                                    : 'ERR!!'}
+                            </b>
+                            원
                         </span>
+                        <ClearEx />
+
+                        <div className="shippingfeeInfo">
+                            <span>
+                                상품구매금액{' '}
+                                <b style={{color: "red", textDecoration: "underline"}}>
+                                    30,000
+                                </b>
+                                {' '}이상 무료배송
+                            </span>
+                        </div>
                     </div>
                     <ClearEx />
+                    
                 </PurchaseMultiWrapper>
                 
                 {/* [장바구니] 상품 주문 버튼 */}
