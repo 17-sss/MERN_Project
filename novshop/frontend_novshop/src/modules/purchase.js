@@ -12,10 +12,15 @@ const CHANGE_PURCHASE = 'purchase/CHANGE_PURCHASE';
 const [CART_IN, CART_IN_SUCCESS, CART_IN_FAILURE] = createRequestActionTypes(
     'purchase/CART_IN',
 );
-
 const [GET_CART, GET_CART_SUCCESS, GET_CART_FAILURE] = createRequestActionTypes(
     'purchase/GET_CART',
 );
+const [
+    UPD_CART_VOLUME,
+    UPD_CART_VOLUME_SUCCESS,
+    UPD_CART_VOLUME_FAILURE,
+] = createRequestActionTypes('purchase/UPD_CART_VOLUME');
+
 
 // =======================================================================
 
@@ -33,15 +38,21 @@ export const cartIn = createAction(
     }),
 );
 export const getCart = createAction(GET_CART, ({ userId }) => ({ userId }));
+export const updCartVolume = createAction(
+    UPD_CART_VOLUME,
+    ({ id, volume }) => ({ id, volume }),
+);
 // =======================================================================
 
 // 사가 생성
 const cartInSaga = createRequestSaga(CART_IN, purchaseAPI.cartIn);
 const getCartSaga = createRequestSaga(GET_CART, purchaseAPI.getCart);
+const updCartVolumeSaga = createRequestSaga(UPD_CART_VOLUME, purchaseAPI.updCartVolume);
 
 export function* purchaseSaga() {
     yield takeLatest(CART_IN, cartInSaga);
     yield takeLatest(GET_CART, getCartSaga);
+    yield takeLatest(UPD_CART_VOLUME, updCartVolumeSaga);
 }
 // =======================================================================
 
@@ -140,7 +151,27 @@ const purchase = handleActions(
                 cartFormStatus: initialState["cartFormStatus"],
                 purchaseError,
             };
-        }
+        },
+
+        // 수량 업데이트 (불러온 데이터 기반)   -- 작업중
+        [UPD_CART_VOLUME_SUCCESS]: (state, action) => {
+            const { payload: cart } = action;
+            console.log(action);
+            return {
+                ...state,
+                cart,
+                purchaseError: null,
+            };
+        },
+        [UPD_CART_VOLUME_FAILURE]: (state, action) => {
+            const { payload: purchaseError } = action;
+
+            return {
+                ...state,
+                cart: null,
+                purchaseError,
+            };
+        },
         
     },
     initialState,

@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { changePurchase, getCart, initialPurchase } from "../../modules/purchase";
+import { changePurchase, updCartVolume, getCart, initialPurchase } from "../../modules/purchase";
 import { threeDigitsComma } from "../../lib/utility/customFunc";
 
 import PurchaseTemplate from "../../components/purchase/PurchaseTemplate";
@@ -14,7 +14,7 @@ const PurchaseContainer = (props) => {
 
     const dispatch = useDispatch();
     const { cartFormStatus, buyFormStatus, userData } = useSelector(({purchase, user }) => {
-        return {
+        return {            
             cartFormStatus: purchase.cartFormStatus, 
             buyFormStatus: purchase.buyFormStatus, 
             userData: user.user,                
@@ -23,13 +23,15 @@ const PurchaseContainer = (props) => {
 
     // 2. useState
     const [data, setData] = useState(null);
+    const [priceLoading, setPriceLoading] = useState(false);
     const [curUserId, setCurUserId] = useState(-1);
     
     // 3. events
-    const onChange = useCallback((e) => {   
-        console.log(e);     // 수량 업뎃할때나 쓰일듯. 추후 작업
-    }, []);
-
+    const onCartVolumeChange = useCallback((e) => {   
+        const { value, id } = e.target;
+        // 하.. 이거 어떻게해야 -----------------------------------------!!
+        dispatch(updCartVolume({id, volume: value}));
+    }, [dispatch]);
 
     // [2] 데이터 관련
     // 1. Normal & etc ----------------------
@@ -52,69 +54,6 @@ const PurchaseContainer = (props) => {
     }
     const colInfo = setColInfo(page);
 
-
-    // 2) shoppingcart용 가격 계산 (상품구매금액, 배송비, 총금액) (func)        ***************** 문제있음 (리듀스 무한루프 && 중간 undefined)
-    const setCartPrice = (aData) => {   
-        if (page !== "shoppingcart") return;
-        
-        if (aData && aData.items && aData.items.length > 0) {
-            const allProductPrice = 
-                (aData.items.reduce(
-                    (prev, curr) => {   
-                        console.log(prev, curr);
-
-                        const {price: currPrice, sale: currSale} = curr.product;                        
-                        const currValue = 
-                            (currSale > 0 && currSale < 1) 
-                                ? (currPrice - currPrice * currSale) 
-                                : currPrice;
-
-                        // if (!prev.product)
-                        //     return Math.round(Number(currValue));
-
-                        const {price: prevPrice, sale: prevSale} = prev.product;                        
-                        const prevValue = 
-                            (prevSale > 0 && prevSale < 1) 
-                                ? (prevPrice - prevPrice * prevSale) 
-                                : prevPrice;
-
-                        return Math.round(Number(prevValue+currValue));
-                    },
-                ));
-
-            const shippingFee = (allProductPrice >= 30000) ? 0 : 2500;
-            const totalPrice = allProductPrice+shippingFee;            
-            
-            dispatch(
-                changePurchase({
-                    form: 'cartFormStatus',
-                    key: 'allProductPrice',
-                    value: threeDigitsComma(allProductPrice),
-                }),
-            );
-            dispatch(
-                changePurchase({
-                    form: 'cartFormStatus',
-                    key: 'shippingFee',
-                    value:
-                        shippingFee === 0
-                            ? '무료'
-                            : threeDigitsComma(shippingFee),
-                }),
-            );
-            dispatch(
-                changePurchase({
-                    form: 'cartFormStatus',
-                    key: 'totalPrice',
-                    value: threeDigitsComma(totalPrice),
-                }),
-            );
-        }                
-    };
-
-
-
-
     // 2. useEffect ----------------------
     // 1-1) 초기화: 유저
     useEffect(() => {
@@ -123,7 +62,8 @@ const PurchaseContainer = (props) => {
 
     // 1-2) 초기화: 페이지
     useEffect(() => {
-        dispatch(initialPurchase());     
+        dispatch(initialPurchase());
+        if (page === "shoppingcart")  setPriceLoading(false);
         
         if (curUserId !== -1) {
             if (page === "shoppingcart") {                
@@ -150,10 +90,91 @@ const PurchaseContainer = (props) => {
 
     }, [cartFormStatus, buyFormStatus, page]);
 
-    
+    // 3) shoppingcart용 가격 계산 후 세팅 (상품구매금액, 배송비, 총금액)        
+    useEffect(() => {        
+        if (priceLoading) return;
+        if (page !== "shoppingcart") return;
+        if (cartFormStatus && cartFormStatus.items && cartFormStatus.items.length > 0) {
+            const allProductPriceTmp = 
+                (cartFormStatus.items.length > 1) ? 
+                    cartFormStatus.items.reduce(
+                        (prev, curr) => {                           
+                            const { product: {price: currPrice, sale: currSale}, volume: currVolume } = curr;                        
+                            
+                            const currValue = 
+                                (currSale > 0 && currSale < 1) 
+                                    ? (currPrice - currPrice * currSale) * currVolume
+                                    : currPrice * currVolume;
+
+                            let prevValue = 0;
+                            if (typeof prev === "object") {
+
+                                const {product: {price: prevPrice, sale: prevSale}, volume: prevVolume} = prev;                        
+                                prevValue = 
+                                    (prevSale > 0 && prevSale < 1) 
+                                        ? (prevPrice - prevPrice * prevSale) * prevVolume
+                                        : prevPrice * prevVolume;
+                            } else if (typeof prev === "number") {
+                                prevValue = prev;
+                            };
+                            
+                            return Math.round(Number(prevValue+currValue));
+                        },
+                    )
+                    :
+                    cartFormStatus.items.map((v) => {
+                        const { product: {price, sale}, volume } = v;
+                        const result = 
+                            (sale > 0 && sale < 1) 
+                                ? (price - price * sale) * volume
+                                : price * volume;
+
+                        return Math.round(Number(result));
+                    });
+                
+            const shippingFeeTmp = (allProductPriceTmp >= 30000) ? "무료" : 2500;
+            const totalPriceTmp = 
+                shippingFeeTmp === "무료" 
+                    ? allProductPriceTmp 
+                    : allProductPriceTmp + shippingFeeTmp; 
+            
+            dispatch(
+                changePurchase({
+                    form: 'cartFormStatus',
+                    key: 'allProductPrice',
+                    value: threeDigitsComma(allProductPriceTmp),
+                }),
+            );
+            dispatch(
+                changePurchase({
+                    form: 'cartFormStatus',
+                    key: 'shippingFee',
+                    value:
+                        shippingFeeTmp === "무료" 
+                            ? shippingFeeTmp
+                            : threeDigitsComma(shippingFeeTmp),
+                }),
+            );
+            dispatch(
+                changePurchase({
+                    form: 'cartFormStatus',
+                    key: 'totalPrice',
+                    value: threeDigitsComma(totalPriceTmp),
+                }),
+            );
+            
+            const { allProductPrice, shippingFee, totalPrice } = cartFormStatus;
+            if (!allProductPrice || !shippingFee || !totalPrice)  
+                setPriceLoading(false)
+            else 
+                setPriceLoading(true);
+        }     
+    }, [priceLoading, cartFormStatus, page, dispatch]);
+
+
     // ============================================================
     return (
-        <PurchaseTemplate data={data} etcs={{page, colInfo}} events={{onChange}} />
+        <PurchaseTemplate data={data} etcs={{page, colInfo}} events={{onCartVolumeChange}} />
     );
 };
 

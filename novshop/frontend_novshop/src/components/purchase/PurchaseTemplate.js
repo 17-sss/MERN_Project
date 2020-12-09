@@ -115,7 +115,7 @@ const PurchaseBtn = styled.button`
 const PurchaseTemplate = (props) => {
     const { etcs, data, events } = props;
     const { page, colInfo } = etcs;    
-    const { onChange } = events;
+    const { onCartVolumeChange } = events;
 
     return (
         <PurchaseWrapper>
@@ -170,7 +170,7 @@ const PurchaseTemplate = (props) => {
                             if (!categoryId && !categorySub) {
                                 aLink = aLink + `?itemId=${productId}`;
                             } else if (categoryId && !categorySub) {
-                                aLink = aLink + `?main=${categoryId}&itemId=${id}`;
+                                aLink = aLink + `?main=${categoryId}&itemId=${productId}`;
                             } else if (categoryId && categorySub) {
                                 aLink = aLink + `?main=${categoryId}&sub=${categorySub}&itemId=${productId}`;
                             }                            
@@ -242,11 +242,21 @@ const PurchaseTemplate = (props) => {
                                         
                                     </PurchaseTd>
                                     <PurchaseTd>
-                                        {page === "shoppingcart" ?
-                                            (<input type="number" min="1" max="20" name="volume" value={volume} />)
-                                            :
+                                        {page === 'shoppingcart' ? (
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                max="20"
+                                                name="volume"
+                                                value={volume}
+                                                onChange={
+                                                    onCartVolumeChange
+                                                }
+                                                id={id}
+                                            />
+                                        ) : (
                                             volume
-                                        }
+                                        )}
                                     </PurchaseTd>
                                     
                                     <PurchaseTd>{fixMile}</PurchaseTd>                                                             

@@ -69,25 +69,17 @@ router.post("/cartIn", async(req, res) => {
 });
 
 
-// 장바구니 수량 업데이트 (PATCH /api/purchase/cartVolUpdate)
-router.patch("/cartVolUpdate", async(req, res) => { 
-/*     
-    1) 장바구니 창에서 수량을 업데이트 할 경우. 
-    2) 이미 카트에 같은 상품이 있는데 해당 상품 페이지에서 또 추가할 때. ==> 수량 정보가져와서 상품페이지에서 입력한 수량정보와 ++
-    -- 이 두 사항의 flag는 type이란 속성으로 처리하기로. (productId, selcolor, selsize가 같을 경우 --> 2)의 상황임 )
-    -- 201207_1557: 2)번 상황 cartIn에서 처리.
-*/
-    const {volume} = req.body;
-    let {type} = req.body;
-    type = type ? type : "";    // 공사중...
+// 장바구니 수량 업데이트 (PATCH /api/purchase/updCartVolume)
+router.patch("/updCartVolume", async(req, res) => { 
+    const {id, volume} = req.body;
 
     try {
-        const cartVolUpdate = await ShoppingCart.update({volume}, { where: { id } });
-
+        const updCartVolume = await ShoppingCart.update({volume}, { where: { id } });
+        
         return res.status(200).json({
             error: null,
             success: true,      
-            data: cartVolUpdate,
+            data: updCartVolume,
         });
 
     } catch (error) {
