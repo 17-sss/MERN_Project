@@ -110,20 +110,28 @@ const purchase = handleActions(
             const { form, addValue } = payload;
             let { key, value } = payload;            
 
+            let keyBak = '';
             if (form === 'cartFormStatus') {
-                if (key === 'volume') {
-                    key = 'items';
+                if (key === 'volume' || key === 'select' || key === 'allselect') {
+                    keyBak = key;
 
-                    const items = state[form][key];
-                    let item = items.find((v) => v.id === addValue);
-                    let itemIndex = items.findIndex((v) => v.id === addValue);
+                    if (key === 'select' || key === 'allselect') 
+                        key = 'checkedItems'
+                    else if (key === 'volume')
+                        key = 'items';        
 
-                    if ('volume' in item) {                    
-                        item['volume'] = Number(value);
-                        items.splice(itemIndex, 1, item);
-                        value = items;                    
-                    } else  return;
-                } 
+                    if (keyBak === 'volume') {          // volume의 경우만 여기서 처리                 
+                        const items = state[form][key];     // state[cartFormStatus][items]
+                        let item = items.find((v) => v.id === addValue);
+                        let itemIndex = items.findIndex((v) => v.id === addValue);
+
+                        if ('volume' in item) {                    
+                            item['volume'] = Number(value);
+                            items.splice(itemIndex, 1, item);
+                            value = items;                    
+                        } else  return;
+                    }                    
+                }                   
             }
 
             return {
@@ -132,9 +140,27 @@ const purchase = handleActions(
                     ...state[form],
                     [key]:
                         form === 'cartFormStatus' && key === 'checkedItems'
-                            ? addValue
-                                ? state[form][key].concat(Number(value))
-                                : state[form][key].filter((v) => v !== Number(value))
+                            ? keyBak === 'select'
+                                ? addValue
+                                    ? state[form][key].concat(Number(value))
+                                    : state[form][key].filter(
+                                          (v) => v !== Number(value),
+                                      )
+                                : keyBak === 'allselect'
+                                ? Boolean(value)
+                                    ? // 이리하니까 checkedItems에 장바구니 아이템 고유 id 잘들감..
+                                      state['cartFormStatus']['items'].map((v) => v.id,)
+                                    /*  
+                                        // [ERR!!] 이리하면 전부선택  [[id], [id]] 요론식으로 들감..
+                                        state['cartFormStatus']['items'].map((v, i) => {                                            
+                                            if (state[form][key].indexOf(v.id) <= -1)
+                                                return state[form][key].concat(Number(v.id))
+                                            else 
+                                                return state[form][key];                                                                                        
+                                        })
+                                    */
+                                    : []
+                                : value
                             : value,
                 },
             };

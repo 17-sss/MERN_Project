@@ -113,9 +113,10 @@ const PurchaseBtn = styled.button`
 // ---------------------------------------------------/
 
 const PurchaseTemplate = (props) => {
-    const { etcs, data, events } = props;
+    const { etcs, data, events, refs } = props;
     const { page, colInfo } = etcs;    
     const { onChange } = events;
+    const { allSelectRef } = refs;
 
     return (
         <PurchaseWrapper>
@@ -147,7 +148,9 @@ const PurchaseTemplate = (props) => {
                                         {v === 'check' ? (
                                             <input
                                                 type="checkbox"
-                                                name="allselect"
+                                                name="allselect"  
+                                                onChange={onChange}                                              
+                                                ref={allSelectRef}
                                             />
                                         ) : (
                                             v
@@ -185,10 +188,10 @@ const PurchaseTemplate = (props) => {
                                             <input
                                                 type="checkbox"
                                                 name="select"
-                                                // checked={Array(data.checkedItems).indexOf(id) > -1} // 연구..필..
+                                                checked={data.checkedItems.indexOf(id) > -1}
                                                 onChange={onChange}
                                                 id = {id}
-                                            />
+                                            />                                            
                                         </PurchaseTd>
                                     )}
 

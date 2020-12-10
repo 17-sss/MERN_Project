@@ -42,6 +42,7 @@ const ProductDetailContainer = (props) => {
     }, []);
 
     useEffect(() => {
+        dispatch(initializeProductForm({form: "productStatus"}));
         dispatch(initializeProductForm({form: "productSelectItems"}));
         dispatch(initializeReview());
         dispatch(initializeQA());

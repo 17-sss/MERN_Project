@@ -1,5 +1,5 @@
 // 구매 / 장바구니 Container
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -32,64 +32,16 @@ const PurchaseContainer = (props) => {
         },
     );
 
-    // 2. useState
+    // 2. useState & useRef
     const [data, setData] = useState(null);
     const [priceLoading, setPriceLoading] = useState(false);
     const [curUserId, setCurUserId] = useState(-1);
+    const allSelectRef = useRef(null);
 
-    // [2] 이벤트
-    const onChange = useCallback(
-        (e) => {
-            const { id, name: key, checked } = e.target;
-            let { value } = e.target;
-            let form =
-                page === 'shoppingcart' ? 'cartFormStatus' : 'buyFormStatus';
-
-            let changePurchaseParams = { form, key, value };
-
-            if (form === 'cartFormStatus') {
-                if (key === 'volume') {
-                    if (Number(value) > 20) value = 20;
-                    else if (Number(value) <= 0) value = 1;
-                }
-
-                /* 
-                    - dispatch changePurchase의 매개변수 설명
-                        1. addValue 사용할 경우
-                            1) form이 cartFormStatus이며 name(key)이 volume일 경우
-                                리덕스 모듈 (purchase)에서 cartFormStatus 폼안의 items를 수정함.
-                        2. key와 value가 e.target에서 가져온 값이 아닌 다른 값으로 쓸 경우
-                            1) form이 cartFormStatus이며 name(key)이 select거나 allselect일 경우
-                                key는 checkedItems가 되며, value는 id값. (id 값이 checkedItems에 들어가거나 수정되게 함)
-                */
-                changePurchaseParams = {
-                    form,
-                    key:
-                        key === 'select' || key === 'allselect'
-                            ? 'checkedItems'
-                            : key,
-                    value: key === 'select' ? id : value,
-                    addValue:
-                        key === 'volume'
-                            ? id && Number(id)
-                            : key === 'select'
-                            ? checked
-                            : '',
-                };
-            }
-
-            dispatch(changePurchase(changePurchaseParams));
-
-            if (form === 'cartFormStatus' && key === 'volume') {
-                dispatch(updCartVolume({ id, volume: value }));
-                setPriceLoading(false);
-            }
-        },
-        [dispatch, page],
-    );
-
-    // [3] 데이터 관련
-    // 1. Normal & etc ----------------------
+        
+    
+    // [2] 데이터 관련
+    // 1. Normal & etc
     // 1) 테이블 행 정보 세팅
     const setColInfo = (page) => {
         const infoTmp = {
@@ -108,8 +60,9 @@ const PurchaseContainer = (props) => {
         return infoTmp;
     };
     const colInfo = setColInfo(page);
-
-    // 2. useEffect ----------------------
+    // -------------
+    
+    // 2. useEffect 
     // 1-1) 초기화: 유저
     useEffect(() => {
         setCurUserId(userData && userData.data ? userData.data.id : -1);
@@ -242,6 +195,76 @@ const PurchaseContainer = (props) => {
             else setPriceLoading(true);
         }
     }, [priceLoading, cartFormStatus, page, dispatch]);
+
+    // 4) 장바구니 상품들의 체크박스에 따른 전체선택 체크박스 제어    
+    useEffect(() => {        
+        if (page !== 'shoppingcart' || !cartFormStatus) return;
+        const { items, checkedItems } = cartFormStatus;
+        if (!items || !checkedItems) return;
+        if (!items instanceof Array || !checkedItems instanceof Array) return;        
+                    
+        if (cartFormStatus.checkedItems.length === cartFormStatus.items.length) 
+            allSelectRef.current.checked = true
+        else
+            allSelectRef.current.checked = false;               
+    }, [cartFormStatus, page]);
+    
+
+    // -------------
+
+    // 3. 이벤트
+    // 1) onChange
+    const onChange = useCallback(
+        (e) => {            
+            const { id, name: key, checked } = e.target;
+            let { value } = e.target;
+            let form =
+                page === 'shoppingcart' ? 'cartFormStatus' : 'buyFormStatus';
+
+            let changePurchaseParams = { form, key, value };
+
+            if (form === 'cartFormStatus') {
+                if (key === 'volume') {
+                    if (Number(value) > 20) value = 20;
+                    else if (Number(value) <= 0) value = 1;
+                } 
+                /* 
+                    - dispatch changePurchase의 매개변수 설명
+                        1. addValue 사용할 경우 (form이 cartFormStatus)
+                            1) name(key)이 volume일 경우
+                                리덕스 모듈 (purchase)에서 cartFormStatus 폼안의 items를 수정함.
+                        2. key와 value가 e.target에서 가져온 값이 아닌 다른 값으로 쓸 경우
+                            1) name(key)이 select일 경우
+                                key는 checkedItems가 되며, value는 id값. (id 값이 checkedItems에 들어가거나 수정되게 함)
+                */
+                changePurchaseParams = {
+                    form,
+                    key,
+                    value:
+                        key === 'select'
+                            ? id
+                            : key === 'allselect'
+                            ? checked
+                            : value,
+                    addValue:
+                        key === 'volume'
+                            ? id && Number(id)
+                            : key === 'select'
+                            ? checked
+                            : '',
+                };
+            }
+
+            dispatch(changePurchase(changePurchaseParams));
+
+            if (form === 'cartFormStatus' && key === 'volume') {
+                dispatch(updCartVolume({ id, volume: value }));
+                setPriceLoading(false);
+            }
+        },
+        [dispatch, page],
+    );
+
     // ============================================================
 
     return (
@@ -249,6 +272,7 @@ const PurchaseContainer = (props) => {
             data={data}
             etcs={{ page, colInfo }}
             events={{ onChange }}
+            refs={{ allSelectRef }}
         />
     );
 };
