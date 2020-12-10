@@ -115,7 +115,7 @@ const PurchaseBtn = styled.button`
 const PurchaseTemplate = (props) => {
     const { etcs, data, events } = props;
     const { page, colInfo } = etcs;    
-    const { onCartVolumeChange } = events;
+    const { onChange } = events;
 
     return (
         <PurchaseWrapper>
@@ -185,6 +185,9 @@ const PurchaseTemplate = (props) => {
                                             <input
                                                 type="checkbox"
                                                 name="select"
+                                                // checked={Array(data.checkedItems).indexOf(id) > -1} // 연구..필..
+                                                onChange={onChange}
+                                                id = {id}
                                             />
                                         </PurchaseTd>
                                     )}
@@ -230,16 +233,7 @@ const PurchaseTemplate = (props) => {
                                                 ? (threeDigitsComma(calcPrice))
                                                 : (threeDigitsComma(price))
                                             }원
-                                        </b>
-                                        <div style={
-                                            sale && sale <= 0 
-                                                ? {textDecoration:"line-through"} 
-                                                : {display: "none !important"}
-                                            }
-                                        >
-                                           
-                                        </div>
-                                        
+                                        </b>                                        
                                     </PurchaseTd>
                                     <PurchaseTd>
                                         {page === 'shoppingcart' ? (
@@ -250,7 +244,7 @@ const PurchaseTemplate = (props) => {
                                                 name="volume"
                                                 value={volume}
                                                 onChange={
-                                                    onCartVolumeChange
+                                                    onChange
                                                 }
                                                 id={id}
                                             />

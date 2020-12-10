@@ -26,7 +26,15 @@ const [
 
 // 액션 생성 함수 작성
 export const initialPurchase = createAction(INITALIZE_PURCHASE);
-export const changePurchase = createAction(CHANGE_PURCHASE, ({form, key, value}) => ({form, key, value}));
+export const changePurchase = createAction(
+    CHANGE_PURCHASE,
+    ({ form, key, value, addValue } = { addValue: null }) => ({
+        form,
+        key,
+        value,
+        addValue,
+    }),
+);
 export const cartIn = createAction(
     CART_IN,
     ({ volume, selcolor, selsize, productId, userId }) => ({
@@ -71,7 +79,7 @@ const initialState = {
     cart: null,
     cartFormStatus: {
         items: null,
-
+        checkedItems: [],
         allProductPrice: "",     // 상품구매금액
         shippingFee: "",         // 배송비
         totalPrice: "",          // 상품구매금액 + 배송비
@@ -96,18 +104,40 @@ const purchase = handleActions(
             };
         },
 
-        // onChange (일반적인 onChange)
+        // onChange
         [CHANGE_PURCHASE]: (state, action) => {
             const { payload } = action;
-            const { form, key, value } = payload;            
+            const { form, addValue } = payload;
+            let { key, value } = payload;            
+
+            if (form === 'cartFormStatus') {
+                if (key === 'volume') {
+                    key = 'items';
+
+                    const items = state[form][key];
+                    let item = items.find((v) => v.id === addValue);
+                    let itemIndex = items.findIndex((v) => v.id === addValue);
+
+                    if ('volume' in item) {                    
+                        item['volume'] = Number(value);
+                        items.splice(itemIndex, 1, item);
+                        value = items;                    
+                    } else  return;
+                } 
+            }
 
             return {
                 ...state,
                 [form]: {
                     ...state[form],
-                    [key]: value,
-                }
-            }
+                    [key]:
+                        form === 'cartFormStatus' && key === 'checkedItems'
+                            ? addValue
+                                ? state[form][key].concat(Number(value))
+                                : state[form][key].filter((v) => v !== Number(value))
+                            : value,
+                },
+            };
         },
 
         // 장바구니 담기
@@ -156,7 +186,6 @@ const purchase = handleActions(
         // 수량 업데이트 (불러온 데이터 기반)   -- 작업중
         [UPD_CART_VOLUME_SUCCESS]: (state, action) => {
             const { payload: cart } = action;
-            console.log(action);
             return {
                 ...state,
                 cart,

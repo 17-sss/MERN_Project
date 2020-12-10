@@ -6,3 +6,20 @@
     * CSS
         1. CSS 선택자 
             https://lktprogrammer.tistory.com/98
+
+
+
+@@ 201210
+    * 현 프로젝트 관련 메모 (의심, 주의사항)
+        1.  장바구니 상품 수량 조절하는 로직
+            1) 참고해야 하는 파일리스트
+                - frontend
+                    > /container/purchase/PurchaseContainer.js
+                    > /module/purchase.js
+                    > /api/purchase.js
+                - backend
+                    > /routes/purchase.js
+            2) 의심사항 메모
+                -   현재 수량이 업데이트되면, redux 상태 업데이트 후 서버부분 따로 업데이트를 진행하게 만듬.
+                    터지지 않으려나..? 다수의 사용자가 이용하면서 수량 업뎃을 막하면....
+                    > 쿠키 같은거에 저장해뒀다가 로그아웃될 때 업데이트되게 하는건 어떨까. 추후연구
