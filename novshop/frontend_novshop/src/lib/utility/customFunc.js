@@ -95,4 +95,38 @@ export const isEmpty = (param) => {
 // **********************************************************************************
 export const threeDigitsComma = (Anumber) => (Anumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
+// **********************************************************************************
+// 정렬 (그냥 만들어봄) 
+// **********************************************************************************
+export const testSort = (arr, reverse = false) => {
+    if (!arr || !(arr instanceof Array) || arr.length <= 0) return arr
+    if (arr.length > 0) {
+        for (let index = 0; index < arr.length-1; index++) {
+            const num = arr[index];
+            if (typeof num !== "number") 
+                return arr
+        }
+    }
+    if (arr.length < 2) return arr;
+
+    for (let i = 0; i < arr.length; i++) {        
+        for (let j = 0; j < arr.length; j++) {
+            let tmp = 0, tmpI = i, tmpJ = j;
+
+            if (reverse) {
+                tmpI = j
+                tmpJ = i;
+            }
+
+            if (arr[tmpI] < arr[tmpJ]) {    
+                tmp = arr[tmpJ];
+                arr[tmpJ] = arr[tmpI];
+                arr[tmpI] = tmp;
+            }
+        }
+    }    
+    console.log(arr);
+    return arr;
+};
+
 
