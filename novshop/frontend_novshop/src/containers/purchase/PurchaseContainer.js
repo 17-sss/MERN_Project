@@ -38,8 +38,6 @@ const PurchaseContainer = (props) => {
     const [curUserId, setCurUserId] = useState(-1);
     const allSelectRef = useRef(null);
 
-        
-    
     // [2] 데이터 관련
     // 1. Normal & etc
     // 1) 테이블 행 정보 세팅
@@ -61,8 +59,8 @@ const PurchaseContainer = (props) => {
     };
     const colInfo = setColInfo(page);
     // -------------
-    
-    // 2. useEffect 
+
+    // 2. useEffect
     // 1-1) 초기화: 유저
     useEffect(() => {
         setCurUserId(userData && userData.data ? userData.data.id : -1);
@@ -114,6 +112,20 @@ const PurchaseContainer = (props) => {
             cartFormStatus.items &&
             cartFormStatus.items.length > 0
         ) {
+            const onePriceResult = () => {
+                const {
+                    product: { price, sale },
+                    volume,
+                } = cartFormStatus.items[0];
+                
+                const result =
+                    sale > 0 && sale < 1
+                        ? (price - price * sale) * volume
+                        : price * volume;
+                
+                return result;
+            }
+
             const allProductPriceTmp =
                 cartFormStatus.items.length > 1
                     ? cartFormStatus.items.reduce((prev, curr) => {
@@ -145,18 +157,7 @@ const PurchaseContainer = (props) => {
 
                           return Math.round(Number(prevValue + currValue));
                       })
-                    : cartFormStatus.items.map((v) => {
-                          const {
-                              product: { price, sale },
-                              volume,
-                          } = v;
-                          const result =
-                              sale > 0 && sale < 1
-                                  ? (price - price * sale) * volume
-                                  : price * volume;
-
-                          return Math.round(Number(result));
-                      });
+                    : cartFormStatus.items.length === 1 && onePriceResult();
 
             const shippingFeeTmp = allProductPriceTmp >= 30000 ? '무료' : 2500;
             const totalPriceTmp =
@@ -215,7 +216,7 @@ const PurchaseContainer = (props) => {
     // 3. 이벤트
     // 1) onChange
     const onChange = useCallback(
-        (e) => {            
+        (e) => {
             const { id, name: key, checked } = e.target;
             let { value } = e.target;
             let form =
@@ -227,7 +228,7 @@ const PurchaseContainer = (props) => {
                 if (key === 'volume') {
                     if (Number(value) > 20) value = 20;
                     else if (Number(value) <= 0) value = 1;
-                } 
+                }
                 /* 
                     - dispatch changePurchase의 매개변수 설명
                         1. addValue 사용할 경우 (form이 cartFormStatus)
