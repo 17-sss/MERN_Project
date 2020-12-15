@@ -17,3 +17,7 @@ export const getCart = ({ userId }) => {
 export const updCartVolume = ({ id, volume }) => {
     return client.patch('/api/purchase/updCartVolume', { id, volume });
 };
+
+export const delCartGoods = ({ items }) => {
+    return client.post('/api/purchase/delCartGoods', { items });
+};

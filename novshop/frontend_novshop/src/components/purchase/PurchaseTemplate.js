@@ -10,7 +10,7 @@ import {
     StyledTh,
     StyledTd,
     SubjectLink,
-    // EmptyWrapper,
+    EmptyWrapper,
 } from '../common/CommonTableComponents';
 import { threeDigitsComma } from "../../lib/utility/customFunc";
 
@@ -114,11 +114,11 @@ const PurchaseBtn = styled.button`
 
 const PurchaseTemplate = (props) => {
     const { etcs, data, events, refs } = props;
-    const { page, colInfo } = etcs;    
-    const { onChange } = events;
+    const { page, colInfo, allLoadingOK } = etcs;    
+    const { onChange, onItemDeleteClick, onBuyProductClick } = events;
     const { allSelectRef } = refs;
-
-    return (
+        
+    return allLoadingOK && (        
         <PurchaseWrapper>
             {/* == [1] 구매 / 장바구니 공용 ------------------------------------------------------------- */}
             <PurchaseMultiWrapper stype="pagename">
@@ -131,7 +131,9 @@ const PurchaseTemplate = (props) => {
                 </p>
             </PurchaseMultiWrapper>
             
-            <PurchaseMultiWrapper stype="table">
+            <PurchaseMultiWrapper stype="table">                
+            {data && data.items && data.items.length > 0 && (                
+                <>    
                 <PurchaseTable>
                     {/* 장바구니 / 구매 분류 정보 (thead) */}
                     <colgroup>
@@ -161,13 +163,12 @@ const PurchaseTemplate = (props) => {
                     </thead>
 
                     {/* 구매할 상품 리스트 (tbody) */}
-                    <tbody>                        
+                    <tbody>                                                
                         {data && data.items && data.items.length > 0 && data.items.map((v, i) => {
                             const {
                                 product: { image, name, price, sale, mileage, sizes, categoryId, categorySub },
                                 id, selcolor, selsize, volume, productId, /* userId */
                             } = v;
-
 
                             let aLink = '/shopping';
                             if (!categoryId && !categorySub) {
@@ -274,13 +275,13 @@ const PurchaseTemplate = (props) => {
                             <div style={{ marginLeft: '20px' }}>
                                 <PurchaseBtn
                                     name="delselproduct"
-                                    onClick={(e) => alert(e.target.innerHTML)}
+                                    onClick={onItemDeleteClick}
                                 >
                                     선택 상품 삭제
                                 </PurchaseBtn>
                                 <PurchaseBtn
                                     name="cleancart"
-                                    onClick={(e) => alert(e.target.innerHTML)}
+                                    onClick={onItemDeleteClick}
                                 >
                                     장바구니 비우기
                                 </PurchaseBtn>
@@ -332,26 +333,27 @@ const PurchaseTemplate = (props) => {
                     <div style={{ float: 'right', marginTop: '10px' }}>
                         <PurchaseBtn
                             name="buyall"
-                            onClick={(e) => alert(e.target.innerHTML)}
+                            onClick={onBuyProductClick}
                         >
                             전체상품주문
                         </PurchaseBtn>
                         <PurchaseBtn
                             name="buyselect"
-                            onClick={(e) => alert(e.target.innerHTML)}
+                            onClick={onBuyProductClick}
                         >
                             선택상품주문
                         </PurchaseBtn>
                     </div>
                     <ClearEx />
-                </>
+                    </>
                 )}
-
-                {/*                 
+                </>
+            )}
+            {(!data || !data.items || data.items.length <= 0) && (
                 <EmptyWrapper>
                     <span>장바구니가 비어 있습니다.</span>
                 </EmptyWrapper>
-                */}
+            )}
             </PurchaseMultiWrapper>
 
             {/* == [2] 구매 페이지 전용 ------------------------------------------------------------- */}

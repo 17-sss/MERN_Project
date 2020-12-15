@@ -7,6 +7,7 @@ import {
     updCartVolume,
     getCart,
     initialPurchase,
+    delCartGoods
 } from '../../modules/purchase';
 import { threeDigitsComma } from '../../lib/utility/customFunc';
 
@@ -22,12 +23,13 @@ const PurchaseContainer = (props) => {
     } = props;
 
     const dispatch = useDispatch();
-    const { cartFormStatus, buyFormStatus, userData } = useSelector(
-        ({ purchase, user }) => {
+    const { cartFormStatus, buyFormStatus, userData, loading } = useSelector(
+        ({ purchase, user, loading }) => {
             return {
                 cartFormStatus: purchase.cartFormStatus,
                 buyFormStatus: purchase.buyFormStatus,
                 userData: user.user,
+                loading: loading,
             };
         },
     );
@@ -36,6 +38,9 @@ const PurchaseContainer = (props) => {
     const [data, setData] = useState(null);
     const [priceLoading, setPriceLoading] = useState(false);
     const [curUserId, setCurUserId] = useState(-1);
+    const [isUpdateValue, setIsUpdateValue] = useState(false);
+    const [allLoadingOK, setAllLoadingOK] = useState(false);
+
     const allSelectRef = useRef(null);
 
     // [2] 데이터 관련
@@ -61,6 +66,22 @@ const PurchaseContainer = (props) => {
     // -------------
 
     // 2. useEffect
+    
+    // +) loading 체크
+    useEffect(() =>  {      
+        setAllLoadingOK(false);
+
+        const arrTmp = [];          
+        for (const key in loading) 
+            arrTmp.push(loading[key]);            
+            
+        for (let i = 0; i < arrTmp.length; i++) {
+            const flag = arrTmp[i];
+            if (flag) return;
+        }        
+        setAllLoadingOK(true);  
+    }, [loading]);
+
     // 1-1) 초기화: 유저
     useEffect(() => {
         setCurUserId(userData && userData.data ? userData.data.id : -1);
@@ -68,6 +89,8 @@ const PurchaseContainer = (props) => {
 
     // 1-2) 초기화: 페이지
     useEffect(() => {
+        if (isUpdateValue) setIsUpdateValue(false);
+
         dispatch(initialPurchase());
         if (page === 'shoppingcart') setPriceLoading(false);
 
@@ -78,7 +101,7 @@ const PurchaseContainer = (props) => {
                 // 구매 dispatch
             }
         }
-    }, [dispatch, page, curUserId]);
+    }, [dispatch, page, curUserId, isUpdateValue]);
 
     // 2) 불러온 데이터 세팅
     useEffect(() => {
@@ -86,8 +109,8 @@ const PurchaseContainer = (props) => {
             if (!cartFormStatus) return;
             if (
                 cartFormStatus &&
-                cartFormStatus.items &&
-                cartFormStatus.items.length > 0
+                cartFormStatus.items /*&&
+                cartFormStatus.items.length > 0*/
             ) {
                 return setData(cartFormStatus);
             }
@@ -200,7 +223,11 @@ const PurchaseContainer = (props) => {
     // 4) 장바구니 상품들의 체크박스에 따른 전체선택 체크박스 제어    
     useEffect(() => {        
         if (page !== 'shoppingcart' || !cartFormStatus) return;
+        if (cartFormStatus.items && cartFormStatus.items.length <= 0) return;
+        if (!allSelectRef.current) return;
+
         const { items, checkedItems } = cartFormStatus;
+
         if (!items || !checkedItems) return;
         if (!items instanceof Array || !checkedItems instanceof Array) return;        
                     
@@ -266,13 +293,48 @@ const PurchaseContainer = (props) => {
         [dispatch, page],
     );
 
+    // 2) onItemDeleteClick (선택 상품 삭제, 장바구니 비우기)
+    const onItemDeleteClick = useCallback((e) => {
+        if (!cartFormStatus) return;
+        
+        const { name } = e.target;
+        if (name === 'cleancart' && !cartFormStatus.items) return;
+        if (name === 'delselproduct' && !cartFormStatus.checkedItems) return;
+
+        if (cartFormStatus.items.length <= 0 && name === 'cleancart') 
+            return alert('제거할 상품이 없습니다!')
+        else if (cartFormStatus.checkedItems.length <= 0 && name === 'delselproduct') 
+            return alert('제거하려는 상품을 선택해주세요!');
+        
+        let items = [];
+
+        if (name === 'cleancart') {
+            const tmpItems = cartFormStatus.items;
+            tmpItems.map((v) => items.push(Number(v.id)));            
+        } else if (name === 'delselproduct') {
+            items = cartFormStatus.checkedItems;
+        } else return;        
+            
+        dispatch(delCartGoods({ items }));
+        setIsUpdateValue(true);
+    }, [dispatch, cartFormStatus]);
+
+    // 3) onBuyProductClick (전체상품 주문, 선택 상품 주문용)
+    const onBuyProductClick = useCallback((e) => {
+        const { name } = e.target;
+
+        name === 'buyall'
+            ? alert('buyall')
+            : name === 'buyselect' && alert('buyselect');
+    }, [])
+
     // ============================================================
 
     return (
         <PurchaseTemplate
             data={data}
-            etcs={{ page, colInfo }}
-            events={{ onChange }}
+            etcs={{ page, colInfo, allLoadingOK }}
+            events={{ onChange, onItemDeleteClick, onBuyProductClick }}
             refs={{ allSelectRef }}
         />
     );

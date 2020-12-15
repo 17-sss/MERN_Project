@@ -127,5 +127,47 @@ router.post("/getCart", async(req, res) => {
     }
 });
 
+// 선택 상품 삭제, 장바구니 비우기   (POST /api/purchase/delCartGoods)
+router.post("/delCartGoods", async (req, res) => {
+    const { items } = req.body;
+    
+    if (items.length <= 0) {
+        return res.status(455).json({
+            error,
+            code: -2,
+            message: '제거할 상품이 없습니다. 서버 오류일 수 있습니다.',
+        });
+    };
+
+    let isErr = null;
+
+    for (let i = 0; i < items.length; i++) {
+        const id = Number(items[i]);
+        console.log(id);
+        if (typeof id !== "number") continue;
+
+        try {
+            await ShoppingCart.destroy({where: { id }});            
+        } catch(error) {
+            isErr = error;
+            break;
+        }
+    }
+
+    if (isErr) {
+        return res.status(500).json({
+            isErr,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    } else {
+        return res.status(200).json({
+            error: null,
+            success: true,            
+        });
+    }
+});
+
+
 
 export default router;

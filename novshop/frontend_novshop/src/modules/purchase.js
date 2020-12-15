@@ -20,6 +20,11 @@ const [
     UPD_CART_VOLUME_SUCCESS,
     UPD_CART_VOLUME_FAILURE,
 ] = createRequestActionTypes('purchase/UPD_CART_VOLUME');
+const [
+    DEL_CART_GOODS,
+    DEL_CART_GOODS_SUCCESS,
+    DEL_CART_GOODS_FAILURE,
+] = createRequestActionTypes('purchase/DEL_CART_GOODS');
 
 
 // =======================================================================
@@ -50,17 +55,23 @@ export const updCartVolume = createAction(
     UPD_CART_VOLUME,
     ({ id, volume }) => ({ id, volume }),
 );
+export const delCartGoods = createAction(
+    DEL_CART_GOODS,
+    ({ items }) => ({ items }),
+);
 // =======================================================================
 
 // 사가 생성
 const cartInSaga = createRequestSaga(CART_IN, purchaseAPI.cartIn);
 const getCartSaga = createRequestSaga(GET_CART, purchaseAPI.getCart);
 const updCartVolumeSaga = createRequestSaga(UPD_CART_VOLUME, purchaseAPI.updCartVolume);
+const delCartGoodsSaga = createRequestSaga(DEL_CART_GOODS, purchaseAPI.delCartGoods);
 
 export function* purchaseSaga() {
     yield takeLatest(CART_IN, cartInSaga);
     yield takeLatest(GET_CART, getCartSaga);
     yield takeLatest(UPD_CART_VOLUME, updCartVolumeSaga);
+    yield takeLatest(DEL_CART_GOODS, delCartGoodsSaga);
 }
 // =======================================================================
 
@@ -88,6 +99,35 @@ const initialState = {
     purchaseError: null,
 };
 // =======================================================================
+
+// purchase 리듀서용 함수들 (SUCCESS or FAILURE)
+// 1) okNotokFuncCart, for Cart
+const okNotokFuncCart = (type, status) => {
+    
+    const successFunc = (state, action) => {
+        const { payload } = action;
+
+        return {
+            ...state,
+            cart: type !== "cartFormStatus" ? payload : state['cart'],
+            cartFormStatus: type === "cartFormStatus" ?  payload : state['cartFormStatus'],
+            purchaseError: null,
+        };
+    }
+
+    const failureFunc = (state, action) => {
+        const { payload: purchaseError } = action;
+    
+        return {
+            ...state,
+            cart: type !== "cartFormStatus" ? null : state['cart'],
+            cartFormStatus: type === "cartFormStatus" ?  null : state['cartFormStatus'],            
+            purchaseError,
+        };
+    };
+    
+    return (status === 'failure' ? failureFunc : successFunc);
+}   
 
 // 리듀서
 const purchase = handleActions(
@@ -209,25 +249,15 @@ const purchase = handleActions(
             };
         },
 
-        // 수량 업데이트 (불러온 데이터 기반)   -- 작업중
-        [UPD_CART_VOLUME_SUCCESS]: (state, action) => {
-            const { payload: cart } = action;
-            return {
-                ...state,
-                cart,
-                purchaseError: null,
-            };
-        },
-        [UPD_CART_VOLUME_FAILURE]: (state, action) => {
-            const { payload: purchaseError } = action;
+        // 수량 업데이트 (불러온 데이터 기반) 
+            // (추후 수량 자체는.. 음 쿠키에 넣어둬야하나 세션에 넣을까.. 수량 변경될때마다 DB변경되는건 너무.. ㅠ)
+        [UPD_CART_VOLUME_SUCCESS]: okNotokFuncCart("cart", "success"),
+        [UPD_CART_VOLUME_FAILURE]: okNotokFuncCart("cart", "failure"),
 
-            return {
-                ...state,
-                cart: null,
-                purchaseError,
-            };
-        },
-        
+        // 선택 상품 삭제 or 장바구니 비우기
+        [DEL_CART_GOODS_SUCCESS]: okNotokFuncCart("cart", "success"),
+        [DEL_CART_GOODS_FAILURE]: okNotokFuncCart("cart", "failure"),
+
     },
     initialState,
 );
