@@ -19,7 +19,7 @@ import { threeDigitsComma } from "../../lib/utility/customFunc";
 // 2) PurchaseMultiWrapper
 const PurchaseMultiWrapper = styled(CommonTableMultiWrapper)`
     ${(props) => {
-        const { stype } = props;
+        const { stype, margin } = props;
 
         return stype === 'totalinfo'
             ? css`
@@ -39,10 +39,10 @@ const PurchaseMultiWrapper = styled(CommonTableMultiWrapper)`
             : stype === 'buy' &&
                   css`
                       width: 100%;                                            
-                      margin-bottom: 10px;
+                      margin: ${() => margin || "0 0 10px 0"};
                       
                       .buyInfoWrap {
-                          border-top: 1px solid #e3e3e3;
+                          /* border-top: 1px solid #e3e3e3; */
                           padding: 10px 0;
                           margin-top: 20px;
                       }
@@ -74,7 +74,7 @@ const PurchaseTable = styled(StyledTable)`
     ${(props) =>
         props.mode === 'buy'
             ? css`
-                  border: 1px solid #e3e3e3;
+                  border: none;
               `
             : css`
                   border-top: 1px solid #e3e3e3;
@@ -109,6 +109,13 @@ const PurchaseTd = styled(StyledTd)`
         }
     }
 `;
+
+// 1-4) PurchaseBuyTr (no import, 구매창의 주문정보 입력부분용)
+const PurchaseBuyTr = styled.tr`
+    ${props => props.noStyle || css`border-bottom: 1px solid #e3e3e3;`};    
+    line-height: 30px;
+`;
+
 
 // 2) PurchaseIsSaleP: 세일 여부에 따른 원가격표시
 const PurchaseIsSaleP = styled.p`
@@ -388,10 +395,11 @@ const PurchaseTemplate = (props) => {
 
             {/* == [2] 구매 페이지 전용 ------------------------------------------------------------- */}
             {page === 'buy' &&
-                [...Array(2)].map((v, index) => {
-                    console.log(v, index);  // 2번째 index는 배송 정보로!
+                [...Array(2)].map((v, index) => {  
+                    console.log(index)                  
                     return (
-                        <PurchaseMultiWrapper stype="buy">
+                        <>
+                        <PurchaseMultiWrapper stype="buy" margin={index===0 && "0 0 50px 0"}>
                             <div className="buyInfoWrap">
                                 <h6 className="float_left">주문 정보</h6>
                                 <h6 className="float_right">
@@ -408,7 +416,7 @@ const PurchaseTemplate = (props) => {
                                 </colgroup>
 
                                 <tbody>
-                                    <tr>
+                                    <PurchaseBuyTr>
                                         <th scope="row">
                                             주문하시는 분
                                             <span className="required_star">
@@ -424,8 +432,8 @@ const PurchaseTemplate = (props) => {
                                                 autoComplete="off"
                                             />
                                         </td>
-                                    </tr>
-                                    <tr>
+                                    </PurchaseBuyTr>
+                                    <PurchaseBuyTr>
                                         <th scope="row">
                                             주소
                                             <span className="required_star">
@@ -463,9 +471,9 @@ const PurchaseTemplate = (props) => {
                                                 readOnly="1"
                                             />
                                         </td>
-                                    </tr>
+                                    </PurchaseBuyTr>
 
-                                    <tr>
+                                    <PurchaseBuyTr noStyle>
                                         <th scope="row">
                                             연락처
                                             <span className="required_star">
@@ -503,10 +511,13 @@ const PurchaseTemplate = (props) => {
                                                 size="4"
                                             />
                                         </td>
-                                    </tr>
+                                    </PurchaseBuyTr>
                                 </tbody>
                             </PurchaseTable>
+                            
                         </PurchaseMultiWrapper>
+                        {index === 0 && <hr/>}
+                        </>
                     );
                 })}
             
