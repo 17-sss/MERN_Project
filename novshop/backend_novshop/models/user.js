@@ -9,11 +9,24 @@ module.exports = (sequelize, DataTypes) => (
             type: DataTypes.STRING(100),
             allowNull: false,
         },
-        usernick: {
+        username: {
             type: DataTypes.STRING(50),
             allowNull: false,            
         },
-        authority: {    // 유저 권한 (0: 일반, 1: 운영진, 2: 최고관리자)
+        address: {
+            type: DataTypes.STRING(1000),
+            allowNull: false,          
+        },
+        phonenumber: {
+            type: DataTypes.STRING(50),
+            allowNull: false,  
+        },
+        email: {
+            type: DataTypes.STRING(100),
+            allowNull: false,  
+        },
+    // 유저 권한 (0: 일반, 1: 운영진, 2: 최고관리자)
+        authority: {    
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,    

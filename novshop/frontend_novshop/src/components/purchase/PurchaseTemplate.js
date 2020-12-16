@@ -38,22 +38,52 @@ const PurchaseMultiWrapper = styled(CommonTableMultiWrapper)`
               `
             : stype === 'buy' &&
                   css`
-                      width: 100%;                      
-                      height: 10rem; // 추후제거
-                      border: 1px solid black;
+                      width: 100%;                                            
                       margin-bottom: 10px;
+                      
+                      .buyInfoWrap {
+                          border-top: 1px solid #e3e3e3;
+                          padding: 10px 0;
+                          margin-top: 20px;
+                      }
+
+                      .float_left {
+                          display: inline-block;
+                          float: left;
+                      }
+                      .float_right {
+                          display: inline-block;
+                          float: right;
+                      }
+                      span.required_star {
+                          color: red;
+                          font-weight: bold;    
+                          font-size: 12pt;                      
+                          padding: 0 3px;                          
+                      }
                   `;
     }}
 `;
+
+// 3) 
 // ---------------------------------------------------/
 
 // [2] Table 관련
 // 1-1) table (import)
 const PurchaseTable = styled(StyledTable)`
-    border-top: 1px solid #e3e3e3;
-    border-bottom: 1px solid #e3e3e3;
+    ${(props) =>
+        props.mode === 'buy'
+            ? css`
+                  border: 1px solid #e3e3e3;
+              `
+            : css`
+                  border-top: 1px solid #e3e3e3;
+                  border-bottom: 1px solid #e3e3e3;
+              `}
+
     font-size: 10pt;
 `;
+
 
 // 1-2) th (import)
 const PurchaseTh = styled(StyledTh)`
@@ -114,11 +144,11 @@ const PurchaseBtn = styled.button`
 
 const PurchaseTemplate = (props) => {
     const { etcs, data, events, refs } = props;
-    const { page, colInfo, allLoadingOK } = etcs;    
+    const { page, colInfo, phoneFrontList } = etcs;    
     const { onChange, onItemDeleteClick, onBuyProductClick } = events;
     const { allSelectRef } = refs;
         
-    return allLoadingOK && (        
+    return (        
         <PurchaseWrapper>
             {/* == [1] 구매 / 장바구니 공용 ------------------------------------------------------------- */}
             <PurchaseMultiWrapper stype="pagename">
@@ -351,17 +381,134 @@ const PurchaseTemplate = (props) => {
             )}
             {(!data || !data.items || data.items.length <= 0) && (
                 <EmptyWrapper>
-                    <span>장바구니가 비어 있습니다.</span>
+                    <span>{page === "buy" ? '구매할 상품이 없습니다.' : '장바구니가 비어 있습니다.'}</span>
                 </EmptyWrapper>
             )}
             </PurchaseMultiWrapper>
 
             {/* == [2] 구매 페이지 전용 ------------------------------------------------------------- */}
-            {page === "buy" && (
-                <PurchaseMultiWrapper stype="buy">
-                    <span>유저 정보 (주소 등)</span>
-                </PurchaseMultiWrapper>
-            )}
+            {page === 'buy' &&
+                [...Array(2)].map((v, index) => {
+                    console.log(v, index);  // 2번째 index는 배송 정보로!
+                    return (
+                        <PurchaseMultiWrapper stype="buy">
+                            <div className="buyInfoWrap">
+                                <h6 className="float_left">주문 정보</h6>
+                                <h6 className="float_right">
+                                    <span className="required_star">*</span>
+                                    필수입력사항
+                                </h6>
+                                <ClearEx />
+                            </div>
+
+                            <PurchaseTable mode="buy">
+                                <colgroup>
+                                    <col style={{ width: '139px' }} />
+                                    <col style={{ width: 'auto' }} />
+                                </colgroup>
+
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            주문하시는 분
+                                            <span className="required_star">
+                                                *
+                                            </span>
+                                        </th>
+                                        <td>
+                                            <input
+                                                name="orderUserName"
+                                                type="text"
+                                                // onChange={onChange}
+                                                // value={form.email}
+                                                autoComplete="off"
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            주소
+                                            <span className="required_star">
+                                                *
+                                            </span>
+                                        </th>
+                                        <td>
+                                            <input
+                                                name="orderUserPostNo"
+                                                type="text"
+                                                // onChange={onChange}
+                                                // value={form.email}
+                                                placeholder="우편번호"
+                                                readOnly="1"
+                                            />
+                                            {/* 여기에 우편번호 API 추가!!!!!!!!!!! */}
+                                            <br />
+                                            <input
+                                                name="orderUserAddr1"
+                                                type="text"
+                                                // onChange={onChange}
+                                                // value={form.email}
+                                                placeholder="기본주소"
+                                                size="40"
+                                                readOnly="1"
+                                            />
+                                            <br />
+                                            <input
+                                                name="orderUserAddr2"
+                                                type="text"
+                                                // onChange={onChange}
+                                                // value={form.email}
+                                                placeholder="나머지주소 (선택입력가능)"
+                                                size="40"
+                                                readOnly="1"
+                                            />
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="row">
+                                            연락처
+                                            <span className="required_star">
+                                                *
+                                            </span>
+                                        </th>
+                                        <td>
+                                            <select
+                                                name="orderUserPhoneNumSelect"
+                                                // onChange={onChange}
+                                                // defaultValue
+                                            >
+                                                {phoneFrontList.map((v) => (
+                                                    <option value={v}>
+                                                        {v}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            -
+                                            <input
+                                                name="orderUserPhoneNum1"
+                                                type="text"
+                                                // onChange={onChange}
+                                                // value={form.email}
+                                                maxLength="4"
+                                                size="4"
+                                            />
+                                            -
+                                            <input
+                                                name="orderUserPhoneNum2"
+                                                type="text"
+                                                // onChange={onChange}
+                                                // value={form.email}
+                                                maxLength="4"
+                                                size="4"
+                                            />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </PurchaseTable>
+                        </PurchaseMultiWrapper>
+                    );
+                })}
             
         </PurchaseWrapper>
     );

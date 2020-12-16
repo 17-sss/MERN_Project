@@ -63,11 +63,14 @@ export const login = createAction(LOGIN, ({ userid, userpwd }) => {
 });
 export const register = createAction(
     REGISTER,
-    ({ userid, usernick, userpwd }) => {
+    ({ userid, userpwd, username, address, phonenumber, email }) => {
         return {
-            userid,
-            usernick,
+            userid,            
             userpwd,
+            username,
+            address, 
+            phonenumber, 
+            email
         };
     },
 );
@@ -86,9 +89,12 @@ export function* authSaga() {
 const initialState = {
     register: {
         userid: '',
-        usernick: '',
+        username: '',
         userpwd: '',
         userpwdConfirm: '',
+        address: '',
+        phonenumber: '',
+        email: '',
     },
     login: {
         userid: '',

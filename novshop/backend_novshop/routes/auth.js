@@ -26,7 +26,7 @@ router.post('/login',
 
 // 회원가입 (POST /api/auth/register)
 router.post('/register', async (req, res /* next */) => {
-    const { userid, userpwd, usernick } = req.body;
+    const { userid, userpwd, username, address, phonenumber, email } = req.body;
 
     try {
         const exUser = await User.findOne({ where: { userid } });
@@ -51,7 +51,10 @@ router.post('/register', async (req, res /* next */) => {
         await User.create({
             userid,
             userpwd: hash,
-            usernick,
+            username,
+            address, 
+            phonenumber, 
+            email
         });
         
         return res.status(200).json({

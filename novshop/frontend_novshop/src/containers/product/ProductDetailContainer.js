@@ -5,21 +5,23 @@ import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, ini
 import { createReview, getProductReview, initializeReview } from '../../modules/review';
 import { getProductQA, initializeQA } from '../../modules/qa';
 import { cartIn } from "../../modules/purchase";
+import { objectFlagIsAllReady } from '../../lib/utility/customFunc';
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
-
 
 const ProductDetailContainer = (props) => {
     const {query, history } = props;
     const {main: categoryId, sub: categorySub, itemId: id} = query;    
     const dispatch = useDispatch();
-    const {productStatus, productSelectItems, reviewStatus, qaStatus, userData } = useSelector(({product, review, qa, user}) => {
+    const {productStatus, productSelectItems, reviewStatus, qaStatus, userData, loading } 
+        = useSelector(({product, review, qa, user, loading}) => {
         return {
             productStatus: product.productStatus,
             productSelectItems: product.productSelectItems,
             reviewStatus: review.reviewStatus,
             qaStatus: qa.qaStatus,
             userData: user.user,
+            loading: loading,
         }
     });
 
@@ -28,17 +30,27 @@ const ProductDetailContainer = (props) => {
         
     const [imgClientSize, setImgClientSize] = useState({width: 0, height: 0});
     const [errorMessage, setErrorMessage] = useState('');
+    const [allLoadingOK, setAllLoadingOK] = useState(false);
+    
     const userIdRef = useRef();
     const imgRef = useRef();    
 
     userIdRef.current = (userData && userData.data) ? userData.data.id : -1;
 
-    useEffect( () => {        
+
+    // +) loading 체크
+    useEffect(() =>  {      
+        setAllLoadingOK(false);
+        const bIsOK = objectFlagIsAllReady(loading);        
+        setAllLoadingOK(bIsOK);  
+    }, [loading]);
+
+    useEffect( () => {      
+        if (!imgRef.current) return;
         setImgClientSize({
             width: imgRef.current.clientWidth,
             height: imgRef.current.clientHeight,
         });
-        
     }, []);
 
     useEffect(() => {
@@ -206,7 +218,7 @@ const ProductDetailContainer = (props) => {
     const imgDivInfo = {imgRef, imgClientSize};
 
     // render
-    return (
+    return allLoadingOK && (
         <ProductDetailTemplate 
             productData = {productData}     // productStatus 기반
             productSelectItems = {productSelectItems}            

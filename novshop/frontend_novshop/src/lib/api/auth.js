@@ -8,14 +8,14 @@ export const login = ({userid, userpwd}) => {
 }
 
 // 회원가입
-export const register = async ({userid, userpwd, usernick}) => {    
-    let options = createAxiosOptions('POST', '/api/auth/register', {userid, userpwd, usernick});
+export const register = async ({userid, userpwd, username, address, phonenumber, email}) => {    
+    let options = createAxiosOptions('POST', '/api/auth/register', {userid, userpwd, username, address, phonenumber, email});
     let response = await axios(options);    
     return response;    
 }
 /*
-export const register = ({userid, userpwd, usernick}) => {    
-    return client.post('/api/auth/register', {userid, userpwd, usernick});
+export const register = ({userid, userpwd, username}) => {    
+    return client.post('/api/auth/register', {userid, userpwd, username});
 };
 */
 

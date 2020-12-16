@@ -11,18 +11,20 @@ import ProductTemplate, {
     ProductItemUpdate,
     ProductManament,
 } from '../../components/product/ProductTemplate';
+import { objectFlagIsAllReady } from '../../lib/utility/customFunc';
 
 const ProductContainer = (props) => {
     // [1] 데이터 관련 START ====
     const { query, history } = props;
 
     const dispatch = useDispatch();
-    const { productStatus, productLoading, userData } = useSelector(
+    const { productStatus, userData, loading } = useSelector(
         ({ product, loading, user }) => {
             return {
                 productStatus: product.productStatus,
-                productLoading: loading['GET_ALL_PRODUCT'],
+                loading: loading,
                 userData: user.user,
+                
             };
         },
     );
@@ -34,11 +36,19 @@ const ProductContainer = (props) => {
     const [imgHeight, setImgHeight] = useState(0);
     const [isDelete, setIsDelete] = useState(false);
     const [visibleOption, setVisibleOption] = useState(false);
+    const [allLoadingOK, setAllLoadingOK] = useState(false);
 
     const colRef = useRef(null);
     const imgRef = useRef(null);
 
     const userAuthority = userData && userData.data && userData.data.authority;
+
+    // +) loading 체크
+    useEffect(() =>  {      
+        setAllLoadingOK(false);
+        const bIsOK = objectFlagIsAllReady(loading);        
+        setAllLoadingOK(bIsOK);  
+    }, [loading]);
 
     // 상품 데이터 불러옴
     useEffect(() => {        
@@ -199,7 +209,7 @@ const ProductContainer = (props) => {
     };
     // ---------------------------------------|
 
-    return !productLoading &&
+    return allLoadingOK &&
         productStatus &&
         productStatus.data &&
         productStatus.data.length > 0 ? (

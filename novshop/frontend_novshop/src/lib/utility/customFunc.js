@@ -129,4 +129,24 @@ export const testSort = (arr, reverse = false) => {
     return arr;
 };
 
+// **********************************************************************************
+// 리덕스 Loading 개체 안에 있는 Flag들 (boolean 값) 전부 체크. 
+// 하나라도 loading중이면 (true)면 false 리턴
+// **********************************************************************************
+export const objectFlagIsAllReady = (aObj) => {
+    let bIsReady = true;
 
+    const arrTmp = [];          
+    for (const key in aObj) 
+        arrTmp.push(aObj[key]);            
+        
+    for (let i = 0; i < arrTmp.length; i++) {
+        const flag = arrTmp[i];
+        if (flag) {
+            bIsReady = false;
+            break;
+        };
+    }  
+
+    return bIsReady;
+};

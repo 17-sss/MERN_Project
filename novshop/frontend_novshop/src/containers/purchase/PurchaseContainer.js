@@ -9,7 +9,7 @@ import {
     initialPurchase,
     delCartGoods
 } from '../../modules/purchase';
-import { threeDigitsComma } from '../../lib/utility/customFunc';
+import { objectFlagIsAllReady, threeDigitsComma } from '../../lib/utility/customFunc';
 
 import PurchaseTemplate from '../../components/purchase/PurchaseTemplate';
 
@@ -40,8 +40,22 @@ const PurchaseContainer = (props) => {
     const [curUserId, setCurUserId] = useState(-1);
     const [isUpdateValue, setIsUpdateValue] = useState(false);
     const [allLoadingOK, setAllLoadingOK] = useState(false);
-
     const allSelectRef = useRef(null);
+
+    // 3. ETC
+    // phoneFrontList, 구매창 연락처 앞부분 리스트(지역번호, 휴대폰 앞 번호 등) (Option 태그에 사용)
+    const phoneFrontList = [            
+        '010', '011', '016', '017', '018', '019',
+        '02', '031', '032', '033', 
+        '041', '042', '043', '044', 
+        '051', '052', '053', '054', '055',
+        '061', '062', '063', '064',
+        '0502', '0503', '0504', '0505', '0506', '0507', '0508', '070', 
+    ];
+    
+
+    // -------------------------------------------------------------------------------------------------
+
 
     // [2] 데이터 관련
     // 1. Normal & etc
@@ -63,23 +77,14 @@ const PurchaseContainer = (props) => {
         return infoTmp;
     };
     const colInfo = setColInfo(page);
-    // -------------
 
-    // 2. useEffect
     
+    // 2. useEffect
     // +) loading 체크
     useEffect(() =>  {      
         setAllLoadingOK(false);
-
-        const arrTmp = [];          
-        for (const key in loading) 
-            arrTmp.push(loading[key]);            
-            
-        for (let i = 0; i < arrTmp.length; i++) {
-            const flag = arrTmp[i];
-            if (flag) return;
-        }        
-        setAllLoadingOK(true);  
+        const bIsOK = objectFlagIsAllReady(loading);        
+        setAllLoadingOK(bIsOK);  
     }, [loading]);
 
     // 1-1) 초기화: 유저
@@ -236,9 +241,10 @@ const PurchaseContainer = (props) => {
         else
             allSelectRef.current.checked = false;               
     }, [cartFormStatus, page]);
-    
 
-    // -------------
+
+    // -------------------------------------------------------------------------------------------------
+
 
     // 3. 이벤트
     // 1) onChange
@@ -331,9 +337,9 @@ const PurchaseContainer = (props) => {
     // ============================================================
 
     return (
-        <PurchaseTemplate
+        allLoadingOK && <PurchaseTemplate
             data={data}
-            etcs={{ page, colInfo, allLoadingOK }}
+            etcs={{ page, colInfo, phoneFrontList }}
             events={{ onChange, onItemDeleteClick, onBuyProductClick }}
             refs={{ allSelectRef }}
         />

@@ -40,20 +40,40 @@ const RegisterContainer = ({history}) => {
     
     /*
         ** onSubmit 이벤트가 발생했을 때 
-            1. register 함수에 현재 userid userpwd usernick 파라미터로 넣어서 액션을 디스패치.
+            1. register 함수에 현재 userid userpwd username 파라미터로 넣어서 액션을 디스패치.
             2. 사가에서 API 요청을 처리.    이에 대한 결과는 auth, authError에서 확인가능   
     */
     const onSubmit = (e) => {
         e.preventDefault();        
-        const {userid, userpwd, usernick, userpwdConfirm } = form;  
+        const {userid, userpwd, username, userpwdConfirm, address, phonenumber, email } = form;  
         
-        if (userpwd !== userpwdConfirm) {            
-            setError('비밀번호를 확인해주세요.');
-            return;
-        }
-
-        dispatch(register({userid, userpwd, usernick}));
+        if (userpwd !== userpwdConfirm) 
+            return setError('비밀번호를 확인해주세요.');
+                
+        if (!userid) 
+            return setError('아이디를 입력해주세요')
+        else if (!userpwd)  
+            return setError('비밀번호를 입력해주세요')
+        else if (!username) 
+            return setError('이름을 입력해주세요.')
+        else if (!address) 
+            return setError('주소를 입력해주세요.')
+        else if (!phonenumber) 
+            return setError('전화번호를 입력해주세요.')
+        else if (!email) 
+            return setError('이메일을 입력해주세요.');
+        
+        dispatch(register({userid, userpwd, username, address, phonenumber, email}));
     };
+
+    // Error 문구 일정시간 지나면 사라짐
+    useEffect(() => {
+        if (error) {
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+        }
+    }, [error])
 
     // 컴포넌트가 처음 렌더링될 때 초기화.
     useEffect(() => {        

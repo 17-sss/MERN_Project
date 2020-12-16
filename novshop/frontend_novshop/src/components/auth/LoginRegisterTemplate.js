@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 import {getSize} from '../../lib/utility/customFunc';
+import { ClearEx } from '../common/StyleUtilModels';
 
 
 // ========================================================================================
@@ -17,7 +18,7 @@ const LoginRegisterTemplateWrapper = styled.div`
 // 2) form
 const LoginRegisterForm = styled.form`
     width: 100%; 
-    padding: ${getSize(10)};
+    padding: 0 ${getSize(30)} ${getSize(30)};   // 상 0, 좌우 & 하 ${getSize(30)}
 
     text-align: center;
     align-items: center;
@@ -47,13 +48,29 @@ const LoginRegisterInput = styled.input`
 
 // 4) Button
 const LoginRegisterBtn = styled.button`
-    width: 51%;
+    width: 30%;
     padding: 10px;
-    margin-top: 1rem;
+    margin-top: 2rem;
     border: none;
 
     &:hover {
         background-color: rgb(209, 209, 209);
+    }
+`;
+// ---------------------------------------------------/
+
+// 5) 페이지 Name Wrapper
+const LoginRegisterPageName = styled.div`
+    width: 100%;
+    min-height: 30px;
+    margin: 50px 0 20px;
+    border-bottom: 0;
+    text-align: center;
+
+    p#pageType {
+        font-weight: 100;
+        color: #222;
+        font-size: 20px;
     }
 `;
 // ---------------------------------------------------/
@@ -95,27 +112,23 @@ const LoginRegisterTemplate = (props) => {
     
     return (
         <>
+            <LoginRegisterPageName>
+                <p id="pageType">
+                    {(type === "register") ? '회원가입' : '로그인'}
+                </p>
+            </LoginRegisterPageName>
+
             <LoginRegisterTemplateWrapper>
                 <LoginRegisterForm onSubmit = {onSubmit}>                                        
                     
                     <LoginRegisterInput        
-                        autoComplete="on"    
+                        autoComplete="off"    
                         name="userid" 
                         placeholder="아이디" 
                         type="text"
                         onChange={onChange}
                         value={form.userid}
                     />
-                    {(type === "register") && 
-                        <LoginRegisterInput                         
-                            autoComplete="on"      
-                            name="usernick"
-                            placeholder="닉네임"
-                            type="text"
-                            onChange={onChange}
-                            value={form.usernick}                            
-                        />                        
-                    }
                     <LoginRegisterInput     
                         autoComplete="off"
                         name="userpwd"
@@ -125,6 +138,7 @@ const LoginRegisterTemplate = (props) => {
                         value={form.userpwd}
                     />  
                     {(type === "register") && 
+                    <>
                         <LoginRegisterInput                         
                             autoComplete="off"
                             name="userpwdConfirm"
@@ -133,11 +147,43 @@ const LoginRegisterTemplate = (props) => {
                             onChange={onChange}
                             value={form.userpwdConfirm}
                         />
-
+                        <LoginRegisterInput                         
+                            autoComplete="off"      
+                            name="username"
+                            placeholder="이름"
+                            type="text"
+                            onChange={onChange}
+                            value={form.username}                            
+                        /> 
+                        <LoginRegisterInput                         
+                            autoComplete="off"      
+                            name="address"
+                            placeholder="주소"
+                            type="text"
+                            onChange={onChange}
+                            value={form.address}                            
+                        />
+                        <LoginRegisterInput                         
+                            autoComplete="off"      
+                            name="phonenumber"
+                            placeholder="전화번호"
+                            type="text"
+                            onChange={onChange}
+                            value={form.phonenumber}                            
+                        /> 
+                        <LoginRegisterInput                         
+                            autoComplete="off"      
+                            name="email"
+                            placeholder="이메일"
+                            type="email"
+                            onChange={onChange}
+                            value={form.email}                            
+                        />       
+                    </>
                     }
 
-                    {error && <ErrorMessage>{error}</ErrorMessage>}
-                    
+                    {error && <ErrorMessage>{error}</ErrorMessage>}                    
+                    <ClearEx />
 
                     <LoginRegisterBtn>
                         {typeValue}

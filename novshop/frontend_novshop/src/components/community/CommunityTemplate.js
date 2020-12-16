@@ -102,7 +102,7 @@ const CommunityTemplate = (props) => {
 
     return (
         <CommunityWrapper>
-            <CommunityMultiWrapper stype="pagename">
+            <CommunityMultiWrapper style={{margin: "50px 0 20px"}} stype="pagename">
                 <p id="pageType">{pageName}</p>
             </CommunityMultiWrapper>
 
