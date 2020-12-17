@@ -1,7 +1,7 @@
 // 구매 / 장바구니 Template
 import React from 'react';
 import styled, { css } from 'styled-components';
-import PostNoBtn from '../../containers/common/PostNoSearchBtnContainer'
+import PostNoSearchBtnContainer from '../../containers/common/PostNoSearchBtnContainer'
 import { cssDisplayNone, cssStrike, cssTransparent } from '../common/StyleUtilCSS';
 import { ClearEx } from '../common/StyleUtilModels';
 import {
@@ -498,9 +498,11 @@ const PurchaseTemplate = (props) => {
                                                     readOnly="1"
                                                 />
                                                 &nbsp;
-                                                <PostNoBtn                                                    
-                                                    // 우편번호 검색 API ==========================
+                                                {/* 우편번호 검색 API용 Container */}
+                                                <PostNoSearchBtnContainer
+                                                    typeId={index ? 'delivery' : 'order'}
                                                 />       
+                                                {/* -- */}
                                                 <br />
                                                 <PurchaseBuyInput
                                                     name="orderUserAddr1"
@@ -508,7 +510,7 @@ const PurchaseTemplate = (props) => {
                                                     // onChange={onChange}
                                                     // value={form.email}
                                                     placeholder="기본주소"
-                                                    size="40"
+                                                    size="60"
                                                     readOnly="1"
                                                 />
                                                 <br />
@@ -518,7 +520,7 @@ const PurchaseTemplate = (props) => {
                                                     // onChange={onChange}
                                                     // value={form.email}
                                                     placeholder="나머지주소 (선택입력가능)"
-                                                    size="40"                                                
+                                                    size="60"                                                
                                                 />
                                             </PurchaseBuyTd>
                                         </PurchaseBuyTr>
@@ -572,7 +574,7 @@ const PurchaseTemplate = (props) => {
                                                 <PurchaseBuyTextArea 
                                                     rows="3"
                                                     cols="100"
-                                                    name="shipMessage"
+                                                    name="deliveryMessage"
                                                     // onChange={onChange}
                                                     // value               
                                                     resize="none"                                 

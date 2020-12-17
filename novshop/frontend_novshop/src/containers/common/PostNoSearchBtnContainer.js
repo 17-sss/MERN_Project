@@ -9,8 +9,8 @@ import { setAddressResult, initializeUtilForm } from "../../modules/util";
 import PostNoSearchBtn from '../../components/common/PostNoSearchBtn';
 
 const PostNoSearchBtnContainer = (props) => {
-    // [1] 기본값 지정 관련  
-    const { children } = props;
+    // [1] 기본값 지정 관련, typeId는 어디에 들어가야하는지 알기위해 만든 값  
+    const { children, typeId } = props;
 
     const dispatch = useDispatch();
     const { addressResult } = useSelector(({util}) => {
@@ -58,6 +58,7 @@ const PostNoSearchBtnContainer = (props) => {
 
     // 2) onShowModal, 우편번호 검색 모달 보이기 상태
     const onShowModal = () => {
+        console.log(typeId);
         setIsShowModal(!isShowModal);
     };  
     // --------------|
@@ -82,15 +83,15 @@ const PostNoSearchBtnContainer = (props) => {
             bFlag && setIsShowModal(false);
         }        
     }, [addressResult])
-    // --------------------------------------------------------------------------------------------
-
+    // --------------------------------------------------------------------------------------------    
     return (
-        <PostNoSearchBtn
+        <PostNoSearchBtn            
             events={{
                 onComplete,
                 onShowModal,
             }}
-            states={{ isShowModal }}
+            states={{ isShowModal }}     
+            typeId={typeId}                   
         >
             {children}
         </PostNoSearchBtn>
