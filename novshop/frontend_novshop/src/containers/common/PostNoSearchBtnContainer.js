@@ -4,17 +4,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { setAddressResult, initializeUtilForm } from "../../modules/util";
+import { setAddressType, setAddressResult, initializeUtil, initializeUtilForm } from "../../modules/util";
 
 import PostNoSearchBtn from '../../components/common/PostNoSearchBtn';
 
 const PostNoSearchBtnContainer = (props) => {
-    // [1] 기본값 지정 관련, typeId는 어디에 들어가야하는지 알기위해 만든 값  
+    // [1] 기본값 지정 관련, typeId는 어디에 들어가야하는지 알기위해 만든 값. container에서만 씀
     const { children, typeId } = props;
 
     const dispatch = useDispatch();
     const { addressResult } = useSelector(({util}) => {
-        return {
+        return {        
+            addressType: util.addressType,
             addressResult: util.addressResult,
         };        
     });              
@@ -57,16 +58,16 @@ const PostNoSearchBtnContainer = (props) => {
     };
 
     // 2) onShowModal, 우편번호 검색 모달 보이기 상태
-    const onShowModal = () => {
-        console.log(typeId);
-        setIsShowModal(!isShowModal);
+    const onShowModal = () => {                
+        dispatch(setAddressType({type: typeId}));
+        setIsShowModal(!isShowModal);        
     };  
     // --------------|
     
     // [3] useEffect
     // 1) 초기화
     useEffect(() => {                        
-        dispatch(initializeUtilForm({form: "addressResult"}));                
+        dispatch(initializeUtil());           
     }, [dispatch]);
 
     // 2) addressResult 값 있을시 모달 창 닫음
@@ -90,8 +91,7 @@ const PostNoSearchBtnContainer = (props) => {
                 onComplete,
                 onShowModal,
             }}
-            states={{ isShowModal }}     
-            typeId={typeId}                   
+            states={{ isShowModal }}                               
         >
             {children}
         </PostNoSearchBtn>
