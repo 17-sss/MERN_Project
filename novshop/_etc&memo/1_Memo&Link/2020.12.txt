@@ -28,4 +28,15 @@
                 - frontend
                     > /module/purchase.js  
             2) 해당 로직 봐보기.. 주석해놓음. 이게 왜 작동이 돼?
+
+
+
+@@ 201217
+    * React Daum 우편번호 (모듈)
+        1. 링크
+            https://gaemi606.tistory.com/144?category=744527
+            https://www.npmjs.com/package/react-daum-postcode
+            http://postcode.map.daum.net/guide#attributes
+
+
             

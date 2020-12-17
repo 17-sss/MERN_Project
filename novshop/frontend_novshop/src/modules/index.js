@@ -10,6 +10,7 @@ import notice, { noticeSaga } from './notice';
 import write, { writeSaga } from './write';
 import purchase, { purchaseSaga } from './purchase';
 import loading from './loading';
+import util from './util';
 
 const rootReducer = combineReducers({
     auth,
@@ -21,7 +22,9 @@ const rootReducer = combineReducers({
     notice,
     write,
     purchase,
+
     loading,
+    util,
 });
 
 export function* rootSaga() {

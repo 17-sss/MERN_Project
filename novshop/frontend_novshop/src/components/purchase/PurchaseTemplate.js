@@ -1,6 +1,7 @@
 // 구매 / 장바구니 Template
 import React from 'react';
 import styled, { css } from 'styled-components';
+import PostNoBtn from '../../containers/common/PostNoSearchBtnContainer'
 import { cssDisplayNone, cssStrike, cssTransparent } from '../common/StyleUtilCSS';
 import { ClearEx } from '../common/StyleUtilModels';
 import {
@@ -19,8 +20,7 @@ import { threeDigitsComma } from "../../lib/utility/customFunc";
 // 2) PurchaseMultiWrapper
 const PurchaseMultiWrapper = styled(CommonTableMultiWrapper)`
     ${(props) => {
-        const { stype, margin } = props;
-
+        const { stype, margin } = props;        
         return stype === 'totalinfo'
             ? css`
                   width: 100%;
@@ -39,7 +39,7 @@ const PurchaseMultiWrapper = styled(CommonTableMultiWrapper)`
             : stype === 'buy' &&
                   css`
                       width: 100%;                                            
-                      margin: ${() => margin || "0 0 10px 0"};
+                      margin: ${margin ? margin : "0 0 30px 0"};
                       
                       .buyInfoWrap {
                           /* border-top: 1px solid #e3e3e3; */
@@ -56,16 +56,14 @@ const PurchaseMultiWrapper = styled(CommonTableMultiWrapper)`
                           float: right;
                       }
                       span.required_star {
-                          color: red;
-                          font-weight: bold;    
-                          font-size: 12pt;                      
+                          color: red;                          
+                          font-size: 10pt;                      
                           padding: 0 3px;                          
                       }
                   `;
     }}
 `;
 
-// 3) 
 // ---------------------------------------------------/
 
 // [2] Table 관련
@@ -84,11 +82,19 @@ const PurchaseTable = styled(StyledTable)`
     font-size: 10pt;
 `;
 
-
 // 1-2) th (import)
 const PurchaseTh = styled(StyledTh)`
-    height: 35px;
-    border-bottom: 1px solid #e3e3e3;
+    ${(props) =>
+        props.mode === 'buy'
+            ? css`
+                  border: none;
+                  background-color: #f6f6f6;
+                  font-size: 9pt;
+              `
+            : css`
+                  height: 35px;
+                  border-bottom: 1px solid #e3e3e3;
+              `}
 `;
 
 // 1-3) td (import)
@@ -110,11 +116,51 @@ const PurchaseTd = styled(StyledTd)`
     }
 `;
 
-// 1-4) PurchaseBuyTr (no import, 구매창의 주문정보 입력부분용)
+// 1-4) PurchaseBuyTr (no import, 구매창의 주문, 배송정보 Tr)
 const PurchaseBuyTr = styled.tr`
     ${props => props.noStyle || css`border-bottom: 1px solid #e3e3e3;`};    
-    line-height: 30px;
+    /* line-height: 30px; */
 `;
+
+// 1-5) PurchaseBuyTd (no import, 구매창의 주문, 배송정보 Td)
+const PurchaseBuyTd = styled.td`
+    border-left: 1px solid #e3e3e3;
+`;
+
+// 1-6) PurchaseBuyInput & SelectBox (no import, 구매창의 주문, 배송정보 input & Select)
+const cssPurchaseBuyInput = css`
+    margin: 3px 0 3px 5px;    
+    font-size: 10pt;
+    
+    border: 1px solid rgb(233, 233, 233);
+    outline: none;
+
+    &:focus {
+        border: 1px solid rgb(209, 209, 209);
+    }
+`;
+
+const PurchaseBuyInput = styled.input`    
+    ${cssPurchaseBuyInput}
+`;
+
+const PurchaseBuySelect = styled.select`    
+    ${cssPurchaseBuyInput}
+`;
+
+const PurchaseBuyTextArea = styled.textarea`    
+    ${cssPurchaseBuyInput}    
+    margin: 10px;    
+    resize: ${props => props.resize ? props.resize : "both"};
+    /* 
+        !! resize (textarea 사이즈 조정)
+        none;  사용자 임의 변경 불가  
+        both;  사용자 변경이 모두 가능  
+        horizontal;  좌우만 가능  
+        vertical;  상하만 가능  
+    */    
+`;
+// -------------|
 
 
 // 2) PurchaseIsSaleP: 세일 여부에 따른 원가격표시
@@ -125,7 +171,6 @@ const PurchaseIsSaleP = styled.p`
         return flag ? cssStrike : cssDisplayNone;
     }}
 `;
-
 
 // ---------------------------------------------------/
 
@@ -147,7 +192,9 @@ const PurchaseBtn = styled.button`
         background-color: ${props => props.name === "buyall" ? "#d6d6d6" : "#e6e6e6"};
     }
 `;
+
 // ---------------------------------------------------/
+
 
 const PurchaseTemplate = (props) => {
     const { etcs, data, events, refs } = props;
@@ -395,129 +442,150 @@ const PurchaseTemplate = (props) => {
 
             {/* == [2] 구매 페이지 전용 ------------------------------------------------------------- */}
             {page === 'buy' &&
-                [...Array(2)].map((v, index) => {  
-                    console.log(index)                  
+                [...Array(2)].map((v, index) => {                                      
                     return (
-                        <>
-                        <PurchaseMultiWrapper stype="buy" margin={index===0 && "0 0 50px 0"}>
-                            <div className="buyInfoWrap">
-                                <h6 className="float_left">주문 정보</h6>
-                                <h6 className="float_right">
-                                    <span className="required_star">*</span>
-                                    필수입력사항
-                                </h6>
-                                <ClearEx />
-                            </div>
+                        <div key = {index}>
+                            <PurchaseMultiWrapper stype="buy" margin={index === 0 && "0 0 50px 0"}>
+                                <div className="buyInfoWrap">
+                                    <span className="float_left" style={{fontSize: "11pt"}}>
+                                        {index ? '배송 정보' : '주문 정보'}
+                                    </span>
+                                    <span className="float_right" style={{fontSize: "11pt"}}>
+                                        <span className="required_star">*</span>
+                                        필수입력사항
+                                    </span>
+                                    <ClearEx />
+                                </div>
 
-                            <PurchaseTable mode="buy">
-                                <colgroup>
-                                    <col style={{ width: '139px' }} />
-                                    <col style={{ width: 'auto' }} />
-                                </colgroup>
+                                <PurchaseTable mode="buy">
+                                    <colgroup>
+                                        <col style={{ width: '139px' }} />
+                                        <col style={{ width: 'auto' }} />
+                                    </colgroup>
 
-                                <tbody>
-                                    <PurchaseBuyTr>
-                                        <th scope="row">
-                                            주문하시는 분
-                                            <span className="required_star">
-                                                *
-                                            </span>
-                                        </th>
-                                        <td>
-                                            <input
-                                                name="orderUserName"
-                                                type="text"
-                                                // onChange={onChange}
-                                                // value={form.email}
-                                                autoComplete="off"
-                                            />
-                                        </td>
-                                    </PurchaseBuyTr>
-                                    <PurchaseBuyTr>
-                                        <th scope="row">
-                                            주소
-                                            <span className="required_star">
-                                                *
-                                            </span>
-                                        </th>
-                                        <td>
-                                            <input
-                                                name="orderUserPostNo"
-                                                type="text"
-                                                // onChange={onChange}
-                                                // value={form.email}
-                                                placeholder="우편번호"
-                                                readOnly="1"
-                                            />
-                                            {/* 여기에 우편번호 API 추가!!!!!!!!!!! */}
-                                            <br />
-                                            <input
-                                                name="orderUserAddr1"
-                                                type="text"
-                                                // onChange={onChange}
-                                                // value={form.email}
-                                                placeholder="기본주소"
-                                                size="40"
-                                                readOnly="1"
-                                            />
-                                            <br />
-                                            <input
-                                                name="orderUserAddr2"
-                                                type="text"
-                                                // onChange={onChange}
-                                                // value={form.email}
-                                                placeholder="나머지주소 (선택입력가능)"
-                                                size="40"
-                                                readOnly="1"
-                                            />
-                                        </td>
-                                    </PurchaseBuyTr>
+                                    <tbody>
+                                        <PurchaseBuyTr>
+                                            <PurchaseTh scope="row" mode="buy">
+                                                {index ? '받으시는 분' : '주문하시는 분'}
+                                                <span className="required_star">
+                                                    *
+                                                </span>
+                                            </PurchaseTh>
+                                            <PurchaseBuyTd>
+                                                <PurchaseBuyInput
+                                                    name="orderUserName"
+                                                    type="text"
+                                                    // onChange={onChange}
+                                                    // value={form.email}
+                                                    autoComplete="off"                                                
+                                                />
+                                            </PurchaseBuyTd>
+                                        </PurchaseBuyTr>
+                                        <PurchaseBuyTr>
+                                            <PurchaseTh scope="row" mode="buy">
+                                                주소
+                                                <span className="required_star">
+                                                    *
+                                                </span>
+                                            </PurchaseTh>
+                                            <PurchaseBuyTd>
+                                                <PurchaseBuyInput
+                                                    name="orderUserPostNo"
+                                                    type="text"
+                                                    // onChange={onChange}
+                                                    // value={form.email}
+                                                    placeholder="우편번호"
+                                                    readOnly="1"
+                                                />
+                                                &nbsp;
+                                                <PostNoBtn                                                    
+                                                    // 우편번호 검색 API ==========================
+                                                />       
+                                                <br />
+                                                <PurchaseBuyInput
+                                                    name="orderUserAddr1"
+                                                    type="text"
+                                                    // onChange={onChange}
+                                                    // value={form.email}
+                                                    placeholder="기본주소"
+                                                    size="40"
+                                                    readOnly="1"
+                                                />
+                                                <br />
+                                                <PurchaseBuyInput
+                                                    name="orderUserAddr2"
+                                                    type="text"
+                                                    // onChange={onChange}
+                                                    // value={form.email}
+                                                    placeholder="나머지주소 (선택입력가능)"
+                                                    size="40"                                                
+                                                />
+                                            </PurchaseBuyTd>
+                                        </PurchaseBuyTr>
 
-                                    <PurchaseBuyTr noStyle>
-                                        <th scope="row">
-                                            연락처
-                                            <span className="required_star">
-                                                *
-                                            </span>
-                                        </th>
-                                        <td>
-                                            <select
-                                                name="orderUserPhoneNumSelect"
-                                                // onChange={onChange}
-                                                // defaultValue
-                                            >
-                                                {phoneFrontList.map((v) => (
-                                                    <option value={v}>
-                                                        {v}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            -
-                                            <input
-                                                name="orderUserPhoneNum1"
-                                                type="text"
-                                                // onChange={onChange}
-                                                // value={form.email}
-                                                maxLength="4"
-                                                size="4"
-                                            />
-                                            -
-                                            <input
-                                                name="orderUserPhoneNum2"
-                                                type="text"
-                                                // onChange={onChange}
-                                                // value={form.email}
-                                                maxLength="4"
-                                                size="4"
-                                            />
-                                        </td>
-                                    </PurchaseBuyTr>
-                                </tbody>
-                            </PurchaseTable>
-                            
-                        </PurchaseMultiWrapper>
-                        {index === 0 && <hr/>}
-                        </>
+                                        <PurchaseBuyTr noStyle={index === 0 && true}>
+                                            <PurchaseTh scope="row" mode="buy">
+                                                연락처
+                                                <span className="required_star">
+                                                    *
+                                                </span>
+                                            </PurchaseTh>
+                                            <PurchaseBuyTd>
+                                                <PurchaseBuySelect
+                                                    name="orderUserPhoneNumSelect"
+                                                    // onChange={onChange}
+                                                    // defaultValue
+                                                >
+                                                    {phoneFrontList.map((v, i) => (
+                                                        <option value={v} key={i}>
+                                                            {v}
+                                                        </option>
+                                                    ))}
+                                                </PurchaseBuySelect>
+                                                -
+                                                <PurchaseBuyInput
+                                                    name="orderUserPhoneNum1"
+                                                    type="text"
+                                                    // onChange={onChange}
+                                                    // value={form.email}
+                                                    maxLength="4"
+                                                    size="4"
+                                                />
+                                                -
+                                                <PurchaseBuyInput
+                                                    name="orderUserPhoneNum2"
+                                                    type="text"
+                                                    // onChange={onChange}
+                                                    // value={form.email}
+                                                    maxLength="4"
+                                                    size="4"
+                                                />
+                                            </PurchaseBuyTd>
+                                        </PurchaseBuyTr>
+
+                                        {index === 1 &&
+                                        (<PurchaseBuyTr noStyle>
+                                            <PurchaseTh mode="buy">
+                                                배송메세지
+                                            </PurchaseTh>
+                                            <PurchaseBuyTd>
+                                                <PurchaseBuyTextArea 
+                                                    rows="3"
+                                                    cols="100"
+                                                    name="shipMessage"
+                                                    // onChange={onChange}
+                                                    // value               
+                                                    resize="none"                                 
+                                                />
+                                            </PurchaseBuyTd>
+                                        </PurchaseBuyTr>)
+                                        }                                          
+                                    </tbody>
+                                </PurchaseTable>
+                                
+                            </PurchaseMultiWrapper>
+                            {index === 0 && <hr/>}
+                        </div>
                     );
                 })}
             
