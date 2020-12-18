@@ -6,13 +6,11 @@ import { check } from "../../modules/user";
 
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
 
-
-
-const RegisterContainer = ({history}) => {
+const RegisterContainer = ({history}) => {     
     const [error, setError] = useState(null);
 
     const dispatch = useDispatch();
-    const { form, auth, authError, user } = useSelector( ({auth, user}) => {        
+    const { form, auth, authError, user, addressType, addressResult } = useSelector( ({auth, user, util}) => {        
         /* 
             useSelector에서 불러오는 auth는 /modules/auth.js의 auth 리듀서
             여기서 console.log(auth) 해보면, auth의 initialState 값나옴.   
@@ -22,18 +20,58 @@ const RegisterContainer = ({history}) => {
             form: auth.register,    // auth['register'] 도 가능
             auth: auth.auth,
             authError: auth.authError,
-            user: user.user
+            user: user.user,
+            addressType: util.addressType,
+            addressResult: util.addressResult,
         };
     });
+
+    // phoneFrontList, 구매창 연락처 앞부분 리스트(지역번호, 휴대폰 앞 번호 등) (Option 태그에 사용)
+    const phoneFrontList = [            
+        '010', '011', '016', '017', '018', '019',
+        '02', '031', '032', '033', 
+        '041', '042', '043', '044', 
+        '051', '052', '053', '054', '055',
+        '061', '062', '063', '064',
+        '0502', '0503', '0504', '0505', '0506', '0507', '0508', '070', 
+    ];
+
+    // 객체에 값이 있는지 확인하는 func
+    const isValueOK = (obj) => {
+        let result = true;
+        for (const key in obj) {                
+            const value = obj[key];
+            if (!value) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    };
+    // -----------
     
+    // onChange
     const onChange = (e) => {
         const {name, value} = e.target;  
+        const exceptionalNames = [
+            'addressPostNo', 'addressAddr1', 'addressAddr2',
+            'phoneNumSelect', 'phoneNum1', 'phoneNum2',
+        ];
+
+        let addrOrPhone = '';
+        if (exceptionalNames.indexOf(name) > -1) {
+            if (name.indexOf('addr') > -1) 
+                addrOrPhone = 'address'
+            else
+                addrOrPhone = 'phonenumber';
+        }
 
         dispatch(            
             changeField({                
                 form: 'register',
-                key: name,
-                value,                
+                key: addrOrPhone ? addrOrPhone : name,
+                value,
+                addKey: addrOrPhone ? name : '',                 
             })
         );
     };
@@ -46,22 +84,27 @@ const RegisterContainer = ({history}) => {
     const onSubmit = (e) => {
         e.preventDefault();        
         const {userid, userpwd, username, userpwdConfirm, address, phonenumber, email } = form;  
+
+        const isAddrOK = isValueOK(address);
+        const isPhoneOK = isValueOK(phonenumber);
         
+        // 비번확인 체크
         if (userpwd !== userpwdConfirm) 
             return setError('비밀번호를 확인해주세요.');
-                
+
+        // 아이디, 비번, 이름, 이메일, 주소, 연락처 체크
         if (!userid) 
             return setError('아이디를 입력해주세요')
         else if (!userpwd)  
             return setError('비밀번호를 입력해주세요')
         else if (!username) 
             return setError('이름을 입력해주세요.')
-        else if (!address) 
-            return setError('주소를 입력해주세요.')
-        else if (!phonenumber) 
-            return setError('전화번호를 입력해주세요.')
         else if (!email) 
-            return setError('이메일을 입력해주세요.');
+            return setError('이메일을 입력해주세요.')        
+        else if (!isAddrOK) 
+            return setError('주소 입력 부분을 확인해주세요.')
+        else if (!isPhoneOK)
+            return setError('연락처 입력 부분을 확인해주세요.');
         
         dispatch(register({userid, userpwd, username, address, phonenumber, email}));
     };
@@ -81,6 +124,56 @@ const RegisterContainer = ({history}) => {
             initializeForm('register'),
         );        
     }, [dispatch]);
+
+    // 주소 API 사용하여 주소 관련 Input Change
+    useEffect(() => {
+        if (addressType !== "register") return;        
+        const { zonecode, address, buildingName, bname, } = addressResult;
+
+        const setExtraAddress = (aBuildingName, aBname) => {
+            let result = '';
+            if (aBname) 
+                result += aBname;
+            if (aBuildingName) {
+                result += 
+                    result !== ''
+                    ? `, ${aBuildingName}`
+                    : aBuildingName;
+            }
+            if(result) result = `(${result})`;
+
+            return result;
+        };
+        const extraAddress = setExtraAddress(buildingName, bname);
+        /*
+        // let fullAddress는 (기본주소 + 법정동/리 이름 + 건물명)             
+        const fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';  
+        */
+
+        dispatch(changeField({
+            form: 'register',
+            key: 'address',
+            value: zonecode,
+            addKey: 'addressPostNo',
+        }));
+
+        dispatch(changeField({
+            form: 'register',
+            key: 'address',
+            value: address,
+            addKey: 'addressAddr1',
+        }));
+
+        if (extraAddress) {
+            dispatch(changeField({
+                form: 'register',
+                key: 'address',
+                value: extraAddress,
+                addKey: 'addressAddr2',
+            }));
+        }
+
+    }, [dispatch, addressResult, addressType]);
 
     // 회원가입 성공 or 실패 처리
     useEffect(()=> {
@@ -125,6 +218,7 @@ const RegisterContainer = ({history}) => {
             onChange = {onChange}
             form = {form}
             error = {error}
+            phoneFrontList={phoneFrontList}
         />
     );
 };

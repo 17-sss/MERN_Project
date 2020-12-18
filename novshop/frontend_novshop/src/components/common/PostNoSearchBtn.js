@@ -19,7 +19,7 @@ const PostNoSearchBtn = (props) => {
 
     return (
         <>            
-            <PostNoBtn onClick={onShowModal}>
+            <PostNoBtn type="button" onClick={onShowModal}>
                 {children ? children : '우편번호 검색'}
             </PostNoBtn>
 

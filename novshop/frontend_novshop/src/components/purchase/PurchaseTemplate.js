@@ -87,14 +87,16 @@ const PurchaseTh = styled(StyledTh)`
     ${(props) =>
         props.mode === 'buy'
             ? css`
+                // 구매 창
                   border: none;
                   background-color: #f6f6f6;
                   font-size: 9pt;
               `
             : css`
+                // 장바구니 창
                   height: 35px;
                   border-bottom: 1px solid #e3e3e3;
-              `}
+              `}    
 `;
 
 // 1-3) td (import)
@@ -472,8 +474,8 @@ const PurchaseTemplate = (props) => {
                                                 </span>
                                             </PurchaseTh>
                                             <PurchaseBuyTd>
-                                                <PurchaseBuyInput
-                                                    name="orderUserName"
+                                                <PurchaseBuyInput                                                    
+                                                    name={index ? 'receiveUserName' : 'orderUserName'}
                                                     type="text"
                                                     // onChange={onChange}
                                                     // value={form.email}
@@ -490,7 +492,7 @@ const PurchaseTemplate = (props) => {
                                             </PurchaseTh>
                                             <PurchaseBuyTd>
                                                 <PurchaseBuyInput
-                                                    name="orderUserPostNo"
+                                                    name={index ? 'receiveUserPostNo' : 'orderUserPostNo'}
                                                     type="text"
                                                     // onChange={onChange}
                                                     // value={form.email}
@@ -500,12 +502,12 @@ const PurchaseTemplate = (props) => {
                                                 &nbsp;
                                                 {/* 우편번호 검색 API용 Container */}
                                                 <PostNoSearchBtnContainer
-                                                    typeId={index ? 'delivery' : 'order'}
+                                                    typeId={index ? 'receive' : 'order'}
                                                 />       
                                                 {/* -- */}
                                                 <br />
                                                 <PurchaseBuyInput
-                                                    name="orderUserAddr1"
+                                                    name={index ? 'receiveUserAddr1' : 'orderUserAddr1'}
                                                     type="text"
                                                     // onChange={onChange}
                                                     // value={form.email}
@@ -515,7 +517,7 @@ const PurchaseTemplate = (props) => {
                                                 />
                                                 <br />
                                                 <PurchaseBuyInput
-                                                    name="orderUserAddr2"
+                                                    name={index ? 'receiveUserAddr2' : 'orderUserAddr2'}
                                                     type="text"
                                                     // onChange={onChange}
                                                     // value={form.email}
@@ -534,7 +536,7 @@ const PurchaseTemplate = (props) => {
                                             </PurchaseTh>
                                             <PurchaseBuyTd>
                                                 <PurchaseBuySelect
-                                                    name="orderUserPhoneNumSelect"
+                                                    name={index ? 'receiveUserPhoneNumSelect' : 'orderUserPhoneNumSelect'}                                                    
                                                     // onChange={onChange}
                                                     // defaultValue
                                                 >
@@ -546,7 +548,7 @@ const PurchaseTemplate = (props) => {
                                                 </PurchaseBuySelect>
                                                 -
                                                 <PurchaseBuyInput
-                                                    name="orderUserPhoneNum1"
+                                                    name={index ? 'receiveUserPhoneNum1' : 'orderUserPhoneNum1'}                                                    
                                                     type="text"
                                                     // onChange={onChange}
                                                     // value={form.email}
@@ -555,7 +557,7 @@ const PurchaseTemplate = (props) => {
                                                 />
                                                 -
                                                 <PurchaseBuyInput
-                                                    name="orderUserPhoneNum2"
+                                                    name={index ? 'receiveUserPhoneNum2' : 'orderUserPhoneNum2'}
                                                     type="text"
                                                     // onChange={onChange}
                                                     // value={form.email}
@@ -567,7 +569,7 @@ const PurchaseTemplate = (props) => {
 
                                         {index === 1 &&
                                         (<PurchaseBuyTr noStyle>
-                                            <PurchaseTh mode="buy">
+                                            <PurchaseTh scope="row" mode="buy">
                                                 배송메세지
                                             </PurchaseTh>
                                             <PurchaseBuyTd>

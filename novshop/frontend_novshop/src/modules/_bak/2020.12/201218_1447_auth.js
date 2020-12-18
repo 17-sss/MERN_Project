@@ -45,15 +45,15 @@ export const initializeForm = form => ({
 */
 export const changeField = createAction(
     CHANGE_FIELD,
-    ({ form, key, value, addKey } = { addKey: '' }) => ({
+    ({ form, key, value }) => ({
         form, // register, login
         key, // username, password, passwordConfirm
         value, // 실제 바꾸려는 값
-        addKey, // register에서 address나 phonenumber 수정할 경우
     }),
 );
 
 export const initializeForm = createAction(INITALIZE_FORM, (form) => form); // "register" / "login"
+
 
 export const login = createAction(LOGIN, ({ userid, userpwd }) => {
     return {
@@ -63,14 +63,14 @@ export const login = createAction(LOGIN, ({ userid, userpwd }) => {
 });
 export const register = createAction(
     REGISTER,
-    ({ userid, userpwd, username, address, phonenumber, email }) => {        
+    ({ userid, userpwd, username, address, phonenumber, email }) => {
         return {
-            userid,
+            userid,            
             userpwd,
             username,
-            address:  JSON.stringify(address),
-            phonenumber: JSON.stringify(phonenumber),
-            email,
+            address, 
+            phonenumber, 
+            email
         };
     },
 );
@@ -92,16 +92,8 @@ const initialState = {
         username: '',
         userpwd: '',
         userpwdConfirm: '',
-        address: {
-            addressPostNo: '', // 우편번호
-            addressAddr1: '', // 기본주소
-            addressAddr2: '', // 나머지주소
-        },
-        phonenumber: {
-            phoneNumSelect: '010',
-            phoneNum1: '',
-            phoneNum2: '',
-        },
+        address: '',
+        phonenumber: '',
         email: '',
     },
     login: {
@@ -117,18 +109,22 @@ const auth = handleActions(
     {
         [CHANGE_FIELD]: (state, action) => {
             const { payload } = action;
-            const { form, key, value, addKey } = payload;             
+            const { form, key, value } = payload;
 
+            // [1] immer 안쓸시
             return {
                 ...state,
                 [form]: {
-                    ...state[form],
-                    [key]: addKey ? {
-                        ...state[form][key],
-                        [addKey]: value,
-                    }: value,
+                    ...state[form], // 예: state.login 객체를 불변성유지 해줌.
+                    [key]: value, // 현재 작업하고 있는 값만 바꿈. (key는 userid가 될수도, userpwd가 될수도)
                 },
             };
+            // [2] immer 썼을시
+            /*
+            return produce(state, draft => {                
+                draft[form][key] = value;   // 예: state.register.username을 바꾼다.
+            });                                  
+            */
         },
 
         // "register" / "login" 객체 초기화.
@@ -146,7 +142,7 @@ const auth = handleActions(
             [form]: initialState[form],
             authError: null,    // 폼 전환 시 회원 인증 에러 초기화    
         }),
-        */
+        */        
 
         // 회원가입 성공
         [REGISTER_SUCCESS]: (state, action) => {

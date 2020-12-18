@@ -23,13 +23,15 @@ const PurchaseContainer = (props) => {
     } = props;
 
     const dispatch = useDispatch();
-    const { cartFormStatus, buyFormStatus, userData, loading } = useSelector(
-        ({ purchase, user, loading }) => {
+    const { cartFormStatus, buyFormStatus, addressType, addressResult, userData, loading } = useSelector(
+        ({ purchase, user, loading, util }) => {
             return {
                 cartFormStatus: purchase.cartFormStatus,
-                buyFormStatus: purchase.buyFormStatus,
+                buyFormStatus: purchase.buyFormStatus,                
+                addressType: util.addressType,
+                addressResult: util.addressResult,
                 userData: user.user,
-                loading: loading,
+                loading: loading,            
             };
         },
     );
@@ -241,6 +243,52 @@ const PurchaseContainer = (props) => {
         else
             allSelectRef.current.checked = false;               
     }, [cartFormStatus, page]);
+
+    // 5) 주소 API 관련 값 Change   (구매창 전용)
+    useEffect(() => {
+        if (addressType !== "order" || addressType !== "receive") return;        
+        const { zonecode, address, buildingName, bname, } = addressResult;
+
+        const setExtraAddress = (aBuildingName, aBname) => {
+            let result = '';
+            if (aBname) 
+                result += aBname;
+            if (aBuildingName) {
+                result += 
+                    result !== ''
+                    ? `, ${aBuildingName}`
+                    : aBuildingName;
+            }
+            if(result) result = `(${result})`;
+
+            return result;
+        };
+        const extraAddress = setExtraAddress(buildingName, bname);        
+        /*
+        dispatch(changeField({
+            form: 'register',
+            key: 'address',
+            value: zonecode,
+            addKey: 'addressPostNo',
+        }));
+
+        dispatch(changeField({
+            form: 'register',
+            key: 'address',
+            value: address,
+            addKey: 'addressAddr1',
+        }));
+
+        if (extraAddress) {
+            dispatch(changeField({
+                form: 'register',
+                key: 'address',
+                value: extraAddress,
+                addKey: 'addressAddr2',
+            }));
+        }
+        */
+    }, [dispatch, addressResult, addressType]);
 
 
     // -------------------------------------------------------------------------------------------------
