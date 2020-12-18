@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-    changePurchase,
+    changePurchaseCart,
     updCartVolume,
     getCart,
     initialPurchase,
@@ -196,14 +196,14 @@ const PurchaseContainer = (props) => {
                     : allProductPriceTmp + shippingFeeTmp;
 
             dispatch(
-                changePurchase({
+                changePurchaseCart({
                     form: 'cartFormStatus',
                     key: 'allProductPrice',
                     value: threeDigitsComma(allProductPriceTmp),
                 }),
             );
             dispatch(
-                changePurchase({
+                changePurchaseCart({
                     form: 'cartFormStatus',
                     key: 'shippingFee',
                     value:
@@ -213,7 +213,7 @@ const PurchaseContainer = (props) => {
                 }),
             );
             dispatch(
-                changePurchase({
+                changePurchaseCart({
                     form: 'cartFormStatus',
                     key: 'totalPrice',
                     value: threeDigitsComma(totalPriceTmp),
@@ -295,15 +295,15 @@ const PurchaseContainer = (props) => {
 
 
     // 3. 이벤트
-    // 1) onChange
-    const onChange = useCallback(
+    // 1) onCartChange, 장바구니 창 전용 Change
+    const onCartChange = useCallback(
         (e) => {
             const { id, name: key, checked } = e.target;
             let { value } = e.target;
-            let form =
-                page === 'shoppingcart' ? 'cartFormStatus' : 'buyFormStatus';
+            const form =
+                page === 'shoppingcart' ? 'cartFormStatus' : '';            
 
-            let changePurchaseParams = { form, key, value };
+            let changePurchaseCartParams = { form, key, value };
 
             if (form === 'cartFormStatus') {
                 if (key === 'volume') {
@@ -311,7 +311,7 @@ const PurchaseContainer = (props) => {
                     else if (Number(value) <= 0) value = 1;
                 }
                 /* 
-                    - dispatch changePurchase의 매개변수 설명
+                    - dispatch changePurchaseCart의 매개변수 설명
                         1. addValue 사용할 경우 (form이 cartFormStatus)
                             1) name(key)이 volume일 경우
                                 리덕스 모듈 (purchase)에서 cartFormStatus 폼안의 items를 수정함.
@@ -319,7 +319,7 @@ const PurchaseContainer = (props) => {
                             1) name(key)이 select일 경우
                                 key는 checkedItems가 되며, value는 id값. (id 값이 checkedItems에 들어가거나 수정되게 함)
                 */
-                changePurchaseParams = {
+                changePurchaseCartParams = {
                     form,
                     key,
                     value:
@@ -337,7 +337,7 @@ const PurchaseContainer = (props) => {
                 };
             }
 
-            dispatch(changePurchase(changePurchaseParams));
+            dispatch(changePurchaseCart(changePurchaseCartParams));
 
             if (form === 'cartFormStatus' && key === 'volume') {
                 dispatch(updCartVolume({ id, volume: value }));
@@ -388,7 +388,7 @@ const PurchaseContainer = (props) => {
         allLoadingOK && <PurchaseTemplate
             data={data}
             etcs={{ page, colInfo, phoneFrontList }}
-            events={{ onChange, onItemDeleteClick, onBuyProductClick }}
+            events={{ onCartChange, onItemDeleteClick, onBuyProductClick }}
             refs={{ allSelectRef }}
         />
     );

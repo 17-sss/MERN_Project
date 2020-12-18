@@ -201,7 +201,7 @@ const PurchaseBtn = styled.button`
 const PurchaseTemplate = (props) => {
     const { etcs, data, events, refs } = props;
     const { page, colInfo, phoneFrontList } = etcs;    
-    const { onChange, onItemDeleteClick, onBuyProductClick } = events;
+    const { onCartChange, onItemDeleteClick, onBuyProductClick } = events;
     const { allSelectRef } = refs;
         
     return (        
@@ -237,7 +237,7 @@ const PurchaseTemplate = (props) => {
                                             <input
                                                 type="checkbox"
                                                 name="allselect"  
-                                                onChange={onChange}                                              
+                                                onChange={onCartChange}                                              
                                                 ref={allSelectRef}
                                             />
                                         ) : (
@@ -276,7 +276,7 @@ const PurchaseTemplate = (props) => {
                                                 type="checkbox"
                                                 name="select"
                                                 checked={data.checkedItems.indexOf(id) > -1}
-                                                onChange={onChange}
+                                                onChange={onCartChange}
                                                 id = {id}
                                             />                                            
                                         </PurchaseTd>
@@ -333,9 +333,7 @@ const PurchaseTemplate = (props) => {
                                                 max="20"
                                                 name="volume"
                                                 value={volume}
-                                                onChange={
-                                                    onChange
-                                                }
+                                                onChange={onCartChange}
                                                 id={id}
                                             />
                                         ) : (
@@ -477,7 +475,7 @@ const PurchaseTemplate = (props) => {
                                                 <PurchaseBuyInput                                                    
                                                     name={index ? 'receiveUserName' : 'orderUserName'}
                                                     type="text"
-                                                    // onChange={onChange}
+                                                    // onChange={onBuyChange}
                                                     // value={form.email}
                                                     autoComplete="off"                                                
                                                 />
@@ -492,9 +490,9 @@ const PurchaseTemplate = (props) => {
                                             </PurchaseTh>
                                             <PurchaseBuyTd>
                                                 <PurchaseBuyInput
-                                                    name={index ? 'receiveUserPostNo' : 'orderUserPostNo'}
+                                                    name={index ? 'receiveAddressPostNo' : 'orderAddressPostNo'}
                                                     type="text"
-                                                    // onChange={onChange}
+                                                    // onChange={onBuyChange}
                                                     // value={form.email}
                                                     placeholder="우편번호"
                                                     readOnly="1"
@@ -507,9 +505,9 @@ const PurchaseTemplate = (props) => {
                                                 {/* -- */}
                                                 <br />
                                                 <PurchaseBuyInput
-                                                    name={index ? 'receiveUserAddr1' : 'orderUserAddr1'}
+                                                    name={index ? 'receiveAddressAddr1' : 'orderAddressAddr1'}
                                                     type="text"
-                                                    // onChange={onChange}
+                                                    // onChange={onBuyChange}
                                                     // value={form.email}
                                                     placeholder="기본주소"
                                                     size="60"
@@ -517,9 +515,9 @@ const PurchaseTemplate = (props) => {
                                                 />
                                                 <br />
                                                 <PurchaseBuyInput
-                                                    name={index ? 'receiveUserAddr2' : 'orderUserAddr2'}
+                                                    name={index ? 'receiveAddressAddr2' : 'orderAddressAddr2'}
                                                     type="text"
-                                                    // onChange={onChange}
+                                                    // onChange={onBuyChange}
                                                     // value={form.email}
                                                     placeholder="나머지주소 (선택입력가능)"
                                                     size="60"                                                
@@ -536,8 +534,8 @@ const PurchaseTemplate = (props) => {
                                             </PurchaseTh>
                                             <PurchaseBuyTd>
                                                 <PurchaseBuySelect
-                                                    name={index ? 'receiveUserPhoneNumSelect' : 'orderUserPhoneNumSelect'}                                                    
-                                                    // onChange={onChange}
+                                                    name={index ? 'receivePhoneNumSelect' : 'orderPhoneNumSelect'}                                                    
+                                                    // onChange={onBuyChange}
                                                     // defaultValue
                                                 >
                                                     {phoneFrontList.map((v, i) => (
@@ -548,18 +546,18 @@ const PurchaseTemplate = (props) => {
                                                 </PurchaseBuySelect>
                                                 -
                                                 <PurchaseBuyInput
-                                                    name={index ? 'receiveUserPhoneNum1' : 'orderUserPhoneNum1'}                                                    
+                                                    name={index ? 'receivePhoneNum1' : 'orderPhoneNum1'}                                                    
                                                     type="text"
-                                                    // onChange={onChange}
+                                                    // onChange={onBuyChange}
                                                     // value={form.email}
                                                     maxLength="4"
                                                     size="4"
                                                 />
                                                 -
                                                 <PurchaseBuyInput
-                                                    name={index ? 'receiveUserPhoneNum2' : 'orderUserPhoneNum2'}
+                                                    name={index ? 'receivePhoneNum2' : 'orderPhoneNum2'}
                                                     type="text"
-                                                    // onChange={onChange}
+                                                    // onChange={onBuyChange}
                                                     // value={form.email}
                                                     maxLength="4"
                                                     size="4"
@@ -577,7 +575,7 @@ const PurchaseTemplate = (props) => {
                                                     rows="3"
                                                     cols="100"
                                                     name="deliveryMessage"
-                                                    // onChange={onChange}
+                                                    // onChange={onBuyChange}
                                                     // value               
                                                     resize="none"                                 
                                                 />

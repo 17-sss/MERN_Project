@@ -7,7 +7,8 @@ import * as purchaseAPI from '../lib/api/purchase';
 // 리덕스에 등록 안함, api 만들어야함.
 // 액션 이름 정의 ----
 const INITALIZE_PURCHASE = 'purchase/INITALIZE_PURCHASE';
-const CHANGE_PURCHASE = 'purchase/CHANGE_PURCHASE'; 
+const CHANGE_PURCHASE_CART = 'purchase/CHANGE_PURCHASE_CART'; 
+const CHANGE_PURCHASE_BUY_USERINFO = 'purchase/CHANGE_PURCHASE_BUY_USERINFO'; 
 
 const [CART_IN, CART_IN_SUCCESS, CART_IN_FAILURE] = createRequestActionTypes(
     'purchase/CART_IN',
@@ -31,13 +32,22 @@ const [
 
 // 액션 생성 함수 작성
 export const initialPurchase = createAction(INITALIZE_PURCHASE);
-export const changePurchase = createAction(
-    CHANGE_PURCHASE,
+export const changePurchaseCart = createAction(
+    CHANGE_PURCHASE_CART,
     ({ form, key, value, addValue } = { addValue: null }) => ({
         form,
         key,
         value,
         addValue,
+    }),
+);
+export const changePurchaseBuyUserInfo = createAction(
+    CHANGE_PURCHASE_BUY_USERINFO,
+    ({ orderOrReceiver, key, subKey, value, } = { subkey: ''} ) => ({
+        orderOrReceiver, 
+        key,
+        subKey,
+        value,
     }),
 );
 export const cartIn = createAction(
@@ -84,8 +94,37 @@ const initialState = {
 */
     buy: null,
     buyFormStatus: {
+        orderInfo: {        // 주문자 정보
+            address: {
+                addressPostNo: '', 
+                addressAddr1: '',
+                addressAddr2: '',
+            },
+            phonenumber: {
+                phoneNumSelect: '010',
+                phoneNum1: '',
+                phoneNum2: '',
+            },
+        },
+        receiverInfo: {     // 받는 사람 정보 + 배송메시지
+            address: {
+                addressPostNo: '', 
+                addressAddr1: '',
+                addressAddr2: '',
+            },
+            phonenumber: {
+                phoneNumSelect: '010',
+                phoneNum1: '',
+                phoneNum2: '',
+            },
+            deliveryMessage: '',
+        },
+        // -----
+
         items: null,
-        // 추후 수정 (필요한 값 등록하기 cartFormStatus 처럼)
+        allProductPrice: "",
+        shippingFee: "",
+        totalPrice: "",
     },
     cart: null,
     cartFormStatus: {
@@ -144,8 +183,8 @@ const purchase = handleActions(
             };
         },
 
-        // onChange
-        [CHANGE_PURCHASE]: (state, action) => {
+        // onChange (장바구니의 수량 & 선택 체크박스)
+        [CHANGE_PURCHASE_CART]: (state, action) => {
             const { payload } = action;
             const { form, addValue } = payload;
             let { key, value } = payload;            
@@ -204,6 +243,26 @@ const purchase = handleActions(
                             : value,
                 },
             };
+        },
+
+        // onChange (구매창의 주문자 & 배송받는사람, 배송메세지)
+        [CHANGE_PURCHASE_BUY_USERINFO]: (state, action) => {
+            const { payload } = action;
+            const { orderOrReceiver, key, subKey, value, } = payload;        
+
+            return {
+                ...state,
+                buyFormStatus: {
+                    ...state['buyFormStatus'],
+                    [orderOrReceiver]: {
+                        ...state['buyFormStatus'][orderOrReceiver],
+                        [key]: {
+                            ...state['buyFormStatus'][orderOrReceiver][key],                                                                                        
+                            [subKey]: value,                            
+                        }
+                    }
+                }
+            }
         },
 
         // 장바구니 담기
