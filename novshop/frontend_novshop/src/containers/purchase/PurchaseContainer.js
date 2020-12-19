@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     changePurchaseCart,
+    changePurchaseBuyUserInfo,
     updCartVolume,
     getCart,
     initialPurchase,
@@ -122,13 +123,9 @@ const PurchaseContainer = (props) => {
                 return setData(cartFormStatus);
             }
         } else if (page === 'buy') {
-            if (!buyFormStatus) return;
-            if (
-                buyFormStatus &&
-                buyFormStatus.items &&
-                buyFormStatus.items.length > 0
-            ) {
-                return setData(buyFormStatus);
+            if (!buyFormStatus) return
+            else {
+                return setData(buyFormStatus);            
             }
         } else return;
     }, [cartFormStatus, buyFormStatus, page]);
@@ -246,7 +243,7 @@ const PurchaseContainer = (props) => {
 
     // 5) 주소 API 관련 값 Change   (구매창 전용)
     useEffect(() => {
-        if (addressType !== "order" || addressType !== "receive") return;        
+        if (addressType !== "order" && addressType !== "receive") return;        
         const { zonecode, address, buildingName, bname, } = addressResult;
 
         const setExtraAddress = (aBuildingName, aBname) => {
@@ -264,30 +261,30 @@ const PurchaseContainer = (props) => {
             return result;
         };
         const extraAddress = setExtraAddress(buildingName, bname);        
-        /*
-        dispatch(changeField({
-            form: 'register',
+        
+        dispatch(changePurchaseBuyUserInfo({
+            orderOrReceive: addressType + 'Info',
             key: 'address',
+            subKey: 'addressPostNo',
             value: zonecode,
-            addKey: 'addressPostNo',
         }));
 
-        dispatch(changeField({
-            form: 'register',
+        dispatch(changePurchaseBuyUserInfo({
+            orderOrReceive: addressType + 'Info',
             key: 'address',
+            subKey: 'addressAddr1',
             value: address,
-            addKey: 'addressAddr1',
         }));
 
         if (extraAddress) {
-            dispatch(changeField({
-                form: 'register',
+            dispatch(changePurchaseBuyUserInfo({
+                orderOrReceive: addressType + 'Info',
                 key: 'address',
+                subKey: 'addressAddr2',
                 value: extraAddress,
-                addKey: 'addressAddr2',
             }));
         }
-        */
+
     }, [dispatch, addressResult, addressType]);
 
 

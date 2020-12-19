@@ -493,7 +493,9 @@ const PurchaseTemplate = (props) => {
                                                     name={index ? 'receiveAddressPostNo' : 'orderAddressPostNo'}
                                                     type="text"
                                                     // onChange={onBuyChange}
-                                                    // value={form.email}
+                                                    value={index 
+                                                        ? data.receiveInfo.address.addressPostNo 
+                                                        : data.orderInfo.address.addressPostNo}
                                                     placeholder="우편번호"
                                                     readOnly="1"
                                                 />
@@ -503,12 +505,14 @@ const PurchaseTemplate = (props) => {
                                                     typeId={index ? 'receive' : 'order'}
                                                 />       
                                                 {/* -- */}
-                                                <br />
+                                                <br />                                                
                                                 <PurchaseBuyInput
                                                     name={index ? 'receiveAddressAddr1' : 'orderAddressAddr1'}
                                                     type="text"
                                                     // onChange={onBuyChange}
-                                                    // value={form.email}
+                                                    value={index 
+                                                        ? data.receiveInfo.address.addressAddr1 
+                                                        : data.orderInfo.address.addressAddr1}
                                                     placeholder="기본주소"
                                                     size="60"
                                                     readOnly="1"
@@ -518,9 +522,11 @@ const PurchaseTemplate = (props) => {
                                                     name={index ? 'receiveAddressAddr2' : 'orderAddressAddr2'}
                                                     type="text"
                                                     // onChange={onBuyChange}
-                                                    // value={form.email}
+                                                    value={index 
+                                                        ? data.receiveInfo.address.addressAddr2 
+                                                        : data.orderInfo.address.addressAddr2}
                                                     placeholder="나머지주소 (선택입력가능)"
-                                                    size="60"                                                
+                                                    size="60"                                  
                                                 />
                                             </PurchaseBuyTd>
                                         </PurchaseBuyTr>
@@ -576,7 +582,7 @@ const PurchaseTemplate = (props) => {
                                                     cols="100"
                                                     name="deliveryMessage"
                                                     // onChange={onBuyChange}
-                                                    // value               
+                                                    value={data.receiveInfo.deliveryMessage}
                                                     resize="none"                                 
                                                 />
                                             </PurchaseBuyTd>

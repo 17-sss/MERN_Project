@@ -43,8 +43,8 @@ export const changePurchaseCart = createAction(
 );
 export const changePurchaseBuyUserInfo = createAction(
     CHANGE_PURCHASE_BUY_USERINFO,
-    ({ orderOrReceiver, key, subKey, value, } = { subkey: ''} ) => ({
-        orderOrReceiver, 
+    ({ orderOrReceive, key, subKey, value, } = { subkey: ''} ) => ({
+        orderOrReceive, 
         key,
         subKey,
         value,
@@ -106,7 +106,7 @@ const initialState = {
                 phoneNum2: '',
             },
         },
-        receiverInfo: {     // 받는 사람 정보 + 배송메시지
+        receiveInfo: {     // 받는 사람 정보 + 배송메시지
             address: {
                 addressPostNo: '', 
                 addressAddr1: '',
@@ -248,16 +248,16 @@ const purchase = handleActions(
         // onChange (구매창의 주문자 & 배송받는사람, 배송메세지)
         [CHANGE_PURCHASE_BUY_USERINFO]: (state, action) => {
             const { payload } = action;
-            const { orderOrReceiver, key, subKey, value, } = payload;        
+            const { orderOrReceive, key, subKey, value, } = payload;        
 
             return {
                 ...state,
                 buyFormStatus: {
                     ...state['buyFormStatus'],
-                    [orderOrReceiver]: {
-                        ...state['buyFormStatus'][orderOrReceiver],
+                    [orderOrReceive]: {
+                        ...state['buyFormStatus'][orderOrReceive],
                         [key]: {
-                            ...state['buyFormStatus'][orderOrReceiver][key],                                                                                        
+                            ...state['buyFormStatus'][orderOrReceive][key],                                                                                        
                             [subKey]: value,                            
                         }
                     }
