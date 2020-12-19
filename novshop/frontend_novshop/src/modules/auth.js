@@ -117,7 +117,8 @@ const auth = handleActions(
     {
         [CHANGE_FIELD]: (state, action) => {
             const { payload } = action;
-            const { form, key, value, addKey } = payload;             
+            const { form, key, value, addKey } = payload;
+            if(!value && key === 'address') return;
 
             return {
                 ...state,

@@ -292,13 +292,13 @@ const PurchaseContainer = (props) => {
 
 
     // 3. 이벤트
-    // 1) onCartChange, 장바구니 창 전용 Change
+    // 1) onCartChange, 장바구니 창 전용
     const onCartChange = useCallback(
         (e) => {
+            if (page !== 'shoppingcart') return;
             const { id, name: key, checked } = e.target;
             let { value } = e.target;
-            const form =
-                page === 'shoppingcart' ? 'cartFormStatus' : '';            
+            const form = 'cartFormStatus';                        
 
             let changePurchaseCartParams = { form, key, value };
 
@@ -344,7 +344,62 @@ const PurchaseContainer = (props) => {
         [dispatch, page],
     );
 
-    // 2) onItemDeleteClick (선택 상품 삭제, 장바구니 비우기)
+    // 2) onBuyChange, 구매 창 전용 (구매 창의 주문자, 받는사람 정보 등)
+    const onBuyChange = useCallback((e) => {
+        if (page !== 'buy') return;        
+        const { name, value, } = e.target;                        
+        const orderOrReceive =
+            (name.indexOf('receive') > -1) || (name === "deliveryMessage")
+                ? 'receiveInfo'
+                : name.indexOf('order') > -1
+                ? 'orderInfo'
+                : '';
+        if(!orderOrReceive) return;
+
+        let key = name.replace(
+                orderOrReceive === 'receiveInfo' ? 'receive' : 'order',
+                '',
+            );
+        if (!key) return;        
+        let subKey = '';
+
+        if (key === "UserName") key = key.toLowerCase()
+        else if (key === "AddressAddr2") {
+            key = "address";
+            subKey = "addressAddr2";
+        } else if (key.toLowerCase().indexOf('phone') > -1) {                        
+            switch (key) {
+                case "PhoneNumSelect": {
+                    subKey = 'phoneNumSelect';
+                    break;
+                }                    
+                case "PhoneNum1": {
+                    subKey = 'phoneNum1';
+                    break;
+                }
+                case "PhoneNum2": {
+                    subKey = 'phoneNum2';
+                    break;
+                }
+                default:
+                    break;
+            }
+            key = 'phonenumber';
+        }
+        
+    
+        dispatch(
+            changePurchaseBuyUserInfo({
+                orderOrReceive,
+                key: name === 'deliveryMessage' ? name : key,
+                subKey,
+                value,
+            }),
+        );
+    }, [dispatch, page]);
+    
+
+    // 3) onItemDeleteClick (선택 상품 삭제, 장바구니 비우기)
     const onItemDeleteClick = useCallback((e) => {
         if (!cartFormStatus) return;
         
@@ -385,7 +440,7 @@ const PurchaseContainer = (props) => {
         allLoadingOK && <PurchaseTemplate
             data={data}
             etcs={{ page, colInfo, phoneFrontList }}
-            events={{ onCartChange, onItemDeleteClick, onBuyProductClick }}
+            events={{ onCartChange, onBuyChange, onItemDeleteClick, onBuyProductClick }}
             refs={{ allSelectRef }}
         />
     );

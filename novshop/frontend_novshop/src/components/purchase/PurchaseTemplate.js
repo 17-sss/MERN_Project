@@ -201,7 +201,7 @@ const PurchaseBtn = styled.button`
 const PurchaseTemplate = (props) => {
     const { etcs, data, events, refs } = props;
     const { page, colInfo, phoneFrontList } = etcs;    
-    const { onCartChange, onItemDeleteClick, onBuyProductClick } = events;
+    const { onCartChange, onBuyChange, onItemDeleteClick, onBuyProductClick } = events;
     const { allSelectRef } = refs;
         
     return (        
@@ -472,11 +472,13 @@ const PurchaseTemplate = (props) => {
                                                 </span>
                                             </PurchaseTh>
                                             <PurchaseBuyTd>
-                                                <PurchaseBuyInput                                                    
+                                                <PurchaseBuyInput
                                                     name={index ? 'receiveUserName' : 'orderUserName'}
                                                     type="text"
-                                                    // onChange={onBuyChange}
-                                                    // value={form.email}
+                                                    onChange={onBuyChange}
+                                                    value={index 
+                                                        ? data.receiveInfo.name 
+                                                        : data.orderInfo.name}
                                                     autoComplete="off"                                                
                                                 />
                                             </PurchaseBuyTd>
@@ -491,13 +493,12 @@ const PurchaseTemplate = (props) => {
                                             <PurchaseBuyTd>
                                                 <PurchaseBuyInput
                                                     name={index ? 'receiveAddressPostNo' : 'orderAddressPostNo'}
-                                                    type="text"
-                                                    // onChange={onBuyChange}
+                                                    type="text"                                                    
                                                     value={index 
                                                         ? data.receiveInfo.address.addressPostNo 
                                                         : data.orderInfo.address.addressPostNo}
                                                     placeholder="우편번호"
-                                                    readOnly="1"
+                                                    readOnly="1"    // readOnly는 onChange 없어도..
                                                 />
                                                 &nbsp;
                                                 {/* 우편번호 검색 API용 Container */}
@@ -508,8 +509,7 @@ const PurchaseTemplate = (props) => {
                                                 <br />                                                
                                                 <PurchaseBuyInput
                                                     name={index ? 'receiveAddressAddr1' : 'orderAddressAddr1'}
-                                                    type="text"
-                                                    // onChange={onBuyChange}
+                                                    type="text"                                                    
                                                     value={index 
                                                         ? data.receiveInfo.address.addressAddr1 
                                                         : data.orderInfo.address.addressAddr1}
@@ -521,7 +521,7 @@ const PurchaseTemplate = (props) => {
                                                 <PurchaseBuyInput
                                                     name={index ? 'receiveAddressAddr2' : 'orderAddressAddr2'}
                                                     type="text"
-                                                    // onChange={onBuyChange}
+                                                    onChange={onBuyChange}
                                                     value={index 
                                                         ? data.receiveInfo.address.addressAddr2 
                                                         : data.orderInfo.address.addressAddr2}
@@ -541,8 +541,10 @@ const PurchaseTemplate = (props) => {
                                             <PurchaseBuyTd>
                                                 <PurchaseBuySelect
                                                     name={index ? 'receivePhoneNumSelect' : 'orderPhoneNumSelect'}                                                    
-                                                    // onChange={onBuyChange}
-                                                    // defaultValue
+                                                    onChange={onBuyChange}                                                    
+                                                    value={index 
+                                                        ? data.receiveInfo.phonenumber.phoneNumSelect 
+                                                        : data.orderInfo.phonenumber.phoneNumSelect}  
                                                 >
                                                     {phoneFrontList.map((v, i) => (
                                                         <option value={v} key={i}>
@@ -554,8 +556,10 @@ const PurchaseTemplate = (props) => {
                                                 <PurchaseBuyInput
                                                     name={index ? 'receivePhoneNum1' : 'orderPhoneNum1'}                                                    
                                                     type="text"
-                                                    // onChange={onBuyChange}
-                                                    // value={form.email}
+                                                    onChange={onBuyChange}
+                                                    value={index 
+                                                        ? data.receiveInfo.phonenumber.phoneNum1 
+                                                        : data.orderInfo.phonenumber.phoneNum1}                                                    
                                                     maxLength="4"
                                                     size="4"
                                                 />
@@ -563,8 +567,10 @@ const PurchaseTemplate = (props) => {
                                                 <PurchaseBuyInput
                                                     name={index ? 'receivePhoneNum2' : 'orderPhoneNum2'}
                                                     type="text"
-                                                    // onChange={onBuyChange}
-                                                    // value={form.email}
+                                                    onChange={onBuyChange}
+                                                    value={index 
+                                                        ? data.receiveInfo.phonenumber.phoneNum2 
+                                                        : data.orderInfo.phonenumber.phoneNum2}  
                                                     maxLength="4"
                                                     size="4"
                                                 />
@@ -581,7 +587,7 @@ const PurchaseTemplate = (props) => {
                                                     rows="3"
                                                     cols="100"
                                                     name="deliveryMessage"
-                                                    // onChange={onBuyChange}
+                                                    onChange={onBuyChange}
                                                     value={data.receiveInfo.deliveryMessage}
                                                     resize="none"                                 
                                                 />

@@ -95,6 +95,7 @@ const initialState = {
     buy: null,
     buyFormStatus: {
         orderInfo: {        // 주문자 정보
+            username: '',
             address: {
                 addressPostNo: '', 
                 addressAddr1: '',
@@ -107,6 +108,7 @@ const initialState = {
             },
         },
         receiveInfo: {     // 받는 사람 정보 + 배송메시지
+            username: '',
             address: {
                 addressPostNo: '', 
                 addressAddr1: '',
@@ -248,7 +250,8 @@ const purchase = handleActions(
         // onChange (구매창의 주문자 & 배송받는사람, 배송메세지)
         [CHANGE_PURCHASE_BUY_USERINFO]: (state, action) => {
             const { payload } = action;
-            const { orderOrReceive, key, subKey, value, } = payload;        
+            const { orderOrReceive, key, subKey, value, } = payload;   
+            if(!value && key === 'address') return;                 
 
             return {
                 ...state,
@@ -256,10 +259,10 @@ const purchase = handleActions(
                     ...state['buyFormStatus'],
                     [orderOrReceive]: {
                         ...state['buyFormStatus'][orderOrReceive],
-                        [key]: {
+                        [key]: subKey ? {
                             ...state['buyFormStatus'][orderOrReceive][key],                                                                                        
                             [subKey]: value,                            
-                        }
+                        } : value,
                     }
                 }
             }

@@ -52,7 +52,7 @@ const RegisterContainer = ({history}) => {
     
     // onChange
     const onChange = (e) => {
-        const {name, value} = e.target;  
+        const {name, value} = e.target;        
         const exceptionalNames = [
             'addressPostNo', 'addressAddr1', 'addressAddr2',
             'phoneNumSelect', 'phoneNum1', 'phoneNum2',
