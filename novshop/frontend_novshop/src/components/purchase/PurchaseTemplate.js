@@ -183,15 +183,36 @@ const PurchaseBtn = styled.button`
     display: inline-block;
     width: auto;
     height: 25px;
-    margin-right: 10px;    
+
+    ${(props) =>
+        props.name === 'receiveInfoClean' ||
+        props.name === 'orderInfoClean' ||
+        props.name === 'orderReceiveSame'
+            ? css`
+                  margin-left: 5px;
+              `
+            : css`
+                  margin-right: 10px;
+              `}
+
     padding: 0 10px;
 
     border-radius: 2px;
     border: 1px solid #d1d1d1;
-    
-    background-color: ${props => props.name === "buyall" ? "#c0c0c0" : "white"};
+
+    background-color: ${(props) =>
+        props.name === 'buyall' ||
+        props.name === 'receiveInfoClean' ||
+        props.name === 'orderInfoClean'
+            ? '#c0c0c0'
+            : 'white'};
     &:hover {
-        background-color: ${props => props.name === "buyall" ? "#d6d6d6" : "#e6e6e6"};
+        background-color: ${(props) =>
+            props.name === 'buyall' ||
+            props.name === 'receiveInfoClean' ||
+            props.name === 'orderInfoClean'
+                ? '#d6d6d6'
+                : '#e6e6e6'};
     }
 `;
 
@@ -200,8 +221,14 @@ const PurchaseBtn = styled.button`
 
 const PurchaseTemplate = (props) => {
     const { etcs, data, events, refs } = props;
-    const { page, colInfo, phoneFrontList } = etcs;    
-    const { onCartChange, onBuyChange, onItemDeleteClick, onBuyProductClick } = events;
+    const { page, colInfo, phoneFrontList } = etcs;
+    const {
+        onCartChange,
+        onBuyChange,
+        onItemDeleteClick,
+        onBuyProductClick,
+        onAddressInfoControl,
+    } = events;
     const { allSelectRef } = refs;
         
     return (        
@@ -450,6 +477,26 @@ const PurchaseTemplate = (props) => {
                                     <span className="float_left" style={{fontSize: "11pt"}}>
                                         {index ? '배송 정보' : '주문 정보'}
                                     </span>
+                                    {index === 1 && (
+                                        <PurchaseBtn
+                                            className="float_left"
+                                            name="orderReceiveSame"
+                                            onClick={onAddressInfoControl}
+                                        >
+                                            주문정보와 같음
+                                        </PurchaseBtn>
+                                    )}
+                                    <PurchaseBtn
+                                        className="float_left"
+                                        name={
+                                            (index
+                                                ? 'receiveInfo'
+                                                : 'orderInfo') + 'Clean'
+                                        }
+                                        onClick={onAddressInfoControl}
+                                    >
+                                        초기화
+                                    </PurchaseBtn>
                                     <span className="float_right" style={{fontSize: "11pt"}}>
                                         <span className="required_star">*</span>
                                         필수입력사항
@@ -477,8 +524,8 @@ const PurchaseTemplate = (props) => {
                                                     type="text"
                                                     onChange={onBuyChange}
                                                     value={index 
-                                                        ? data.receiveInfo.name 
-                                                        : data.orderInfo.name}
+                                                        ? data.receiveInfo.username 
+                                                        : data.orderInfo.username}
                                                     autoComplete="off"                                                
                                                 />
                                             </PurchaseBuyTd>

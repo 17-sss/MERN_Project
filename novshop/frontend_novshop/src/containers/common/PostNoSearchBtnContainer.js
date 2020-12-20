@@ -66,7 +66,7 @@ const PostNoSearchBtnContainer = (props) => {
     
     // [3] useEffect
     // 1) 초기화
-    useEffect(() => {                        
+    useEffect(() => {     
         dispatch(initializeUtil());           
     }, [dispatch]);
 

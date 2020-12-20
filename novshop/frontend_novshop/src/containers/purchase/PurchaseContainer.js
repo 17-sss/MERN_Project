@@ -8,11 +8,13 @@ import {
     updCartVolume,
     getCart,
     initialPurchase,
+    initialPurchaseForm,
     delCartGoods
 } from '../../modules/purchase';
 import { objectFlagIsAllReady, threeDigitsComma } from '../../lib/utility/customFunc';
 
 import PurchaseTemplate from '../../components/purchase/PurchaseTemplate';
+import { initializeUtilForm } from '../../modules/util';
 
 const PurchaseContainer = (props) => {
     // [1] 기본 세팅
@@ -105,13 +107,39 @@ const PurchaseContainer = (props) => {
         if (curUserId !== -1) {
             if (page === 'shoppingcart') {
                 dispatch(getCart({ userId: curUserId }));
-            } else {
-                // 구매 dispatch
-            }
-        }
-    }, [dispatch, page, curUserId, isUpdateValue]);
+            } else if (page === 'buy') {  
+                if (!userData || typeof userData === "string" || !userData.data) return;
+                const {username, address, phonenumber} = userData.data;
+                
+                if (username) {                                       
+                    dispatch(changePurchaseBuyUserInfo({orderOrReceive: "orderInfo", key: "username", subKey: '', value: username}));
+                    dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key: "username", subKey: '', value: username}));
+                }
+                
+                if (address) {
+                    const addressTemp = JSON.parse(address);                
+                    for (const subKey in addressTemp) {
+                        const value = addressTemp[subKey];
 
-    // 2) 불러온 데이터 세팅
+                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "orderInfo", key: "address", subKey, value})); 
+                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key: "address", subKey, value}));
+                    }    
+                }
+
+                if (phonenumber) {
+                    const phoneTemp = JSON.parse(phonenumber);                
+                    for (const subKey in phoneTemp) {
+                        const value = phoneTemp[subKey];
+
+                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "orderInfo", key: "phonenumber", subKey, value})); 
+                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key: "phonenumber", subKey, value}));
+                    }         
+                }                
+            } else return;
+        }
+    }, [dispatch, page, curUserId, isUpdateValue, userData]);
+
+    // 2-1) 불러온 데이터 세팅
     useEffect(() => {
         if (page === 'shoppingcart') {
             if (!cartFormStatus) return;
@@ -129,6 +157,8 @@ const PurchaseContainer = (props) => {
             }
         } else return;
     }, [cartFormStatus, buyFormStatus, page]);
+
+    // 2-2) 유저 정보(현재 유저 주소 & 연락처 정보) 가져옴 (구매 창 전용)
 
     // 3) shoppingcart용 가격 계산 후 세팅 (상품구매금액, 배송비, 총금액)
     useEffect(() => {
@@ -245,6 +275,7 @@ const PurchaseContainer = (props) => {
     useEffect(() => {
         if (addressType !== "order" && addressType !== "receive") return;        
         const { zonecode, address, buildingName, bname, } = addressResult;
+        if (!zonecode && !address && !buildingName && !bname) return;
 
         const setExtraAddress = (aBuildingName, aBname) => {
             let result = '';
@@ -283,8 +314,8 @@ const PurchaseContainer = (props) => {
                 subKey: 'addressAddr2',
                 value: extraAddress,
             }));
-        }
-
+        }        
+        dispatch(initializeUtilForm({form: 'addressResult'}));
     }, [dispatch, addressResult, addressType]);
 
 
@@ -387,7 +418,6 @@ const PurchaseContainer = (props) => {
             key = 'phonenumber';
         }
         
-    
         dispatch(
             changePurchaseBuyUserInfo({
                 orderOrReceive,
@@ -425,14 +455,41 @@ const PurchaseContainer = (props) => {
         setIsUpdateValue(true);
     }, [dispatch, cartFormStatus]);
 
-    // 3) onBuyProductClick (전체상품 주문, 선택 상품 주문용)
+    // 4) onBuyProductClick (전체상품 주문, 선택 상품 주문용)
     const onBuyProductClick = useCallback((e) => {
         const { name } = e.target;
 
         name === 'buyall'
             ? alert('buyall')
             : name === 'buyselect' && alert('buyselect');
-    }, [])
+    }, []);
+
+    // 5) onAddressInfoControl, onClick (배송 정보에 주문 정보 그대로 가져오거나, 각 정보란 초기화 Btn Click)
+    const onAddressInfoControl = useCallback((e) => {
+        const { name } = e.target;
+
+        if (name.indexOf('Clean') > -1) {
+            const subForm = name.replace("Clean", "");
+            dispatch(initialPurchaseForm({form: "buyFormStatus", subForm, }))
+
+        } else if (name === "orderReceiveSame") {
+            if (!buyFormStatus || !buyFormStatus.orderInfo) return;
+            
+            for (const key in buyFormStatus.orderInfo) {                
+                if (key === "username") {
+                    const value = buyFormStatus.orderInfo[key];
+                    dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key, subKey: '', value}));
+                } else if (key === "address" || key === "phonenumber") {
+                    for (const subKey in buyFormStatus.orderInfo[key]) {                        
+                        const value = buyFormStatus.orderInfo[key][subKey];
+                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key, subKey, value}));
+                    }
+                } else continue;
+            }
+
+        } else return;
+
+    }, [dispatch, buyFormStatus]);
 
     // ============================================================
 
@@ -440,7 +497,7 @@ const PurchaseContainer = (props) => {
         allLoadingOK && <PurchaseTemplate
             data={data}
             etcs={{ page, colInfo, phoneFrontList }}
-            events={{ onCartChange, onBuyChange, onItemDeleteClick, onBuyProductClick }}
+            events={{ onCartChange, onBuyChange, onItemDeleteClick, onBuyProductClick, onAddressInfoControl }}
             refs={{ allSelectRef }}
         />
     );

@@ -7,6 +7,7 @@ import * as purchaseAPI from '../lib/api/purchase';
 // 리덕스에 등록 안함, api 만들어야함.
 // 액션 이름 정의 ----
 const INITALIZE_PURCHASE = 'purchase/INITALIZE_PURCHASE';
+const INITALIZE_PURCHASE_FORM = 'purchase/INITALIZE_PURCHASE_FORM';
 const CHANGE_PURCHASE_CART = 'purchase/CHANGE_PURCHASE_CART'; 
 const CHANGE_PURCHASE_BUY_USERINFO = 'purchase/CHANGE_PURCHASE_BUY_USERINFO'; 
 
@@ -32,6 +33,10 @@ const [
 
 // 액션 생성 함수 작성
 export const initialPurchase = createAction(INITALIZE_PURCHASE);
+export const initialPurchaseForm = createAction(
+    INITALIZE_PURCHASE_FORM,
+    ({ form, subForm } = { subForm: '' }) => ({ form, subForm }),
+);
 export const changePurchaseCart = createAction(
     CHANGE_PURCHASE_CART,
     ({ form, key, value, addValue } = { addValue: null }) => ({
@@ -185,6 +190,21 @@ const purchase = handleActions(
             };
         },
 
+        // 초기화 (특정 폼) 
+        [INITALIZE_PURCHASE_FORM]: (state, action) => {
+            const { payload } = action;
+            const { form, subForm } = payload;
+
+            return {
+                ...state,
+                [form]: subForm
+                    ? {
+                          ...state[form],
+                          [subForm]: initialState[form][subForm],
+                      }
+                    : initialState[form],
+            };
+        },
         // onChange (장바구니의 수량 & 선택 체크박스)
         [CHANGE_PURCHASE_CART]: (state, action) => {
             const { payload } = action;
@@ -251,8 +271,8 @@ const purchase = handleActions(
         [CHANGE_PURCHASE_BUY_USERINFO]: (state, action) => {
             const { payload } = action;
             const { orderOrReceive, key, subKey, value, } = payload;   
-            if(!value && key === 'address') return;                 
-
+            if(!value && key === 'address') return;         
+            
             return {
                 ...state,
                 buyFormStatus: {
