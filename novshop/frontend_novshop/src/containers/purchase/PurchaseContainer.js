@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     changePurchaseCart,
-    changePurchaseBuyUserInfo,
+    changePurchaseBuy,
     updCartVolume,
     getCart,
     initialPurchase,
@@ -23,7 +23,8 @@ const PurchaseContainer = (props) => {
         match: {
             params: { page },
         },
-    } = props;
+        history,
+    } = props;    
 
     const dispatch = useDispatch();
     const { cartFormStatus, buyFormStatus, addressType, addressResult, userData, loading } = useSelector(
@@ -112,8 +113,8 @@ const PurchaseContainer = (props) => {
                 const {username, address, phonenumber} = userData.data;
                 
                 if (username) {                                       
-                    dispatch(changePurchaseBuyUserInfo({orderOrReceive: "orderInfo", key: "username", subKey: '', value: username}));
-                    dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key: "username", subKey: '', value: username}));
+                    dispatch(changePurchaseBuy({topKey: "orderInfo", key: "username", subKey: '', value: username}));
+                    dispatch(changePurchaseBuy({topKey: "receiveInfo", key: "username", subKey: '', value: username}));
                 }
                 
                 if (address) {
@@ -121,8 +122,8 @@ const PurchaseContainer = (props) => {
                     for (const subKey in addressTemp) {
                         const value = addressTemp[subKey];
 
-                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "orderInfo", key: "address", subKey, value})); 
-                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key: "address", subKey, value}));
+                        dispatch(changePurchaseBuy({topKey: "orderInfo", key: "address", subKey, value})); 
+                        dispatch(changePurchaseBuy({topKey: "receiveInfo", key: "address", subKey, value}));
                     }    
                 }
 
@@ -131,8 +132,8 @@ const PurchaseContainer = (props) => {
                     for (const subKey in phoneTemp) {
                         const value = phoneTemp[subKey];
 
-                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "orderInfo", key: "phonenumber", subKey, value})); 
-                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key: "phonenumber", subKey, value}));
+                        dispatch(changePurchaseBuy({topKey: "orderInfo", key: "phonenumber", subKey, value})); 
+                        dispatch(changePurchaseBuy({topKey: "receiveInfo", key: "phonenumber", subKey, value}));
                     }         
                 }                
             } else return;
@@ -293,23 +294,23 @@ const PurchaseContainer = (props) => {
         };
         const extraAddress = setExtraAddress(buildingName, bname);        
         
-        dispatch(changePurchaseBuyUserInfo({
-            orderOrReceive: addressType + 'Info',
+        dispatch(changePurchaseBuy({
+            topKey: addressType + 'Info',
             key: 'address',
             subKey: 'addressPostNo',
             value: zonecode,
         }));
 
-        dispatch(changePurchaseBuyUserInfo({
-            orderOrReceive: addressType + 'Info',
+        dispatch(changePurchaseBuy({
+            topKey: addressType + 'Info',
             key: 'address',
             subKey: 'addressAddr1',
             value: address,
         }));
 
         if (extraAddress) {
-            dispatch(changePurchaseBuyUserInfo({
-                orderOrReceive: addressType + 'Info',
+            dispatch(changePurchaseBuy({
+                topKey: addressType + 'Info',
                 key: 'address',
                 subKey: 'addressAddr2',
                 value: extraAddress,
@@ -379,16 +380,16 @@ const PurchaseContainer = (props) => {
     const onBuyChange = useCallback((e) => {
         if (page !== 'buy') return;        
         const { name, value, } = e.target;                        
-        const orderOrReceive =
+        const topKey =
             (name.indexOf('receive') > -1) || (name === "deliveryMessage")
                 ? 'receiveInfo'
                 : name.indexOf('order') > -1
                 ? 'orderInfo'
                 : '';
-        if(!orderOrReceive) return;
+        if(!topKey) return;
 
         let key = name.replace(
-                orderOrReceive === 'receiveInfo' ? 'receive' : 'order',
+                topKey === 'receiveInfo' ? 'receive' : 'order',
                 '',
             );
         if (!key) return;        
@@ -419,8 +420,8 @@ const PurchaseContainer = (props) => {
         }
         
         dispatch(
-            changePurchaseBuyUserInfo({
-                orderOrReceive,
+            changePurchaseBuy({
+                topKey,
                 key: name === 'deliveryMessage' ? name : key,
                 subKey,
                 value,
@@ -455,52 +456,69 @@ const PurchaseContainer = (props) => {
         setIsUpdateValue(true);
     }, [dispatch, cartFormStatus]);
 
-    // 4) onBuyProductClick (전체상품 주문, 선택 상품 주문용)
+    // 4) onBuyProductClick (장바구니 창 전용. 전체상품 주문, 선택 상품 주문용)
     const onBuyProductClick = useCallback((e) => {
+        if (!cartFormStatus.items || cartFormStatus.items.length <= 0) return;
         const { name } = e.target;
+        if (name !== 'buyall' && name !== 'buyselect') return;  
 
-        name === 'buyall'
-            ? alert('buyall')
-            : name === 'buyselect' && alert('buyselect');
-    }, []);
+        let value = [];
+        if (name === 'buyall')
+            value = cartFormStatus.items
+        else if (name === 'buyselect') {                        
+            cartFormStatus.checkedItems.map((v1) =>
+                value.push(cartFormStatus.items.find((v2) => Number(v2.id) === Number(v1))),
+            );
+        } else return;
+
+        dispatch(
+            changePurchaseBuy({
+                topKey: 'items',
+                value,
+            }),
+        );
+
+        history.push(`/purchase/buy`);  // 제대로 안먹힘.. 분리해야하나? 장바구니랑 구매랑?
+    }, [dispatch, cartFormStatus, history]);
 
     // 5) onAddressInfoControl, onClick (배송 정보에 주문 정보 그대로 가져오거나, 각 정보란 초기화 Btn Click)
     const onAddressInfoControl = useCallback((e) => {
         const { name } = e.target;
 
-        if (name.indexOf('Clean') > -1) {
+        
+        if (name.indexOf('Clean') > -1) {                   // 초기화 (주문정보 & 배송정보)
             const subForm = name.replace("Clean", "");
-            dispatch(initialPurchaseForm({form: "buyFormStatus", subForm, }))
-
-        } else if (name === "orderReceiveSame") {
+            dispatch(initialPurchaseForm({form: "buyFormStatus", subForm, }))                
+        } else if (name === "orderReceiveSame") {           // 주문정보와 같음
             if (!buyFormStatus || !buyFormStatus.orderInfo) return;
-            
+
             for (const key in buyFormStatus.orderInfo) {                
                 if (key === "username") {
                     const value = buyFormStatus.orderInfo[key];
-                    dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key, subKey: '', value}));
+                    dispatch(changePurchaseBuy({topKey: "receiveInfo", key, subKey: '', value}));
                 } else if (key === "address" || key === "phonenumber") {
                     for (const subKey in buyFormStatus.orderInfo[key]) {                        
                         const value = buyFormStatus.orderInfo[key][subKey];
-                        dispatch(changePurchaseBuyUserInfo({orderOrReceive: "receiveInfo", key, subKey, value}));
+                        dispatch(changePurchaseBuy({topKey: "receiveInfo", key, subKey, value}));
                     }
                 } else continue;
             }
-
         } else return;
 
     }, [dispatch, buyFormStatus]);
 
     // ============================================================
 
-    return (
-        allLoadingOK && <PurchaseTemplate
+    const returnJSX = (
+        <PurchaseTemplate
             data={data}
             etcs={{ page, colInfo, phoneFrontList }}
             events={{ onCartChange, onBuyChange, onItemDeleteClick, onBuyProductClick, onAddressInfoControl }}
             refs={{ allSelectRef }}
         />
     );
+
+    return page === "buy" ? allLoadingOK && returnJSX : returnJSX;
 };
 
 export default withRouter(PurchaseContainer);

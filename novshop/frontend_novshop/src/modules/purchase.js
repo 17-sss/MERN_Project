@@ -9,7 +9,7 @@ import * as purchaseAPI from '../lib/api/purchase';
 const INITALIZE_PURCHASE = 'purchase/INITALIZE_PURCHASE';
 const INITALIZE_PURCHASE_FORM = 'purchase/INITALIZE_PURCHASE_FORM';
 const CHANGE_PURCHASE_CART = 'purchase/CHANGE_PURCHASE_CART'; 
-const CHANGE_PURCHASE_BUY_USERINFO = 'purchase/CHANGE_PURCHASE_BUY_USERINFO'; 
+const CHANGE_PURCHASE_BUY = 'purchase/CHANGE_PURCHASE_BUY'; 
 
 const [CART_IN, CART_IN_SUCCESS, CART_IN_FAILURE] = createRequestActionTypes(
     'purchase/CART_IN',
@@ -46,10 +46,10 @@ export const changePurchaseCart = createAction(
         addValue,
     }),
 );
-export const changePurchaseBuyUserInfo = createAction(
-    CHANGE_PURCHASE_BUY_USERINFO,
-    ({ orderOrReceive, key, subKey, value, } = { subkey: ''} ) => ({
-        orderOrReceive, 
+export const changePurchaseBuy = createAction(
+    CHANGE_PURCHASE_BUY,
+    ({ topKey, key, subKey, value, } = { key: '', subkey: ''} ) => ({
+        topKey, 
         key,
         subKey,
         value,
@@ -267,25 +267,28 @@ const purchase = handleActions(
             };
         },
 
-        // onChange (구매창의 주문자 & 배송받는사람, 배송메세지)
-        [CHANGE_PURCHASE_BUY_USERINFO]: (state, action) => {
+        // onChange (구매창 전용, 현재 구매하려는 상품목록(items), 주문자 & 배송받는사람, 배송메세지 등..)
+        [CHANGE_PURCHASE_BUY]: (state, action) => {
             const { payload } = action;
-            const { orderOrReceive, key, subKey, value, } = payload;   
-            if(!value && key === 'address') return;         
-            
+            const { topKey, key, subKey, value, } = payload;   
+            if(!value && key === 'address') return;                     
             return {
                 ...state,
                 buyFormStatus: {
                     ...state['buyFormStatus'],
-                    [orderOrReceive]: {
-                        ...state['buyFormStatus'][orderOrReceive],
-                        [key]: subKey ? {
-                            ...state['buyFormStatus'][orderOrReceive][key],                                                                                        
-                            [subKey]: value,                            
-                        } : value,
-                    }
-                }
-            }
+                    [topKey]: key
+                        ? {
+                              ...state['buyFormStatus'][topKey],
+                              [key]: subKey
+                                  ? {
+                                        ...state['buyFormStatus'][topKey][key],
+                                        [subKey]: value,
+                                    }
+                                  : value,
+                          }
+                        : value,
+                },
+            };
         },
 
         // 장바구니 담기
