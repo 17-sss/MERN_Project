@@ -102,7 +102,9 @@ const PurchaseContainer = (props) => {
     useEffect(() => {
         if (isUpdateValue) setIsUpdateValue(false);
 
-        dispatch(initialPurchase());
+        if ((page === 'buy' && (!buyFormStatus.items || buyFormStatus.items.length <= 0)) || page === 'shoppingcart')             
+            dispatch(initialPurchase());        
+            
         if (page === 'shoppingcart') setPriceLoading(false);
 
         if (curUserId !== -1) {
@@ -138,7 +140,7 @@ const PurchaseContainer = (props) => {
                 }                
             } else return;
         }
-    }, [dispatch, page, curUserId, isUpdateValue, userData]);
+    }, [dispatch, page, curUserId, isUpdateValue, userData, buyFormStatus]);
 
     // 2-1) 불러온 데이터 세팅
     useEffect(() => {
@@ -158,8 +160,6 @@ const PurchaseContainer = (props) => {
             }
         } else return;
     }, [cartFormStatus, buyFormStatus, page]);
-
-    // 2-2) 유저 정보(현재 유저 주소 & 연락처 정보) 가져옴 (구매 창 전용)
 
     // 3) shoppingcart용 가격 계산 후 세팅 (상품구매금액, 배송비, 총금액)
     useEffect(() => {
@@ -461,6 +461,7 @@ const PurchaseContainer = (props) => {
         if (!cartFormStatus.items || cartFormStatus.items.length <= 0) return;
         const { name } = e.target;
         if (name !== 'buyall' && name !== 'buyselect') return;  
+        if (name === 'buyselect' && cartFormStatus.checkedItems.length <= 0) return alert('제품을 선택해주세요.');
 
         let value = [];
         if (name === 'buyall')

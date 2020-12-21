@@ -524,8 +524,8 @@ const PurchaseTemplate = (props) => {
                                                     type="text"
                                                     onChange={onBuyChange}
                                                     value={index 
-                                                        ? data.receiveInfo.username 
-                                                        : data.orderInfo.username}
+                                                        ? data.receiveInfo && data.receiveInfo.username 
+                                                        : data.orderInfo && data.orderInfo.username}
                                                     autoComplete="off"                                                
                                                 />
                                             </PurchaseBuyTd>
@@ -542,8 +542,8 @@ const PurchaseTemplate = (props) => {
                                                     name={index ? 'receiveAddressPostNo' : 'orderAddressPostNo'}
                                                     type="text"                                                    
                                                     value={index 
-                                                        ? data.receiveInfo.address.addressPostNo 
-                                                        : data.orderInfo.address.addressPostNo}
+                                                        ? data.receiveInfo &&  data.receiveInfo.address.addressPostNo 
+                                                        : data.orderInfo && data.orderInfo.address.addressPostNo}
                                                     placeholder="우편번호"
                                                     readOnly="1"    // readOnly는 onChange 없어도..
                                                 />
@@ -558,8 +558,8 @@ const PurchaseTemplate = (props) => {
                                                     name={index ? 'receiveAddressAddr1' : 'orderAddressAddr1'}
                                                     type="text"                                                    
                                                     value={index 
-                                                        ? data.receiveInfo.address.addressAddr1 
-                                                        : data.orderInfo.address.addressAddr1}
+                                                        ? data.receiveInfo && data.receiveInfo.address.addressAddr1 
+                                                        : data.orderInfo && data.orderInfo.address.addressAddr1}
                                                     placeholder="기본주소"
                                                     size="60"
                                                     readOnly="1"
@@ -570,8 +570,8 @@ const PurchaseTemplate = (props) => {
                                                     type="text"
                                                     onChange={onBuyChange}
                                                     value={index 
-                                                        ? data.receiveInfo.address.addressAddr2 
-                                                        : data.orderInfo.address.addressAddr2}
+                                                        ? data.receiveInfo && data.receiveInfo.address.addressAddr2 
+                                                        : data.orderInfo && data.orderInfo.address.addressAddr2}
                                                     placeholder="나머지주소 (선택입력가능)"
                                                     size="60"                                  
                                                 />
@@ -590,8 +590,8 @@ const PurchaseTemplate = (props) => {
                                                     name={index ? 'receivePhoneNumSelect' : 'orderPhoneNumSelect'}                                                    
                                                     onChange={onBuyChange}                                                    
                                                     value={index 
-                                                        ? data.receiveInfo.phonenumber.phoneNumSelect 
-                                                        : data.orderInfo.phonenumber.phoneNumSelect}  
+                                                        ? data.receiveInfo && data.receiveInfo.phonenumber.phoneNumSelect 
+                                                        : data.orderInfo && data.orderInfo.phonenumber.phoneNumSelect}  
                                                 >
                                                     {phoneFrontList.map((v, i) => (
                                                         <option value={v} key={i}>
@@ -605,8 +605,8 @@ const PurchaseTemplate = (props) => {
                                                     type="text"
                                                     onChange={onBuyChange}
                                                     value={index 
-                                                        ? data.receiveInfo.phonenumber.phoneNum1 
-                                                        : data.orderInfo.phonenumber.phoneNum1}                                                    
+                                                        ? data.receiveInfo && data.receiveInfo.phonenumber.phoneNum1 
+                                                        : data.orderInfo && data.orderInfo.phonenumber.phoneNum1}                                                    
                                                     maxLength="4"
                                                     size="4"
                                                 />
@@ -616,8 +616,8 @@ const PurchaseTemplate = (props) => {
                                                     type="text"
                                                     onChange={onBuyChange}
                                                     value={index 
-                                                        ? data.receiveInfo.phonenumber.phoneNum2 
-                                                        : data.orderInfo.phonenumber.phoneNum2}  
+                                                        ? data.receiveInfo && data.receiveInfo.phonenumber.phoneNum2 
+                                                        : data.orderInfo && data.orderInfo.phonenumber.phoneNum2}  
                                                     maxLength="4"
                                                     size="4"
                                                 />
@@ -635,7 +635,7 @@ const PurchaseTemplate = (props) => {
                                                     cols="100"
                                                     name="deliveryMessage"
                                                     onChange={onBuyChange}
-                                                    value={data.receiveInfo.deliveryMessage}
+                                                    value={data.receiveInfo && data.receiveInfo.deliveryMessage}
                                                     resize="none"                                 
                                                 />
                                             </PurchaseBuyTd>
