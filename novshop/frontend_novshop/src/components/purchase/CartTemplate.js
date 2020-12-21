@@ -232,14 +232,14 @@ const CartTemplate = (props) => {
                     </PurchaseBtn>
                 </div>
                 <ClearEx />
-
-                {(!cartFormStatus || !cartFormStatus.items || cartFormStatus.items.length <= 0) && (
-                    <EmptyWrapper>
-                        <span>장바구니가 비어 있습니다.</span>
-                    </EmptyWrapper>
-                )}
                 </>
             )}  
+
+            {(!cartFormStatus || !cartFormStatus.items || cartFormStatus.items.length <= 0) && (
+                <EmptyWrapper>
+                    <span>장바구니가 비어 있습니다.</span>
+                </EmptyWrapper>
+            )}
             </PurchaseMultiWrapper>
         </PurchaseWrapper>
     );

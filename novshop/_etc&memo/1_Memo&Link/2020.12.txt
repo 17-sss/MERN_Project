@@ -39,4 +39,16 @@
             http://postcode.map.daum.net/guide#attributes
 
 
-            
+
+@@ 201221
+    * 현 프로젝트 관련 메모 (의심, 주의사항)
+        1. 구매창
+            1) 참고해야 하는 파일리스트
+                - frontend
+                    > /container/purchase/BuyContainer.js
+                    > /module/user.js
+            2) 의심사항 메모
+                - 구매창의 상품목록들은 장바구니창에서 구매창으로 이동했거나, 
+                    상품상세에서 구매창으로 이동했을 경우만임.
+                ! 새로고침하면 사라져서, localStorage 활용함
+                    - remove는 로그아웃할때 user 모듈에서 처리.

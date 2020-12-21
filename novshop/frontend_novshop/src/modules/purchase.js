@@ -272,6 +272,15 @@ const purchase = handleActions(
             const { payload } = action;
             const { topKey, key, subKey, value, } = payload;   
             if(!value && key === 'address') return;                     
+            
+            if (topKey === "items") {
+                try {
+                    localStorage.setItem('buyFormStatusItems', JSON.stringify(value));                            
+                } catch (error) {
+                    console.log("localStorage isn't working");
+                }
+            }
+
             return {
                 ...state,
                 buyFormStatus: {

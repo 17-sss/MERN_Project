@@ -68,7 +68,20 @@ const BuyContainer = (props) => {
     useEffect(() => {
         if (isUpdateValue) setIsUpdateValue(false);
         if (isEmptyItems.current) dispatch(initialPurchase());        
-        setPriceLoading(false);        
+        setPriceLoading(false);
+
+        // 새로고침하면 정보 사라져서 localStorage 활용 START ----
+        const tempItems = localStorage.getItem('buyFormStatusItems');           
+        if (tempItems) {                        
+            if (isEmptyItems.current) isEmptyItems.current = false;
+            dispatch(
+                changePurchaseBuy({
+                    topKey: 'items',
+                    value: JSON.parse(tempItems),
+                }),
+            );
+        }
+        // 새로고침하면 정보 사라져서 localStorage 활용 END ----
 
         if (!userData || typeof userData === "string" || !userData.data) return;
         const {username, address, phonenumber} = userData.data;
@@ -316,7 +329,7 @@ const BuyContainer = (props) => {
             }
         } else return;
 
-    }, [dispatch, buyFormStatus]);
+    }, [dispatch, buyFormStatus]); 
 
     // ============================================================
     return (

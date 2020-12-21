@@ -37,7 +37,10 @@ const checkFailureSaga = () => {
 function* logoutSaga() {
     try {
         yield call(authAPI.logout);
-        localStorage.removeItem('user');    
+        localStorage.removeItem('user');                  
+        if (localStorage.getItem('buyFormStatusItems')) {
+            localStorage.removeItem('buyFormStatusItems');
+        }
     } catch (error) {
         console.error(error);
     }

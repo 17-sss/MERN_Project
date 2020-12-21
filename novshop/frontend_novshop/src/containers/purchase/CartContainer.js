@@ -253,7 +253,8 @@ const PurchaseContainer = (props) => {
         if (!cartFormStatus.items || cartFormStatus.items.length <= 0) return;
         const { name } = e.target;
         if (name !== 'buyall' && name !== 'buyselect') return;  
-        if (name === 'buyselect' && cartFormStatus.checkedItems.length <= 0) return alert('제품을 선택해주세요.');
+        if (name === 'buyselect' && cartFormStatus.checkedItems.length <= 0) 
+            return alert('구매할 상품을 선택해주세요.');
 
         let value = [];
         if (name === 'buyall')
