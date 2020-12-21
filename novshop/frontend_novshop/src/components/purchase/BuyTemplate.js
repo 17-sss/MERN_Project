@@ -12,6 +12,8 @@ import {
 import {
     PurchaseMultiWrapper, PurchaseTable, PurchaseTh, PurchaseTd, PurchaseIsSaleP, PurchaseBtn 
 } from './StylePurchase';
+import { cssTransparent } from '../common/StyleUtilCSS';
+
 import PostNoSearchBtnContainer from '../../containers/common/PostNoSearchBtnContainer'
 
 
@@ -59,6 +61,23 @@ const PurchaseBuyTextArea = styled.textarea`
         horizontal;  좌우만 가능  
         vertical;  상하만 가능  
     */    
+`;
+
+// 1-4) PurchaseBuyBtn (no import, 구매창의 주문 버튼)
+const PurchaseBuyItemsBtn = styled.button`
+    ${cssTransparent}    
+    width: 80px;
+    height: 40px;
+    padding: 0 10px;
+
+    border-radius: 2px;
+    border: 1px solid #d1d1d1;
+    background-color: #89d9fb;
+    color: white;
+
+    &:hover {
+        background-color: #a3e0fa;
+    }
 `;
 
 // ---------------------------------------------------/
@@ -403,7 +422,20 @@ const BuyTemplate = (props) => {
                         {index === 0 && <hr/>}
                     </div>
                 );
-            })}
+            })}            
+            
+            <PurchaseMultiWrapper stype="buy">
+                <div className="buyInfoWrap">                    
+                    <PurchaseBuyItemsBtn
+                        className="float_right"
+                        name="buyItems"
+                        onClick={()=>alert('123')}
+                    >
+                        구매
+                    </PurchaseBuyItemsBtn>
+                    <ClearEx />
+                </div>
+            </PurchaseMultiWrapper>
             
         </PurchaseWrapper>
     );

@@ -21,3 +21,7 @@ export const updCartVolume = ({ id, volume }) => {
 export const delCartGoods = ({ items }) => {
     return client.post('/api/purchase/delCartGoods', { items });
 };
+
+export const buyIn = ({ orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice, userId }) => {
+    return client.post('/api/purchase/buyIn', { orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice, userId });
+};

@@ -28,7 +28,9 @@ const [
     DEL_CART_GOODS_FAILURE,
 ] = createRequestActionTypes('purchase/DEL_CART_GOODS');
 
-
+const [BUY_IN, BUY_IN_SUCCESS, BUY_IN_FAILURE] = createRequestActionTypes(
+    'purchase/BUY_IN',
+);
 // =======================================================================
 
 // 액션 생성 함수 작성
@@ -74,6 +76,17 @@ export const delCartGoods = createAction(
     DEL_CART_GOODS,
     ({ items }) => ({ items }),
 );
+export const buyIn = createAction(
+    BUY_IN,
+    ({ orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice }) => ({
+        orderInfo,
+        receiveInfo,
+        items,
+        allProductPrice,
+        shippingFee,
+        totalPrice,
+    }),
+)
 // =======================================================================
 
 // 사가 생성
@@ -81,12 +94,14 @@ const cartInSaga = createRequestSaga(CART_IN, purchaseAPI.cartIn);
 const getCartSaga = createRequestSaga(GET_CART, purchaseAPI.getCart);
 const updCartVolumeSaga = createRequestSaga(UPD_CART_VOLUME, purchaseAPI.updCartVolume);
 const delCartGoodsSaga = createRequestSaga(DEL_CART_GOODS, purchaseAPI.delCartGoods);
+const buyInSaga = createRequestSaga(BUY_IN, purchaseAPI.buyIn);
 
 export function* purchaseSaga() {
     yield takeLatest(CART_IN, cartInSaga);
     yield takeLatest(GET_CART, getCartSaga);
     yield takeLatest(UPD_CART_VOLUME, updCartVolumeSaga);
     yield takeLatest(DEL_CART_GOODS, delCartGoodsSaga);
+    yield takeLatest(BUY_IN, buyInSaga);
 }
 // =======================================================================
 
@@ -352,6 +367,25 @@ const purchase = handleActions(
         [DEL_CART_GOODS_SUCCESS]: okNotokFuncCart("cart", "success"),
         [DEL_CART_GOODS_FAILURE]: okNotokFuncCart("cart", "failure"),
 
+        // 구매 확정 (데이터 전송)
+        [BUY_IN_SUCCESS]: (state, action) => {
+            const { payload: buy } = action;
+
+            return {
+                ...state,
+                buy,
+                purchaseError: null,
+            }
+        },
+        [BUY_IN_FAILURE]: (state, action) => {
+            const { payload: purchaseError } = action;
+
+            return {
+                ...state,
+                buy: null,
+                purchaseError,
+            }
+        },
     },
     initialState,
 );

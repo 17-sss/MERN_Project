@@ -21,6 +21,7 @@ db.Review = require('./review')(sequelize, Sequelize);
 db.QA = require('./qa')(sequelize, Sequelize);
 db.Notice = require('./notice')(sequelize, Sequelize);
 db.ShoppingCart = require('./shoppingcart')(sequelize, Sequelize);
+db.Buy = require('./buy')(sequelize, Sequelize);
 // 추후 model 더 생성하면 여기에 적기. (맨 앞글자는 대문자로)
 
 
@@ -50,6 +51,10 @@ db.User.hasMany(db.ShoppingCart);
 db.ShoppingCart.belongsTo(db.User); 
 db.Product.hasMany(db.ShoppingCart);
 db.ShoppingCart.belongsTo(db.Product);
+
+// 6) Buy
+db.User.hasMany(db.Buy);
+db.Buy.belongsTo(db.User); 
 
 /*
 db.User.hasMany(db.Post);

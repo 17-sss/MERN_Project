@@ -1,6 +1,7 @@
 // 장바구니(ShoopingCart), 구매(Buy) 모델 쓰임
+import { create } from "domain";
 import express from "express";
-import { ShoppingCart, Product } from "../models";
+import { ShoppingCart, Product, Buy } from "../models";
 
 const router = express.Router();
 
@@ -168,6 +169,43 @@ router.post("/delCartGoods", async (req, res) => {
     }
 });
 
+
+// 구매 확정 (Buy Table에 In)  (POST /api/purchase/buyIn)
+router.post('/buyIn', async (req, res) => {
+    const {
+        orderInfo,
+        receiveInfo,
+        items,
+        allProductPrice,
+        shippingFee,
+        totalPrice,
+        userId,
+    } = req.body;
+
+    try {
+        await Buy.create({
+            orderInfo: JSON.stringify(orderInfo),
+            receiveInfo: JSON.stringify(receiveInfo),
+            items: JSON.stringify(items),
+            allProductPrice, 
+            shippingFee, 
+            totalPrice,
+            userId
+        });
+        
+        return res.status(200).json({
+            error: null,
+            success: true,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    }
+});
 
 
 export default router;
