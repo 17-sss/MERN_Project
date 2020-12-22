@@ -4,7 +4,7 @@ import React from 'react';
 import { ClearEx } from '../common/StyleUtilModels';
 import { threeDigitsComma } from "../../lib/utility/customFunc";
 import {    
-    CommonTableWrapper as PurchaseWrapper,
+    CommonTableWrapper as CartWrapper,
     SubjectLink,
     EmptyWrapper,
 } from '../common/CommonTableComponents';
@@ -25,7 +25,7 @@ const CartTemplate = (props) => {
     const { allSelectRef } = refs;
         
     return (        
-        <PurchaseWrapper>
+        <CartWrapper>
             <PurchaseMultiWrapper stype="pagename">
                 <p id="pageType">장바구니</p>
             </PurchaseMultiWrapper>
@@ -241,7 +241,7 @@ const CartTemplate = (props) => {
                 </EmptyWrapper>
             )}
             </PurchaseMultiWrapper>
-        </PurchaseWrapper>
+        </CartWrapper>
     );
 };
 

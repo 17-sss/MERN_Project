@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import { ClearEx } from '../common/StyleUtilModels';
 import { threeDigitsComma } from "../../lib/utility/customFunc";
 import {    
-    CommonTableWrapper as PurchaseWrapper,
+    CommonTableWrapper as BuyWrapper,
     SubjectLink,
     EmptyWrapper,
 } from '../common/CommonTableComponents';
@@ -89,7 +89,7 @@ const BuyTemplate = (props) => {
     const { onBuyChange, onAddressInfoControl, onBuySubmit } = events;
         
     return (        
-        <PurchaseWrapper>            
+        <BuyWrapper>            
             <PurchaseMultiWrapper stype="pagename">
                 <p id="pageType">구매</p>
             </PurchaseMultiWrapper>
@@ -437,7 +437,7 @@ const BuyTemplate = (props) => {
                 </div>
             </PurchaseMultiWrapper>
             
-        </PurchaseWrapper>
+        </BuyWrapper>
     );
 };
 
