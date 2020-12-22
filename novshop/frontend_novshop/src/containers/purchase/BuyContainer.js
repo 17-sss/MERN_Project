@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+    buyIn,
     changePurchaseBuy,
     initialPurchase,
     initialPurchaseForm,
@@ -15,12 +16,13 @@ import { initializeUtilForm } from '../../modules/util';
 const BuyContainer = (props) => {
     // [1] 기본 세팅
     // 1. redux 관련
-    // const {history} = props;    
+    const {history} = props;    
 
     const dispatch = useDispatch();
-    const {buyFormStatus, addressType, addressResult, userData } = useSelector(
+    const {buy, buyFormStatus, addressType, addressResult, userData } = useSelector(
         ({ purchase, user, util }) => {
             return {                
+                buy: purchase.buy,
                 buyFormStatus: purchase.buyFormStatus,
                 addressType: util.addressType,
                 addressResult: util.addressResult,
@@ -331,12 +333,46 @@ const BuyContainer = (props) => {
 
     }, [dispatch, buyFormStatus]); 
 
+    // 3) onBuySubmit, onClick (서버로 구매리스트 및 정보 전송)
+    const onBuySubmit = useCallback( async () => {
+        const {
+            orderInfo,
+            receiveInfo,
+            items,
+            allProductPrice,
+            shippingFee,
+            totalPrice,
+        } = buyFormStatus;
+
+
+        dispatch(
+            buyIn({
+                orderInfo,
+                receiveInfo,
+                items,
+                allProductPrice: allProductPrice.replace(',', ''),
+                shippingFee: shippingFee.replace(',', ''),
+                totalPrice: totalPrice.replace(',', ''),
+            }),
+        );
+        
+        // 연구필요.. async ~ await문 개념 확실히 잡아야할듯. 
+        const buyCheck = await buy;
+            
+        if (buyCheck) {
+            await history.push(`/purchase/buyConfirm`);
+        }
+
+        
+    }, [buyFormStatus, buy, history, dispatch]);
+
+
     // ============================================================
     return (
         <BuyTemplate
             buyFormStatus={buyFormStatus}
             etcs={{ colInfo, phoneFrontList }}
-            events={{ onBuyChange, onAddressInfoControl }}            
+            events={{ onBuyChange, onAddressInfoControl, onBuySubmit }}            
         />
     )
 };

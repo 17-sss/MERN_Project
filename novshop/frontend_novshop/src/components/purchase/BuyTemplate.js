@@ -86,7 +86,7 @@ const PurchaseBuyItemsBtn = styled.button`
 const BuyTemplate = (props) => {
     const { buyFormStatus, etcs, events } = props;
     const { colInfo, phoneFrontList } = etcs;
-    const { onBuyChange, onAddressInfoControl } = events;
+    const { onBuyChange, onAddressInfoControl, onBuySubmit } = events;
         
     return (        
         <PurchaseWrapper>            
@@ -429,7 +429,7 @@ const BuyTemplate = (props) => {
                     <PurchaseBuyItemsBtn
                         className="float_right"
                         name="buyItems"
-                        onClick={()=>alert('123')}
+                        onClick={onBuySubmit}
                     >
                         구매
                     </PurchaseBuyItemsBtn>
