@@ -209,7 +209,7 @@ const purchase = handleActions(
         [INITALIZE_PURCHASE_FORM]: (state, action) => {
             const { payload } = action;
             const { form, subForm } = payload;
-
+            
             return {
                 ...state,
                 [form]: subForm

@@ -251,6 +251,17 @@ const BuyContainer = (props) => {
         dispatch(initializeUtilForm({form: 'addressResult'}));
     }, [dispatch, addressResult, addressType]);
 
+    // 4) onBuySubmit 이벤트가 성공했을시 buy 상태 체크 후 페이지 이동
+    useEffect(() => {        
+        if (!buy) return;
+        const { data, success } = buy;
+
+        if (data === 'buyInOK' && success) {
+            dispatch(initialPurchaseForm({form: "buy", subForm: ""}));
+            history.push(`/purchase/buyConfirm`);
+        }
+    }, [dispatch, buy, history]);
+
 
     // -------------------------------------------------------------------------------------------------
 
@@ -355,16 +366,7 @@ const BuyContainer = (props) => {
                 totalPrice: totalPrice.replace(',', ''),
             }),
         );
-        
-        // 연구필요.. async ~ await문 개념 확실히 잡아야할듯. 
-        const buyCheck = await buy;
-            
-        if (buyCheck) {
-            await history.push(`/purchase/buyConfirm`);
-        }
-
-        
-    }, [buyFormStatus, buy, history, dispatch]);
+    }, [buyFormStatus, dispatch]);
 
 
     // ============================================================
