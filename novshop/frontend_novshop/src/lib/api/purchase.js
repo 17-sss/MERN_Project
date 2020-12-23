@@ -25,3 +25,7 @@ export const delCartGoods = ({ items }) => {
 export const buyIn = ({ orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice, userId }) => {
     return client.post('/api/purchase/buyIn', { orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice, userId });
 };
+
+export const getBuyConfirm = ({ userId }) => {
+    return client.post('/api/purchase/getBuyConfirm', { userId });
+};

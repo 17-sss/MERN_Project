@@ -169,7 +169,6 @@ router.post("/delCartGoods", async (req, res) => {
     }
 });
 
-
 // 구매 확정 (Buy Table에 In)  (POST /api/purchase/buyIn)
 router.post('/buyIn', async (req, res) => {
     const {
@@ -195,6 +194,34 @@ router.post('/buyIn', async (req, res) => {
         
         return res.status(200).json({
             data: "buyInOK",
+            error: null,
+            success: true,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    }
+});
+
+// 구매 확정 후 마지막 데이터 GET (POST /api/purchase/getBuyConfirm)
+router.post('/getBuyConfirm', async(req, res) => {
+    const { userId } = req.body;
+    
+    try {
+        const getBuyConfirm = await Buy.findOne({
+            where: { userId },
+            order: [
+                ['createdAt', 'DESC'],
+            ],  
+            offset: 0,
+        });
+
+        return res.status(200).json({
+            data: getBuyConfirm,
             error: null,
             success: true,
         });

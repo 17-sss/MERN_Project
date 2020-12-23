@@ -346,6 +346,8 @@ const BuyContainer = (props) => {
 
     // 3) onBuySubmit, onClick (서버로 구매리스트 및 정보 전송)
     const onBuySubmit = useCallback( async () => {
+        if (!userData || typeof userData === "string" || !userData.data) return;
+        const { id } = userData.data;
         const {
             orderInfo,
             receiveInfo,
@@ -354,19 +356,19 @@ const BuyContainer = (props) => {
             shippingFee,
             totalPrice,
         } = buyFormStatus;
-
-
+        
         dispatch(
             buyIn({
                 orderInfo,
                 receiveInfo,
                 items,
                 allProductPrice: allProductPrice.replace(',', ''),
-                shippingFee: shippingFee.replace(',', ''),
+                shippingFee: shippingFee !== "무료" ? shippingFee.replace(',', '') : 0,
                 totalPrice: totalPrice.replace(',', ''),
+                userId: id,
             }),
         );
-    }, [buyFormStatus, dispatch]);
+    }, [buyFormStatus, userData, dispatch]);
 
 
     // ============================================================

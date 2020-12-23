@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => (
             type: DataTypes.STRING(100),
             allowNull: false,  
         },
+        mileage: {
+            // 마일리지 사용은 추후 구현
+            type: DataTypes.INTEGER,
+            allowNull: false,  
+            defaultValue: 0,
+        },
     // 유저 권한 (0: 일반, 1: 운영진, 2: 최고관리자)
         authority: {    
             type: DataTypes.INTEGER,

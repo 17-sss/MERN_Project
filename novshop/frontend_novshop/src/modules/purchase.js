@@ -31,6 +31,10 @@ const [
 const [BUY_IN, BUY_IN_SUCCESS, BUY_IN_FAILURE] = createRequestActionTypes(
     'purchase/BUY_IN',
 );
+
+const [GET_BUY_CONFIRM, GET_BUY_CONFIRM_SUCCESS, GET_BUY_CONFIRM_FAILURE] = createRequestActionTypes(
+    'purchase/GET_BUY_CONFIRM',
+);
 // =======================================================================
 
 // 액션 생성 함수 작성
@@ -78,14 +82,19 @@ export const delCartGoods = createAction(
 );
 export const buyIn = createAction(
     BUY_IN,
-    ({ orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice }) => ({
+    ({ orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice, userId }) => ({
         orderInfo,
         receiveInfo,
         items,
         allProductPrice,
         shippingFee,
         totalPrice,
+        userId,
     }),
+);
+export const getBuyConfirm = createAction(
+    GET_BUY_CONFIRM,
+    ({userId}) => ({userId})
 )
 // =======================================================================
 
@@ -95,6 +104,7 @@ const getCartSaga = createRequestSaga(GET_CART, purchaseAPI.getCart);
 const updCartVolumeSaga = createRequestSaga(UPD_CART_VOLUME, purchaseAPI.updCartVolume);
 const delCartGoodsSaga = createRequestSaga(DEL_CART_GOODS, purchaseAPI.delCartGoods);
 const buyInSaga = createRequestSaga(BUY_IN, purchaseAPI.buyIn);
+const getBuyConfirmSaga = createRequestSaga(GET_BUY_CONFIRM, purchaseAPI.getBuyConfirm);
 
 export function* purchaseSaga() {
     yield takeLatest(CART_IN, cartInSaga);
@@ -102,6 +112,7 @@ export function* purchaseSaga() {
     yield takeLatest(UPD_CART_VOLUME, updCartVolumeSaga);
     yield takeLatest(DEL_CART_GOODS, delCartGoodsSaga);
     yield takeLatest(BUY_IN, buyInSaga);
+    yield takeLatest(GET_BUY_CONFIRM, getBuyConfirmSaga);
 }
 // =======================================================================
 
@@ -113,6 +124,7 @@ const initialState = {
         2) cartFormStatus: 장바구니 상태를 담당
 */
     buy: null,
+    buyConfirm: null,
     buyFormStatus: {
         orderInfo: {        // 주문자 정보
             username: '',
@@ -367,7 +379,7 @@ const purchase = handleActions(
         [DEL_CART_GOODS_SUCCESS]: okNotokFuncCart("cart", "success"),
         [DEL_CART_GOODS_FAILURE]: okNotokFuncCart("cart", "failure"),
 
-        // 구매 확정 (데이터 전송)
+        // 구매 데이터 전송
         [BUY_IN_SUCCESS]: (state, action) => {
             const { payload: buy } = action;
 
@@ -383,6 +395,27 @@ const purchase = handleActions(
             return {
                 ...state,
                 buy: null,
+                purchaseError,
+            }
+        },
+
+        // 구매 확정 후 구매확정 페이지에 보여줄 데이터
+        [GET_BUY_CONFIRM_SUCCESS]: (state, action) => {
+            const { payload: buyConfirm } = action;
+
+            return {
+                ...state,
+                buyConfirm,
+                purchaseError: null,
+            }
+        },
+
+        [GET_BUY_CONFIRM_FAILURE]: (state, action) => {
+            const { payload: purchaseError } = action;
+
+            return {
+                ...state,
+                buyConfirm: null,
                 purchaseError,
             }
         },
