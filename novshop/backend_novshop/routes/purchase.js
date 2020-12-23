@@ -1,7 +1,8 @@
 // 장바구니(ShoopingCart), 구매(Buy) 모델 쓰임
 import { create } from "domain";
 import express from "express";
-import { ShoppingCart, Product, Buy } from "../models";
+import { ShoppingCart, Product, Buy, User } from "../models";
+import user from "../models/user";
 
 const router = express.Router();
 
@@ -169,7 +170,7 @@ router.post("/delCartGoods", async (req, res) => {
     }
 });
 
-// 구매 확정 (Buy Table에 In)  (POST /api/purchase/buyIn)
+// 구매 확정 및 유저 마일리지+  (Buy Table에 In)  (POST /api/purchase/buyIn)
 router.post('/buyIn', async (req, res) => {
     const {
         orderInfo,
@@ -182,6 +183,17 @@ router.post('/buyIn', async (req, res) => {
     } = req.body;
 
     try {
+        const getUser = await User.findOne({
+            where: { id: userId } 
+        });
+        const { mileage } = getUser;
+        const curMileage = Number(totalPrice.replace(",", "")) * 0.01;
+
+        await User.update(
+            { mileage: Number(mileage + curMileage) },
+            { where: { id: userId } },
+        );
+
         await Buy.create({
             orderInfo: JSON.stringify(orderInfo),
             receiveInfo: JSON.stringify(receiveInfo),
