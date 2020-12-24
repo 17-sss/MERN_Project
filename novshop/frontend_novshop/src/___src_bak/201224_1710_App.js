@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import CheckAuthRoute from './lib/utility/CheckAuthRoute';
 
@@ -20,14 +19,6 @@ import MemberPage from './pages/MemberPage';
 import AdminPage from './pages/AdminPage';
 
 const App = () => {    
-    const { userData } = useSelector(({user}) => ({ userData: user.user})); // shoppingcart 페이지의 query와 충돌남..
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        if (!userData || !userData.data || typeof userData.data !== "object" ) return;
-        setUser(userData.data);
-    }, [userData]);   
-
     return (
         <>                  
             <HeaderContainer/>      
@@ -54,25 +45,22 @@ const App = () => {
                     Member (회원정보)
                     Admin (관리자 페이지)
                 */}
-                <CheckAuthRoute
-                    authenticated={user}
+                <CheckAuthRoute                    
                     path="/purchase/:page"
                     render={props => <PurchasePage {...props} />}
                     exact
                 />     
-                <CheckAuthRoute
-                    authenticated={user}
+                <CheckAuthRoute                    
                     path="/write/:opt?"
                     render={props => <WritePage {...props} />}
                     exact
                 />
-                <CheckAuthRoute
-                    authenticated={user}
+                <CheckAuthRoute                    
                     path="/member/@:username"
                     render={props => <MemberPage {...props} />}                  
                 />
                 <CheckAuthRoute
-                    authenticated={user && user.authority > 0}
+                    isAdmin
                     path="/admin/:ctrlpage?"
                     render={props => <AdminPage {...props} />}
                     exact

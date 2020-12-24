@@ -212,7 +212,7 @@ const ProductContainer = (props) => {
     return allLoadingOK &&
         productStatus &&
         productStatus.data &&
-        productStatus.data.length > 0 ? (
+        productStatus.data.length > 0 && (
         <>
             <ProductManament
                 events={{ onVisible: onProductManageBtnVisible }}
@@ -222,8 +222,6 @@ const ProductContainer = (props) => {
                 <ProductTemplate key={i}>{v}</ProductTemplate>
             ))}
         </>
-    ) : (
-        <></>
     );
 };
 

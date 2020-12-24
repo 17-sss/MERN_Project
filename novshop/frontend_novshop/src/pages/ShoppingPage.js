@@ -9,14 +9,10 @@ const ShoppingPage = (props) => {
     
     if (query) {
         const {main, itemId} = query;
-        const propTmp = {
-            ...props,
-            query: query
-        };
 
         if (itemId) {
             // [1] 상품 상세 정보
-            return <ProductDetailContainer {...propTmp} />;
+            return <ProductDetailContainer query={query} />;
         } else {
             // [2] 상품 목록 페이지
             if (main) {
