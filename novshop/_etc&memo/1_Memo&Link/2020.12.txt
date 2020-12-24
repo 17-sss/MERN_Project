@@ -52,3 +52,12 @@
                     상품상세에서 구매창으로 이동했을 경우만임.
                 ! 새로고침하면 사라져서, localStorage 활용함
                     - remove는 로그아웃할때 user 모듈에서 처리.
+
+
+
+@@ 201224
+    * react-router-dom 관련 메모
+        1. Route 컴포넌트의 component 속성과 render 속성의 차이
+            https://mingcoder.me/2019/12/04/Programming/React/react-router-component-vs-render/
+        2. 커스텀 Route (어드민이나 없는 페이지로 가려할때 제어하는)
+            https://www.daleseo.com/react-router-authentication/
