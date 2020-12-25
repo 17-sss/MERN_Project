@@ -37,7 +37,6 @@ const ProductDetailContainer = (props) => {
 
     userIdRef.current = (userData && userData.data) ? userData.data.id : -1;
 
-
     // +) loading 체크
     useEffect(() =>  {      
         setAllLoadingOK(false);
@@ -63,12 +62,12 @@ const ProductDetailContainer = (props) => {
     }, [dispatch]);
     
     useEffect(()=> {        
-        dispatch(getProductReview({productId: id}));        
-        dispatch(getProductQA({productId: id}));          
+        dispatch(getProductReview({productId: id}));
+        dispatch(getProductQA({productId: id}));
     }, [dispatch, id]);
 
     useEffect(()=> {    
-        dispatch(getProduct({categoryId, categorySub, id}));        
+        dispatch(getProduct({categoryId, categorySub, id}));
     }, [dispatch, categoryId, categorySub, id]);
 
     useEffect(() => {

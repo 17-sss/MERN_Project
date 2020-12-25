@@ -233,9 +233,6 @@ const BuyConfirmTemplate = (props) => {
                             적립되었습니다. 감사합니다.
                         </span>
                     </div>
-                    
-
-
                 </BuyConfirmMultiWrapper>
 
             </BuyConfirmMultiWrapper>

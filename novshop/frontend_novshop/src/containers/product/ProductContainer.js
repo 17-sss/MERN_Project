@@ -35,6 +35,7 @@ const ProductContainer = (props) => {
     const [colHeight, setColHeight] = useState(0);
     const [imgHeight, setImgHeight] = useState(0);
     const [isDelete, setIsDelete] = useState(false);
+    const [queryTmp, setQueryTmp] = useState({});
     const [visibleOption, setVisibleOption] = useState(false);
     const [allLoadingOK, setAllLoadingOK] = useState(false);
 
@@ -50,17 +51,32 @@ const ProductContainer = (props) => {
         setAllLoadingOK(bIsOK);  
     }, [loading]);
 
+    // 무한루프 방지용 (query 값 계속가져와서 state로 관리)
+    useEffect(() => {   
+        if (!query || typeof query !== "object") return;
+        
+        for (const key in query) {            
+            const queryElement = query[key];
+            const queryTmpElement = queryTmp[key];
+            
+            if (queryElement !== queryTmpElement) {
+                setQueryTmp(query);
+                break;
+            }
+        }
+    }, [query, queryTmp])
+
     // 상품 데이터 불러옴
-    useEffect(() => {        
+    useEffect(() => {                      
         dispatch(initializeProductForm({ form: 'productStatus' }));
         dispatch(
             getAllProduct({
-                categoryId: query ? query.main : undefined,
-                categorySub: query ? query.sub : undefined,
+                categoryId: queryTmp ? queryTmp.main : undefined,
+                categorySub: queryTmp ? queryTmp.sub : undefined,
             }),
         );
         if (isDelete) setIsDelete(false);
-    }, [dispatch, query, isDelete]);
+    }, [dispatch, queryTmp, isDelete]);
 
     useEffect(() => {
         // 이미지 못 불러왔을 경우 여기서 에러먹기에 조건 줌.
