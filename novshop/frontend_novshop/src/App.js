@@ -20,7 +20,11 @@ import MemberPage from './pages/MemberPage';
 import AdminPage from './pages/AdminPage';
 
 const App = () => {    
-    const { userData } = useSelector(({user}) => ({ userData: user.user})); // shoppingcart 페이지의 query와 충돌남..
+    const { userData, loadingUser } = useSelector(({ user, loading }) => ({
+        userData: user.user,
+        loadingUser: loading['user/CHECK'],
+    }));
+
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -54,29 +58,37 @@ const App = () => {
                     Member (회원정보)
                     Admin (관리자 페이지)
                 */}
-                <CheckAuthRoute
-                    authenticated={user}
-                    path="/purchase/:page"
-                    render={props => <PurchasePage {...props} />}
-                    exact
-                />     
-                <CheckAuthRoute
-                    authenticated={user}
-                    path="/write/:opt?"
-                    render={props => <WritePage {...props} />}
-                    exact
-                />
-                <CheckAuthRoute
-                    authenticated={user}
-                    path="/member/@:username"
-                    render={props => <MemberPage {...props} />}                  
-                />
-                <CheckAuthRoute
-                    authenticated={user && user.authority > 0}
-                    path="/admin/:ctrlpage?"
-                    render={props => <AdminPage {...props} />}
-                    exact
-                />                                
+                {!loadingUser && (
+                    <CheckAuthRoute
+                        authenticated={user}
+                        path="/purchase/:page"
+                        render={(props) => <PurchasePage {...props} />}
+                        exact
+                    />
+                )}
+                {!loadingUser && (
+                    <CheckAuthRoute
+                        authenticated={user}
+                        path="/write/:opt?"
+                        render={(props) => <WritePage {...props} />}
+                        exact
+                    />
+                )}
+                {!loadingUser && (
+                    <CheckAuthRoute
+                        authenticated={user}
+                        path="/member/@:username"
+                        render={(props) => <MemberPage {...props} />}
+                    />
+                )}
+                {!loadingUser && (
+                    <CheckAuthRoute
+                        authenticated={user && user.authority > 0}
+                        path="/admin/:ctrlpage?"
+                        render={(props) => <AdminPage {...props} />}
+                        exact
+                    />
+                )}                             
             </Switch>
 
             <FooterContainer />

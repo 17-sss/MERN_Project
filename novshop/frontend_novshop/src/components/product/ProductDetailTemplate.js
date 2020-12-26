@@ -417,7 +417,6 @@ const ProductAddInfoTextWrapper = styled.div`
 
 const ProductDetailTemplate = (props) => {
     const { productData, productSelectItems, reviewStatus, qaStatus, refs, events, etcs } = props;
-
     const {
         // categoryId, categorySub,         
         name, colors, sizes, description, 
@@ -718,6 +717,19 @@ const ProductDetailTemplate = (props) => {
             <PaddingTB20/>
         </>
     );
+};
+
+// ** props 기본값 지정 **
+ProductDetailTemplate.defaultProps = {
+    name: '',
+    colors: [],
+    sizes: [],
+    description: '',
+    image: '',
+    price: 0,
+    mileage: 0,
+    sale: 0,
+    detailinfo: '',
 };
 
 export default ProductDetailTemplate;

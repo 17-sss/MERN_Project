@@ -7,8 +7,7 @@ const CheckAuthRoute = ({
     render,
     redirectMain,
     ...parentProps
-}) => {
-
+}) => {    
     return (
         <Route
             {...parentProps}

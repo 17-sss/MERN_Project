@@ -129,6 +129,7 @@ const RegisterContainer = ({history}) => {
     useEffect(() => {
         if (addressType !== "register") return;        
         const { zonecode, address, buildingName, bname, } = addressResult;
+        if (!zonecode && !address && !buildingName && !bname) return;
 
         const setExtraAddress = (aBuildingName, aBname) => {
             let result = '';

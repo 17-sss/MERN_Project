@@ -27,12 +27,14 @@ const ProductDetailContainer = (props) => {
 
     const colorRef = useRef();
     const sizeRef = useRef();
-        
+    
+    const [productData, setProductData] = useState(null);
     const [imgClientSize, setImgClientSize] = useState({width: 0, height: 0});
     const [errorMessage, setErrorMessage] = useState('');
     const [allLoadingOK, setAllLoadingOK] = useState(false);
     
     const userIdRef = useRef();
+    const productDataLoadingOK = useRef(false);
     const imgRef = useRef();    
 
     userIdRef.current = (userData && userData.data) ? userData.data.id : -1;
@@ -44,6 +46,7 @@ const ProductDetailContainer = (props) => {
         setAllLoadingOK(bIsOK);  
     }, [loading]);
 
+    // ProductDetailTemplate -> ProductImageWrapper의 사이즈 (이미지가 들어갈) 측정
     useEffect( () => {      
         if (!imgRef.current) return;
         setImgClientSize({
@@ -52,6 +55,22 @@ const ProductDetailContainer = (props) => {
         });
     }, []);
 
+    // productStatus 상태를 productData (useState 값)으로 변환. 
+    useEffect(() => {
+        if (productStatus && productStatus.data) {
+            const {image, sizes, colors} = productStatus.data;
+            setProductData({
+                ...productStatus.data,
+                image: image && "/uploads/" + image,
+                sizes: sizes && JSON.parse(sizes),
+                colors: colors && JSON.parse(colors),
+            });
+
+            productDataLoadingOK.current = true;
+        } else return;
+    }, [productStatus]);
+
+    // 상품 상세 페이지 초기화
     useEffect(() => {
         dispatch(initializeProductForm({form: "productStatus"}));
         dispatch(initializeProductForm({form: "productSelectItems"}));
@@ -61,32 +80,24 @@ const ProductDetailContainer = (props) => {
         window.scrollTo(0,0);   // 맨위로    
     }, [dispatch]);
     
+    // 상품 상세 페이지 GET REVIEW & QA 
     useEffect(()=> {        
         dispatch(getProductReview({productId: id}));
         dispatch(getProductQA({productId: id}));
     }, [dispatch, id]);
 
+    // 상품 상세 페이지 GET 상품 DATA
     useEffect(()=> {    
         dispatch(getProduct({categoryId, categorySub, id}));
     }, [dispatch, categoryId, categorySub, id]);
 
+    // 에러메세지 있을 시, 3초 뒤 초기화
     useEffect(() => {
         errorMessage && setTimeout(() => {
             setErrorMessage('');
         }, 3000);
     }, [errorMessage])
     
-    let productData = {};
-    if (productStatus && productStatus.data) {
-        const {image, sizes, colors} = productStatus.data;
-        
-        productData = {
-            ...productStatus.data,
-            image: image && "/uploads/" + image,
-            sizes: sizes && JSON.parse(sizes),
-            colors: colors && JSON.parse(colors),
-        }
-    };
 
     // 색상, 사이즈 둘 다 정했을 시 현재 선택 목록에 IN
     const onOptionConfirmation = (e) => {
@@ -176,33 +187,19 @@ const ProductDetailContainer = (props) => {
         const {value} = e.target;                    
         
         // 1) 장바구니
-        if (value === "CART") {           
-            // 장바구니 담기 로직 START ---
-            let isNext = true;
-            
-            if (!productSelectItems || !productSelectItems.items || productSelectItems.items.length <= 0)
-                isNext = false;
-            if (productSelectItems.items.length <= 0)
-                isNext = false;                                    
-                                
-            if (!isNext) 
-                return setErrorMessage('서버에 오류가 있습니다. (상품 담기 실패)');
-                
+        if (value === "CART") {
             productSelectItems.items.map((v, i) => {
                 const {volume, color: selcolor, size: selsize, productId} = v;
                 return dispatch(cartIn({volume, selcolor, selsize, productId, userId: userIdRef.current}));
             });            
-            // 장바구니 담기 로직 END -----
-            
-            if (window.confirm('장바구니에 상품이 정상적으로 담겼습니다. 장바구니로 이동하시겠습니까?')) {                
-                history.push(`/purchase/shoppingcart`); 
-            } else {
-                return;
-            }
+            if (window.confirm('장바구니에 상품이 정상적으로 담겼습니다. 장바구니로 이동하시겠습니까?'))
+                history.push(`/purchase/shoppingcart`);         
         // 2) 구매창
-        } else {
-            history.push(`/purchase/buy`)            
-        }
+        } else if (value === "BUY NOW") {
+            // 만들어야함
+            history.push(`/purchase/buy`);       
+        } else return;
+
     }, [dispatch, history, productSelectItems]);
 
     // 리뷰, Q&A 추가용 테스트      ---------------- 추후 구매내역을 기반으로 리뷰를 작성하는 폼 만들기.
@@ -219,7 +216,7 @@ const ProductDetailContainer = (props) => {
     // render
     return allLoadingOK && (
         <ProductDetailTemplate 
-            productData = {productData}     // productStatus 기반
+            productData = {productDataLoadingOK.current && productData}     // productStatus 기반
             productSelectItems = {productSelectItems}            
             reviewStatus = {reviewStatus}
             qaStatus = {qaStatus}            
