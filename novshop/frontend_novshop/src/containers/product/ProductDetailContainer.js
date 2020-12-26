@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { addSelectProduct, delSelectProduct, changeProductForms, getProduct, initializeProductForm } from "../../modules/product";
 import { createReview, getProductReview, initializeReview } from '../../modules/review';
 import { getProductQA, initializeQA } from '../../modules/qa';
-import { cartIn } from "../../modules/purchase";
+import { cartIn, changePurchaseBuy } from "../../modules/purchase";
 import { objectFlagIsAllReady } from '../../lib/utility/customFunc';
 
 import ProductDetailTemplate from "../../components/product/ProductDetailTemplate";
@@ -172,7 +172,9 @@ const ProductDetailContainer = (props) => {
     }
 
     // 구매 / 장바구니 버튼 OnClick
-    const onPurchaseClick = useCallback((e) => {        
+    const onPurchaseClick = useCallback((e) => {   
+        if (!productStatus || !productStatus.data) return;
+        
         if (userIdRef.current <= -1) {
             if(window.confirm('로그인이 되어있지 않습니다. 로그인 하시겠습니까?')) {
                 return history.push(`/auth/login`);
@@ -196,11 +198,34 @@ const ProductDetailContainer = (props) => {
                 history.push(`/purchase/shoppingcart`);         
         // 2) 구매창
         } else if (value === "BUY NOW") {
-            // 만들어야함
+            const items = [];            
+            const { sizes, name, image, price, sale, mileage, categoryId, categorySub } = productStatus.data;
+            productSelectItems.items.map((v, i) => {
+                const {volume, color: selcolor, size: selsize, productId} = v;
+                return items.push({
+                    volume,
+                    selcolor,
+                    selsize,
+                    userId: userIdRef.current,
+                    productId,
+
+                    product: { sizes, name, image, price, sale, mileage, categoryId, categorySub, }
+                });
+            });
+            
+            if (items.length > 0) {
+                dispatch(
+                    changePurchaseBuy({
+                        topKey: 'items',
+                        value: items,
+                    }),
+                );
+            } else return setErrorMessage("서버에 오류가 있습니다. (구매 페이지 이동 불가)"); 
+        
             history.push(`/purchase/buy`);       
         } else return;
 
-    }, [dispatch, history, productSelectItems]);
+    }, [dispatch, history, productSelectItems, productStatus]);
 
     // 리뷰, Q&A 추가용 테스트      ---------------- 추후 구매내역을 기반으로 리뷰를 작성하는 폼 만들기.
     const onAddReviewTest = (e) => {
