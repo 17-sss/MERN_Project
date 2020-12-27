@@ -6,7 +6,7 @@ const ErrorPage = (props) => {
     const onClick = () => {
         history.goBack();
     };
-
+    
     return (
         <div
             style={{ width: getSize(1), margin: '10px auto', textAlign: 'center', padding: "10rem" }}

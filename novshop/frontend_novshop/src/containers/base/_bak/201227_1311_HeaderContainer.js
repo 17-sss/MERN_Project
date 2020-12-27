@@ -7,6 +7,9 @@ import { logout } from '../../modules/user';
 import Header from '../../components/base/Header';
 
 const HeaderContainer = (props) => {
+    // const { location } = props;
+    // const { pathname } = location;
+
     const [categoryData, setCategoryData] = useState([]);
     const dispatch = useDispatch();
     const { userData, category, categoryStatus } = useSelector(
@@ -59,6 +62,18 @@ const HeaderContainer = (props) => {
             categoryData={categoryData && categoryData}
         />
     );
+
+    /*
+    return pathname !== '/error' ? (
+        <Header
+            userData={userData && userData.data}
+            onLogout={onLogout}
+            categoryData={categoryData && categoryData}
+        />
+    ) : (
+        <></>
+    );
+    */
 };
 
 export default withRouter(HeaderContainer);

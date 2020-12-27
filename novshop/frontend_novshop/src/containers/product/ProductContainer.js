@@ -10,6 +10,7 @@ import ProductTemplate, {
     ProductItem,
     ProductItemUpdate,
     ProductManament,
+    ProductEmpty
 } from '../../components/product/ProductTemplate';
 import { objectFlagIsAllReady } from '../../lib/utility/customFunc';
 
@@ -23,8 +24,7 @@ const ProductContainer = (props) => {
             return {
                 productStatus: product.productStatus,
                 loading: loading,
-                userData: user.user,
-                
+                userData: user.user,                
             };
         },
     );
@@ -228,17 +228,17 @@ const ProductContainer = (props) => {
     return allLoadingOK &&
         productStatus &&
         productStatus.data &&
-        productStatus.data.length > 0 && (
-        <>
+        productStatus.data.length > 0 ? (
+        <>            
             <ProductManament
                 events={{ onVisible: onProductManageBtnVisible }}
                 isAdmin={userAuthority > 0}
             />
             {createItems(productStatus.data).map((v, i) => (
                 <ProductTemplate key={i}>{v}</ProductTemplate>
-            ))}
+            ))}                    
         </>
-    );
+    ) : <ProductEmpty/>;
 };
 
 export default withRouter(ProductContainer);

@@ -38,18 +38,17 @@ const App = () => {
             <Switch>
                 <Route component={MainPage} path="/" exact />     
                 <Route component={ErrorPage} path="/error" exact />                
-                <Route component={TestPage} path="/test/:opt?" exact />
-                
+                <Route component={TestPage} path="/test/:opt?" exact />                
                 {/* 
                     Shopping  
                     Community (커뮤니티 (공지, CS))    
                     Register (회원가입)
                     Login (로그인)
                 */}
-                <Route component={ShoppingPage} path="/shopping" /> 
+                <Route component={ShoppingPage} path="/shopping" exact /> 
                 <Route component={CommunityPage} path="/community/:page?" exact /> 
-                <Route component={RegisterPage} path="/auth/register" />
-                <Route component={LoginPage} path="/auth/login" />
+                <Route component={RegisterPage} path="/auth/register" exact/>
+                <Route component={LoginPage} path="/auth/login" exact/>
                 
                 {/* 회원 전용 */}
                 {/* 
@@ -79,6 +78,7 @@ const App = () => {
                         authenticated={user}
                         path="/member/@:username"
                         render={(props) => <MemberPage {...props} />}
+                        exact
                     />
                 )}
                 {!loadingUser && (
@@ -88,7 +88,10 @@ const App = () => {
                         render={(props) => <AdminPage {...props} />}
                         exact
                     />
-                )}                             
+                )}   
+                
+                {/*  default */}
+                <Route component={ErrorPage} /> 
             </Switch>
 
             <FooterContainer />

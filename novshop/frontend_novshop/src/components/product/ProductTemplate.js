@@ -214,7 +214,23 @@ const ProductManagementBtn = styled.button`
 `;
 // [END] ProductManagementWrapper ======================
 
-// [3 START] ProductForm ====================== [export default]
+// [3 START] ProductEmpty ====================== [export]
+// 1) ProductEmptyWrapper: 상품 데이터가 없을 경우 Wrapper
+const ProductEmptyWrapper = styled.div`
+    ${(props) =>
+        props.stype === 'paddingWrap'
+            ? css`
+                  padding: ${getSize(3, 'height')} 0;
+                  text-align: center;
+              `
+            : css`
+                  width: ${getSize(1.35)};
+                  margin: 0 auto;
+              `}
+`;
+// [END] ProductEmpty ======================
+
+// [4 START] ProductForm ====================== [export default]
 // 1) ProductFormWrapper: 상품 폼 Wrapper (전체 틀)
 const ProductFormWrapper = styled(Container)`
     width: ${getSize(1.2)};
@@ -228,6 +244,7 @@ const ProductFormRow = styled(Row)`
     margin: 0 5% 0%;
 `;
 // [END] ProductForm ======================
+
 
 // =======================================================================
 // [START] ProductItem 템플릿 :: export
@@ -387,6 +404,22 @@ export const ProductManament = (props) => {
 };
 // =======================================================================
 // [END] ProductItemUpdate / ProductManament 템플릿 :: export
+// =======================================================================
+
+// =======================================================================
+// [START] ProductEmpty 템플릿 :: export
+// =======================================================================
+export const ProductEmpty = () => {
+    return (
+        <ProductEmptyWrapper>
+            <ProductEmptyWrapper stype="paddingWrap">
+                <h4>상품이 없습니다</h4>
+            </ProductEmptyWrapper>
+        </ProductEmptyWrapper>
+    );
+};
+// =======================================================================
+// [END] ProductEmpty 템플릿 :: export
 // =======================================================================
 
 // =======================================================================

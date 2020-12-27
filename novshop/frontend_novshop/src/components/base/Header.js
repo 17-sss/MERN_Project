@@ -129,7 +129,7 @@ const Header = (props) => {
     const {onLogout, userData: user, categoryData} = props;      
 
     return (
-        <>
+        <div id="header">
             {/* *** 헤더 [아이콘, 로고] START *** */}
 
             <HeadWrapper>
@@ -257,7 +257,7 @@ const Header = (props) => {
             {/* *** 헤더 [카테고리] END *** */}
             <ClearEx />
             <BorderBotLine/>
-        </>
+        </div>
     );
 };
 
