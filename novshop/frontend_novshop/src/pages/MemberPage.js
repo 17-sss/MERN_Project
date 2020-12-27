@@ -1,10 +1,9 @@
 import React from 'react';
+import MemberContainer from "../containers/member/MemberContainer";
 
 const MemberPage = () => {    
     return (
-        <div>
-            This is MemberPage.
-        </div>
+        <MemberContainer/>
     );
 };
 
