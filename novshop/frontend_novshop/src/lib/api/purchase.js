@@ -29,3 +29,7 @@ export const buyIn = ({ orderInfo, receiveInfo, items, allProductPrice, shipping
 export const getBuyConfirm = ({ userId }) => {
     return client.post('/api/purchase/getBuyConfirm', { userId });
 };
+
+export const getBuyListPrice = ({ userId }) => {
+    return client.post('/api/purchase/getBuyListPrice', { userId });
+};

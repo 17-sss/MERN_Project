@@ -1,10 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { getSize } from '../../lib/utility/customFunc';
+import { getSize, threeDigitsComma } from '../../lib/utility/customFunc';
 import { faListAlt, faAddressCard } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CommonTableMultiWrapper as MemberPageNameWrapper } from '../common/CommonTableComponents';
-import { CustomLink } from '../common/StyleUtilModels';
+import { ClearEx, CustomLink } from '../common/StyleUtilModels';
 
 // 1. Wrapper
 // 1) MemberWrapper: 메인 Wrapper
@@ -90,11 +90,27 @@ const MemberMultiWrapper = styled.div`
                                   border: 1px solid #c9c9c9;
                               }
 
-                              span {
-                                  margin-left: 10px;
-                                  position: relative;
-                                  top: -13px;
+                              div.floatLeft {
+                                  float: left;
+                                  span.topFix {
+                                      // top minus
+                                      position: relative;
+                                      top: -13px;
+                                      margin-left: 10px;
+                                  }
                               }
+
+                              div.floatRight {
+                                  float: Right;
+                                  height: 100%;
+                                  span.topFix {
+                                      // top plus
+                                      position: relative;
+                                      top: 17px;
+                                      margin-right: 20px;
+                                  }
+                              }
+
                               span.bold {
                                   font-size: 15pt;
                                   font-weight: bold;
@@ -106,7 +122,9 @@ const MemberMultiWrapper = styled.div`
               `};
 `;
 
-const MemberTemplate = () => {
+const MemberTemplate = (props) => {    
+    const { userData, buyData } = props;    
+
     return (
         <MemberWrapper>
             <MemberMultiWrapper>
@@ -126,15 +144,15 @@ const MemberTemplate = () => {
                 </div>
                 <ul className="myinfo_flRight">
                     <li>
-                        <strong class="title">총주문</strong>
-                        <strong class="data">
-                            <span>10,800원 (1회)</span>
+                        <strong className="title">총주문</strong>
+                        <strong className="data">
+                            {buyData && (<span>{threeDigitsComma(buyData.sum)}원 ({buyData.count}회)</span>)}
                         </strong>
                     </li>
                     <li>
-                        <strong class="title">총적립금</strong>
-                        <strong class="data">
-                            <span>1,080원</span>
+                        <strong className="title">총적립금</strong>
+                        <strong className="data">
+                            {userData && (<span>{threeDigitsComma(userData.mileage)}원</span>)}
                         </strong>
                     </li>
                 </ul>
@@ -143,27 +161,44 @@ const MemberTemplate = () => {
             <MemberMultiWrapper stype="menu">
                 <ul>
                     <li>
-                        <CustomLink to="/">
-                            <FontAwesomeIcon
-                                icon={faListAlt}
-                                size="4x"
-                                style={{ marginLeft: '10px' }}
-                            />
-                            <span className="bold">Order</span>
-                            <span>주문내역 조회</span>
-                            <span>고객님께서 주문하신 상품의 주문내역을 확인하실 수 있습니다.</span>
+                        <CustomLink to={userData ? `/member/@${userData.userid}/order` : "/error"}>
+                            <div className="floatLeft">
+                                <FontAwesomeIcon
+                                    icon={faListAlt}
+                                    size="4x"
+                                    style={{ marginLeft: '10px' }}
+                                />
+                                <span className="bold topFix">Order</span>
+                                <span className="topFix">주문내역 조회</span>
+                            </div>
+
+                            <div className="floatRight">
+                                <span className="topFix">
+                                    고객님께서 주문하신 상품의 주문내역을
+                                    확인하실 수 있습니다.
+                                </span>
+                            </div>
+                            <ClearEx />
                         </CustomLink>
                     </li>
                     <li>
-                        <CustomLink to="/">
-                            <FontAwesomeIcon
-                                icon={faAddressCard}
-                                size="4x"
-                                style={{ marginLeft: '10px' }}
-                            />
-                            <span className="bold">Profile</span>
-                            <span>회원 정보</span>
-                            <span>고객님의 개인정보를 관리하는 공간입니다.</span>
+                        <CustomLink to={userData ? `/member/@${userData.userid}/profile` : "/error"}>
+                            <div className="floatLeft">
+                                <FontAwesomeIcon
+                                    icon={faAddressCard}
+                                    size="4x"
+                                    style={{ marginLeft: '10px' }}
+                                />
+                                <span className="bold topFix">Profile</span>
+                                <span className="topFix">회원 정보</span>
+                            </div>
+
+                            <div className="floatRight">
+                                <span className="topFix">
+                                    고객님의 개인정보를 관리하는 공간입니다.
+                                </span>
+                            </div>
+                            <ClearEx />
                         </CustomLink>
                     </li>
                 </ul>

@@ -247,5 +247,30 @@ router.post('/getBuyConfirm', async(req, res) => {
     }
 });
 
+// 마이페이지에서 구매 횟수 및 총금액 계산
+router.post('/getBuyListPrice', async(req, res) => {
+    const { userId } = req.body;
+        
+    try {
+        const getBuyList = await Buy.findAndCountAll({
+            where: { userId }            
+        });
+        const getBuyAllSum = await Buy.sum('totalPrice', { where: { userId }  });
+
+        return res.status(200).json({
+            data: {...getBuyList, sum: getBuyAllSum},
+            error: null,
+            success: true,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    }
+});
+
 
 export default router;

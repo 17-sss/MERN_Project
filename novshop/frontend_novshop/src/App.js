@@ -7,7 +7,7 @@ import HeaderContainer from './containers/base/HeaderContainer';
 import FooterContainer from './containers/base/FooterContainer';
 
 import MainPage from './pages/MainPage';
-import ErrorPage from "./pages/ErrorPage";
+import ErrorPage from "./containers/error/ErrorContainer";
 import TestPage from './pages/TestPage';
 
 import ShoppingPage from './pages/ShoppingPage';
@@ -76,7 +76,7 @@ const App = () => {
                 {!loadingUser && (
                     <CheckAuthRoute
                         authenticated={user}
-                        path="/member/@:username"
+                        path="/member/@:userid/:opt?"
                         render={(props) => <MemberPage {...props} />}
                         exact
                     />

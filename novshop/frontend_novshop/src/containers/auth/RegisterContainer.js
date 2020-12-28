@@ -6,7 +6,8 @@ import { check } from "../../modules/user";
 
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
 
-const RegisterContainer = ({history}) => {     
+const RegisterContainer = (props) => {         
+    const { history, isUpdateForm } = props;    // isUpdateForm은 회원정보 수정일 시 true (MemberPage -> RegisterContainer(ProfileContainer))
     const [error, setError] = useState(null);
 
     const dispatch = useDispatch();
@@ -119,11 +120,10 @@ const RegisterContainer = ({history}) => {
     }, [error])
 
     // 컴포넌트가 처음 렌더링될 때 초기화.
-    useEffect(() => {        
-        dispatch(
-            initializeForm('register'),
-        );        
-    }, [dispatch]);
+    useEffect(() => {                
+        dispatch(initializeForm('register'));        
+        if (isUpdateForm) return; // 작업해야
+    }, [dispatch, isUpdateForm]);
 
     // 주소 API 사용하여 주소 관련 Input Change
     useEffect(() => {
@@ -177,7 +177,9 @@ const RegisterContainer = ({history}) => {
     }, [dispatch, addressResult, addressType]);
 
     // 회원가입 성공 or 실패 처리
-    useEffect(()=> {
+    useEffect(()=> {                     
+        if (isUpdateForm) return;
+
         if (authError) {
             const {data, status} = authError;           
 
@@ -195,11 +197,11 @@ const RegisterContainer = ({history}) => {
             dispatch(login({userid, userpwd}));
             dispatch(check());
         }
-    }, [auth, authError, dispatch, form])
+    }, [auth, authError, dispatch, form, isUpdateForm])
 
     // 회원가입 성공 후, 유저 체크
     useEffect(() => {
-        if (user) {
+        if (user && !isUpdateForm) {
             history.push('/');
             
             // 로그인 상태 유지하기위해 브라우저에 내장되어있는 localStorage 사용
@@ -209,7 +211,7 @@ const RegisterContainer = ({history}) => {
                 console.log('localStorage is not working');
             }
         }
-    }, [history, user])
+    }, [history, user, isUpdateForm]);
     
 
     return (
@@ -220,6 +222,7 @@ const RegisterContainer = ({history}) => {
             form = {form}
             error = {error}
             phoneFrontList={phoneFrontList}
+            isUpdateForm={isUpdateForm}
         />
     );
 };

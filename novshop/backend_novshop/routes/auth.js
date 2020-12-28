@@ -122,5 +122,10 @@ router.post('/logout', (req, res) => {
     }
 });
 
+// 유저 정보 가져옴 (회원정보 수정 전) (POST /api/auth/getUserInfo)
+router.post('/getUserInfo', (req, res) => { 
+    // 
+});
+
 
 export default router;

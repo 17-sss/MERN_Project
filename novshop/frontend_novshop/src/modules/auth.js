@@ -25,6 +25,10 @@ const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] = createRequestActionTypes(
     'auth/REGISTER',
 );
 
+const [GET_USER_INFO, GET_USER_INFO_SUCCESS, GET_USER_INFO_FAILURE] = createRequestActionTypes(
+    'user/GET_USER_INFO',
+);
+
 // 액션 생성 함수 생성
 /*  
 // 일반 액션 생성 함수 샘플.
@@ -74,15 +78,18 @@ export const register = createAction(
         };
     },
 );
+export const getUserInfo = createAction(GET_USER_INFO, ({id}) => ({id}));
 
 // 사가 생성
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+const getUserInfoSaga = createRequestSaga(GET_USER_INFO, authAPI.getUserInfo);
 
 export function* authSaga() {
     // 마지막에 발생된 액션타입이 LOGIN or REGISTER인 경우 실행
     yield takeLatest(REGISTER, registerSaga);
     yield takeLatest(LOGIN, loginSaga);
+    yield takeLatest(GET_USER_INFO, getUserInfoSaga);
 }
 
 // 리듀서 초기값
@@ -149,7 +156,7 @@ const auth = handleActions(
         }),
         */
 
-        // 회원가입 성공
+        // 회원가입
         [REGISTER_SUCCESS]: (state, action) => {
             const { payload: auth } = action;
 
@@ -158,9 +165,7 @@ const auth = handleActions(
                 authError: null,
                 auth,
             };
-        },
-
-        // 회원가입 실패
+        },        
         [REGISTER_FAILURE]: (state, action) => {
             const { payload: error } = action;
 
@@ -170,7 +175,7 @@ const auth = handleActions(
             };
         },
 
-        // 로그인 성공
+        // 로그인
         [LOGIN_SUCCESS]: (state, action) => {
             const { payload: auth } = action;
 
@@ -179,9 +184,7 @@ const auth = handleActions(
                 authError: null,
                 auth,
             };
-        },
-
-        // 로그인 실패
+        },        
         [LOGIN_FAILURE]: (state, action) => {
             const { payload: error } = action;
 
@@ -190,6 +193,27 @@ const auth = handleActions(
                 authError: error,
             };
         },
+
+        // 회원정보 수정
+        [GET_USER_INFO_SUCCESS]: (state, action) => {
+            const { payload: auth } = action;
+
+            return {
+                ...state,
+                authError: null,
+                auth,
+            };
+        },  
+        [GET_USER_INFO_FAILURE]: (state, action) => {
+            const { payload: error } = action;
+
+            return {
+                ...state,
+                authError: error,
+            };
+        },
+
+
     },
     initialState,
 );

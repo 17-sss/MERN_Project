@@ -35,6 +35,11 @@ const [BUY_IN, BUY_IN_SUCCESS, BUY_IN_FAILURE] = createRequestActionTypes(
 const [GET_BUY_CONFIRM, GET_BUY_CONFIRM_SUCCESS, GET_BUY_CONFIRM_FAILURE] = createRequestActionTypes(
     'purchase/GET_BUY_CONFIRM',
 );
+
+const [GET_BUY_LIST_PRICE, GET_BUY_LIST_PRICE_SUCCESS, GET_BUY_LIST_PRICE_FAILURE] = createRequestActionTypes(
+    'purchase/GET_BUY_LIST_PRICE',
+);
+
 // =======================================================================
 
 // 액션 생성 함수 작성
@@ -95,7 +100,12 @@ export const buyIn = createAction(
 export const getBuyConfirm = createAction(
     GET_BUY_CONFIRM,
     ({userId}) => ({userId})
-)
+);
+
+export const getBuyListPrice = createAction(   // 마이페이지의 주문한 총금액 & 구매횟수 GET 
+    GET_BUY_LIST_PRICE,
+    ({userId}) => ({userId})
+);
 // =======================================================================
 
 // 사가 생성
@@ -105,6 +115,7 @@ const updCartVolumeSaga = createRequestSaga(UPD_CART_VOLUME, purchaseAPI.updCart
 const delCartGoodsSaga = createRequestSaga(DEL_CART_GOODS, purchaseAPI.delCartGoods);
 const buyInSaga = createRequestSaga(BUY_IN, purchaseAPI.buyIn);
 const getBuyConfirmSaga = createRequestSaga(GET_BUY_CONFIRM, purchaseAPI.getBuyConfirm);
+const getBuyListPriceSaga = createRequestSaga(GET_BUY_LIST_PRICE, purchaseAPI.getBuyListPrice);
 
 export function* purchaseSaga() {
     yield takeLatest(CART_IN, cartInSaga);
@@ -113,6 +124,7 @@ export function* purchaseSaga() {
     yield takeLatest(DEL_CART_GOODS, delCartGoodsSaga);
     yield takeLatest(BUY_IN, buyInSaga);
     yield takeLatest(GET_BUY_CONFIRM, getBuyConfirmSaga);
+    yield takeLatest(GET_BUY_LIST_PRICE, getBuyListPriceSaga);
 }
 // =======================================================================
 
@@ -200,7 +212,35 @@ const okNotokFuncCart = (type, status) => {
     };
     
     return (status === 'failure' ? failureFunc : successFunc);
-}   
+};
+
+// 2) okNotokFuncBuy, for Buy
+const okNotokFuncBuy = (type, status) => {
+    
+    const successFunc = (state, action) => {
+        const { payload } = action;
+
+        return {
+            ...state,
+            buy: type !== "buyFormStatus" ? payload : state['buy'],
+            buyFormStatus: type === "buyFormStatus" ?  payload : state['buyFormStatus'],
+            purchaseError: null,
+        };
+    }
+
+    const failureFunc = (state, action) => {
+        const { payload: purchaseError } = action;
+    
+        return {
+            ...state,
+            buy: type !== "buyFormStatus" ? null : state['buy'],
+            buyFormStatus: type === "buyFormStatus" ?  null : state['buyFormStatus'],            
+            purchaseError,
+        };
+    };
+    
+    return (status === 'failure' ? failureFunc : successFunc);
+};
 
 // 리듀서
 const purchase = handleActions(
@@ -380,24 +420,8 @@ const purchase = handleActions(
         [DEL_CART_GOODS_FAILURE]: okNotokFuncCart("cart", "failure"),
 
         // 구매 데이터 전송
-        [BUY_IN_SUCCESS]: (state, action) => {
-            const { payload: buy } = action;
-
-            return {
-                ...state,
-                buy,
-                purchaseError: null,
-            }
-        },
-        [BUY_IN_FAILURE]: (state, action) => {
-            const { payload: purchaseError } = action;
-
-            return {
-                ...state,
-                buy: null,
-                purchaseError,
-            }
-        },
+        [BUY_IN_SUCCESS]: okNotokFuncBuy("buy", "success"),
+        [BUY_IN_FAILURE]: okNotokFuncBuy("buy", "failure"),
 
         // 구매 확정 후 구매확정 페이지에 보여줄 데이터
         [GET_BUY_CONFIRM_SUCCESS]: (state, action) => {
@@ -419,6 +443,10 @@ const purchase = handleActions(
                 purchaseError,
             }
         },
+
+        // 마이페이지의 총금액 & 구매횟수 GET
+        [GET_BUY_LIST_PRICE_SUCCESS]: okNotokFuncBuy("buy", "success"),
+        [GET_BUY_LIST_PRICE_FAILURE]: okNotokFuncBuy("buy", "failure"),
     },
     initialState,
 );
