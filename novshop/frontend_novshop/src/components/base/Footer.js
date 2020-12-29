@@ -6,18 +6,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons';       // fab
 
 const FooterWrapper = styled.div`
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem 0;
+    background-color: #f6f6f6;    
+`;
+
+const FooterMultiWrapper = styled.div`
     ${(props) =>
         props.stype === 'logo'
             ? css`
-                  width: ${getSize(1.35)};
                   margin: 0 auto;
-                  text-align: ${props.align ? props.align : "left"};                  
+                  text-align: ${props.align ? props.align : "left"};                        
+                  display: table;
               `
             : css`
-                  width: ${getSize(1)};
-                  margin: 0 auto;
-                  padding: 2rem 0;
-                  background-color: #f6f6f6;
+                  width: ${getSize(1.45)};
+                  position: relative;
+                  margin: 0 auto;                  
               `}
 `;
 
@@ -32,28 +38,31 @@ const FooterA = styled.a`
 `;
 
 const Footer = () => {
+    console.log(  );
     return (
         <FooterWrapper id="footer"> 
-            <FooterWrapper stype="logo" align="center">
-                <CustomLink 
-                        to = '/'                         
-                        margin="0"
-                    >
-                    <img 
-                        src="/images/logo_Trans_small.png"
-                        alt="logo"
-                    />
-                </CustomLink>  
-                <FooterA href="https://github.com/17-sss" mr5>
-                    <FontAwesomeIcon icon = {faGithub} size = 'lg'/>                        
-                </FooterA>
-                
-                <FooterA href="https://www.instagram.com/17__sss/">
-                    <FontAwesomeIcon icon = {faInstagram} size = 'lg'/>                        
-                </FooterA>
-                <br/>
-                <span>Copyright 2020. ©Hoyoung. All Right Reserved.</span>
-            </FooterWrapper>
+            <FooterMultiWrapper>
+                <FooterMultiWrapper stype="logo" align="center">
+                    <CustomLink 
+                            to = '/'                         
+                            margin="0"
+                        >
+                        <img 
+                            src="/images/logo_Trans_small.png"
+                            alt="logo"
+                        />
+                    </CustomLink>  
+                    <FooterA href="https://github.com/17-sss" mr5>
+                        <FontAwesomeIcon icon = {faGithub} size = 'lg'/>                        
+                    </FooterA>
+                    
+                    <FooterA href="https://www.instagram.com/17__sss/">
+                        <FontAwesomeIcon icon = {faInstagram} size = 'lg'/>                        
+                    </FooterA>
+                    <br/>
+                    <span>Copyright 2020. ©Hoyoung. All Right Reserved.</span>
+                </FooterMultiWrapper>
+            </FooterMultiWrapper>
         </FooterWrapper>
     );
 };

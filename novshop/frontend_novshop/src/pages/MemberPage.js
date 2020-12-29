@@ -1,7 +1,10 @@
 import React from 'react';
-import ProfileContainer from "../containers/auth/RegisterContainer";    // ProfileContainer는 RegisterContainer 겸 쓰임.
+
 import MemberContainer from '../containers/member/MemberContainer';
+import ProfileContainer from "../containers/auth/RegisterContainer";    // ProfileContainer는 RegisterContainer 겸 쓰임.
+import OrderListContainer from '../containers/purchase/OrderListContainer';
 import ErrorContainer from '../containers/error/ErrorContainer';
+
 
 const MemberPage = (props) => {
     const {
@@ -14,7 +17,7 @@ const MemberPage = (props) => {
             opt === 'profile' ? (
                 <ProfileContainer isUpdateForm />
             ) : opt === 'order' ? (
-                <div>order</div>
+                <OrderListContainer />
             ) : (
                 opt !== 'profile' && opt !== 'order' && <ErrorContainer />
             )

@@ -93,7 +93,12 @@ export const isEmpty = (param) => {
 // **********************************************************************************
 // 숫자 3자리마다 , 입력
 // **********************************************************************************
-export const threeDigitsComma = (Anumber) => (Anumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+export const threeDigitsComma = (Anumber) => {
+    if (typeof Anumber !== 'number') 
+        return Anumber
+    else
+        return Anumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+};
 
 // **********************************************************************************
 // 정렬 (그냥 만들어봄) 

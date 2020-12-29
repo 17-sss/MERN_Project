@@ -146,7 +146,14 @@ const MemberTemplate = (props) => {
                     <li>
                         <strong className="title">총주문</strong>
                         <strong className="data">
-                            {buyData && (<span>{threeDigitsComma(buyData.sum)}원 ({buyData.count}회)</span>)}
+                            {buyData && (
+                                <span>
+                                    {buyData.sum
+                                        ? threeDigitsComma(buyData.sum)
+                                        : 0}
+                                    원 ({buyData.count}회)
+                                </span>
+                            )}
                         </strong>
                     </li>
                     <li>
