@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { changeField, initializeForm, login } from "../../modules/auth";
+import { changeField, initializeAuthForm, login } from "../../modules/auth";
 import { check } from '../../modules/user';
 
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
@@ -42,7 +42,7 @@ const LoginContainer = ({history}) => {
     // 컴포넌트가 처음 렌더링될 때 form을 초기화
     useEffect(() => {
         dispatch(
-            initializeForm('login')
+            initializeAuthForm({form: 'login'})
         ); 
     }, [dispatch]);
 

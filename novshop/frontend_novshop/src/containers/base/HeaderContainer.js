@@ -7,7 +7,11 @@ import { logout } from '../../modules/user';
 import Header from '../../components/base/Header';
 
 const HeaderContainer = (props) => {
+    const { history } = props;
+    
     const [categoryData, setCategoryData] = useState([]);
+    const [isLogout, setIsLogout] = useState(false);
+    
     const dispatch = useDispatch();
     const { userData, category, categoryStatus } = useSelector(
         ({ user, category }) => {
@@ -21,7 +25,15 @@ const HeaderContainer = (props) => {
 
     const onLogout = () => {
         dispatch(logout());
+        setIsLogout(true);
     };
+    
+    useEffect(() => {
+        if (isLogout) {
+            history.push('/');
+            setIsLogout(false);
+        }
+    }, [isLogout, history]);
 
     useEffect(() => {
         dispatch(getAllCategory());

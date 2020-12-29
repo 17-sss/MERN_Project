@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { changeField, initializeForm, register, login } from "../../modules/auth";
+import { changeField, initializeAuthForm, register, login, getUserInfo, updUserInfo } from "../../modules/auth";
 import { check } from "../../modules/user";
 
 import LoginRegisterTemplate from "../../components/auth/LoginRegisterTemplate";
@@ -96,7 +96,7 @@ const RegisterContainer = (props) => {
         // 아이디, 비번, 이름, 이메일, 주소, 연락처 체크
         if (!userid) 
             return setError('아이디를 입력해주세요')
-        else if (!userpwd)  
+        else if (!userpwd && !isUpdateForm)  
             return setError('비밀번호를 입력해주세요')
         else if (!username) 
             return setError('이름을 입력해주세요.')
@@ -107,7 +107,14 @@ const RegisterContainer = (props) => {
         else if (!isPhoneOK)
             return setError('연락처 입력 부분을 확인해주세요.');
         
-        dispatch(register({userid, userpwd, username, address, phonenumber, email}));
+        if (!isUpdateForm) 
+            dispatch(register({userid, userpwd, username, address, phonenumber, email}))
+        else {
+            if (user && user.data && user.data.id) {
+                dispatch(updUserInfo({id: user.data.id, userid, userpwd, username, address, phonenumber, email}));
+                history.goBack();
+            }
+        }                
     };
 
     // Error 문구 일정시간 지나면 사라짐
@@ -121,9 +128,13 @@ const RegisterContainer = (props) => {
 
     // 컴포넌트가 처음 렌더링될 때 초기화.
     useEffect(() => {                
-        dispatch(initializeForm('register'));        
-        if (isUpdateForm) return; // 작업해야
-    }, [dispatch, isUpdateForm]);
+        dispatch(initializeAuthForm({form: 'register'}));        
+        
+        // 회원정보 수정일 시 정보 가져옴
+        if (isUpdateForm && user && user.data && user.data.id) {            
+            dispatch(getUserInfo({id: user.data.id}));
+        }
+    }, [dispatch, user, isUpdateForm]);
 
     // 주소 API 사용하여 주소 관련 Input Change
     useEffect(() => {
@@ -212,7 +223,6 @@ const RegisterContainer = (props) => {
             }
         }
     }, [history, user, isUpdateForm]);
-    
 
     return (
         <LoginRegisterTemplate

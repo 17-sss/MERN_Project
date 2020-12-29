@@ -54,6 +54,7 @@ const LoginRegisterTemplate = (props) => {
                                 onChange={onChange}
                                 value={form.userid}
                                 size="60"
+                                readOnly={isUpdateForm}
                             />
                             <br/>
                             <LoginRegisterInput     

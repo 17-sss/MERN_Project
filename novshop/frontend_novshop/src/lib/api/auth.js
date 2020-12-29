@@ -19,9 +19,14 @@ export const register = ({userid, userpwd, username}) => {
 };
 */
 
-// 회원정보 수정
+// 회원정보 수정를 위해 기존 정보 가져오기
 export const getUserInfo = ({id}) => {    
     return client.post('/api/auth/getUserInfo', {id});
+}
+
+// 회원정보 수정
+export const updUserInfo = ({id, userid, userpwd, username, address, phonenumber, email}) => {    
+    return client.patch('/api/auth/updUserInfo', {id, userid, userpwd, username, address, phonenumber, email});
 }
 
 // 로그인 체크 

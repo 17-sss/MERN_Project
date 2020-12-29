@@ -123,8 +123,68 @@ router.post('/logout', (req, res) => {
 });
 
 // 유저 정보 가져옴 (회원정보 수정 전) (POST /api/auth/getUserInfo)
-router.post('/getUserInfo', (req, res) => { 
-    // 
+router.post('/getUserInfo', async (req, res) => { 
+    const {id} = req.body;
+    try {
+        const findUser = await User.findOne({ 
+            where: { id },
+            attributes: { 
+                // 제외될 필드 목록 (exclude옵션 안쓰고 그냥 쓰면 보여질 필드 목록.)
+                exclude: ['createdAt', 'deletedAt', 'updatedAt', 'userpwd'] 
+            },
+        });
+
+        return res.status(200).json({
+            data: findUser,
+            error: null,
+            success: true,
+        });
+
+    } catch (error) {
+        console.error(error);        
+        return res.status(500).json({
+            error,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    }
+});
+
+// 유저 정보 수정 (POST /api/auth/updUserInfo)
+router.patch('/updUserInfo', async (req, res) => { 
+    const { id, userid, userpwd, username, address, phonenumber, email } = req.body;    
+    
+    try {
+        const backUser = await User.findOne({ where: { id } });
+        const hash = await bcrypt.hash(userpwd, 12);
+
+        await User.update(
+            {
+                userid,
+                userpwd: userpwd ? hash : backUser.userpwd,
+                username,
+                address,
+                phonenumber,
+                email,
+            },
+            {
+                where: { id },
+            },
+        );
+        
+        return res.status(200).json({
+            error: null,
+            success: true,
+        });
+
+    } catch (error) {
+        console.error(error);        
+        return res.status(500).json({
+            error,
+            code: -1,
+            message: '서버에 오류가 있습니다.',
+        });
+    }
 });
 
 

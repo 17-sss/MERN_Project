@@ -15,7 +15,8 @@ import * as authAPI from '../lib/api/auth';
 
 // 액션 이름 설정
 const CHANGE_FIELD = 'auth/CHANGE_FIELD';
-const INITALIZE_FORM = 'auth/INITALIZE_FORM';
+const INITALIZE_AUTH = 'auth/INITALIZE_AUTH';
+const INITALIZE_AUTH_FORM = 'auth/INITALIZE_AUTH_FORM';
 
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes(
     'auth/LOGIN',
@@ -27,6 +28,10 @@ const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] = createRequestActionTypes(
 
 const [GET_USER_INFO, GET_USER_INFO_SUCCESS, GET_USER_INFO_FAILURE] = createRequestActionTypes(
     'user/GET_USER_INFO',
+);
+
+const [UPD_USER_INFO, UPD_USER_INFO_SUCCESS, UPD_USER_INFO_FAILURE] = createRequestActionTypes(
+    'user/UPD_USER_INFO',
 );
 
 // 액션 생성 함수 생성
@@ -41,8 +46,8 @@ export const changeField = ({form, key, value}) => ({
     }
 });
 
-export const initializeForm = form => ({
-    type: INITALIZE_FORM,
+export const initializeAuthForm = form => ({
+    type: INITALIZE_AUTH_FORM,
     payload: form,
 });
 
@@ -57,7 +62,11 @@ export const changeField = createAction(
     }),
 );
 
-export const initializeForm = createAction(INITALIZE_FORM, (form) => form); // "register" / "login"
+export const initializeAuth = createAction(INITALIZE_AUTH);     
+export const initializeAuthForm = createAction( // "register" / "login"
+    INITALIZE_AUTH_FORM,    
+    ({ form, subForm } = { subForm: '' }) => ({ form, subForm }),
+); 
 
 export const login = createAction(LOGIN, ({ userid, userpwd }) => {
     return {
@@ -79,18 +88,34 @@ export const register = createAction(
     },
 );
 export const getUserInfo = createAction(GET_USER_INFO, ({id}) => ({id}));
+export const updUserInfo = createAction(
+    UPD_USER_INFO,
+    ({ id, userid, userpwd, username, address, phonenumber, email }) => {
+        return {
+            id,
+            userid,
+            userpwd,
+            username,
+            address: JSON.stringify(address),
+            phonenumber: JSON.stringify(phonenumber),
+            email,
+        };
+    },
+);
 
 // 사가 생성
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 const getUserInfoSaga = createRequestSaga(GET_USER_INFO, authAPI.getUserInfo);
+const updUserInfoSaga = createRequestSaga(UPD_USER_INFO, authAPI.updUserInfo);
 
 export function* authSaga() {
     // 마지막에 발생된 액션타입이 LOGIN or REGISTER인 경우 실행
     yield takeLatest(REGISTER, registerSaga);
     yield takeLatest(LOGIN, loginSaga);
     yield takeLatest(GET_USER_INFO, getUserInfoSaga);
-}
+    yield takeLatest(UPD_USER_INFO, updUserInfoSaga);
+};
 
 // 리듀서 초기값
 const initialState = {
@@ -139,22 +164,25 @@ const auth = handleActions(
             };
         },
 
-        // "register" / "login" 객체 초기화.
-        [INITALIZE_FORM]: (state, action) => {
-            const { payload: form } = action; // action의 payload를 가져오지만, 여기선 form이라는 이름으로 씀
+        // 초기화
+        [INITALIZE_AUTH]: (state, action) => (initialState),
+
+        // "register" / "login" 객체 개별 초기화
+        [INITALIZE_AUTH_FORM]: (state, action) => {
+            const { payload } = action; // action의 payload를 가져오지만, 여기선 form이라는 이름으로 씀
+            const { form, subForm } = payload;
+
             return {
                 ...state,
-                [form]: initialState[form],
+                [form]: subForm
+                    ? {
+                          ...state[form],
+                          [subForm]: initialState[form][subForm],
+                      }
+                    : initialState[form],
                 authError: null, // 폼 전환 시 회원 인증 에러 초기화
             };
         },
-        /*      // 위와 같은 동작임.
-        [INITALIZE_FORM]: (state, {payload: form}) => ({
-            ...state,
-            [form]: initialState[form],
-            authError: null,    // 폼 전환 시 회원 인증 에러 초기화    
-        }),
-        */
 
         // 회원가입
         [REGISTER_SUCCESS]: (state, action) => {
@@ -194,14 +222,35 @@ const auth = handleActions(
             };
         },
 
-        // 회원정보 수정
+        // 회원정보 수정를 위해 기존 정보 가져오기
         [GET_USER_INFO_SUCCESS]: (state, action) => {
-            const { payload: auth } = action;
+            const { payload } = action;
+            const { data } = payload;            
+            const { address, phonenumber } = data;
+            
+            const { addressPostNo, addressAddr1, addressAddr2 } = JSON.parse(address);
+            const { phoneNumSelect, phoneNum1, phoneNum2 } = JSON.parse(phonenumber);
+
+            const register = {
+                ...data,
+                userpwd: '',
+                userpwdConfirm: '',
+                address: {
+                    addressPostNo,
+                    addressAddr1,
+                    addressAddr2,
+                },
+                phonenumber: {
+                    phoneNumSelect,
+                    phoneNum1,
+                    phoneNum2,
+                }
+            };
 
             return {
                 ...state,
+                register,
                 authError: null,
-                auth,
             };
         },  
         [GET_USER_INFO_FAILURE]: (state, action) => {
@@ -209,11 +258,29 @@ const auth = handleActions(
 
             return {
                 ...state,
+                register: null,
                 authError: error,
             };
         },
 
+        // 회원정보 수정
+        [UPD_USER_INFO_SUCCESS]: (state, action) => {
+            const { payload: auth } = action;
 
+            return {
+                ...state,
+                authError: null,
+                auth,
+            };
+        },        
+        [UPD_USER_INFO_FAILURE]: (state, action) => {
+            const { payload: error } = action;
+
+            return {
+                ...state,
+                authError: error,
+            };
+        },
     },
     initialState,
 );
