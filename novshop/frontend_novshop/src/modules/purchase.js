@@ -135,8 +135,7 @@ const initialState = {
         1) buyFormStatus: 구매 상태를 담당 
         2) cartFormStatus: 장바구니 상태를 담당
 */
-    buy: null,
-    buyConfirm: null,
+    buy: null,    
     buyFormStatus: {
         orderInfo: {        // 주문자 정보
             username: '',
@@ -425,11 +424,11 @@ const purchase = handleActions(
 
         // 구매 확정 후 구매확정 페이지에 보여줄 데이터
         [GET_BUY_CONFIRM_SUCCESS]: (state, action) => {
-            const { payload: buyConfirm } = action;
+            const { payload: buy } = action;
 
             return {
                 ...state,
-                buyConfirm,
+                buy,
                 purchaseError: null,
             }
         },
@@ -439,7 +438,7 @@ const purchase = handleActions(
 
             return {
                 ...state,
-                buyConfirm: null,
+                buy: null,
                 purchaseError,
             }
         },

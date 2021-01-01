@@ -9,8 +9,8 @@ const BuyConfirmContainer = (props) => {
     const { history } = props;
 
     const dispatch = useDispatch();
-    const { buyConfirm, userData } = useSelector(({ purchase, user }) => ({
-        buyConfirm: purchase.buyConfirm,
+    const { buy, userData } = useSelector(({ purchase, user }) => ({
+        buy: purchase.buy,
         userData: user.user,
     }));
 
@@ -22,7 +22,7 @@ const BuyConfirmContainer = (props) => {
     };
 
     useEffect(() => {
-        dispatch(initialPurchaseForm({form: "buyConfirm"}));
+        dispatch(initialPurchaseForm({form: "buy"}));
     }, [dispatch]);
 
     useEffect(() => {        
@@ -35,8 +35,8 @@ const BuyConfirmContainer = (props) => {
     }, [dispatch, userData]);
 
     useEffect(() => {
-        if (!buyConfirm || !buyConfirm.data) return;
-        const {orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice } = buyConfirm.data;
+        if (!buy || !buy.data) return;
+        const {orderInfo, receiveInfo, items, allProductPrice, shippingFee, totalPrice } = buy.data;
         setData({
             orderInfo: JSON.parse(orderInfo),
             receiveInfo: JSON.parse(receiveInfo),
@@ -45,7 +45,7 @@ const BuyConfirmContainer = (props) => {
             shippingFee: shippingFee === 0 ? "무료" : threeDigitsComma(shippingFee),
             totalPrice: threeDigitsComma(totalPrice),
         });
-    }, [buyConfirm]);
+    }, [buy]);
 
     const onMainGoClick = () => {
         history.push(`/`);

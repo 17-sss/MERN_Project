@@ -34,10 +34,25 @@ const OrderListMultiWrapper = styled.div`
             ? css`
                   height: 30px;
                   background-color: #fbfafa;
+
+                  ${OrderListCell} {
+                      padding: 5px 0;
+                      margin: 0 0.5%;
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 15px;
+                  }
               `
             : props.stype === 'dataRow' &&
               css`
                   height: 30px;
+
+                  ${OrderListCell} {
+                      padding: 5px 0;
+                      margin: 0 5px;
+                      text-align: ${props.align ? props.align : 'center'};
+                      font-size: 13px;
+                  }
               `}
 `;
 
@@ -45,26 +60,13 @@ const OrderListCell = styled.span`
     display: inline-block;
     width: ${(props) => (props.width ? props.width : '10%')};
     vertical-align: center;
-
-    ${(props) =>
-        props.stype === 'head'
-            ? css`
-                  padding: 5px 0;
-                  margin: 0 0.5%;
-                  text-align: center;
-                  font-weight: bold;
-                  font-size: 15px;
-              `
-            : props.stype === 'data' &&
-              css`
-                  padding: 5px 0;
-                  margin: 0 5px;
-                  text-align: ${props.align ? props.align : 'center'};
-                  font-size: 13px;
-              `}
 `;
+// =====
 
-const OrderListTemplate = () => {
+const OrderListTemplate = (props) => {
+    const { etc } = props;
+    const { headDatas } = etc;
+
     return (
         <OrderListWrapper>
             <OrderListMultiWrapper stype="pagename">
@@ -72,61 +74,30 @@ const OrderListTemplate = () => {
             </OrderListMultiWrapper>
 
             <OrderListMultiWrapper stype="tableDiv">
-
                 <OrderListMultiWrapper stype="headRow">
-                    <OrderListCell stype="head" width="12%">
-                        주문일자
-                    </OrderListCell>
-                    <OrderListCell stype="head" width="16%">
-                        이미지
-                    </OrderListCell>
-                    <OrderListCell stype="head" width="41%">
-                        상품정보
-                    </OrderListCell>
-                    <OrderListCell stype="head" width="12%">
-                        수량
-                    </OrderListCell>
-                    <OrderListCell stype="head" width="13%">
-                        상품구매금액
-                    </OrderListCell>
+                    {headDatas &&
+                        headDatas.map((v) => (
+                            <OrderListCell width={v.width}>
+                                {v.name}
+                            </OrderListCell>
+                        ))}
                 </OrderListMultiWrapper>
 
                 <OrderListMultiWrapper stype="dataRow">
-                    <OrderListCell stype="data" width="12%">
-                        20201231
-                    </OrderListCell>
-                    <OrderListCell stype="data" width="16%">
-                        image
-                    </OrderListCell>
-                    <OrderListCell stype="data" width="41%">
-                        info
-                    </OrderListCell>
-                    <OrderListCell stype="data" width="12%">
-                        1
-                    </OrderListCell>
-                    <OrderListCell stype="data" width="13%">
-                        20000
-                    </OrderListCell>
+                    <OrderListCell width="12%">20201231</OrderListCell>
+                    <OrderListCell width="16%">image</OrderListCell>
+                    <OrderListCell width="41%">info</OrderListCell>
+                    <OrderListCell width="12%">1</OrderListCell>
+                    <OrderListCell width="13%">20000</OrderListCell>
                 </OrderListMultiWrapper>
 
                 <OrderListMultiWrapper stype="dataRow">
-                    <OrderListCell stype="data" width="12%">
-                        20201231
-                    </OrderListCell>
-                    <OrderListCell stype="data" width="16%">
-                        image
-                    </OrderListCell>
-                    <OrderListCell stype="data" width="41%">
-                        info
-                    </OrderListCell>
-                    <OrderListCell stype="data" width="12%">
-                        1
-                    </OrderListCell>
-                    <OrderListCell stype="data" width="13%">
-                        20000
-                    </OrderListCell>
+                    <OrderListCell width="12%">20201231</OrderListCell>
+                    <OrderListCell width="16%">image</OrderListCell>
+                    <OrderListCell width="41%">info</OrderListCell>
+                    <OrderListCell width="12%">1</OrderListCell>
+                    <OrderListCell width="13%">20000</OrderListCell>
                 </OrderListMultiWrapper>
-                
             </OrderListMultiWrapper>
         </OrderListWrapper>
     );
