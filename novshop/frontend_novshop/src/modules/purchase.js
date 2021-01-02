@@ -102,7 +102,7 @@ export const getBuyConfirm = createAction(
     ({userId}) => ({userId})
 );
 
-export const getBuyListPrice = createAction(   // 마이페이지의 주문한 총금액 & 구매횟수 GET 
+export const getBuyListPrice = createAction(   // 마이페이지의 주문한 총금액 & 구매횟수, 구매목록 GET 
     GET_BUY_LIST_PRICE,
     ({userId}) => ({userId})
 );

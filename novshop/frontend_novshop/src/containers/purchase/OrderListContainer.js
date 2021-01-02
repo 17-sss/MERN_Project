@@ -1,28 +1,48 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import OrderListTemplate from "../../components/purchase/OrderListTemplate";
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import OrderListTemplate from '../../components/purchase/OrderListTemplate';
+import { getBuyListPrice, initialPurchase } from '../../modules/purchase';
 
 const OrderListContainer = () => {
-    const { userData } = useSelector(({user, buy}) => {
+    const dispatch = useDispatch();
+    const { userData, buy } = useSelector(({ user, purchase }) => {
         return {
             userData: user.user,
-
-        }
+            buy: purchase.buy,
+        };
     });
+    const [orderItems, setOrderItems] = useState(null);
 
-    console.log(userData);
+    useEffect(() => {
+        setOrderItems(null);
+        dispatch(initialPurchase());
+
+        if (userData && userData.data && userData.data.id)
+            dispatch(getBuyListPrice({ userId: userData.data.id }));
+    }, [dispatch, userData]);
+
+    useEffect(() => {
+        if (buy && buy.data && buy.data.rows) {
+            const tempRows = [];
+            buy.data.rows.map((v) =>
+                tempRows.push({
+                    ...v,
+                    createdAt: new Date(v.createdAt).toLocaleDateString(),
+                    items: JSON.parse(v.items),
+                }),
+            );
+            setOrderItems(tempRows);            
+        }
+    }, [buy]);
 
     const headDatas = [
-        {name: '주문일자', width: "12%"},
-        {name: '이미지', width: "16%"},
-        {name: '상품정보', width: "41%"},
-        {name: '수량', width: "12%"},
-        {name: '상품구매금액', width: "13%"},
+        { name: '주문일자', width: '8%' },
+        { name: '이미지', width: '20%' },
+        { name: '상품정보', width: '52%' },        
+        { name: '총 구매금액', width: '14%' },
     ];
 
-    return (
-        <OrderListTemplate etc={{headDatas,}}/>
-    )
+    return <OrderListTemplate orderItems={orderItems && orderItems} etc={{ headDatas }} />;
 };
 
 export default OrderListContainer;

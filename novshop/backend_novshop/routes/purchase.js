@@ -187,7 +187,7 @@ router.post('/buyIn', async (req, res) => {
             where: { id: userId } 
         });
         const { mileage } = getUser;
-        const curMileage = Number(totalPrice.replace(",", "")) * 0.01;
+        const curMileage = Number(allProductPrice.replace(",", "")) * 0.01;
 
         await User.update(
             { mileage: Number(mileage + curMileage) },
@@ -255,7 +255,7 @@ router.post('/getBuyListPrice', async(req, res) => {
         const getBuyList = await Buy.findAndCountAll({
             where: { userId }            
         });
-        const getBuyAllSum = await Buy.sum('totalPrice', { where: { userId }  });
+        const getBuyAllSum = await Buy.sum('allProductPrice', { where: { userId }  });
 
         return res.status(200).json({
             data: {...getBuyList, sum: getBuyAllSum},
