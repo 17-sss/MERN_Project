@@ -27,8 +27,10 @@ const OrderListContainer = () => {
             buy.data.rows.map((v) =>
                 tempRows.push({
                     ...v,
-                    createdAt: new Date(v.createdAt).toLocaleDateString(),
-                    items: JSON.parse(v.items),
+                    createdAt: new Date(v.createdAt),
+                    items: JSON.parse(v.items),             // 주문상품들
+                    orderInfo: JSON.parse(v.orderInfo),     // 주문자
+                    receiveInfo: JSON.parse(v.receiveInfo), // 받는사람
                 }),
             );
             setOrderItems(tempRows);            

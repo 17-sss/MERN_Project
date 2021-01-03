@@ -6,12 +6,16 @@ import { getSize, threeDigitsComma } from '../../lib/utility/customFunc';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';       // fas
+import { Accordion } from 'react-bootstrap';
 
+// 1. Wrapper 
+// 1) 전체 Wrapper 
 const OrderListWrapper = styled.div`
     width: ${getSize(1.65)};
     margin: 0 auto;
 `;
 
+// 2) MultiWrapper
 const OrderListMultiWrapper = styled.div`
     width: 100%;
 
@@ -59,7 +63,10 @@ const OrderListMultiWrapper = styled.div`
                   }
               `}
 `;
+// -------------------------
 
+// 2-1. 테이블 느낌나게 만든 태그들 -> 일반적으로 보이는 부분임 (Accordion 아님)
+// 1) 테이블의 td나 th 느낌
 const OrderListCell = styled.span`
     display: inline-block;
     width: ${(props) => (props.width ? props.width : '10%')};
@@ -67,6 +74,7 @@ const OrderListCell = styled.span`
     vertical-align: middle;
 `;
 
+// 2) 상품정보 부분의 내용을 분리하기 위함 (주문 상세정보 Btn & 일반정보)
 const OrderListProdInfo = styled.div`
     display: inline-block;
     ${(props) =>
@@ -82,7 +90,10 @@ const OrderListProdInfo = styled.div`
                   text-align: center;
               `};
 `;
+// ----------
 
+// 2-2. Accordion (주문 상세정보)
+// 1) 주문 상세정보 버튼 (OrderListDetailWrapper(Accordion) 펼치는 용도)
 const OrderListDetailBtn = styled(TransparentBtn)`
     color: #bdbdbd;
     font-weight: bold;    
@@ -91,7 +102,54 @@ const OrderListDetailBtn = styled(TransparentBtn)`
     }
 `;
 
-// =====
+// 2) 주문 상세정보 Wrapper
+const OrderListDetailWrapper = styled.div`
+    width: 100%;    
+    border-top: 1px solid #f6f6f6;
+    
+    div {                
+        width: 85%;
+        margin: 20px auto;
+    }
+
+    p.infoName {            
+        font-size: 14px;            
+        font-weight: bold;
+    }
+`;
+// ----------
+
+// 2-3. 주문 상세정보 틀안에서 쓰임 Table 관련
+// 1) table
+const OrderListDetailTable = styled.table`
+    margin: 10px auto;
+    width: 100%;
+    border-bottom: 1px solid #dfdfdf;
+`;
+
+// 2) th
+const OrderListDetailTh = styled.th`
+    width: 20%;
+    padding: 11px 0 10px 18px;
+    border: 1px solid #dfdfdf;
+    color: #353535;
+    text-align: left;
+    font-weight: normal;
+    background-color: #fbfafa;
+`;
+
+// 2) td
+const OrderListDetailTd = styled.td`
+    width: 80%;
+    padding: 11px 10px 10px;
+    border-top: 1px solid #dfdfdf;
+    border-right: 1px solid #dfdfdf;
+    color: #353535;
+    vertical-align: middle;
+`;
+// -------------------------
+
+// ===================================================================================
 
 const OrderListTemplate = (props) => {
     const { orderItems, etc } = props;
@@ -121,6 +179,15 @@ const OrderListTemplate = (props) => {
                         // 링크
                         const { categoryId, categorySub } = firstItem.product;
 
+                        // 받는사람 정보
+                        // 1) 주소
+                        const { addressPostNo: receivePostNo, addressAddr1, addressAddr2 } = v.receiveInfo.address;
+                        const receiveAddress = `${addressAddr1} ${addressAddr2}`;
+                        // 2) 연락처
+                        const { phoneNumSelect, phoneNum1, phoneNum2 } = v.receiveInfo.phonenumber;
+                        const receivePhoneNumber = `${phoneNumSelect}-${phoneNum1}-${phoneNum2}`;
+                        // ----
+
                         let aLink = '/shopping';
                         if (!categoryId && !categorySub) {
                             aLink = aLink + `?itemId=${firstItem.productId}`;
@@ -141,64 +208,194 @@ const OrderListTemplate = (props) => {
 
                         return (
                             <OrderListMultiWrapper stype="dataRow" key={i}>
-                                <OrderListCell width={headDatas[0].width}>
-                                    {v.createdAt}
-                                </OrderListCell>
-                                <OrderListCell width={headDatas[1].width}>
-                                    <img
-                                        style={{
-                                            maxWidth: '120px',
-                                        }}
-                                        alt={firstItem.product.name}
-                                        src={
-                                            '/uploads/' +
-                                            firstItem.product.image
-                                        }
-                                    />
-                                </OrderListCell>
-                                <OrderListCell
-                                    width={headDatas[2].width}
-                                    align="left"
-                                >                        
-                                    <OrderListProdInfo stype="info">
-                                        <ul>
-                                            <li>
-                                                <SubjectLink
-                                                    to={aLink}
-                                                    style={{
-                                                        margin: '0',
-                                                        padding: '0',
-                                                    }}
-                                                >
-                                                    {firstItem.product.name}
-                                                </SubjectLink>
-                                            </li>
-                                            <li>
-                                                <b>{fixSizes}</b>
-                                            </li>
-                                            <li>
-                                                <span className="lightgray">
-                                                    [옵션: {firstItem.selcolor}{' '}
-                                                    / {firstItem.selsize}]
-                                                </span>
-                                            </li>
-                                        </ul>
-                                    </OrderListProdInfo>
-                                    
-                                    <OrderListProdInfo stype="detail">
-                                        <OrderListDetailBtn type="button">
-                                            주문 상세정보&nbsp;
-                                            <FontAwesomeIcon size="lg" icon={faCaretDown}/>
-                                        </OrderListDetailBtn>
-                                    </OrderListProdInfo>                                                                 
-                                </OrderListCell>
+                                <Accordion> 
+                                    <OrderListCell width={headDatas[0].width}>
+                                        {v.createdAt.toLocaleDateString()}
+                                    </OrderListCell>
+                                    <OrderListCell width={headDatas[1].width}>
+                                        <img
+                                            style={{
+                                                maxWidth: '120px',
+                                            }}
+                                            alt={firstItem.product.name}
+                                            src={
+                                                '/uploads/' +
+                                                firstItem.product.image
+                                            }
+                                        />
+                                    </OrderListCell>
+                                    <OrderListCell
+                                        width={headDatas[2].width}
+                                        align="left"
+                                    >         
+                                            
+                                            <OrderListProdInfo stype="info">
+                                                <ul>
+                                                    <li>
+                                                        <SubjectLink
+                                                            to={aLink}
+                                                            style={{
+                                                                margin: '0',
+                                                                padding: '0',
+                                                            }}
+                                                        >
+                                                            {firstItem.product.name}
+                                                        </SubjectLink>
+                                                    </li>
+                                                    <li>
+                                                        <b>{fixSizes}</b>
+                                                    </li>
+                                                    <li>
+                                                        <span className="lightgray">
+                                                            [옵션: {firstItem.selcolor}{' '}
+                                                            / {firstItem.selsize}]
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </OrderListProdInfo>
+                                            <OrderListProdInfo stype="detail">
+                                                <Accordion.Toggle as={OrderListDetailBtn} eventKey="detailInfo">                                                
+                                                    주문 상세정보&nbsp;
+                                                    <FontAwesomeIcon size="lg" icon={faCaretDown}/>                                                
+                                                </Accordion.Toggle>
+                                            </OrderListProdInfo>                                                                                                                                                                                                                       
+                                        
+                                    </OrderListCell>
 
-                                <OrderListCell
-                                    width={headDatas[3].width}
-                                    style={{ marginLeft: '10px' }}
-                                >
-                                    {threeDigitsComma(v.totalPrice) + '원'}
-                                </OrderListCell>
+                                    <OrderListCell
+                                        width={headDatas[3].width}
+                                        style={{ marginLeft: '10px' }}
+                                    >
+                                        {threeDigitsComma(v.totalPrice) + '원'}
+                                    </OrderListCell>
+
+                                    <Accordion.Collapse eventKey="detailInfo">
+                                        <OrderListDetailWrapper>
+                                            {/* 주문 상세정보 : 주문 정보 */}
+                                            <div>
+                                                <p className="infoName">주문정보</p>
+                                                <OrderListDetailTable summary="주문정보">                                                    
+                                                    <tbody>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                주문번호
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>---주문번호 가져와---</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                주문일자
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{v.createdAt.toLocaleDateString()}</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                주문자
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{v.orderInfo.username}</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        {/* 주문처리상태는 나중에... */}
+                                                    </tbody>
+                                                </OrderListDetailTable>
+                                            </div>
+
+                                            {/* 주문 상세정보 : 결제정보 */}
+                                            <div>
+                                                <p className="infoName">결제정보</p>
+                                                <OrderListDetailTable summary="결제정보">
+                                                    <tbody>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                총 주문금액
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{threeDigitsComma(v.allProductPrice)}원</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                배송비
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{v.shippingFee ? `${threeDigitsComma(v.shippingFee)}원` : '무료'}</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                총 결제금액
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{threeDigitsComma(v.totalPrice)}원</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                    </tbody>
+                                                </OrderListDetailTable>
+
+                                            </div>
+
+                                            {/* 주문 상세정보 : 주문 상품 정보 */}
+                                            <div>
+                                                <p className="infoName">주문 상품 정보</p>
+
+                                            </div>
+
+                                            {/* 주문 상세정보 : 배송지정보 */}
+                                            <div>
+                                                <p className="infoName">배송지정보</p>
+                                                <OrderListDetailTable summary="배송지정보">
+                                                    <tbody>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                받으시는 분
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{v.receiveInfo.username}</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                우편번호
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{receivePostNo}</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                주소
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{receiveAddress}</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                연락처
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                <span>{receivePhoneNumber}</span>
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                        <tr>
+                                                            <OrderListDetailTh scope="row">
+                                                                배송메세지
+                                                            </OrderListDetailTh>
+                                                            <OrderListDetailTd>
+                                                                {v.receiveInfo.deliveryMessage}
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                    </tbody>
+                                                </OrderListDetailTable>
+                                            </div>
+                                        </OrderListDetailWrapper>
+                                    </Accordion.Collapse>      
+                                </Accordion>                             
                             </OrderListMultiWrapper>
                         );
                     })}
