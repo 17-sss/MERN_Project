@@ -128,22 +128,41 @@ const OrderListDetailTable = styled.table`
 `;
 
 // 2) th
-const OrderListDetailTh = styled.th`
-    width: 20%;
-    padding: 11px 0 10px 18px;
+const OrderListDetailTh = styled.th`    
+    ${(props) =>
+        props.stype === 'orderProdInfos'
+            ? css`
+                  text-align: center;
+                  padding: 11px 18px;
+              `
+            : css`
+                  width: 20%;
+                  font-weight: normal;
+                  text-align: left;
+                  padding: 11px 0 10px 18px;
+              `};
+    
     border: 1px solid #dfdfdf;
     color: #353535;
-    text-align: left;
-    font-weight: normal;
     background-color: #fbfafa;
 `;
 
 // 2) td
 const OrderListDetailTd = styled.td`
-    width: 80%;
-    padding: 11px 10px 10px;
-    border-top: 1px solid #dfdfdf;
-    border-right: 1px solid #dfdfdf;
+    ${(props) =>
+        props.stype === 'orderProdInfos'
+            ? css`
+                  text-align: ${props.txtAlign ? props.txtAlign : "center"};
+                  padding: 10px;
+                  border-left: 1px solid #dfdfdf;
+                  border-right: 1px solid #dfdfdf;
+              `
+            : css`
+                  width: 80%;
+                  padding: 11px 10px 10px;
+                  border-top: 1px solid #dfdfdf;
+                  border-right: 1px solid #dfdfdf;
+              `};
     color: #353535;
     vertical-align: middle;
 `;
@@ -153,7 +172,7 @@ const OrderListDetailTd = styled.td`
 
 const OrderListTemplate = (props) => {
     const { orderItems, etc } = props;
-    const { headDatas } = etc;
+    const { headDatas, orderProdHeadDatas } = etc;
 
     return (
         <OrderListWrapper>
@@ -203,7 +222,7 @@ const OrderListTemplate = (props) => {
 
                         const fixSizes =
                             '[' +
-                            JSON.parse(firstItem.product.sizes).join(', ') +
+                                JSON.parse(firstItem.product.sizes).join(', ') +
                             ']';
 
                         return (
@@ -227,8 +246,7 @@ const OrderListTemplate = (props) => {
                                     <OrderListCell
                                         width={headDatas[2].width}
                                         align="left"
-                                    >         
-                                            
+                                    >                                                     
                                             <OrderListProdInfo stype="info">
                                                 <ul>
                                                     <li>
@@ -342,7 +360,38 @@ const OrderListTemplate = (props) => {
                                             {/* 주문 상세정보 : 주문 상품 정보 */}
                                             <div>
                                                 <p className="infoName">주문 상품 정보</p>
-
+                                                <OrderListDetailTable summary="주문 상품 정보">
+                                                    <colgroup>
+                                                        {orderProdHeadDatas.map((v) => (<col style={{width: v.width}}/>))}
+                                                    </colgroup>
+                                                    <thead>
+                                                        <tr>
+                                                            {orderProdHeadDatas.map(
+                                                                (v) => (
+                                                                    <OrderListDetailTh scope="col" stype="orderProdInfos">
+                                                                        {v.name}
+                                                                    </OrderListDetailTh>
+                                                                ),
+                                                            )}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <OrderListDetailTd stype="orderProdInfos">
+                                                                이미지
+                                                            </OrderListDetailTd>
+                                                            <OrderListDetailTd stype="orderProdInfos">
+                                                                상품정보
+                                                            </OrderListDetailTd>
+                                                            <OrderListDetailTd stype="orderProdInfos">
+                                                                수량
+                                                            </OrderListDetailTd>
+                                                            <OrderListDetailTd stype="orderProdInfos">
+                                                                판매가
+                                                            </OrderListDetailTd>
+                                                        </tr>
+                                                    </tbody>
+                                                </OrderListDetailTable>
                                             </div>
 
                                             {/* 주문 상세정보 : 배송지정보 */}
