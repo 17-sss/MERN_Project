@@ -152,10 +152,12 @@ const OrderListDetailTd = styled.td`
     ${(props) =>
         props.stype === 'orderProdInfos'
             ? css`
-                  text-align: ${props.txtAlign ? props.txtAlign : "center"};
-                  padding: 10px;
+                  text-align: ${props.txtAlign ? props.txtAlign : 'center'};
+                  padding: 10px 30px;
                   border-left: 1px solid #dfdfdf;
                   border-right: 1px solid #dfdfdf;
+                  border-bottom: 1px solid #dfdfdf;
+                  ${ props.backColor && css`background-color: ${props.backColor};` };
               `
             : css`
                   width: 80%;
@@ -362,13 +364,13 @@ const OrderListTemplate = (props) => {
                                                 <p className="infoName">주문 상품 정보</p>
                                                 <OrderListDetailTable summary="주문 상품 정보">
                                                     <colgroup>
-                                                        {orderProdHeadDatas.map((v) => (<col style={{width: v.width}}/>))}
+                                                        {orderProdHeadDatas.map((v, i) => (<col key={i} style={{width: v.width}}/>))}
                                                     </colgroup>
                                                     <thead>
                                                         <tr>
                                                             {orderProdHeadDatas.map(
-                                                                (v) => (
-                                                                    <OrderListDetailTh scope="col" stype="orderProdInfos">
+                                                                (v, i) => (
+                                                                    <OrderListDetailTh key={i} scope="col" stype="orderProdInfos">
                                                                         {v.name}
                                                                     </OrderListDetailTh>
                                                                 ),
@@ -376,21 +378,68 @@ const OrderListTemplate = (props) => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        {v.items.map((item, i) => {
+                                                            return (
+                                                                <tr key={i}>
+                                                                    <OrderListDetailTd stype="orderProdInfos">
+                                                                        <img
+                                                                            style={{
+                                                                                maxWidth: '120px',
+                                                                            }}
+                                                                            alt={item.product.name}
+                                                                            src={'/uploads/' + item.product.image}
+                                                                        />                                                                                                                                    
+                                                                    </OrderListDetailTd>
+                                                                    <OrderListDetailTd stype="orderProdInfos" txtAlign="left">
+                                                                        <ul>
+                                                                            <li>
+                                                                                <SubjectLink
+                                                                                    to={aLink}
+                                                                                    style={{
+                                                                                        margin: '0',
+                                                                                        padding: '0',
+                                                                                    }}
+                                                                                >
+                                                                                    {item.product.name}
+                                                                                </SubjectLink>
+                                                                            </li>
+                                                                            <li>
+                                                                                <b>{fixSizes}</b>
+                                                                            </li>
+                                                                            <li>
+                                                                                <span className="lightgray">
+                                                                                    [옵션: {item.selcolor}{' '}
+                                                                                    / {item.selsize}]
+                                                                                </span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </OrderListDetailTd>
+                                                                    <OrderListDetailTd stype="orderProdInfos">
+                                                                        {item.volume}
+                                                                    </OrderListDetailTd>
+                                                                    <OrderListDetailTd stype="orderProdInfos">
+                                                                        {/* 작업해야함--- */}
+                                                                        <p>{item.product.price}</p>
+                                                                        {item.product.sale  // sale 0일때 displaynone 해야함
+                                                                            && (<p>{threeDigitsComma(item.product.price-(item.product.price * item.product.sale))}원</p>) }
+                                                                        {/* 작업해야함--- */}
+                                                                    </OrderListDetailTd>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                    <tfoot>
                                                         <tr>
-                                                            <OrderListDetailTd stype="orderProdInfos">
-                                                                이미지
-                                                            </OrderListDetailTd>
-                                                            <OrderListDetailTd stype="orderProdInfos">
-                                                                상품정보
-                                                            </OrderListDetailTd>
-                                                            <OrderListDetailTd stype="orderProdInfos">
-                                                                수량
-                                                            </OrderListDetailTd>
-                                                            <OrderListDetailTd stype="orderProdInfos">
-                                                                판매가
+                                                            <OrderListDetailTd 
+                                                                stype="orderProdInfos" 
+                                                                txtAlign="right" 
+                                                                colSpan={orderProdHeadDatas.length}
+                                                                backColor={"#fbfafa"}
+                                                            >
+                                                                <span>상품구매금액 72,000 + 배송비 0 + 지역별배송비 0 - 상품할인금액 36,000 = 합계 : 36,000원</span>                                                                
                                                             </OrderListDetailTd>
                                                         </tr>
-                                                    </tbody>
+                                                    </tfoot>
                                                 </OrderListDetailTable>
                                             </div>
 
