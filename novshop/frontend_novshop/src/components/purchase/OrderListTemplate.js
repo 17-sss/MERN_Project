@@ -7,6 +7,7 @@ import { getSize, threeDigitsComma } from '../../lib/utility/customFunc';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';       // fas
 import { Accordion } from 'react-bootstrap';
+import { cssDisplayNone, cssStrike } from '../common/StyleUtilCSS';
 
 // 1. Wrapper 
 // 1) 전체 Wrapper 
@@ -167,6 +168,18 @@ const OrderListDetailTd = styled.td`
               `};
     color: #353535;
     vertical-align: middle;
+`;
+// ----------
+
+// 2-4. 기타 (주문 상세정보 Table 관련 태그안에 쓰이는 태그들)
+// 1) p
+const OrderListDetailP = styled.p`
+    ${(props) =>
+        props.stype === 'strike'
+            ? cssStrike
+            : props.stype === 'displaynone'
+            ? cssDisplayNone
+            : css``};
 `;
 // -------------------------
 
@@ -419,9 +432,12 @@ const OrderListTemplate = (props) => {
                                                                     </OrderListDetailTd>
                                                                     <OrderListDetailTd stype="orderProdInfos">
                                                                         {/* 작업해야함--- */}
-                                                                        <p>{item.product.price}</p>
-                                                                        {item.product.sale  // sale 0일때 displaynone 해야함
-                                                                            && (<p>{threeDigitsComma(item.product.price-(item.product.price * item.product.sale))}원</p>) }
+                                                                        <OrderListDetailP stype={item.product.sale && 'strike'}>
+                                                                            {threeDigitsComma(item.product.price)}원
+                                                                        </OrderListDetailP>                                                                        
+                                                                        <OrderListDetailP stype={item.product.sale || 'displaynone'}>
+                                                                            {threeDigitsComma(item.product.price-(item.product.price * item.product.sale))}원
+                                                                        </OrderListDetailP>
                                                                         {/* 작업해야함--- */}
                                                                     </OrderListDetailTd>
                                                                 </tr>
@@ -436,7 +452,33 @@ const OrderListTemplate = (props) => {
                                                                 colSpan={orderProdHeadDatas.length}
                                                                 backColor={"#fbfafa"}
                                                             >
-                                                                <span>상품구매금액 72,000 + 배송비 0 + 지역별배송비 0 - 상품할인금액 36,000 = 합계 : 36,000원</span>                                                                
+                                                                <span>
+                                                                    <span>
+                                                                        <b>상품구매금액&nbsp;</b>      
+                                                                        {/* 
+                                                                            상품구매금액
+                                                                            v.items
+                                                                                product.price * volume 
+                                                                            // 리듀서..? 하..
+                                                                        */}
+                                                                        72,000
+                                                                    </span>
+                                                                    &nbsp;+&nbsp; 
+                                                                    <span>
+                                                                        <b>배송비&nbsp;</b>
+                                                                        0
+                                                                    </span>
+                                                                    &nbsp;-&nbsp;
+                                                                    <span>
+                                                                        <b>상품할인금액&nbsp;</b>
+                                                                        36,000
+                                                                    </span>
+                                                                    &nbsp;=&nbsp;
+                                                                    <span>
+                                                                        <b>합계:&nbsp;</b>
+                                                                        36,000원
+                                                                    </span>
+                                                                </span>
                                                             </OrderListDetailTd>
                                                         </tr>
                                                     </tfoot>
