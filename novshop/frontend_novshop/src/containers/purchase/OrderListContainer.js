@@ -37,6 +37,12 @@ const OrderListContainer = () => {
         }
     }, [buy]);
 
+    // if(orderItems && orderItems) { 
+    //     // orderItems.map((v) => (v.items.reduce((p, c, i) => console.log(p,c,i))) )
+    //     // orderItems.map((v) => ( console.log(v.items) )) 
+    // 테스트중..
+    // }
+
     // *** 기타 ***
     // 1) 주문 정보
     const headDatas = [
