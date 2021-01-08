@@ -430,15 +430,13 @@ const OrderListTemplate = (props) => {
                                                                     <OrderListDetailTd stype="orderProdInfos">
                                                                         {item.volume}
                                                                     </OrderListDetailTd>
-                                                                    <OrderListDetailTd stype="orderProdInfos">
-                                                                        {/* 작업해야함--- */}
+                                                                    <OrderListDetailTd stype="orderProdInfos">                                                                        
                                                                         <OrderListDetailP stype={item.product.sale && 'strike'}>
                                                                             {threeDigitsComma(item.product.price)}원
                                                                         </OrderListDetailP>                                                                        
                                                                         <OrderListDetailP stype={item.product.sale || 'displaynone'}>
                                                                             {threeDigitsComma(item.product.price-(item.product.price * item.product.sale))}원
-                                                                        </OrderListDetailP>
-                                                                        {/* 작업해야함--- */}
+                                                                        </OrderListDetailP>                                                                        
                                                                     </OrderListDetailTd>
                                                                 </tr>
                                                             );
