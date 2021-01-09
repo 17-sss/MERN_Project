@@ -450,31 +450,42 @@ const OrderListTemplate = (props) => {
                                                                 colSpan={orderProdHeadDatas.length}
                                                                 backColor={"#fbfafa"}
                                                             >
-                                                                <span>
+                                                                <span>                                                                    
                                                                     <span>
-                                                                        <b>상품구매금액&nbsp;</b>      
-                                                                        {/* 
-                                                                            상품구매금액
-                                                                            v.items
-                                                                                product.price * volume 
-                                                                            // 리듀서..? 하..
-                                                                        */}
-                                                                        72,000
+                                                                        <b>상품구매금액&nbsp;</b>                                           
+                                                                        { threeDigitsComma(
+                                                                            v.items.reduce((prev, curr) => {
+                                                                                return (prev + (curr.product.price * curr.volume));
+                                                                            }, 0)) }
                                                                     </span>
                                                                     &nbsp;+&nbsp; 
                                                                     <span>
                                                                         <b>배송비&nbsp;</b>
-                                                                        0
+                                                                        <span>{v.shippingFee ? `${threeDigitsComma(v.shippingFee)}` : '무료'}</span>
                                                                     </span>
                                                                     &nbsp;-&nbsp;
                                                                     <span>
                                                                         <b>상품할인금액&nbsp;</b>
-                                                                        36,000
+                                                                        { threeDigitsComma(
+                                                                            v.items.reduce((prev, curr) => {
+                                                                                return (prev + (curr.product.price * curr.product.sale) * curr.volume);
+                                                                            }, 0)) }                                        
                                                                     </span>
                                                                     &nbsp;=&nbsp;
                                                                     <span>
                                                                         <b>합계:&nbsp;</b>
-                                                                        36,000원
+                                                                        { threeDigitsComma(
+                                                                            v.items.reduce((prev, curr) => {
+                                                                                return (
+                                                                                    prev + 
+                                                                                    (
+                                                                                        ((curr.product.price * curr.volume) 
+                                                                                        - (curr.product.price * curr.product.sale)
+                                                                                        * curr.volume) 
+                                                                                        + v.shippingFee
+                                                                                    )
+                                                                                );
+                                                                            }, 0)) }원
                                                                     </span>
                                                                 </span>
                                                             </OrderListDetailTd>
