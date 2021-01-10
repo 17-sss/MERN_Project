@@ -7,6 +7,7 @@ import {
     changePurchaseBuy,
     initialPurchase,
     initialPurchaseForm,
+    delCartGoods,
 } from '../../modules/purchase';
 import {  threeDigitsComma } from '../../lib/utility/customFunc';
 
@@ -69,17 +70,29 @@ const BuyContainer = (props) => {
 
     useEffect(() => {
         if (isUpdateValue) setIsUpdateValue(false);
-        if (isEmptyItems.current) dispatch(initialPurchase());        
+        if (isEmptyItems.current) {
+            dispatch(initialPurchase());
+            isEmptyItems.current = false;
+        };        
         setPriceLoading(false);
 
         // 새로고침하면 정보 사라져서 localStorage 활용 START ----
-        const tempItems = localStorage.getItem('buyFormStatusItems');           
-        if (tempItems) {                        
-            if (isEmptyItems.current) isEmptyItems.current = false;
+        const tempItems = localStorage.getItem('buyFormStatusItems');
+        if (tempItems) {                                    
             dispatch(
                 changePurchaseBuy({
                     topKey: 'items',
                     value: JSON.parse(tempItems),
+                }),
+            );
+        };
+
+        const tempFromCartToBuyItems = localStorage.getItem('fromCartToBuyItems');
+        if (tempFromCartToBuyItems) {
+            dispatch(
+                changePurchaseBuy({
+                    topKey: 'fromCartToBuyItems',
+                    value: JSON.parse(tempFromCartToBuyItems),
                 }),
             );
         }
@@ -355,6 +368,7 @@ const BuyContainer = (props) => {
             allProductPrice,
             shippingFee,
             totalPrice,
+            fromCartToBuyItems,
         } = buyFormStatus;
         
         dispatch(
@@ -368,6 +382,12 @@ const BuyContainer = (props) => {
                 userId: id,
             }),
         );
+        dispatch(delCartGoods({ items: fromCartToBuyItems }));
+
+        if (localStorage.getItem('buyFormStatusItems')) 
+            localStorage.removeItem('buyFormStatusItems');
+        if (localStorage.getItem('fromCartToBuyItems')) 
+            localStorage.removeItem('fromCartToBuyItems');
     }, [buyFormStatus, userData, dispatch]);
 
 

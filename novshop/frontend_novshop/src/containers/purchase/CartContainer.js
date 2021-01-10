@@ -271,6 +271,15 @@ const PurchaseContainer = (props) => {
                 value,
             }),
         );
+        dispatch(
+            changePurchaseBuy({
+                topKey: 'fromCartToBuyItems',
+                value:
+                    name === 'buyall'
+                        ? cartFormStatus.items.map((v) => v.id)
+                        : cartFormStatus.checkedItems.map((v) => v),
+            }),
+        );
 
         history.push(`/purchase/buy`);
     }, [dispatch, cartFormStatus, history]);

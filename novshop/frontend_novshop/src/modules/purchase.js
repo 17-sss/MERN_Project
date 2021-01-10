@@ -166,7 +166,8 @@ const initialState = {
         },
         // -----
 
-        items: null,
+        items: null,        
+        fromCartToBuyItems: null,
         allProductPrice: "",
         shippingFee: "",
         totalPrice: "",
@@ -339,13 +340,17 @@ const purchase = handleActions(
             const { topKey, key, subKey, value, } = payload;   
             if(!value && key === 'address') return;                     
             
-            if (topKey === "items") {
+            if (topKey === "items" || topKey === "fromCartToBuyItems") {
                 try {
-                    localStorage.setItem('buyFormStatusItems', JSON.stringify(value));                            
+                    if (topKey === "items") {
+                        localStorage.setItem('buyFormStatusItems', JSON.stringify(value));
+                    } else if (topKey === "fromCartToBuyItems") {
+                        localStorage.setItem('fromCartToBuyItems', JSON.stringify(value));
+                    }
                 } catch (error) {
                     console.log("localStorage isn't working");
                 }
-            }
+            } 
 
             return {
                 ...state,
