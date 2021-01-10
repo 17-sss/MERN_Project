@@ -194,14 +194,26 @@ router.post('/buyIn', async (req, res) => {
             { where: { id: userId } },
         );
 
+        const date = new Date();
+        const orderDate =
+            '' +
+            date.getFullYear() +
+            (date.getMonth() + 1) +
+            date.getDate() +
+            date.getHours() +
+            date.getMinutes() +
+            date.getSeconds() +
+            date.getMilliseconds();
+
         await Buy.create({
+            orderNumStr: `${orderDate}_${userId}`,
             orderInfo: JSON.stringify(orderInfo),
             receiveInfo: JSON.stringify(receiveInfo),
             items: JSON.stringify(items),
-            allProductPrice, 
-            shippingFee, 
+            allProductPrice,
+            shippingFee,
             totalPrice,
-            userId
+            userId,
         });
         
         return res.status(200).json({

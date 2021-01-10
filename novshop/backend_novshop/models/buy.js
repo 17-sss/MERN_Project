@@ -2,7 +2,11 @@
 module.exports = (sequelize, DataTypes) => (
     sequelize.define(
         'buy',
-        {            
+        {                        
+            orderNumStr: {
+                type: DataTypes.STRING(100),
+                allowNull: false,
+            },    
             orderInfo: {
                 type: DataTypes.STRING(1500),
                 allowNull: false,

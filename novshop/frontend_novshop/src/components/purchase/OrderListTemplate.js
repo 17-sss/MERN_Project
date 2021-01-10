@@ -314,7 +314,7 @@ const OrderListTemplate = (props) => {
                                                                 주문번호
                                                             </OrderListDetailTh>
                                                             <OrderListDetailTd>
-                                                                <span>---주문번호 가져와---</span>
+                                                                <span>{v.orderNumStr}</span>
                                                             </OrderListDetailTd>
                                                         </tr>
                                                         <tr>
