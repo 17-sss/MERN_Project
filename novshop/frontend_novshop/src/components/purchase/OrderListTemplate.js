@@ -305,6 +305,7 @@ const OrderListTemplate = (props) => {
                                     <Accordion.Collapse eventKey="detailInfo">
                                         <OrderListDetailWrapper>
                                             {/* 주문 상세정보 : 주문 정보 */}
+                                            {/* 코드스쿼드 힘드러.. */}
                                             <div>
                                                 <p className="infoName">주문정보</p>
                                                 <OrderListDetailTable summary="주문정보">                                                    
